@@ -1,0 +1,77 @@
+package XMLFrames;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  dbrtl,
+  bdertl,
+  dbexpress,
+  vcldb,
+  adortl,
+  vcljpg,
+  vclx,
+  Jcl,
+  JclVcl,
+  designide,
+  vclactnband,
+  rxdb,
+  rxctl,
+  VclSmp,
+  rxbde,
+  dsnap,
+  ZComponentDesign,
+  dclstd,
+  vcldesigner,
+  dcldb,
+  designdgm,
+  dclado,
+  inet,
+  ExtToolbarTools,
+  VirtualTreesD10,
+  JvXPCtrlsD10R,
+  JvCtrlsD10R,
+  JvDBD10R,
+  JvSystemD10R,
+  JvStdCtrlsD10R,
+  JvCoreD10R,
+  Fonctions,
+  PCK_ALCINOE,
+  ExtComponents,
+  ManSoft,
+  dklang10;
+
+contains
+  U_ASQLBuilder in 'composants\U_ASQLBuilder.pas',
+  u_xmlform in 'composants\u_xmlform.pas',
+  fonctions_xml in 'fonctions\fonctions_xml.pas',
+  fonctions_ObjetsXML in 'fonctions\fonctions_ObjetsXML.pas',
+  U_XMLFenetrePrincipale in 'forms\U_XMLFenetrePrincipale.pas',
+  u_languagevars in 'fonctions\u_languagevars.pas',
+  fonctions_autocomponents in 'fonctions\fonctions_autocomponents.pas';
+
+end.

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<L_FILE id="hotel_db" url="$LY_DATA_DIR$" type='CSV'/>
+
+<!--L_SQL id="hotel_db"
+		url="jdbc:idb=C:\dev\leonv2.2\hotel\database\hotel.prp"
+		driver="com.lutris.instantdb.jdbc.idbDriver"
+		dbName="hotel"/-->
+
+<!--L_SQL id="hotel_db"
+		url="jdbc:mysql://localhost/hotel"
+		driver="com.mysql.jdbc.Driver"
+		user="root"
+		dbName="hotel"
+		valueSep="&#010;"/-->

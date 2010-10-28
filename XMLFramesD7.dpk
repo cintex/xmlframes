@@ -1,0 +1,88 @@
+package XMLFramesD7;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  dbrtl,
+  bdertl,
+  dbexpress,
+  vcldb,
+  adortl,
+  ExtComponentsD7,
+  JvPageCompsD7R,
+  vcljpg,
+  vclx,
+  Jcl,
+  JvStdCtrlsD7R,
+  JclVcl,
+  JvCoreD7R,
+  JvSystemD7R,
+  JvHMID7R,
+  TB97_d7,
+  designide,
+  vclactnband,
+  rxdb,
+  rxctl,
+  VclSmp,
+  rxbde,
+  dsnap,
+  JvCmpD7R,
+  GJLSoftwareD7,
+  FonctionsD7,
+  ZComponentDesign,
+  JvXPCtrlsD7R,
+  VirtualTreesD7,
+  dclstd,
+  vcldesigner,
+  dcldb,
+  designdgm,
+  dclado,
+  JvDBD7R,
+  JvCtrlsD7R,
+  JvDlgsD7R,
+  JvCustomD7R,
+  JvXPCtrlsD7D,
+  JvCoreD7D,
+  inet,
+  VampyreImagingPackageD7,
+  JvGlobusD7R,
+  ManFramesD7,
+  ExtToolbarTools,
+  ManSoftD7,
+  AlcinoeXMLDoc;
+
+contains
+  u_searchframework in 'composants\u_searchframework.pas',
+  U_ASQLBuilder in 'composants\U_ASQLBuilder.pas',
+  u_autoform in 'composants\u_autoform.pas',
+  u_formxml in 'composants\u_formxml.pas',
+  fonctions_xml in 'fonctions\fonctions_xml.pas',
+  fonctions_ObjetsXML in 'fonctions\fonctions_ObjetsXML.pas',
+  U_XMLFenetrePrincipale in 'forms\U_XMLFenetrePrincipale.pas';
+
+end.

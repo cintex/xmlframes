@@ -1,0 +1,83 @@
+object M_Donnees: TM_Donnees
+  OnCreate = DataModuleCreate
+  OldCreateOrder = False
+  left = 478
+  top = 244
+  Height = 314
+  HorizontalOffset = 434
+  VerticalOffset = 498
+  Width = 181
+  object Connection: TZConnection
+    left = 104
+    top = 16
+  end
+  object Acces: TZConnection
+    left = 24
+    top = 16
+  end
+  object ds_rech: TDatasource
+    DataSet = q_rech
+    left = 104
+    top = 112
+  end
+  object q_rech: TZQuery
+    Connection = Acces
+    Params = <>
+    left = 24
+    top = 112
+  end
+  object q_TreeUser: TZQuery
+    Connection = Acces
+    Params = <>
+    left = 24
+    top = 64
+  end
+  object q_conn: TZQuery
+    Connection = Acces
+    Params = <>
+    left = 104
+    top = 64
+  end
+  object ds_Connexions: TDatasource
+    DataSet = q_Connexions
+    left = 24
+    top = 160
+  end
+  object q_user: TZQuery
+    Connection = Acces
+    ReadOnly = True
+    SQL.Strings = (
+      'SELECT * FROM UTILISATEURS'
+    )
+    Params = <>
+    left = 104
+    top = 216
+  end
+  object q_Connexions: TZQuery
+    Connection = Acces
+    ReadOnly = True
+    SQL.Strings = (
+      'SELECT * FROM CONNEXION WHERE CONN_Clep IN ( SELECT ACCE__CONN FROM ACCES WHERE ACCE__UTIL = :Cle )'
+      'ORDER BY CONN_Libelle'
+    )
+    Params = <    
+      item
+        DataType = ftString
+        Name = 'Cle'
+        ParamType = ptInput
+      end>
+    left = 104
+    top = 160
+    ParamData = <    
+      item
+        DataType = ftString
+        Name = 'Cle'
+        ParamType = ptInput
+      end>
+  end
+  object ds_User: TDatasource
+    DataSet = q_user
+    left = 24
+    top = 216
+  end
+end

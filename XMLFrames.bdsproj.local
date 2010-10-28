@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2010/05/18 13:01:36.143.pas,C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\Unit1.pas=C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\fonctions\u_languagevars.pas</Transaction>
+    <Transaction>2010/05/18 13:05:59.334.pas,C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\composants\u_formxml.pas=C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\composants\u_xmlform.pas</Transaction>
+    <Transaction>2010/05/20 07:12:18.425.pas,C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\Unit1.pas=C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\fonctions\fonctions_autocomponents.pas</Transaction>
+  </Transactions>
+</BorlandProject>
