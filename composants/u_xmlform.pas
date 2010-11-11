@@ -148,6 +148,7 @@ type
     function  fb_ChargementNomCol ( const AFWColumn : TFWColumn ; const ai_NumSource : Integer ) : Boolean; override;
     procedure p_AfterColumnFrameShow( const aFWColumn : TFWColumn ); override;
     procedure DoClose ( var CloseAction : TCloseAction ); override;
+    function fb_ChargeDonnees : Boolean; override;
   public
     procedure p_setLogin ( const axml_Login : TALXMLDocument );
     function  fb_InsereCompteur ( const adat_Dataset : TDataset ;
@@ -691,6 +692,11 @@ procedure TF_XMLForm.DoClose(var CloseAction: TCloseAction);
 begin
   inherited DoClose(CloseAction);
   CloseAction := caFree;
+end;
+
+function TF_XMLForm.fb_ChargeDonnees: Boolean;
+begin
+  Result:= True;
 end;
 
 // procedure p_setLogin
