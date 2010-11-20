@@ -1667,7 +1667,7 @@ Begin
        Begin
         // Le module M_Donnees n'est pas encore chargé
         ls_ConnectionClep := lNode.Attributes [CST_LEON_ID];
-        li_connection:= fi_FindConnection(ls_ConnectionClep);
+        li_connection:= fi_FindConnection(ls_ConnectionClep, False);
         if li_connection > -1 Then
           Continue;
         if ( lNode.NodeName = CST_LEON_DATA_FILE ) Then

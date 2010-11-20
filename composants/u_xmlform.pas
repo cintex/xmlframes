@@ -399,14 +399,7 @@ function TF_XMLForm.ffwc_CreateColumn(const as_Class, as_Connection: String;
   const ai_Counter: Integer): TFWXMLColumn;
 var li_Connection : Integer;
 begin
-  li_Connection:=fi_FindConnection( as_Connection );
-  if li_Connection = - 1 Then
-   Begin
-     if as_Connection = '' Then
-       li_Connection := 0
-      Else
-       Exit;
-   end;
+  li_Connection:=fi_FindConnection( as_Connection, True );
   if ( Columns.Count <= ai_Counter ) then
    with ga_Connections [ li_Connection ] do
     Begin
@@ -589,7 +582,7 @@ Begin
               end;
         /// getting other xml file info
         ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_Class, ls_Connection, alis_IdRelation, anod_CrossLinkRelation );
-        li_i := fi_FindConnection(ls_Connection);
+        li_i := fi_FindConnection(ls_Connection, True );
         if anod_CrossLinkRelation = nil Then
          // 1-N relationships
           Begin

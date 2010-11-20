@@ -70,7 +70,7 @@ var gs_DataExtension : String = '.res';
 
 procedure p_setMiniConnectionTo ( const ar_Source : TAConnection; var ar_Destination : TAConnection );
 procedure p_setConnectionTo ( const ar_Source : TAConnection; var ar_Destination : TAConnection );
-function fi_FindConnection ( const as_Clep : String ): Integer ;
+function fi_FindConnection ( const as_Clep : String ; const ab_Show_Error : Boolean ): Integer ;
 function fs_getSoftData : String;
 
 type
@@ -119,7 +119,7 @@ uses Forms, Controls, SysUtils,
 {$IFDEF FPC}
   FileUtil,
 {$ENDIF}
-  U_FormMainIni,
+  U_FormMainIni, Dialogs,
   fonctions_string, fonctions_dbcomponents, fonctions_proprietes ;
 
 {$IFNDEF CSV}
@@ -344,7 +344,7 @@ end;
 // as_Clep : XML File Clep which find the connection
 // return the number of TAConnection
 ////////////////////////////////////////////////////////////////////////////////
-function fi_FindConnection ( const as_Clep : String ): Integer ;
+function fi_FindConnection ( const as_Clep : String ; const ab_Show_Error : Boolean ): Integer ;
 var li_i : Integer;
 Begin
   Result := -1 ;
@@ -353,7 +353,10 @@ Begin
       Result := li_i;
  if  ( result = -1 )
  and ( as_Clep = '' ) Then
-   Result := low ( ga_Connections );
+   Result := low ( ga_Connections )
+  Else
+   if ab_Show_Error Then
+     ShowMessage ( 'Connection ' + as_Clep + ' not found !' );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
