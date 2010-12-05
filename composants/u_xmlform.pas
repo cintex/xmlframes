@@ -142,20 +142,12 @@ type
     procedure p_setControlName ( const as_FunctionName : String ; const anod_FieldProperty : TALXMLNode ;  const awin_Control : TControl; const ai_Counter : Longint ); virtual;
     function fscb_CreateTabSheet ( var apc_PageControl : TPageControl ;const awin_ParentPageControl,  awin_PanelOrigin : TWinControl ;
                                    const as_Name, as_Caption : String  ; const ai_Counter : Integer): TScrollBox; virtual;
-    function  fb_ValidePostDeleteWork (  const adat_Dataset: TDataSet;
-                                const aFWColumn : TFWColumn ;
-                                const ab_Efface            : Boolean ): Boolean ; override;
     function  fb_ChargementNomCol ( const AFWColumn : TFWColumn ; const ai_NumSource : Integer ) : Boolean; override;
     procedure p_AfterColumnFrameShow( const aFWColumn : TFWColumn ); override;
     procedure DoClose ( var CloseAction : TCloseAction ); override;
     function fb_ChargeDonnees : Boolean; override;
   public
     procedure p_setLogin ( const axml_Login : TALXMLDocument );
-    function  fb_InsereCompteur ( const adat_Dataset : TDataset ;
-                                 const aslt_Cle : TStringlist ;
-                                 const as_ChampCompteur, as_Table, as_PremierLettrage : String ;
-                                 const ach_DebutLettrage, ach_FinLettrage : Char ;
-                                 const ali_Debut, ali_LimiteRecherche : Int64 ): Boolean; overload; override;
 		{ Déclarations publiques }
     procedure BeforeCreateFrameWork(Sender: TComponent);  override;
     procedure DestroyComponents ( const acom_Parent : TWinControl ); virtual;
@@ -372,25 +364,6 @@ end;
 // Inherited function, just make it true
 function TF_XMLForm.fb_ChargementNomCol(const AFWColumn: TFWColumn;
   const ai_NumSource: Integer): Boolean;
-begin
-  Result := True;
-end;
-
-// function fb_InsereCompteur
-// Software inherited counter management
-function TF_XMLForm.fb_InsereCompteur(const adat_Dataset: TDataset;
-  const aslt_Cle: TStringlist; const as_ChampCompteur, as_Table,
-  as_PremierLettrage: String; const ach_DebutLettrage, ach_FinLettrage: Char;
-  const ali_Debut, ali_LimiteRecherche: Int64): Boolean;
-begin
-  Result := False;
-end;
-
-// function fb_ValidePostDeleteWork
-// Have to make the management of obligatory fields
-
-function TF_XMLForm.fb_ValidePostDeleteWork(const adat_Dataset: TDataSet;
-  const aFWColumn: TFWColumn; const ab_Efface: Boolean): Boolean;
 begin
   Result := True;
 end;

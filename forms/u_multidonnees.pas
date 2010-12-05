@@ -351,12 +351,17 @@ Begin
   for li_i := 0 to high ( ga_Connections ) do
     if ga_connections [ li_i ].Clep = as_Clep Then
       Result := li_i;
- if  ( result = -1 )
- and ( as_Clep = '' ) Then
-   Result := low ( ga_Connections )
-  Else
-   if ab_Show_Error Then
-     ShowMessage ( 'Connection ' + as_Clep + ' not found !' );
+ if  ( result = -1 ) Then
+   Begin
+    if ( as_Clep = '' ) Then
+     Result := low ( ga_Connections )
+    Else
+     if ab_Show_Error Then
+       Begin
+         ShowMessage ( 'Connection ' + as_Clep + ' not found !' );
+         Abort;
+       end;
+  End;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
