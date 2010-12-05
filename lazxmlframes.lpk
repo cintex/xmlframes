@@ -13,7 +13,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="9" Build="3"/>
+    <Version Minor="9" Build="4"/>
     <Files Count="9">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
@@ -57,62 +57,35 @@
       <OutDir Value="fonctions"/>
     </i18n>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="18">
+    <RequiredPkgs Count="9">
       <Item1>
-        <PackageName Value="lazexttools"/>
+        <PackageName Value="LCL"/>
       </Item1>
       <Item2>
-        <PackageName Value="lazexttools"/>
+        <PackageName Value="JvXPBarLaz"/>
       </Item2>
       <Item3>
-        <PackageName Value="JvXPBarLaz"/>
+        <PackageName Value="xmldocument"/>
       </Item3>
       <Item4>
-        <PackageName Value="JvXPBarLaz"/>
-      </Item4>
-      <Item5>
-        <PackageName Value="JvXPBarLaz"/>
-      </Item5>
-      <Item6>
-        <PackageName Value="lazexttools"/>
-      </Item6>
-      <Item7>
-        <PackageName Value="lazexttools"/>
-      </Item7>
-      <Item8>
-        <PackageName Value="lazexttools"/>
-      </Item8>
-      <Item9>
-        <PackageName Value="lazexttools"/>
-      </Item9>
-      <Item10>
-        <PackageName Value="lazexttools"/>
-      </Item10>
-      <Item11>
-        <PackageName Value="xmldocument"/>
-      </Item11>
-      <Item12>
         <PackageName Value="FCL"/>
         <MinVersion Major="1" Valid="True"/>
-      </Item12>
-      <Item13>
+      </Item4>
+      <Item5>
         <PackageName Value="lazmansoft"/>
-      </Item13>
-      <Item14>
+      </Item5>
+      <Item6>
         <PackageName Value="lazfonctions"/>
-      </Item14>
-      <Item15>
+      </Item6>
+      <Item7>
         <PackageName Value="lazextcomponents"/>
-      </Item15>
-      <Item16>
+      </Item7>
+      <Item8>
         <PackageName Value="lazmanframes"/>
-      </Item16>
-      <Item17>
+      </Item8>
+      <Item9>
         <PackageName Value="rxnew"/>
-      </Item17>
-      <Item18>
-        <PackageName Value="LCL"/>
-      </Item18>
+      </Item9>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)/"/>
