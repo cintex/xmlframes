@@ -136,10 +136,11 @@ const CST_LEON_File_Extension = '.xml';
                                      FileUnit : 'fonctions_xml' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des données des objets dynamiques du composant Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory :  'Version 0.9.0.0 : Unit functionnal.' +
+              			                 BugsStory :  'Version 0.9.0.1 : Images Directory.' + #13#10 +
+                                                              'Version 0.9.0.0 : Unit functionnal.' + #13#10 +
                                                               'Version 0.1.0.0 : Création de l''unité.';
               			                 UnitType : 1 ;
-              			                 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 0 );
+              			                 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 1 );
 
 {$ENDIF}
 function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileXML : String ): Boolean;

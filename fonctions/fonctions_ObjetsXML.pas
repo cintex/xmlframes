@@ -53,9 +53,10 @@ const // Champs utilisés
                                      FileUnit : 'fonctions_ObjetsXML' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des données des objets dynamiques du composant Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory :  'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
+              			                 BugsStory : 'No ExtToolbar on LAZARUS.' + #13#10 +
+                                                             'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 0 );
+              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 1 );
 
 {$ENDIF}
 type

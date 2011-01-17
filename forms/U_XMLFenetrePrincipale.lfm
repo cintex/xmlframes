@@ -13,7 +13,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   ChildSizing.EnlargeVertical = crsHomogenousChildResize
   ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
-  ClientHeight = 618
+  ClientHeight = 620
   ClientWidth = 926
   Color = 13565951
   DefaultMonitor = dmDesktop
@@ -190,7 +190,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object br_statusbar: TStatusBar[6]
     Left = 0
-    Height = 19
+    Height = 21
     Top = 599
     Width = 926
     AutoHint = True
