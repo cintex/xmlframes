@@ -29,41 +29,37 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="8">
+    <RequiredPackages Count="7">
       <Item1>
         <PackageName Value="JvXPBarLaz"/>
         <MinVersion Major="1" Release="2" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="lazexttools"/>
-        <MinVersion Release="9" Valid="True"/>
+        <PackageName Value="lazxmlframes"/>
       </Item2>
       <Item3>
-        <PackageName Value="lazxmlframes"/>
+        <PackageName Value="lazmansoft"/>
       </Item3>
       <Item4>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="lazmanframes"/>
       </Item4>
       <Item5>
-        <PackageName Value="lazmanframes"/>
+        <PackageName Value="lazfonctions"/>
       </Item5>
       <Item6>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazextcomponents"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazextcomponents"/>
-      </Item7>
-      <Item8>
         <PackageName Value="LCL"/>
-      </Item8>
+      </Item7>
     </RequiredPackages>
     <Units Count="146">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="hotel"/>
-        <CursorPos X="65" Y="42"/>
-        <TopLine Value="26"/>
+        <CursorPos X="47" Y="37"/>
+        <TopLine Value="28"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="149"/>
         <Loaded Value="True"/>
