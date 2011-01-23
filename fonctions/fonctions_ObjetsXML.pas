@@ -52,11 +52,12 @@ const // Champs utilisés
   gver_fonctions_Objets_XML : T_Version = ( Component : 'Gestion des objets dynamiques XML' ;
                                      FileUnit : 'fonctions_ObjetsXML' ;
               			                 Owner : 'Matthieu Giroux' ;
-              			                 Comment : 'Gestion des données des objets dynamiques du composant Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory : 'No ExtToolbar on LAZARUS.' + #13#10 +
+              			                 Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
+              			                 BugsStory : 'Version 1.0.0.2 : Better Ini.' + #13#10 +
+                                                             'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
                                                              'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 1 );
+              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 2 );
 
 {$ENDIF}
 type
@@ -130,7 +131,7 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
 function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 function fi_FindAction ( const aClep : String ):Longint ;
-function fb_ReadIni ( var amif_Init : TMemIniFile ) : Boolean;
+function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
 procedure p_initialisationSommaire ( const as_SommaireEnCours      : String       );
 procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}TTntForm{$ELSE}TForm{$ENDIF}        ;
@@ -1927,7 +1928,7 @@ End;
 // Résultat : il y a un fichier projet.
 // amif_Init : ini file
 /////////////////////////////////////////////////////////////////////////
-function fb_ReadIni ( var amif_Init : TMemIniFile) : Boolean;
+function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 Begin
   Result := False;
   gs_Language := 'en';

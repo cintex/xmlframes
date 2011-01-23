@@ -8,7 +8,7 @@
       <Title Value="weo"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="0"/>
+      <ActiveEditorIndexAtStart Value="1"/>
     </General>
     <i18n>
       <EnableI18N Value="True"/>
@@ -53,13 +53,13 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="146">
+    <Units Count="147">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <CursorPos X="24" Y="61"/>
-        <TopLine Value="26"/>
+        <CursorPos X="58" Y="61"/>
+        <TopLine Value="28"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="149"/>
         <Loaded Value="True"/>
@@ -146,7 +146,6 @@
         <CursorPos X="44" Y="245"/>
         <TopLine Value="239"/>
         <UsageCount Value="11"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
         <Filename Value="../ManFrames/composants/U_FormMainIni.pas"/>
@@ -157,7 +156,6 @@
         <CursorPos X="21" Y="1426"/>
         <TopLine Value="1418"/>
         <UsageCount Value="8"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
         <Filename Value="../ManFrames/lazmansoft.lpk"/>
@@ -251,14 +249,12 @@
         <CursorPos X="25" Y="41"/>
         <TopLine Value="22"/>
         <UsageCount Value="13"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
         <Filename Value="../ManFrames/composants/U_GroupView.lrs"/>
         <CursorPos X="1" Y="1"/>
         <TopLine Value="1"/>
         <UsageCount Value="7"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
         <Filename Value="../ManFrames/composants/U_RegisterGroupView.pas"/>
@@ -266,7 +262,6 @@
         <CursorPos X="69" Y="10"/>
         <TopLine Value="1"/>
         <UsageCount Value="10"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit26>
       <Unit27>
         <Filename Value="../Extended/composants/U_RegisterListView.pas"/>
@@ -325,7 +320,6 @@
         <CursorPos X="1" Y="758"/>
         <TopLine Value="738"/>
         <UsageCount Value="10"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
         <Filename Value="../Alcinoe/source/ALFcnUnicode.pas"/>
@@ -402,7 +396,6 @@
         <CursorPos X="29" Y="311"/>
         <TopLine Value="291"/>
         <UsageCount Value="16"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit44>
       <Unit45>
         <Filename Value="../Alcinoe/source/ALFcnHTML.pas"/>
@@ -480,7 +473,6 @@
         <CursorPos X="50" Y="201"/>
         <TopLine Value="201"/>
         <UsageCount Value="36"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit55>
       <Unit56>
         <Filename Value="../Extended/composants/U_ExtDBImage.pas"/>
@@ -536,7 +528,6 @@
         <CursorPos X="1" Y="132"/>
         <TopLine Value="110"/>
         <UsageCount Value="17"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit63>
       <Unit64>
         <Filename Value="../ZEOSDBO/src/dbc/ZDbcIntfs.pas"/>
@@ -544,7 +535,6 @@
         <CursorPos X="26" Y="955"/>
         <TopLine Value="950"/>
         <UsageCount Value="11"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit64>
       <Unit65>
         <Filename Value="../ManFrames/composants/u_formdico.pas"/>
@@ -555,7 +545,6 @@
         <CursorPos X="119" Y="559"/>
         <TopLine Value="540"/>
         <UsageCount Value="12"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit65>
       <Unit66>
         <Filename Value="../ManFrames/forms/U_Administration.pas"/>
@@ -566,7 +555,6 @@
         <CursorPos X="23" Y="2149"/>
         <TopLine Value="2130"/>
         <UsageCount Value="11"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit66>
       <Unit67>
         <Filename Value="../Extended/composants/u_framework_components.pas"/>
@@ -595,7 +583,6 @@
         <CursorPos X="24" Y="6"/>
         <TopLine Value="1"/>
         <UsageCount Value="9"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit70>
       <Unit71>
         <Filename Value="../Freelogy/Components/SuperFormExpert/CompSuperForm.pas"/>
@@ -632,7 +619,6 @@
         <CursorPos X="1" Y="3530"/>
         <TopLine Value="3511"/>
         <UsageCount Value="27"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit75>
       <Unit76>
         <Filename Value="../../../../../../../usr/lib/lazarus/0.9.28.2/lcl/include/scrollingwincontrol.inc"/>
@@ -759,7 +745,6 @@
         <CursorPos X="10" Y="831"/>
         <TopLine Value="831"/>
         <UsageCount Value="10"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit93>
       <Unit94>
         <Filename Value="../../../../../../../usr/share/fpcsrc/2.4.0/rtl/objpas/sysutils/filutilh.inc"/>
@@ -779,7 +764,6 @@
         <CursorPos X="1" Y="1"/>
         <TopLine Value="1"/>
         <UsageCount Value="9"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit96>
       <Unit97>
         <Filename Value="../ManFrames/forms/U_FenetrePrincipale.lfm"/>
@@ -794,7 +778,6 @@
         <CursorPos X="5" Y="1875"/>
         <TopLine Value="1853"/>
         <UsageCount Value="21"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit98>
       <Unit99>
         <Filename Value="../../../../../../../usr/lib/lazarus/0.9.28.2/lcl/forms.pp"/>
@@ -1011,7 +994,6 @@
         <CursorPos X="1" Y="392"/>
         <TopLine Value="373"/>
         <UsageCount Value="10"/>
-        <SyntaxHighlighter Value="Delphi"/>
       </Unit130>
       <Unit131>
         <Filename Value="../XMLFrames/forms/U_XMFenetrePrincipale.pas"/>
@@ -1120,13 +1102,52 @@
         <TopLine Value="20"/>
         <UsageCount Value="13"/>
       </Unit145>
+      <Unit146>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <UnitName Value="fonctions_ObjetsXML"/>
+        <CursorPos X="88" Y="56"/>
+        <TopLine Value="41"/>
+        <EditorIndex Value="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit146>
     </Units>
-    <JumpHistory Count="0" HistoryIndex="-1"/>
+    <JumpHistory Count="7" HistoryIndex="6">
+      <Position1>
+        <Filename Value="weo.pas"/>
+        <Caret Line="61" Column="24" TopLine="26"/>
+      </Position1>
+      <Position2>
+        <Filename Value="weo.pas"/>
+        <Caret Line="10" Column="19" TopLine="1"/>
+      </Position2>
+      <Position3>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position3>
+      <Position4>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="133" Column="39" TopLine="113"/>
+      </Position4>
+      <Position5>
+        <Filename Value="weo.pas"/>
+        <Caret Line="10" Column="19" TopLine="1"/>
+      </Position5>
+      <Position6>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1930" Column="40" TopLine="1923"/>
+      </Position6>
+      <Position7>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="141" Column="101" TopLine="133"/>
+      </Position7>
+    </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="8"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
+      <UnitOutputDirectory Value="$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
       <Optimizations>

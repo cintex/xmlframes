@@ -63,7 +63,7 @@
 
 	<!-- Locations -->
 	&LOCATION;
-	<L_SQL id="mysql"
+	<L_SQL id="weo_db"
 			url="jdbc:mysql://localhost/"
 			driver="com.mysql.jdbc.Driver"
 			user="demo"
