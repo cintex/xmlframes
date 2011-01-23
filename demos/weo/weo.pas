@@ -6,7 +6,7 @@ program weo;
 uses
   Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents, lazfonctions,
-  u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
+  u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
 
 {$IFNDEF FPC}

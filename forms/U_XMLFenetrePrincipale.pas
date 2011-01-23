@@ -256,7 +256,7 @@ begin
   ChangeLanguage( li_Language );
   {$ENDIF}
 
-   gs_DefaultUser := f_IniReadSectionStr ( INISEC_PAR, INISEC_UTI, '' );
+  gs_DefaultUser := gmif_MainFormIniInit.Readstring ( INISEC_PAR, INISEC_UTI, '' );
 
   SvgFormInfoIni.LaFormCreate ( Self );
   // Lecture des infos des composants du fichier INI

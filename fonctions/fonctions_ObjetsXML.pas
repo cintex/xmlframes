@@ -1903,6 +1903,12 @@ Begin
   if ( gs_ProjectFile = '' ) then
     Begin
       lstl_FichierIni := TStringList.Create ;
+      if not FileExists(fs_getSoftDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
+        Begin
+          ShowMessage ( 'No ini file LEONARDI project !' );
+          Application.Terminate;
+          Exit;
+        end;
       try
         lstl_FichierIni.LoadFromFile( fs_getSoftDir + fs_GetNameSoft + CST_EXTENSION_INI);
         if ( pos ( INISEC_PAR, lstl_FichierIni [ 0 ] ) <= 0 ) Then
@@ -1934,7 +1940,7 @@ Begin
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
   if not assigned ( amif_Init ) then
-    amif_Init := TMemIniFile.Create(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI);
+    amif_Init := TIniFile.Create(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI);
   if assigned ( amif_Init ) Then
     Begin
       gs_ProjectFile := amif_Init.ReadString(INISEC_PAR,CST_INI_PROJECT_FILE,'');
