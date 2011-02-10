@@ -762,7 +762,7 @@ begin
         end;
     end;
   OnClose:=p_CloseLoginAction;
-  Name := 'XMLLogin' ;
+  Name := CST_COMPONENTS_FORM_BEGIN + 'AutoLoginForm' ;
   // Initiate data and showing
   FormCreate ( Self );
   Position:=poMainFormCenter;
@@ -877,6 +877,7 @@ begin
        End;
    End;
  FormCreate ( Self );
+ gfin_FormIni.p_ExecuteLecture(Self);
 end;
 
 // procedure p_setChoiceComponent
@@ -1415,6 +1416,8 @@ begin
   gfin_FormIni.SauvePosForm    := True;
   gfin_FormIni.SauvePosObjects := True;
   gfin_FormIni.Name := CST_COMPONENTS_FORMINI;
+  gfin_FormIni.AutoUpdate := True;
+  gfin_FormIni.AutoLoad   := False;
 end;
 
 
