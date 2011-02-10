@@ -762,6 +762,7 @@ begin
         end;
     end;
   OnClose:=p_CloseLoginAction;
+  Name := 'XMLLogin' ;
   // Initiate data and showing
   FormCreate ( Self );
   Position:=poMainFormCenter;
@@ -884,7 +885,7 @@ end;
 
 procedure TF_XMLForm.p_setChoiceComponent( const argr_Control : TDBRadioGroup );
 Begin
-  argr_Control.Height:=argr_Control.Items.Count  * gi_FontHeight + argr_Control.BorderWidth * 2 ;
+  argr_Control.Height:=argr_Control.Items.Count  * gi_FontHeight + flin_getComponentProperty ( argr_Control, 'BorderWidth' )  * 2 ;
 end;
 
 
