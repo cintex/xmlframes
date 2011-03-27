@@ -3,17 +3,22 @@
   <Package Version="3">
     <Name Value="lazxmlframes"/>
     <CompilerOptions>
-      <Version Value="8"/>
+      <Version Value="9"/>
       <SearchPaths>
-        <IncludeFiles Value="composants/;forms/"/>
-        <OtherUnitFiles Value="composants/;classes/;Servers/;forms/;fonctions/"/>
+        <IncludeFiles Value="composants;forms"/>
+        <OtherUnitFiles Value="composants;classes;Servers;forms;fonctions"/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
       <Other>
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="9" Release="1" Build="1"/>
+    <Version Minor="9" Release="2" Build="2"/>
     <Files Count="9">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
@@ -88,7 +93,7 @@
       </Item9>
     </RequiredPkgs>
     <UsageOptions>
-      <UnitPath Value="$(PkgOutDir)/"/>
+      <UnitPath Value="$(PkgOutDir)"/>
     </UsageOptions>
     <PublishOptions>
       <Version Value="2"/>

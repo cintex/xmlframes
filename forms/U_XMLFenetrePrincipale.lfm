@@ -1,10 +1,9 @@
 inherited F_FenetrePrincipale: TF_FenetrePrincipale
-  Left = 377
+  Left = 419
   Height = 645
   Top = 202
-  Width = 926
+  Width = 884
   HelpContext = 1400
-  ActiveControl = tbsep_1
   Align = alClient
   AutoScroll = True
   AutoSize = True
@@ -14,7 +13,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
   ClientHeight = 620
-  ClientWidth = 926
+  ClientWidth = 884
   Color = 13565951
   DefaultMonitor = dmDesktop
   Font.Height = -11
@@ -24,7 +23,6 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   OnActivate = F_FormMainIniActivate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  Visible = True
   object im_appli: TImage[0]
     Left = 248
     Height = 49
@@ -56,7 +54,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Width = 16
     Version = 'Version 3.20, Copyright � 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
     Visible = False
-    TabOrder = 1
+    TabOrder = 0
   end
   object spl_volet: TSplitter[4]
     Left = 197
@@ -64,135 +62,11 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Top = 50
     Width = 5
   end
-  object tbar_outils: TToolBar[5]
-    Left = 0
-    Height = 50
-    Hint = 'Cliquer sur un bouton pour accéder à une fonction'
-    Top = 0
-    Width = 926
-    HelpContext = 1430
-    Caption = 'Barre d''accès'
-    Color = cl3DLight
-    ParentColor = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 0
-    object tbsep_3: TPanel
-      Left = 590
-      Height = 22
-      Top = 2
-      Width = 1
-      TabOrder = 4
-    end
-    object tbsep_1: TPanel
-      Left = 588
-      Height = 22
-      Top = 2
-      Width = 1
-      TabOrder = 5
-    end
-    object tbsep_2: TPanel
-      Left = 589
-      Height = 22
-      Top = 2
-      Width = 1
-      TabOrder = 6
-    end
-    object pa_4: TPanel
-      Left = 869
-      Height = 48
-      Top = 2
-      Width = 57
-      Align = alRight
-      BevelOuter = bvNone
-      ClientHeight = 48
-      ClientWidth = 57
-      TabOrder = 0
-      object dbt_quitter: TJvXPButton
-        Left = 9
-        Height = 41
-        Hint = 'Quitter'
-        Top = 0
-        Width = 41
-        HelpContext = 1430
-        TabOrder = 0
-        Font.Height = -13
-        Font.Name = 'MS Sans Serif'
-        ParentFont = False
-        ParentShowHint = False
-        ShowHint = True
-        OnClick = dbt_quitterClick
-      end
-    end
-    object pa_1: TPanel
-      Left = 1
-      Height = 22
-      Top = 2
-      Width = 57
-      BevelOuter = bvNone
-      ClientHeight = 22
-      ClientWidth = 57
-      TabOrder = 1
-      object dbt_ident: TJvXPButton
-        Left = 9
-        Height = 41
-        Hint = 'S''identifier/déconnecter|Ouvrir la fenêtre d''identification'
-        Top = 0
-        Width = 40
-        HelpContext = 1430
-        TabOrder = 0
-        Layout = blGlyphRight
-        Font.Height = -13
-        Font.Name = 'MS Sans Serif'
-        ParentFont = False
-        ParentShowHint = False
-        ShowHint = True
-        OnClick = dbt_identClick
-      end
-    end
-    object pa_2: TPanel
-      Left = 58
-      Height = 22
-      Top = 2
-      Width = 530
-      BevelOuter = bvNone
-      TabOrder = 2
-    end
-    object pa_3: TPanel
-      Left = 812
-      Height = 48
-      Top = 2
-      Width = 57
-      Align = alRight
-      BevelOuter = bvNone
-      ClientHeight = 48
-      ClientWidth = 57
-      TabOrder = 3
-      object dbt_aide: TJvXPButton
-        Left = 9
-        Height = 41
-        Hint = 'Ouvrir l''aide|Rubrique d''aide'
-        Top = 0
-        Width = 41
-        HelpContext = 1430
-        TabOrder = 0
-        Layout = blGlyphRight
-        Spacing = 0
-        Align = alCustom
-        Font.Height = -13
-        Font.Name = 'MS Sans Serif'
-        ParentFont = False
-        ParentShowHint = False
-        ShowHint = True
-        OnClick = dbt_aideClick
-      end
-    end
-  end
-  object br_statusbar: TStatusBar[6]
+  object br_statusbar: TStatusBar[5]
     Left = 0
     Height = 21
     Top = 599
-    Width = 926
+    Width = 884
     AutoHint = True
     Panels = <    
       item
@@ -231,7 +105,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end>
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object pa_5: TPanel[7]
+  object pa_5: TPanel[6]
     Left = 0
     Height = 549
     Top = 50
@@ -242,12 +116,12 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     ClientWidth = 197
     Color = cl3DLight
     ParentColor = False
-    TabOrder = 2
+    TabOrder = 1
     OnResize = pa_5Resize
     object scb_Volet: TScrollBox
       Left = 0
       Height = 549
-      Hint = 'Cliquez pour accéder aux fonctions'
+      Hint = 'Cliquez pour accÃ©der aux fonctions'
       Top = 0
       Width = 197
       HelpContext = 1440
@@ -258,6 +132,144 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+    end
+  end
+  object tbar_outils: TToolBar[7]
+    Left = 0
+    Height = 50
+    Hint = 'Cliquer sur un bouton pour accÃ©der Ã  une fonction'
+    Top = 0
+    Width = 884
+    HelpContext = 1430
+    Caption = 'Barre d''accÃ¨s'
+    Color = cl3DLight
+    ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
+    object pa_4: TPanel
+      Left = 824
+      Height = 48
+      Top = 2
+      Width = 57
+      Align = alRight
+      BevelOuter = bvNone
+      ClientHeight = 48
+      ClientWidth = 57
+      TabOrder = 0
+      object dbt_quitter: TJvXPButton
+        Left = 9
+        Height = 41
+        Hint = 'Quitter'
+        Top = 0
+        Width = 41
+        HelpContext = 1430
+        TabOrder = 0
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = dbt_quitterClick
+      end
+    end
+    object pa_3: TPanel
+      Left = 764
+      Height = 48
+      Top = 2
+      Width = 57
+      Align = alRight
+      BevelOuter = bvNone
+      ClientHeight = 48
+      ClientWidth = 57
+      TabOrder = 1
+      object dbt_aide: TJvXPButton
+        Left = 9
+        Height = 41
+        Hint = 'Ouvrir l''aide|Rubrique d''aide'
+        Top = 0
+        Width = 41
+        HelpContext = 1430
+        TabOrder = 0
+        Layout = blGlyphRight
+        Spacing = 0
+        Align = alCustom
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = dbt_aideClick
+      end
+    end
+    object tbsep_1: TPanel
+      Left = 58
+      Height = 48
+      Top = 2
+      Width = 3
+      Align = alLeft
+      TabOrder = 2
+    end
+    object tbsep_3: TPanel
+      Left = 821
+      Height = 48
+      Top = 2
+      Width = 3
+      Align = alRight
+      TabOrder = 3
+    end
+    object tbsep_4: TPanel
+      Left = 881
+      Height = 48
+      Top = 2
+      Width = 3
+      Align = alRight
+      TabOrder = 4
+    end
+    object pa_1: TPanel
+      Left = 1
+      Height = 48
+      Top = 2
+      Width = 57
+      Align = alLeft
+      BevelOuter = bvNone
+      ClientHeight = 48
+      ClientWidth = 57
+      TabOrder = 5
+      object dbt_ident: TJvXPButton
+        Left = 9
+        Height = 41
+        Hint = 'S''identifier/dÃ©connecter|Ouvrir la fenÃªtre d''identification'
+        Top = 0
+        Width = 40
+        HelpContext = 1430
+        TabOrder = 0
+        Default = True
+        Layout = blGlyphRight
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = dbt_identClick
+      end
+    end
+    object tbsep_2: TPanel
+      Left = 761
+      Height = 48
+      Top = 2
+      Width = 3
+      Align = alRight
+      TabOrder = 6
+    end
+    object pa_2: TPanel
+      Left = 61
+      Height = 48
+      Top = 2
+      Width = 700
+      Align = alClient
+      BevelOuter = bvNone
+      TabOrder = 7
     end
   end
   object im_Liste: TImageList[8]
@@ -883,10 +895,10 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_file: TMenuItem
       Caption = '&Application'
       HelpContext = 1420
-      Hint = 'Fermeture des fenêtres ou de l''application'
+      Hint = 'Fermeture des fenÃªtres ou de l''application'
       object mu_identifier: TMenuItem
         Caption = 'S''&identifier'
-        Hint = 'Ouvrir la fenêtre d''identification'
+        Hint = 'Ouvrir la fenÃªtre d''identification'
         OnClick = dbt_identClick
       end
       object mu_ouvrir: TMenuItem
@@ -907,10 +919,10 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
     object mu_fenetre: TMenuItem
-      Caption = 'Fe&nêtre'
-      Hint = 'Commandes relatives aux fenêtres'
+      Caption = 'Fe&nÃªtre'
+      Hint = 'Commandes relatives aux fenÃªtres'
       object mu_Reinitiliserpresentation: TMenuItem
-        Caption = 'Réinitialiser la présentation'
+        Caption = 'RÃ©initialiser la prÃ©sentation'
         HelpContext = 1420
         OnClick = mu_ReinitiliserpresentationClick
       end
@@ -939,13 +951,13 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_affichage: TMenuItem
       Caption = 'Affichage'
       object mu_barreoutils: TMenuItem
-        Caption = 'Barre d''accès'
+        Caption = 'Barre d''accÃ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_barreoutilsClick
       end
       object mu_voletexplore: TMenuItem
-        Caption = 'Volet d''accès'
+        Caption = 'Volet d''accÃ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_voletexploreClick
@@ -966,7 +978,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       object mu_apropos: TMenuItem
         Caption = '&A propos...'
         HelpContext = 1420
-        Hint = 'A propos|Afficher des informations sur le programme, le numéro de version et le copyright'
+        Hint = 'A propos|Afficher des informations sur le programme, le numÃ©ro de version et le copyright'
         OnClick = mu_aproposClick
       end
     end

@@ -17,6 +17,7 @@ unit U_XMLFenetrePrincipale;
 
 {$IFDEF FPC}
 {$mode Delphi}
+{$R *.lfm}
 {$ELSE}
 {$R *.dfm}
 {$ENDIF}
@@ -71,8 +72,13 @@ type
   { TF_FenetrePrincipale }
 
   TF_FenetrePrincipale = class(TF_FormMainIni)
+    mu_apropos: TMenuItem;
+    mu_cascade: TMenuItem;
     mu_MainMenu: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
     mu_file: TMenuItem;
+    mu_mosaiqueh: TMenuItem;
+    mu_mosaiquev: TMenuItem;
+    mu_organiser: TMenuItem;
     mu_ouvrir: TMenuItem;
     mu_sep1: TMenuItem;
     mu_quitter: TMenuItem;
@@ -97,6 +103,7 @@ type
     mu_sep3: TMenuItem;
 
     ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
+    pa_2: TPanel;
     {$IFDEF MDI}
     WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
     WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
@@ -115,12 +122,11 @@ type
     {$ENDIF}
     tbar_volet: {$IFDEF FPC}TToolbar{$ELSE}TExtToolbar{$ENDIF};
     tbsep_1: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
-    tbsep_2: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
     tbsep_3: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
+    tbsep_2: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
     tbar_outils: {$IFDEF FPC}TToolbar{$ELSE}TExtToolbar{$ENDIF};
 
     pa_1: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
     pa_3: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
     pa_4: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
     pa_5: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
@@ -168,7 +174,6 @@ type
     procedure tbar_outilsClose(Sender: TObject);
 
     procedure tbar_voletDockChanged(Sender: TObject);
-    procedure tbar_voletCloseQuery(Sender: TObject; var CanClose: Boolean);
     function CloseQuery: Boolean; override;
     procedure mu_ReinitiliserpresentationClick(Sender: TObject);
 
@@ -460,7 +465,7 @@ end;
 
 procedure TF_FenetrePrincipale.F_FormMainIniResize(Sender: TObject);
 begin
-  F_FormResize ( Self, tbar_outils,pa_2, tbsep_2, br_statusbar, im_led);
+//  F_FormResize ( Self, tbar_outils,pa_2, tbsep_2, br_statusbar, im_led);
 end;
 
 procedure TF_FenetrePrincipale.DoClose ( var AAction: TCloseAction );
@@ -616,7 +621,6 @@ end;
 
 procedure TF_FenetrePrincipale.mu_voletchange(const ab_visible : Boolean);
 begin
-  DisableAlign ;
   mu_voletexplore.Checked := ab_visible;
 {$IFNDEF FPC}
   tbar_volet.Visible := ab_visible;
@@ -627,7 +631,6 @@ begin
     tbar_voletDockChanged(Self);
 {$ENDIF}
   spl_volet.Left := pa_5.Width;
-  EnableAlign ;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -676,13 +679,6 @@ procedure TF_FenetrePrincipale.br_statusbarDrawPanel(StatusBar: TStatusBar;
   Panel: TStatusPanel; const Rect: TRect);
 begin
   p_statusbarDrawPanel( StatusBar, Panel, Rect );
-end;
-
-procedure TF_FenetrePrincipale.tbar_voletCloseQuery(Sender: TObject;
-  var CanClose: Boolean);
-begin
-  DisableAlign ;
-
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -824,9 +820,6 @@ begin
     fb_ReadLanguage ( {$IFDEF TNT}GetLanguageCode ( LangManager.LanguageID ){$ELSE}ga_SoftwareLanguages [ iIndex ].LittleLang{$ENDIF});
 end;
 initialization
-{$IFDEF FPC}
-  {$I U_XMLFenetrePrincipale.lrs}
-{$ENDIF}
 {$IFDEF VERSIONS}
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}

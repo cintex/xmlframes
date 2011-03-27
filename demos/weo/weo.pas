@@ -4,6 +4,9 @@ program weo;
 
 
 uses
+  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  cthreads,
+  {$ENDIF}{$ENDIF}
   Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents, lazfonctions,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
