@@ -309,7 +309,7 @@ Begin
   p_InitFrameWork ( AOwner );
 
   // Creating objects
-  p_CreateColumns;
+  CreateColumns;
 
   if not ( csDesigning in ComponentState ) Then
     Try
