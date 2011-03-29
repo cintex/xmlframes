@@ -681,6 +681,7 @@ var
     lfwl_Label    : TFWLabel;
     lfwc_Column     : TFWColumn ;
 begin
+  DisableAlign ;
   gfwe_Password := nil;
   gfwe_Login    := nil;
   for li_i := 0 to axml_Login.ChildNodes.Count - 1 do
@@ -769,6 +770,7 @@ begin
   Name := CST_COMPONENTS_FORM_BEGIN + 'AutoLoginForm' ;
   // Initiate data and showing
   FormCreate ( Self );
+  EnableAlign ;
   Position:=poMainFormCenter;
   FormStyle:=fsStayOnTop;
   Show;
@@ -855,6 +857,7 @@ begin
     Begin
       p_CopyLeonFunction ( a_Value, gr_Function );
     End;
+ DisableAlign ;
  Name := CST_COMPONENTS_FORM_BEGIN + a_value.Clep;
  Caption := fs_GetLabelCaption ( gr_Function.Name );
  li_NumSource := 0 ;
@@ -881,6 +884,7 @@ begin
    End;
  FormCreate ( Self );
  gfin_FormIni.p_ExecuteLecture(Self);
+ EnableAlign ;
 end;
 
 // procedure p_setChoiceComponent
