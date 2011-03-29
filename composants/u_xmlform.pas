@@ -306,28 +306,32 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 Constructor TF_XMLForm.Create(AOwner: TComponent);
 Begin
-  p_InitFrameWork ( AOwner );
-
-  // Creating objects
-  p_CreateColumns;
 
   if not ( csDesigning in ComponentState ) Then
     Try
+      gstl_SQLWork := nil ;
       GlobalNameSpace.BeginWrite;
+
+      p_InitFrameWork ( AOwner );
+      // Creating objects
+      p_CreateColumns;
+
       {$IFDEF FPC}
-      CreateNew(AOwner,0 );
+      CreateNew(AOwner, 1 );
       {$ELSE}
       CreateNew(AOwner);
       {$ENDIF}
-      DoCreate;
+      {$IFDEF SFORM}
+      InitSuperForm;
+      {$ENDIF}
     Finally
       GlobalNameSpace.EndWrite;
     End
   Else
-   inherited ;
-
-  if ( csDesigning in ComponentState ) Then
-    Exit ;
+   Begin
+     inherited ;
+     Exit ;
+   end;
 
   DataCloseMessage := True;
 
@@ -767,8 +771,7 @@ begin
   FormCreate ( Self );
   Position:=poMainFormCenter;
   FormStyle:=fsStayOnTop;
-  Visible := True;
-  BringToFront;
+  Show;
 end;
 // procedure p_CloseLoginAction
 // Login close event

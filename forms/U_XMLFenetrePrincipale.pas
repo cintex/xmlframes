@@ -29,7 +29,7 @@ uses
   ZConnection,
 {$ENDIF}
 {$IFDEF FPC}
-   LCLIntf, LCLType, SQLDB, PCheck, lresources,
+   LCLIntf, LCLType, SQLDB, PCheck,
 {$ELSE}
   Windows, OleDB, JvComponent, StoHtmlHelp, JvScrollBox,
   extdock, ExtTBTlbr, ImgList,
