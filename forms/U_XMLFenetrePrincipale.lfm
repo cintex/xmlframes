@@ -12,7 +12,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   ChildSizing.EnlargeVertical = crsHomogenousChildResize
   ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
-  ClientHeight = 619
+  ClientHeight = 620
   ClientWidth = 884
   Color = 13565951
   DefaultMonitor = dmDesktop
@@ -59,14 +59,14 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object spl_volet: TSplitter[4]
     Left = 197
-    Height = 548
+    Height = 549
     Top = 50
     Width = 5
   end
   object br_statusbar: TStatusBar[5]
     Left = 0
     Height = 21
-    Top = 598
+    Top = 599
     Width = 884
     AutoHint = True
     Panels = <    
@@ -108,12 +108,12 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object pa_5: TPanel[6]
     Left = 0
-    Height = 548
+    Height = 549
     Top = 50
     Width = 197
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 548
+    ClientHeight = 549
     ClientWidth = 197
     Color = cl3DLight
     ParentColor = False
@@ -121,8 +121,8 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     OnResize = pa_5Resize
     object scb_Volet: TScrollBox
       Left = 0
-      Height = 548
-      Hint = 'Cliquez pour accÃÂÃÂÃÂÃÂ©der aux fonctions'
+      Height = 549
+      Hint = 'Cliquez pour accÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©der aux fonctions'
       Top = 0
       Width = 197
       HelpContext = 1440
@@ -138,11 +138,11 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   object tbar_outils: TToolBar[7]
     Left = 0
     Height = 50
-    Hint = 'Cliquer sur un bouton pour accÃÂÃÂÃÂÃÂ©der ÃÂÃÂÃÂÃÂ  une fonction'
+    Hint = 'Cliquer sur un bouton pour accÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©der ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  une fonction'
     Top = 0
     Width = 884
     HelpContext = 1430
-    Caption = 'Barre d''accÃÂÃÂÃÂÃÂ¨s'
+    Caption = 'Barre d''accÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¨s'
     Color = cl3DLight
     ParentColor = False
     ParentShowHint = False
@@ -240,7 +240,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       object dbt_ident: TJvXPButton
         Left = 9
         Height = 41
-        Hint = 'S''identifier/dÃÂÃÂÃÂÃÂ©connecter|Ouvrir la fenÃÂÃÂÃÂÃÂªtre d''identification'
+        Hint = 'S''identifier/dÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©connecter|Ouvrir la fenÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂªtre d''identification'
         Top = 0
         Width = 40
         HelpContext = 1430
@@ -896,10 +896,10 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_file: TMenuItem
       Caption = '&Application'
       HelpContext = 1420
-      Hint = 'Fermeture des fenÃÂÃÂÃÂÃÂªtres ou de l''application'
+      Hint = 'Fermeture des fenÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂªtres ou de l''application'
       object mu_identifier: TMenuItem
         Caption = 'S''&identifier'
-        Hint = 'Ouvrir la fenÃÂÃÂÃÂÃÂªtre d''identification'
+        Hint = 'Ouvrir la fenÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂªtre d''identification'
         OnClick = dbt_identClick
       end
       object mu_ouvrir: TMenuItem
@@ -920,10 +920,10 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
     object mu_fenetre: TMenuItem
-      Caption = 'Fe&nÃÂÃÂÃÂÃÂªtre'
-      Hint = 'Commandes relatives aux fenÃÂÃÂÃÂÃÂªtres'
+      Caption = 'Fe&netre'
+      Hint = 'Commandes relatives aux fenÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂªtres'
       object mu_Reinitiliserpresentation: TMenuItem
-        Caption = 'RÃÂÃÂÃÂÃÂ©initialiser la prÃÂÃÂÃÂÃÂ©sentation'
+        Caption = 'Reinitialiser la &presentation'
         HelpContext = 1420
         OnClick = mu_ReinitiliserpresentationClick
       end
@@ -952,13 +952,13 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_affichage: TMenuItem
       Caption = 'Affichage'
       object mu_barreoutils: TMenuItem
-        Caption = 'Barre d''accÃÂÃÂÃÂÃÂ¨s'
+        Caption = 'Barre d''accÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_barreoutilsClick
       end
       object mu_voletexplore: TMenuItem
-        Caption = 'Volet d''accÃÂÃÂÃÂÃÂ¨s'
+        Caption = 'Volet d''accÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_voletexploreClick
@@ -979,7 +979,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       object mu_apropos: TMenuItem
         Caption = '&A propos...'
         HelpContext = 1420
-        Hint = 'A propos|Afficher des informations sur le programme, le numÃÂÃÂÃÂÃÂ©ro de version et le copyright'
+        Hint = 'A propos|Afficher des informations sur le programme, le numÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ©ro de version et le copyright'
         OnClick = mu_aproposClick
       end
     end
