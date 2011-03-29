@@ -83,12 +83,6 @@ type
     mu_sep1: TMenuItem;
     mu_quitter: TMenuItem;
     mu_fenetre: TMenuItem;
-    {$IFNDEF FPC}
-    mu_cascade: TMenuItem;
-    mu_mosaiqueh: TMenuItem;
-    mu_mosaiquev: TMenuItem;
-    mu_organiser: TMenuItem;
-    {$ENDIF}
     mu_reduire: TMenuItem;
     mu_affichage: TMenuItem;
     mu_barreoutils: TMenuItem;
@@ -96,14 +90,11 @@ type
     mu_aide: TMenuItem;
     mu_ouvriraide: TMenuItem;
     mu_sep2: TMenuItem;
-    {$IFDEF VERSIONS}
-    mu_apropos: TMenuItem;
-    {$ENDIF}
     mu_Reinitiliserpresentation: TMenuItem;
     mu_sep3: TMenuItem;
 
     ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
-    pa_2: TPanel;
+    pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
     {$IFDEF MDI}
     WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
     WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
