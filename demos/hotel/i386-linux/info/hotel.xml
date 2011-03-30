@@ -28,7 +28,7 @@
 	&ROOT;
 
 	<!-- Locations -->
-	<L_SQL id="mysql"
+	<L_SQL id="hotel_db"
 			url="jdbc:mysql://localhost:3306/"
 			driver="com.mysql.jdbc.Driver"
 			user="demo"
