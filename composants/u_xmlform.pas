@@ -1088,6 +1088,8 @@ begin
      with afwc_Column do
        Begin
          gi_LastFormFieldsHeight := 0;
+         gi_LastFormColumnHeight := 0;
+         ab_Column:=False;
          awin_Parent := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent,
                           CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
                           Gs_DetailsSheet, ai_FieldCounter );

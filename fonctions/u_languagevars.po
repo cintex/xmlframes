@@ -2,7 +2,7 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
 #: u_languagevars.gs_detailssheet
-msgid "D#233tails"
+msgid "Détails"
 msgstr ""
 
 #: u_languagevars.gs_emptyfunctionname
@@ -14,14 +14,14 @@ msgid "Ce nom d'item XP BAR est invalide : "
 msgstr ""
 
 #: u_languagevars.gs_nocomponenttocreate
-msgid "Pas de composant r#233pertori#233 pour "
+msgid "Pas de composant répertorié pour "
 msgstr ""
 
 #: u_languagevars.gs_noformtocreate
-msgid "Pas de formulaire r#233pertori#233 pour "
+msgid "Pas de formulaire répertorié pour "
 msgstr ""
 
 #: u_languagevars.gs_rootform
-msgid "Fen#234tre principale"
+msgid "Fenêtre principale"
 msgstr ""
 

@@ -213,7 +213,7 @@ begin
     Try
       GlobalNameSpace.BeginWrite;
       {$IFDEF FPC}
-      CreateNew(AOwner,0 );
+      CreateNew(AOwner, 0 );
       {$ELSE}
       CreateNew(AOwner);
       {$ENDIF}
