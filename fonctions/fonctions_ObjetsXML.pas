@@ -312,13 +312,6 @@ End ;
 // ab_Ajuster  : Adjust the form of function
 /////////////////////////////////////////////////////////////////////////
 procedure p_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        );
-var lf_Formulaire    : TF_XMLForm ;
-    lb_Unload        : Boolean ;
-    li_i             : Longint ;
-    lfs_newFormStyle : TFormStyle ;
-    llf_Function      : TLeonFunction;
-    lico_icon : TIcon ;
-    lbmp_Bitmap : TBitmap ;
 begin
   // Recherche dans ce qui a été chargé par les fichiers XML
   p_ExecuteNoFonction ( fi_findAction ( as_Fonction ), ab_ajuster);
@@ -2222,9 +2215,7 @@ Begin
     if li_i = 0 Then
       Begin
         Result := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
-        {$IFDEF FPC}
         Break;
-        {$ENDIF}
       end
      Else
       Result := Result + ',' + fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );

@@ -567,6 +567,7 @@ Begin
             ls_FieldsID := fs_GetStringFields  ( alis_IdRelation , '' );
             ls_FieldsDisplay := fs_GetStringFields  ( alis_DisplayRelation, '' );
             Result := TFWDBLookupCombo.Create ( Self );
+//            ( Result as TFWDBLookupCombo ).DisplayAllFields := true ;
             if ls_FieldsDisplay <> '' Then
              Begin
                ls_Fields := ls_FieldsID + ',' + ls_FieldsDisplay;

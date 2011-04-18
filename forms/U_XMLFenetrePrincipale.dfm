@@ -84,7 +84,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         Top = 0
       end
       object tbsep_1: TExtToolbarSep
-        Left = 57
+        Left = 587
         Top = 0
       end
       object tbsep_2: TExtToolbarSep
@@ -119,7 +119,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         end
       end
       object pa_1: TTntPanel
-        Left = 0
+        Left = 530
         Top = 0
         Width = 57
         Height = 41
@@ -146,7 +146,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         end
       end
       object pa_2: TTntPanel
-        Left = 63
+        Left = 0
         Top = 0
         Width = 530
         Height = 41
@@ -259,7 +259,6 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         UseLastDock = False
         Visible = False
         OnClose = tbar_voletClose
-        OnCloseQuery = tbar_voletCloseQuery
         OnDockChanged = tbar_voletDockChanged
         object scb_Volet: TScrollBox
           Left = 0
