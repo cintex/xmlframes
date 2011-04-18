@@ -113,7 +113,7 @@ function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge :
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TAConnection; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep :String;
-                                    var as_Table, as_connection : String; var aanod_idRelation : TList ;
+                                    var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
 procedure p_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ) ;
 procedure p_CreateRootEntititiesForm;
@@ -2086,7 +2086,7 @@ End ;
 // anod_NodeCrossLink : linked node in other file
 ////////////////////////////////////////////////////////////////////////////////
 function fdoc_GetCrossLinkFunction( const as_FunctionClep :String;
-                                    var as_Table, as_connection : String; var aanod_idRelation : TList ;
+                                    var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
 var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties,
@@ -2120,6 +2120,7 @@ begin
                           for li_k := 0 to lnod_ClassProperties.ChildNodes.Count -1 do
                             Begin
                               p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_id, aanod_idRelation );
+                              p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_main, aanod_DisplayRelation );
                             End;
                         End;
                     End;
@@ -2207,7 +2208,7 @@ begin
 End;
 
 ////////////////////////////////////////////////////////////////////////////////
-// function fs_GetStringFields
+// function fs_GetIDFields
 // getting a list separated by comma from nodes
 // alis_NodeFields : Node fields
 // as_Empty        : if empty put this string
@@ -2219,9 +2220,34 @@ Begin
   Result := as_Empty;
   for li_i := 0 to  alis_NodeFields.count - 1 do
     if li_i = 0 Then
-      Result := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID )
+      Begin
+        Result := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
+        {$IFDEF FPC}
+        Break;
+        {$ENDIF}
+      end
      Else
       Result := Result + ',' + fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
+end;
+
+function fs_GetDisplayFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
+var
+    li_i : Integer ;
+    listnodes : TList ;
+Begin
+  Result := as_Empty;
+  listnodes := TList.Create;
+  for li_i := 0 to  alis_NodeFields.count - 1 do
+    Begin
+      p_GetMarkFunction(alis_NodeFields [ li_i ],CST_LEON_FIELD_main, listnodes );
+    End;
+  Result := as_Empty;
+  for li_i := 0 to  listnodes.count - 1 do
+    if li_i = 0 Then
+      Result := fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID )
+     Else
+      Result := Result + CST_COMBO_FIELD_SEPARATOR + fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID );
+  listnodes.Free;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

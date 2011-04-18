@@ -529,15 +529,16 @@ var ldoc_XMlRelation : TALXMLDocument ;
     lnode, lnodeClass,
     anod_CrossLinkRelation : TALXMLNode;
     ls_Class, ls_Connection : String;
-    alis_idRelation        : TList;
+    alis_idRelation, alis_DisplayRelation         : TList;
     li_i : Integer;
-    ls_Fields : String;
+    ls_Fields, ls_FieldsID, ls_FieldsDisplay : String;
 Begin
   Result := nil;
   if ( anod_Field.NodeName = CST_LEON_FIELD_RELATION ) then
     Begin
       lnode := fnod_GetClassFromRelation(anod_Field);
       alis_IdRelation        := TList.Create;
+      alis_DisplayRelation   := TList.Create;
       anod_CrossLinkRelation := nil;
       ldoc_XMlRelation       := nil;
       try
@@ -558,22 +559,31 @@ Begin
                   end;
               end;
         /// getting other xml file info
-        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_Class, ls_Connection, alis_IdRelation, anod_CrossLinkRelation );
+        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_Class, ls_Connection, alis_IdRelation, alis_DisplayRelation, anod_CrossLinkRelation );
         li_i := fi_FindConnection(ls_Connection, True );
         if anod_CrossLinkRelation = nil Then
          // 1-N relationships
           Begin
+            ls_FieldsID := fs_GetStringFields  ( alis_IdRelation , '' );
+            ls_FieldsDisplay := fs_GetStringFields  ( alis_DisplayRelation, '' );
             Result := TFWDBLookupCombo.Create ( Self );
-            ls_Fields := fs_GetStringFields  ( alis_IdRelation , '' );
+            if ls_FieldsDisplay <> '' Then
+             Begin
+               ls_Fields := ls_FieldsID + ',' + ls_FieldsDisplay;
+               ( Result as TFWDBLookupCombo ).{$IFDEF FPC}ListField{$ELSE}LookupDisplay{$ENDIF}:= ls_FieldsDisplay;
+             end
+            Else
+             ls_Fields := ls_FieldsID;
             if li_i <> -1 Then
               ( Result as TFWDBLookupCombo ).{$IFDEF FPC}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( ls_Class, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ li_i ], alis_IdRelation, Self );
-            ( Result as TFWDBLookupCombo ).{$IFDEF FPC}KeyField{$ELSE}LookupField{$ENDIF}:= ls_Fields;
+            ( Result as TFWDBLookupCombo ).{$IFDEF FPC}KeyField{$ELSE}LookupField{$ENDIF}:= ls_FieldsID;
           end
          else
          // N-N N-1 relationships
            fdbg_GroupViewComponents ( awin_Parent, anod_Field, alis_IdRelation, ai_FieldCounter, ai_Counter );
       finally
         alis_IdRelation.free;
+        alis_DisplayRelation.Free;
         anod_CrossLinkRelation.free;
         ldoc_XMlRelation.free;
       end;
@@ -684,6 +694,7 @@ begin
   DisableAlign ;
   gfwe_Password := nil;
   gfwe_Login    := nil;
+  Position := poDesktopCenter;
   for li_i := 0 to axml_Login.ChildNodes.Count - 1 do
     Begin
       lnod_Node := axml_Login.ChildNodes [ li_i ];

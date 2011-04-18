@@ -131,6 +131,8 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_XMLFRAMES_ROOT_FORM_CLEP = 'rootentitie' ;
 
+      CST_COMBO_FIELD_SEPARATOR    = ',' ;
+
 {$IFDEF VERSIONS}
   gver_fonctions_XML : T_Version = ( Component : 'Librairie de fonctions XML' ;
                                      FileUnit : 'fonctions_xml' ;
@@ -208,6 +210,7 @@ Begin
               Begin
                 aano_IdNOdes.Add ( anod_Field );
               End;
+            Break;
           End;
       End;
 End;

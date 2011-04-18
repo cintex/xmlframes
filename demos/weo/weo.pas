@@ -16,12 +16,12 @@ uses
 {$IFNDEF FPC}
 {$R *.res}
 {$R WindowsXP.res}
-{$ENDIF}
-
-
 var
   gc_classname: Array[0..255] of char;
   gi_result: integer;
+
+{$ENDIF}
+
 
 {$IFDEF WINDOWS}{$R weo.rc}{$ENDIF}
 
