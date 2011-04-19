@@ -21,7 +21,6 @@ unit U_XMLFenetrePrincipale;
 {$ELSE}
 {$R *.dfm}
 {$ENDIF}
-{$DEFINE TNT}
 
 interface
 
