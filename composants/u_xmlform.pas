@@ -17,7 +17,7 @@ interface
 
 uses
   Graphics, Controls, Classes, Dialogs, DB,
-  U_ExtDBNavigator, Buttons, Forms, DBCtrls, Grids,
+  U_ExtDBNavigator, Buttons, Forms, DBCtrls,
   ComCtrls, SysUtils,	TypInfo, Variants,
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
@@ -118,10 +118,10 @@ type
     procedure p_CreateCsvFile(const afd_FieldsDefs: TFieldDefs; const afwc_Column : TFWXMLColumn ); virtual;
     function fpc_CreatePageControl(const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl): TPageControl; virtual;
     function fdbg_GroupViewComponents(const awin_Parent : TWinControl ;
-      const anod_NodeRelation: TALXMLNode; const alis_ListCrossLink: TList ; const ai_FieldCounter, ai_Counter : Integer
+      const anod_NodeRelation: TALXMLNode; const ai_FieldCounter, ai_Counter : Integer
       ): TDBGroupView; virtual;
     function ffwc_getRelationComponent( const awin_Parent : TWinControl ; const anod_Field: TALXMLNode;
-      const ab_IsLocal: Boolean; const ai_FieldCounter, ai_Counter : Integer ): TWinControl; virtual;
+      const ai_FieldCounter, ai_Counter : Integer ): TWinControl; virtual;
     procedure p_setFieldComponent(const awin_Control: TWinControl; const afw_column: TFWColumn; const afw_columnField: TFWFieldColumn; const ab_IsLocal, ab_Column : Boolean ); virtual;
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
@@ -136,12 +136,12 @@ type
     function fpan_GridNavigationComponents(const awin_Parent: TWinControl; const as_Name : String ;
       const ai_Counter: Integer): TScrollBox; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl; const afd_FieldDef : TFieldDef ;
-      const ai_Counter: Integer ; const afwc_Column : TFWXMLColumn ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
+      const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
     procedure p_SetFieldButtonsProperties(const anod_Action : TALXMLNode;
-      const ai_Counter: Integer; const awin_Parent: TWinControl); virtual;
+      const ai_Counter: Integer); virtual;
     procedure p_setControlName ( const as_FunctionName : String ; const anod_FieldProperty : TALXMLNode ;  const awin_Control : TControl; const ai_Counter : Longint ); virtual;
     function fscb_CreateTabSheet ( var apc_PageControl : TPageControl ;const awin_ParentPageControl,  awin_PanelOrigin : TWinControl ;
-                                   const as_Name, as_Caption : String  ; const ai_Counter : Integer): TScrollBox; virtual;
+                                   const as_Name, as_Caption : String  ): TScrollBox; virtual;
     function  fb_ChargementNomCol ( const AFWColumn : TFWColumn ; const ai_NumSource : Integer ) : Boolean; override;
     procedure p_AfterColumnFrameShow( const aFWColumn : TFWColumn ); override;
     procedure DoClose ( var CloseAction : TCloseAction ); override;
@@ -440,7 +440,7 @@ End;
 // ai_Counter : Column Counter
 // returns the main list
 
-function TF_XMLForm.fdbg_GroupViewComponents ( const awin_Parent : TWinControl ; const anod_NodeRelation : TALXMLNode ; const alis_ListCrossLink : TList ; const ai_FieldCounter, ai_Counter : Integer ):TDBGroupView;
+function TF_XMLForm.fdbg_GroupViewComponents ( const awin_Parent : TWinControl ; const anod_NodeRelation : TALXMLNode ; const ai_FieldCounter, ai_Counter : Integer ):TDBGroupView;
 var lpan_ParentPanel   : TWinControl;
     lpan_GroupViewRight,
     lpan_Panel : TPanel ;
@@ -453,7 +453,7 @@ begin
   with lfwc_Column do
     Begin
       ls_ClassName := anod_NodeRelation.Attributes[CST_LEON_ID];
-      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, lfwc_Column.Panels [ lfwc_Column.Panels.Count -1 ].panel, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), Gs_DetailsSheet, ai_FieldCounter );
+      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, lfwc_Column.Panels [ lfwc_Column.Panels.Count -1 ].panel, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), Gs_DetailsSheet );
 //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
 //      lpan_ParentPanel.ShowHint := True;
       Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + ls_ClassName + CST_COMPONENTS_LEFT, Self, alLeft );
@@ -524,7 +524,7 @@ End;
 // ab_IsLocal : is relationships not linked to data ?
 // ai_FieldCounter : table counter
 // ai_Counter : column counter
-function TF_XMLForm.ffwc_getRelationComponent (  const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ab_IsLocal : Boolean  ; const ai_FieldCounter, ai_Counter : Integer ):TWinControl;
+function TF_XMLForm.ffwc_getRelationComponent (  const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_Counter : Integer ):TWinControl;
 var ldoc_XMlRelation : TALXMLDocument ;
     lnode, lnodeClass,
     anod_CrossLinkRelation : TALXMLNode;
@@ -536,6 +536,7 @@ Begin
   Result := nil;
   if ( anod_Field.NodeName = CST_LEON_FIELD_RELATION ) then
     Begin
+      ls_Connection := '';
       lnode := fnod_GetClassFromRelation(anod_Field);
       alis_IdRelation        := TList.Create;
       alis_DisplayRelation   := TList.Create;
@@ -581,7 +582,7 @@ Begin
           end
          else
          // N-N N-1 relationships
-           fdbg_GroupViewComponents ( awin_Parent, anod_Field, alis_IdRelation, ai_FieldCounter, ai_Counter );
+           fdbg_GroupViewComponents ( awin_Parent, anod_Field, ai_FieldCounter, ai_Counter );
       finally
         alis_IdRelation.free;
         alis_DisplayRelation.Free;
@@ -605,7 +606,7 @@ begin
   Result := fwin_CreateAFieldComponent ( anod_Field.NodeName, Self, ab_isLarge, ab_IsLocal, ai_counter );
 
   if  ( Result = nil ) Then
-    Result := ffwc_getRelationComponent ( awin_Parent, anod_Field, ab_IsLocal, ai_FieldCounter, ai_counter );
+    Result := ffwc_getRelationComponent ( awin_Parent, anod_Field, ai_FieldCounter, ai_counter );
 
   if anod_Field is TALXmlCommentNode then
     Begin
@@ -696,7 +697,6 @@ begin
   Screen.Cursor := Self.Cursor;
   gfwe_Password := nil;
   gfwe_Login    := nil;
-  Position := poDesktopCenter;
   for li_i := 0 to axml_Login.ChildNodes.Count - 1 do
     Begin
       lnod_Node := axml_Login.ChildNodes [ li_i ];
@@ -785,8 +785,8 @@ begin
   // Initiate data and showing
   FormCreate ( Self );
   EnableAlign ;
-  Position:=poMainFormCenter;
-  FormStyle:=fsStayOnTop;
+  Position := poDesktopCenter;
+//  FormStyle:=fsNoStayOnTop;
   Show;
 end;
 // procedure p_CloseLoginAction
@@ -949,7 +949,7 @@ End;
 // ab_Column : Segund editing column
 // afcf_ColumnField : Field Form column definitions
 
-function TF_XMLForm.flab_setFieldComponentProperties ( const anod_Field : TALXMLNode ; const awin_Control, awin_Parent : TWinControl; const afd_FieldDef : TFieldDef ; const ai_Counter : Longint ; const afwc_Column : TFWXMLColumn ; const ab_Column : Boolean ; const afcf_ColumnField : TFWFieldColumn ): TFWLabel;
+function TF_XMLForm.flab_setFieldComponentProperties ( const anod_Field : TALXMLNode ; const awin_Control, awin_Parent : TWinControl; const afd_FieldDef : TFieldDef ; const ai_Counter : Longint ; const ab_Column : Boolean ; const afcf_ColumnField : TFWFieldColumn ): TFWLabel;
 var li_i : LongInt ;
     ldo_Temp : Double ;
     lnod_FieldProperties : TALXMLNode ;
@@ -1049,7 +1049,7 @@ End;
 // anod_Action : Action node for buttons
 // ai_Counter : column counter
 // awin_Parent : Parent component
-procedure TF_XMLForm.p_SetFieldButtonsProperties ( const anod_Action : TALXMLNode ; const ai_Counter : Longint ; const awin_Parent : TWinControl );
+procedure TF_XMLForm.p_SetFieldButtonsProperties ( const anod_Action : TALXMLNode ; const ai_Counter : Longint );
 var ls_Action   : String ;
 begin
   with Columns [ ai_Counter ] do
@@ -1106,7 +1106,7 @@ begin
          ab_Column:=False;
          awin_Parent := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent,
                           CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
-                          Gs_DetailsSheet, ai_FieldCounter );
+                          Gs_DetailsSheet );
          afwc_Column.Panels.add.Panel := awin_Parent;
        End;
 
@@ -1191,7 +1191,7 @@ begin
 
   p_setFieldComponent ( lwin_Control, afwc_Column, lffd_ColumnFieldDef, lb_IsLocal, ab_Column );
 
-  llab_Label := flab_setFieldComponentProperties ( anod_Field, lwin_Control, awin_Parent, lfd_FieldDef, ai_Counter, afwc_Column, ab_Column, lffd_ColumnFieldDef );
+  llab_Label := flab_setFieldComponentProperties ( anod_Field, lwin_Control, awin_Parent, lfd_FieldDef, ai_Counter, ab_Column, lffd_ColumnFieldDef );
 
   p_setLabelComponent ( lwin_Control, llab_Label, ab_Column );
 
@@ -1232,7 +1232,7 @@ End;
 // as_Caption : old caption
 // ai_Counter : COlumn counter
 function TF_XMLForm.fscb_CreateTabSheet ( var apc_PageControl : TPageControl ;const awin_ParentPageControl,  awin_PanelOrigin : TWinControl ;
-                                          const as_Name, as_Caption : String  ; const ai_Counter : Integer) : TScrollBox;
+                                          const as_Name, as_Caption : String  ) : TScrollBox;
 var ltbs_Tabsheet : TTabSheet ;
 begin
   if apc_PageControl = nil then
@@ -1284,13 +1284,12 @@ End;
 // ai_Counter : The column counter for other XML File
 procedure TF_XMLForm.p_CreateFormComponents ( const as_XMLFile, as_Name : String ; awin_Parent : TWinControl ; var ai_Counter : Longint );
 var li_i, li_j, li_NoField : LongInt ;
-    lnod_Node, lnod_ClassProperties : TALXMLNode ;
+    lnod_Node : TALXMLNode ;
     ls_ProjectFile : String ;
     lb_Column, lb_FieldFound, lb_Table : Boolean ;
     lfwc_Column : TFWXMLColumn ;
     lfd_FieldsDefs : TFieldDefs ;
     li_Counter : Integer;
-    ls_Temp : String;
   // child procedure p_CreateParentAndFieldsComponent
   // Creates the navigation grid and fields components
   // anod_ANode : current node
@@ -1306,7 +1305,7 @@ var li_i, li_j, li_NoField : LongInt ;
             End
          else
           Begin
-            awin_Parent := fscb_CreateTabSheet ( FPageControl, Self, FMainPanel, as_Name, as_Name, ai_Counter );
+            awin_Parent := fscb_CreateTabSheet ( FPageControl, Self, FMainPanel, as_Name, as_Name );
             awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, ai_Counter );
           End;
         lb_FieldFound := True;
@@ -1332,7 +1331,6 @@ var li_i, li_j, li_NoField : LongInt ;
           Begin
             p_CreateParentAndFieldsComponent ( anod_ANode.ChildNodes [ li_k ] );
           End;
-        ls_Temp := '';
         inc ( ai_counter );
        p_CreateCsvFile ( lfd_FieldsDefs, lfwc_Column );
       End;
@@ -1341,7 +1339,7 @@ var li_i, li_j, li_NoField : LongInt ;
         Begin
           for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
             Begin
-              p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], li_Counter, ActionPanel );
+              p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], li_Counter );
             End;
         End;
   End;
@@ -1416,7 +1414,7 @@ begin
                     lb_FieldFound := True;               }
                   end;
               if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
-                 p_SetFieldButtonsProperties ( lnod_Node, li_Counter, awin_Parent );
+                 p_SetFieldButtonsProperties ( lnod_Node, li_Counter );
             End;
         End;
     Except

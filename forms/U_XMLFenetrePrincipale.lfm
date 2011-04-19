@@ -1,4 +1,4 @@
-object F_FenetrePrincipale: TF_FenetrePrincipale
+inherited F_FenetrePrincipale: TF_FenetrePrincipale
   Left = 398
   Height = 645
   Top = 202
@@ -23,9 +23,8 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   OnActivate = F_FormMainIniActivate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  LCLVersion = '0.9.30'
   Visible = True
-  object im_appli: TImage
+  object im_appli: TImage[0]
     Left = 248
     Height = 49
     Top = 104
@@ -33,7 +32,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_acces: TImage
+  object im_acces: TImage[1]
     Left = 312
     Height = 49
     Top = 104
@@ -41,7 +40,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_about: TImage
+  object im_about: TImage[2]
     Left = 376
     Height = 49
     Top = 104
@@ -49,22 +48,16 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_led: TPCheck
+  object im_led: TPCheck[3]
     Left = 312
     Height = 19
     Top = 440
     Width = 16
-    Version = 'Version 3.20, Copyright � 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
+    Version = 'Version 3.20, Copyright © 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
     Visible = False
     TabOrder = 0
   end
-  object spl_volet: TSplitter
-    Left = 197
-    Height = 549
-    Top = 50
-    Width = 5
-  end
-  object br_statusbar: TStatusBar
+  object br_statusbar: TStatusBar[4]
     Left = 0
     Height = 21
     Top = 599
@@ -107,25 +100,22 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end>
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object pa_5: TPanel
+  object tbar_volet: TToolBar[5]
     Left = 0
     Height = 549
     Top = 50
     Width = 197
     Align = alLeft
-    BevelOuter = bvNone
-    ClientHeight = 549
-    ClientWidth = 197
     Color = cl3DLight
     ParentColor = False
     TabOrder = 1
     OnResize = pa_5Resize
     object scb_Volet: TScrollBox
-      Left = 0
-      Height = 549
-      Hint = 'Cliquez pour accéder à une fonction'
-      Top = 0
-      Width = 197
+      Left = 1
+      Height = 547
+      Hint = 'Cliquez pour accÃ©der Ã  une fonction'
+      Top = 2
+      Width = 196
       HelpContext = 1440
       Align = alClient
       BorderStyle = bsNone
@@ -136,19 +126,19 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 0
     end
   end
-  object tbar_outils: TToolBar
+  object tbar_outils: TToolBar[6]
     Left = 0
     Height = 50
-    Hint = 'Cliquer sur un bouton pour accéder à une fonction'
+    Hint = 'Cliquer sur un bouton pour accÃ©der Ã  une fonction'
     Top = 0
     Width = 884
     HelpContext = 1430
-    Caption = 'Barre d''accès'
+    Caption = 'Barre d''accÃ¨s'
     Color = cl3DLight
     ParentColor = False
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 4
+    TabOrder = 3
     object pa_4: TPanel
       Left = 824
       Height = 48
@@ -241,7 +231,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       object dbt_ident: TJvXPButton
         Left = 9
         Height = 41
-        Hint = 'S''identifier/déconnecter'
+        Hint = 'S''identifier/dÃ©connecter'
         Top = 0
         Width = 40
         HelpContext = 1430
@@ -274,7 +264,13 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 7
     end
   end
-  object im_Liste: TImageList
+  object Splitter1: TSplitter[7]
+    Left = 197
+    Height = 549
+    Top = 50
+    Width = 5
+  end
+  object im_Liste: TImageList[8]
     BkColor = clForeground
     left = 256
     top = 216
@@ -890,17 +886,17 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       00FF000000FF000000FF000000FF
     }
   end
-  object mu_MainMenu: TMainMenu
+  object mu_MainMenu: TMainMenu[9]
     Images = im_Liste
     left = 256
     top = 266
     object mu_file: TMenuItem
       Caption = '&Application'
       HelpContext = 1420
-      Hint = 'Fermeture des fenêtres'
+      Hint = 'Fermeture des fenÃªtres'
       object mu_identifier: TMenuItem
         Caption = 'S''&identifier'
-        Hint = 'Ouvrir la fenêtre d''identification'
+        Hint = 'Ouvrir la fenÃªtre d''identification'
         OnClick = dbt_identClick
       end
       object mu_ouvrir: TMenuItem
@@ -922,9 +918,9 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     end
     object mu_fenetre: TMenuItem
       Caption = 'Fe&netre'
-      Hint = 'Commandes relatives aux fenêtres'
+      Hint = 'Commandes relatives aux fenÃªtres'
       object mu_Reinitiliserpresentation: TMenuItem
-        Caption = 'Reinitialiser la &présentation'
+        Caption = 'Reinitialiser la &prÃ©sentation'
         HelpContext = 1420
         OnClick = mu_ReinitiliserpresentationClick
       end
@@ -953,13 +949,13 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_affichage: TMenuItem
       Caption = 'Affichage'
       object mu_barreoutils: TMenuItem
-        Caption = 'Barre d''accès'
+        Caption = 'Barre d''accÃ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_barreoutilsClick
       end
       object mu_voletexplore: TMenuItem
-        Caption = 'Volet d''accès'
+        Caption = 'Volet d''accÃ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_voletexploreClick
@@ -980,23 +976,23 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       object mu_apropos: TMenuItem
         Caption = '&A propos...'
         HelpContext = 1420
-        Hint = 'A propos|Afficher des informations sur le programme, le numéro de version et le copyright'
+        Hint = 'A propos|Afficher des informations sur le programme, le numÃ©ro de version et le copyright'
         OnClick = mu_aproposClick
       end
     end
   end
-  object ActionList: TActionList
+  object ActionList: TActionList[10]
     Images = im_Liste
     left = 256
     top = 317
   end
-  object Timer: TTimer
+  object Timer: TTimer[11]
     Interval = 60000
     OnTimer = TimerTimer
     left = 256
     top = 367
   end
-  object SvgFormInfoIni: TOnFormInfoIni
+  object SvgFormInfoIni: TOnFormInfoIni[12]
     SauvePosObjects = True
     SauveEditObjets = []
     SauvePosForm = True

@@ -22,8 +22,6 @@ unit U_XMLFenetrePrincipale;
 {$R *.dfm}
 {$ENDIF}
 
-{$DEFINE TNT}
-
 interface
 
 uses
@@ -55,7 +53,7 @@ uses
   JvXPBar, Forms,  U_FormMainIni, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli, fonctions_string,
-  U_OnFormInfoIni, DBCtrls, RXSplit;
+  U_OnFormInfoIni, DBCtrls;
 
 {$IFDEF VERSIONS}
 const
@@ -97,6 +95,7 @@ type
 
     ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
     pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    tbsep_4: TPanel;
     {$IFDEF MDI}
     WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
     WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
@@ -109,13 +108,17 @@ type
     SvgFormInfoIni: TOnFormInfoIni;
     im_Liste: TImageList;
 
-    {$IFNDEF FPC}
+    {$IFDEF FPC}
+    spl_volet: TSplitter;
+    {$ELSE}
     dock_outils: TDock;
+    dock_volet: TDock;
     {$ENDIF}
     tbsep_1: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
     tbsep_3: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
     tbsep_2: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
     tbar_outils: {$IFDEF FPC}TToolbar{$ELSE}TExtToolbar{$ENDIF};
+    tbar_volet: {$IFDEF FPC}TToolbar{$ELSE}TExtToolbar{$ENDIF};
 
     pa_1: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
     pa_3: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
@@ -132,8 +135,6 @@ type
     im_acces: TImage;
     im_about: TImage;
     mu_langue: TMenuItem;
-    dock_volet: TDock;
-    tbar_volet: TExtToolbar;
     scb_Volet: TScrollBox;
 
     procedure pa_5Resize(Sender: TObject);
@@ -167,8 +168,6 @@ type
     procedure tbar_voletDockChanged(Sender: TObject);
     function CloseQuery: Boolean; override;
     procedure mu_ReinitiliserpresentationClick(Sender: TObject);
-    procedure dock_voletInsertRemoveBar(Sender: TObject; Inserting: Boolean;
-      Bar: TCustomToolWindow);
 
   private
 
@@ -337,12 +336,6 @@ begin
     Exit ;
   F_SplashForm.Free; // Libération de la mémoire
   F_SplashForm := nil;
-end;
-
-procedure TF_FenetrePrincipale.dock_voletInsertRemoveBar(Sender: TObject;
-  Inserting: Boolean; Bar: TCustomToolWindow);
-begin
-
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -657,7 +650,7 @@ end;
 procedure TF_FenetrePrincipale.SvgFormInfoIniIniWrite(
   const AInifile: TCustomInifile; var Continue: Boolean);
 begin
-  AInifile.WriteBool ( 'F_FenetrePrincipale', 'tbar_volet.Visible' , {$IFDEF FPC}pa_5{$ELSE}tbar_volet{$ENDIF}.Visible );
+  AInifile.WriteBool ( 'F_FenetrePrincipale', 'tbar_volet.Visible' , tbar_volet.Visible );
   AInifile.WriteBool ( 'F_FenetrePrincipale', 'tbar_outils.Visible', tbar_outils.Visible );
 
 end;
@@ -825,4 +818,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+
