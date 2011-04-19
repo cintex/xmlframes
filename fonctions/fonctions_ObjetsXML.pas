@@ -199,7 +199,7 @@ procedure p_ExecuteFonction ( aobj_Sender                  : TObject            
 implementation
 
 uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
-     fonctions_images , fonctions_init, 
+     fonctions_images , fonctions_init, U_XMLFenetrePrincipale, 
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents,
      unite_variables, u_xmlform, u_languagevars, Imaging ;
@@ -882,7 +882,7 @@ function fb_CreeMenu (              const aF_FormParent           : TForm       
                                     var   ab_UtiliseSousMenu      : Boolean      ): Boolean ;
 var //lMen_Menu           ,
     lMen_MenuEnCours    : TMenuItem ;  // Nouvelle barre xp
-    li_i, li_j, li_k    ,
+    li_i, li_j    ,
     li_Action           ,
     li_CompteurMenu     : LongInt ;  // Compteur barres xp
 //    li_CompteurFonctions: Integer ; // Compteur fonctions
@@ -1853,6 +1853,8 @@ Begin
    End
  Else
   fb_CreeLeMenu ( );
+
+ F_FenetrePrincipale.p_AccessToSoft;
 End;
 /////////////////////////////////////////////////////////////////////////
 // function fb_NavigationTree

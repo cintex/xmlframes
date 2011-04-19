@@ -28,13 +28,6 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object spl_volet: TJvSplitter
-    Left = 197
-    Top = 45
-    Width = 5
-    Height = 449
-    ExplicitHeight = 439
-  end
   object im_appli: TImage
     Left = 248
     Top = 104
@@ -52,7 +45,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
   end
   object im_about: TImage
-    Left = 376
+    Left = 392
     Top = 104
     Width = 49
     Height = 49
@@ -230,58 +223,44 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     ParentBiDiMode = False
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object pa_5: TTntPanel
+  object dock_volet: TDock
     Left = 0
     Top = 45
-    Width = 197
+    Width = 201
     Height = 449
-    Align = alLeft
-    BevelOuter = bvNone
-    TabOrder = 2
-    OnResize = pa_5Resize
-    object dock_volet: TDock
+    FixAlign = True
+    Position = dpLeft
+    ExplicitLeft = 8
+    ExplicitTop = 8
+    object tbar_volet: TExtToolbar
       Left = 0
       Top = 0
-      Width = 197
-      Height = 449
-      Position = dpLeft
-      object tbar_volet: TExtToolbar
+      Caption = 'Volet d'#39'acc'#232's'
+      CloseButtonWhenDocked = True
+      DockableTo = [dpLeft]
+      DockPos = 0
+      FloatingMode = fmOnTopOfAllForms
+      FullSize = True
+      TabOrder = 0
+      UseLastDock = False
+      OnClose = tbar_voletClose
+      OnDockChanged = tbar_voletDockChanged
+      object scb_Volet: TScrollBox
         Left = 0
         Top = 0
-        Caption = 'Volet d'#39'acc'#232's'
-        CloseButtonWhenDocked = True
-        DockableTo = [dpLeft]
-        DockPos = 0
-        FloatingMode = fmOnTopOfAllForms
-        FullSize = True
-        HideWhenInactive = False
+        Width = 197
+        Height = 458
+        Hint = 'Cliquez pour acc'#233'der aux fonctions'
+        HelpContext = 1440
+        Align = alClient
+        AutoSize = True
+        BorderStyle = bsNone
+        Constraints.MinHeight = 10
+        Constraints.MinWidth = 10
+        DockSite = True
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 0
-        UseLastDock = False
-        Visible = False
-        OnClose = tbar_voletClose
-        OnDockChanged = tbar_voletDockChanged
-        object scb_Volet: TScrollBox
-          Left = 0
-          Top = 0
-          Width = 193
-          Height = 421
-          Hint = 'Cliquer pour acc'#233'der aux fonctions'
-          HelpContext = 1440
-          HorzScrollBar.Smooth = True
-          HorzScrollBar.Style = ssFlat
-          VertScrollBar.Smooth = True
-          VertScrollBar.Style = ssFlat
-          Align = alClient
-          BorderStyle = bsNone
-          Constraints.MinHeight = 10
-          Constraints.MinWidth = 10
-          DockSite = True
-          Color = clGradientInactiveCaption
-          ParentColor = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
       end
     end
   end

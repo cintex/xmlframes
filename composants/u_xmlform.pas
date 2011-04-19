@@ -693,6 +693,7 @@ var
     lfwc_Column     : TFWColumn ;
 begin
   DisableAlign ;
+  Screen.Cursor := Self.Cursor;
   gfwe_Password := nil;
   gfwe_Login    := nil;
   Position := poDesktopCenter;
@@ -724,6 +725,7 @@ begin
                    lfwc_Column := ffwc_createColumn ( lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location, 0 );
                  end;
             end;
+          li_Counter := 0 ;
           // Setting login parameters
           for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
             Begin
