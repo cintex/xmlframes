@@ -21,6 +21,7 @@ unit U_XMLFenetrePrincipale;
 {$ELSE}
 {$R *.dfm}
 {$ENDIF}
+{$DEFINE TNT}
 
 interface
 
@@ -95,7 +96,6 @@ type
 
     ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
     pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    tbsep_4: TPanel;
     {$IFDEF MDI}
     WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
     WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
@@ -499,7 +499,7 @@ begin
   br_statusbar.Panels[2].Text := GS_LBL_PB;
   p_SetLengthSB(br_statusbar.Panels[2]);
   // Le volet d'exploration est fermé et inaccessible
-//  mu_voletchange ( False );
+  mu_voletchange ( False );
 
   // Connexion à la base d'accès aux utilisateurs et sommaires
 {$IFNDEF CSV}
@@ -570,6 +570,7 @@ Begin
 {$ENDIF}
   gb_FirstAcces := False;
   tbar_voletDockChanged ( tbar_volet );
+  mu_voletchange ( mu_voletexplore.Checked );
 End;
 procedure TF_FenetrePrincipale.p_SetLedColor( const ab_Status : Boolean );
 begin

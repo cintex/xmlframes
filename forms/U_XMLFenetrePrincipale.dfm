@@ -77,7 +77,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         Top = 0
       end
       object tbsep_1: TExtToolbarSep
-        Left = 587
+        Left = 57
         Top = 0
       end
       object tbsep_2: TExtToolbarSep
@@ -112,14 +112,15 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         end
       end
       object pa_1: TTntPanel
-        Left = 530
+        Left = 0
         Top = 0
         Width = 57
         Height = 41
+        Align = alLeft
         BevelOuter = bvNone
         TabOrder = 1
         object dbt_ident: TJvXPButton
-          Left = 9
+          Left = 6
           Top = 0
           Width = 40
           Height = 41
@@ -139,7 +140,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         end
       end
       object pa_2: TTntPanel
-        Left = 0
+        Left = 63
         Top = 0
         Width = 530
         Height = 41
@@ -230,8 +231,6 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Height = 449
     FixAlign = True
     Position = dpLeft
-    ExplicitLeft = 8
-    ExplicitTop = 8
     object tbar_volet: TExtToolbar
       Left = 0
       Top = 0
