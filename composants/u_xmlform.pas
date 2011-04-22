@@ -91,7 +91,6 @@ type
   TFWXMLColumns = class(TFWColumns)
   public
     function Add: TFWXMLColumn;
-    constructor Create(Form: TF_CustomFrameWork; ColumnClass: TFWXMLColumnClass); virtual;
   end;
 
   { TF_XMLForm }
@@ -147,8 +146,8 @@ type
     procedure DoClose ( var CloseAction : TCloseAction ); override;
     function fb_ChargeDonnees : Boolean; override;
   public
+    { Déclarations publiques }
     procedure p_setLogin ( const axml_Login : TALXMLDocument );
-		{ Déclarations publiques }
     procedure BeforeCreateFrameWork(Sender: TComponent);  override;
     procedure DestroyComponents ( const acom_Parent : TWinControl ); virtual;
     procedure p_CreateFormComponents ( const as_XMLFile, as_Name : String ;  awin_Parent : TWinControl ; var ai_Counter : Longint ) ; virtual;
@@ -287,16 +286,6 @@ function TFWXMLColumns.Add: TFWXMLColumn;
 begin
   Result := TFWXMLColumn(inherited Add);
 end;
-
-// Overrided constructor Create
-// Setting the constructor to TFWXMLColumnClass type
-// Form: TF_CustomFrameWork
-// ColumnClass : TFWXMLColumnClass
-constructor TFWXMLColumns.Create(Form: TF_CustomFrameWork; ColumnClass: TFWXMLColumnClass);
-begin
-  inherited Create(Form, ColumnClass);
-end;
-
 
 { TF_XMLForm }
 
