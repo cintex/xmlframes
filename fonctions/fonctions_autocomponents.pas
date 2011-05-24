@@ -14,7 +14,7 @@ uses
   ComCtrls, SysUtils,	TypInfo, Variants,
   fonctions_string, fonctions_xml, ExtCtrls,
   U_FormMainIni, u_framework_dbcomponents,
-  fonctions_manbase,
+  fonctions_manbase, StdCtrls,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -36,6 +36,7 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_XML_FIELDS_LABEL_INTERLEAVING = 15;
       CST_XML_FIELDS_CHARLENGTH         = 10;
 
+      CST_COMPONENTS_GROUPBOX_BEGIN     = 'grb_' ;    // Debut du Nom du panel
       CST_COMPONENTS_PANEL_BEGIN        = 'pan_' ;    // Debut du Nom du panel
       CST_COMPONENTS_DBGRID_BEGIN       = 'dbg_' ;
       CST_COMPONENTS_TABSHEET_BEGIN     = 'tbs_' ;
@@ -87,6 +88,7 @@ var  gi_FontHeight : Integer = 22 ;
 function fwin_CreateAEditComponent ( const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean ):TWinControl;
 function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
 function fpan_CreateActionPanel ( const awin_Parent : TWinControl ; const acom_Owner : TWinControl ; var apan_ActionPanel : TPanel ):TPanel;
+function fgrb_CreateGroupBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TGroupBox;
 function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TPanel;
 function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TScrollBox;
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
@@ -252,6 +254,27 @@ Begin
   Result.parent := awin_Parent;
   Result.Align := aal_Align ;
   Result.BevelOuter := bvNone ;
+  Result.Name := as_Name;
+  Result.Caption := '';
+
+End;
+
+/////////////////////////////////////////////////////////////////////////
+// function fpan_CreatePanel
+// Creating a panel and setting properties
+// awin_Parent : Parent control
+// as_Name : Name of panel
+// acom_Owner : Form
+// aal_Align : Align value
+// returns a panel
+//////////////////////////////////////////////////////////////////////////
+
+function fgrb_CreateGroupBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TGroupBox;
+Begin
+  Result := TGroupBox.create ( acom_Owner );
+  Result.parent := awin_Parent;
+  Result.Align := aal_Align ;
+//  Result.BevelOuter := bvNone ;
   Result.Name := as_Name;
   Result.Caption := '';
 

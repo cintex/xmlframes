@@ -122,7 +122,11 @@ type
       ): TDBGroupView; virtual;
     function ffwc_getRelationComponent( const awin_Parent : TWinControl ; const anod_Field: TALXMLNode;
       const ai_FieldCounter, ai_Counter : Integer ): TWinControl; virtual;
-    procedure p_setFieldComponent(const awin_Control: TWinControl; const afw_column: TFWColumn; const afw_columnField: TFWFieldColumn; const ab_IsLocal, ab_Column : Boolean ); virtual;
+    procedure p_setComponentLeft(const awin_Control: TControl;
+      const ab_Column: Boolean);
+    procedure p_setFieldComponentTop(const awin_Control: TWinControl;
+      const ab_Column: Boolean);
+    procedure p_setFieldComponentData(const awin_Control: TWinControl; const afw_column: TFWColumn; const afw_columnField: TFWFieldColumn; const ab_IsLocal : Boolean ); virtual;
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
@@ -131,8 +135,8 @@ type
     function  CreateColumns: TFWColumns; override;
     function  fwin_CreateFieldComponent ( const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ab_isLarge, ab_IsLocal : Boolean ; const ai_FieldCounter, ai_counter : Longint ):TWinControl;
     procedure p_CreateFieldComponentAndProperties(const as_Table :String; const anod_Field: TALXMLNode;
-                                                  const ai_FieldCounter, ai_Counter : Longint ;
-                                                  var awin_Parent : TWinControl ; var ab_Column : Boolean ; const afwc_Column : TFWXMLColumn ; const afd_FieldsDefs : TFieldDefs ); virtual;
+                                                  var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ;
+                                                       awin_Parent : TWinControl ; var ab_Column : Boolean ; const afwc_Column : TFWXMLColumn ; const afd_FieldsDefs : TFieldDefs ); virtual;
     function fpan_GridNavigationComponents(const awin_Parent: TWinControl; const as_Name : String ;
       const ai_Counter: Integer): TScrollBox; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl; const afd_FieldDef : TFieldDef ;
@@ -165,7 +169,7 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
-     u_buttons_appli, unite_variables;
+     u_buttons_appli, unite_variables, StdCtrls;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
 // functions and procédures not methods
@@ -398,7 +402,7 @@ var lpan_ParentPanel : TPanel ;
     lcon_Control   : TControl ;
 begin
   lfwc_Column := Columns [ ai_Counter ] as TFWXMLColumn;
-  lpan_ParentPanel := fpan_CreatePanel ( awin_Parent, CST_COMPONENTS_PANEL_MAIN + as_Name, Self, alClient );
+  lpan_ParentPanel := fpan_CreatePanel ( awin_Parent, CST_COMPONENTS_PANEL_MAIN + as_Name + IntToStr(ai_counter), Self, alClient );
   lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   lpan_ParentPanel.ShowHint := True;
   lpan_Panel := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_DBGRID + as_Name, Self, alLeft );
@@ -622,20 +626,32 @@ end;
 // afw_columnField : Field Column
 // ab_IsLocal : Not linked to data
 // ab_Column : Second editing column
-procedure TF_XMLForm.p_setFieldComponent ( const awin_Control : TWinControl ; const afw_column : TFWColumn ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal, ab_Column : Boolean );
+procedure TF_XMLForm.p_setFieldComponentTop  ( const awin_Control : TWinControl ; const ab_Column : Boolean );
 begin
   if ab_Column Then
    // Intervalle entre les champs
     awin_Control.Top := gi_LastFormColumnHeight + CST_XML_FIELDS_INTERLEAVING
    Else
     awin_Control.Top := gi_LastFormFieldsHeight + CST_XML_FIELDS_INTERLEAVING ;
+end;
 
+procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_column : TFWColumn ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
+begin
   if not ab_IsLocal Then
     Begin
       p_setComponentProperty       ( awin_Control, 'DataField' , afw_columnField.FieldName );
       p_setComponentObjectProperty ( awin_Control, 'Datasource', afw_column.Datasource );
     end;
 end;
+procedure TF_XMLForm.p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
+begin
+  if ab_Column then
+    awin_Control.Left := CST_XML_SEGUND_COLMUN_MIN_POSWIDTH
+   Else
+    awin_Control.Left := 0 ;
+
+end;
+
 // procedure p_setLabelComponent
 // after having fully read the field nodes last setting of label component
 // awin_Control : Field Component
@@ -647,10 +663,7 @@ begin
     Begin
       alab_Label.Top  := awin_Control.Top + ( awin_Control.Height - alab_Label.Height ) div 2 ;
       alab_label.Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
-      if ab_Column then
-        alab_Label.Left := CST_XML_SEGUND_COLMUN_MIN_POSWIDTH
-       Else
-        alab_Label.Left := 0 ;
+      p_setComponentLeft  ( alab_Label, ab_Column );
     End;
 end;
 // overrided procedure p_AfterColumnFrameShow
@@ -1084,7 +1097,7 @@ end;
 // ab_Column : Second editing column
 // afwc_Column : XML form Column
 // afd_FieldsDefs : Field Definitions
-procedure TF_XMLForm.p_CreateFieldComponentAndProperties (const as_Table :String; const anod_Field: TALXMLNode; const  ai_FieldCounter, ai_Counter : Longint ; var awin_Parent : TWinControl ; var ab_Column : Boolean ; const afwc_Column : TFWXMLColumn ; const afd_FieldsDefs : TFieldDefs );
+procedure TF_XMLForm.p_CreateFieldComponentAndProperties (const as_Table :String; const anod_Field: TALXMLNode; var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; awin_Parent : TWinControl ; var ab_Column : Boolean ; const afwc_Column : TFWXMLColumn ; const afd_FieldsDefs : TFieldDefs );
 var li_i : LongInt ;
     lnod_FieldProperties : TALXMLNode ;
     llab_Label  : TFWLabel;
@@ -1093,44 +1106,9 @@ var li_i : LongInt ;
     lfd_FieldDef : TFieldDef;
     lffd_ColumnFieldDef : TFWFieldColumn;
 
-begin
-   If  ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT) Then
-     with afwc_Column do
-       Begin
-         gi_LastFormFieldsHeight := 0;
-         gi_LastFormColumnHeight := 0;
-         ab_Column:=False;
-         awin_Parent := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent,
-                          CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
-                          Gs_DetailsSheet );
-         afwc_Column.Panels.add.Panel := awin_Parent;
-       End;
-
-  if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
-    Begin
-      lffd_ColumnFieldDef := afwc_Column.FieldsDefs.Add ;
-      with lffd_ColumnFieldDef do
-        begin
-          NomTable    := as_Table;
-          NumTag      := ai_counter + 1;
-          FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
-          AffiRech    := -1;
-        end;
-    End
-   else
-     Begin
-//      lffd_ColumnFieldDef := nil;
-      Exit;
-     End;
-
-  lb_IsLocal := False;
-  
-  lb_IsLarge := False;
-  if anod_Field.HasChildNodes then
-    for li_i := 0 to anod_Field.ChildNodes.Count -1 do
-      Begin
-        lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
-        if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
+    procedure p_getFieldOptions;
+    begin
+         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
           Begin
             if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_local )
             and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_local ] = CST_LEON_BOOL_FALSE )  then
@@ -1169,27 +1147,112 @@ begin
                 lffd_ColumnFieldDef.AffiRech := ai_counter + 1;
               End
           End;
-        if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-        or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-          lb_IsLarge := True;
-      End;
-  if afwc_Column.gr_Connection.dtt_DatasetType = dtCSV then
+
+    end;
+
+    procedure p_CreateFieldsLabels ;
+    var li_k : LongInt ;
+        lb_column : Boolean;
+        ls_NodeId : String;
     Begin
-      lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, lb_IsLarge, afd_FieldsDefs );
-    End
-   Else
-    lfd_FieldDef := nil ;
+      if ( anod_Field.NodeName = CST_LEON_ARRAY )
+      or ( anod_Field.NodeName = CST_LEON_STRUCT )
+       Then
+        Begin
+          ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
+          lwin_control := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
+          lb_IsLocal := False;
+          if anod_Field.HasChildNodes then
+            for li_k := 0 to anod_Field.ChildNodes.Count - 1 do
+              Begin
+                if anod_Field.ChildNodes [ li_k ].NodeName = CST_LEON_NAME then
+                  Begin
+                    p_SetComponentProperty(lwin_Control,'Caption',fs_GetLabelCaption(anod_Field.ChildNodes [ li_k ].Attributes[CST_LEON_VALUE]));
+                    Continue;
+                  End;
+                if ( anod_Field.NodeName = CST_LEON_STRUCT )
+                and anod_Field.ChildNodes [ li_k ].HasChildNodes then
+                  Begin
+                    lb_column := False;
+                    p_CreateFieldComponentAndProperties(as_Table,anod_Field.ChildNodes [ li_k ],ai_FieldCounter,ai_Counter,lwin_control,lb_column,afwc_Column,afd_FieldsDefs);
+                    inc ( ai_FieldCounter );
+                    lb_IsLocal:=True;
+                  end;
+              end;
+          if not lb_IsLocal Then
+            Begin
 
-  lwin_Control := fwin_CreateFieldComponent ( awin_Parent, anod_Field, lb_IsLarge, lb_IsLocal, ai_FieldCounter, ai_counter );
+            end;
+          p_setFieldComponentTop ( lwin_Control, ab_Column );
+          p_setComponentLeft  ( lwin_Control, ab_Column );
+          Exit;
+        end;
+      if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
+        Begin
+          lffd_ColumnFieldDef := afwc_Column.FieldsDefs.Add ;
+          with lffd_ColumnFieldDef do
+            begin
+              NomTable    := as_Table;
+              NumTag      := ai_counter + 1;
+              FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
+              AffiRech    := -1;
+            end;
+        End
+       else
+         Begin
+    //      lffd_ColumnFieldDef := nil;
+          Exit;
+         End;
 
-  if not assigned ( lwin_Control ) then
-    Exit;
+      lb_IsLocal := False;
 
-  p_setFieldComponent ( lwin_Control, afwc_Column, lffd_ColumnFieldDef, lb_IsLocal, ab_Column );
+      lb_IsLarge := False;
+      if anod_Field.HasChildNodes then
+        for li_k := 0 to anod_Field.ChildNodes.Count -1 do
+          Begin
+            lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
+            p_getFieldOptions;
+            if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
+            or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
+              lb_IsLarge := True;
+          End;
+      if afwc_Column.gr_Connection.dtt_DatasetType = dtCSV then
+        Begin
+          lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, lb_IsLarge, afd_FieldsDefs );
+        End
+       Else
+        lfd_FieldDef := nil ;
 
-  llab_Label := flab_setFieldComponentProperties ( anod_Field, lwin_Control, awin_Parent, lfd_FieldDef, ai_Counter, ab_Column, lffd_ColumnFieldDef );
+      lwin_Control := fwin_CreateFieldComponent ( awin_Parent, anod_Field, lb_IsLarge, lb_IsLocal, ai_FieldCounter, ai_counter );
 
-  p_setLabelComponent ( lwin_Control, llab_Label, ab_Column );
+      if not assigned ( lwin_Control ) then
+        Exit;
+
+      p_setFieldComponentTop ( lwin_Control, ab_Column );
+
+      p_setFieldComponentData ( lwin_Control, afwc_Column, lffd_ColumnFieldDef, lb_IsLocal );
+
+
+      llab_Label := flab_setFieldComponentProperties ( anod_Field, lwin_Control, awin_Parent, lfd_FieldDef, ai_Counter, ab_Column, lffd_ColumnFieldDef );
+
+      p_setLabelComponent ( lwin_Control, llab_Label, ab_Column );
+
+    end;
+
+begin
+   If  ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT) Then
+     with afwc_Column do
+       Begin
+         gi_LastFormFieldsHeight := 0;
+         gi_LastFormColumnHeight := 0;
+         ab_Column:=False;
+         awin_Parent := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent,
+                          CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
+                          Gs_DetailsSheet );
+         afwc_Column.Panels.add.Panel := awin_Parent;
+       End;
+
+  p_CreateFieldsLabels ;
 
   ab_Column := lwin_control.Width + lwin_Control.Left < CST_XML_SEGUND_COLMUN_MIN_POSWIDTH;
   gi_LastFormColumnHeight := gi_LastFormFieldsHeight;

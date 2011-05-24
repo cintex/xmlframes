@@ -53,11 +53,12 @@ const // Champs utilisés
                                      FileUnit : 'fonctions_ObjetsXML' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory : 'Version 1.0.0.2 : Better Ini.' + #13#10 +
+              			                 BugsStory : 'Version 1.0.0.3 : Better menu.' + #13#10 +
+                                                             'Version 1.0.0.2 : Better Ini.' + #13#10 +
                                                              'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
                                                              'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 2 );
+              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 3 );
 
 {$ENDIF}
 type
@@ -598,7 +599,6 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
                if assigned ( ldx_WinXpBar )
                 Then
                  Begin
-                   p_SetOneFunctiontoBar;
                    ldx_WinXpBar.Refresh ;
                    li_TopXPBar := ldx_WinXpBar.Top + ldx_WinXpBar.Height + 1 ;
                  End ;
@@ -791,6 +791,7 @@ Begin
              p_SetOneFunctiontoBar;
             End ;
           End;
+   p_SetOneFunctiontoBar;
    if assigned ( aMen_MenuVolet )
     Then
      if Result
@@ -1485,6 +1486,12 @@ var li_i, li_j  : LongInt ;
               lParam3 :=  lnodeChild.Attributes [ CST_LEON_ACTION_IDREF ];
       end;
 
+    procedure p_setCompoundFunction ( const as_idName : String );
+    Begin
+      SetLength ( ga_Functions [ ai_LastCFonction ].Functions, high ( ga_Functions [ ai_LastCFonction ].Functions ) + 2 );
+      ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := ano_Node.Attributes [ as_idName ];
+    end;
+
 Begin
   if ( ano_Node.NodeName = CST_LEON_ACTION )
   or ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
@@ -1532,6 +1539,13 @@ Begin
                Else Mode := fsMDIChild ;
          End;
 
+       if  ( ano_Parent <> nil )
+       and ( ai_LastCFonction >= 0   )
+       Then
+         Begin
+           p_setCompoundFunction ( CST_LEON_ID );
+         end;
+
        if ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
          if  ( ano_Node.HasChildNodes ) then
            for  li_j := 0 to  ano_Node.ChildNodes.Count- 1 do
@@ -1539,7 +1553,7 @@ Begin
               lNodeChild := ano_Node.ChildNodes [ li_j ];
               p_SetAttributeValues;
               finalize (ga_Functions [high ( ga_Functions )].Functions);
-              if  ( lNodeChild.NodeName = CST_LEON_COMPOUND_ACTION ) Then
+              if  ( lNodeChild.NodeName = CST_LEON_ACTION ) Then
                 p_LoadNodesEntities ( lNodeChild, lNodeChild, high ( ga_Functions ) );
             End;
     End
@@ -1547,8 +1561,7 @@ Begin
     if  ( ano_Node.NodeName = CST_LEON_ACTION_REF )
     and ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
       Begin
-        SetLength ( ga_Functions [ ai_LastCFonction ].Functions, high ( ga_Functions [ ai_LastCFonction ].Functions ) + 2 );
-        ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := ano_Node.Attributes [ CST_LEON_ACTION_IDREF ];
+        p_setCompoundFunction ( CST_LEON_ACTION_IDREF );
       End;
 End;
 
@@ -2185,7 +2198,7 @@ end;
 
 procedure p_setFieldDefs ( const adat_Dataset : TDataset ; const alis_NodeFields : TList );
 var lfds_FieldDefs : TFieldDefs;
-    li_i : Integer ;
+    li_i, li_j : Integer ;
 begin
   lfds_FieldDefs := fobj_getComponentObjectProperty(adat_Dataset,'FieldDefs') as TFieldDefs;
   for li_i := 0 to  alis_NodeFields.count - 1 do
