@@ -82,7 +82,6 @@
 			</F_MARKS>
 			<CLASSES idrefs="room"/>
 			<CONSTRAINT type='CAPTION' remainder='true' hAlign='LEFT' colSpan='2'/>
-			<CONSTRAINT remainder='true' hAlign='LEFT' colSpan='2'/>
 		</RELATION>
 	</FIELDS>
 	<ACTIONS>

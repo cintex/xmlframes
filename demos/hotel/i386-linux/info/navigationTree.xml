@@ -37,7 +37,7 @@
 						<PARAMETER name="_classInfo" idref="client"/>
 					</ACTION>
 				</COMPOUND_ACTION>
-				<COMPOUND_ACTION id="terminated_reservation_filter_list" style='VERTICAL' sizes="170px 45"  target="hotelPrincipalZone">
+				<COMPOUND_ACTION id="terminated_reservation_filter_list" style='VERTICAL' sizes="290px 45"  target="hotelPrincipalZone">
 					<NAME value="NAME_TERMINATED_RESERVATION_FILTER_LIST"/>
 					<GROUP value="GROUP_HISTO"/>
 					<PREFIX value="history"/>
@@ -59,7 +59,7 @@
 					<PARAMETER_DECL name="_url" required='true'/>
 					<PARAMETER name="_url" value="HOTEL_HELP_FILE"/>
 				</ACTION>
-				<ACTION id="reservation_establishment_chart" template="_graphicalChart">
+				<ACTION id="reservation_establishment_chart" template="_graphicalChart"  target="hotelPrincipalZone">
 					<NAME value="NAME_RESERVATION_ESTABLISHMENT_CHART"/>
 					<ALIAS value="ALIAS_ESTABLISHMENT"/>
 					<GROUP value="GROUP_HISTO"/>
@@ -76,7 +76,7 @@
 					</PARAMETER>
 					<PARAMETER name="_classInfo" idref="current_reservation"/>
 				</ACTION>
-				<ACTION id="reservation_month_chart" template="_graphicalChart">
+				<ACTION id="reservation_month_chart" template="_graphicalChart" target="hotelPrincipalZone">
 					<NAME value="NAME_RESERVATION_MONTH_CHART"/>
 					<ALIAS value="ALIAS_BY_MONTH"/>
 					<GROUP value="GROUP_HISTO"/>

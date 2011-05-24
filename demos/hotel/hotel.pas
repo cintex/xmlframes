@@ -47,7 +47,7 @@ begin
 
 		end;
 
-	F_SplashForm := TF_SplashForm.Create(Application);
+	F_SplashForm := TF_SplashForm.Create(nil);
 	F_SplashForm.Label1.Caption := 'GENERIC' ;
 	F_SplashForm.Label1.Width   := F_SplashForm.Width ;
 	F_SplashForm.Show;   // Affichage de la fiche

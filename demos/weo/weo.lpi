@@ -55,16 +55,16 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="206">
+    <Units Count="208">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="20"/>
-        <CursorPos X="1" Y="28"/>
-        <UsageCount Value="173"/>
+        <TopLine Value="26"/>
+        <CursorPos X="47" Y="49"/>
+        <UsageCount Value="174"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -73,7 +73,7 @@
         <UnitName Value="U_ConstMessage"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="173"/>
+        <UsageCount Value="174"/>
       </Unit1>
       <Unit2>
         <Filename Value="../XMLFrames/composants/u_formxml.pas"/>
@@ -1240,11 +1240,12 @@
       <Unit146>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1847"/>
-        <CursorPos X="1" Y="1883"/>
-        <UsageCount Value="17"/>
+        <TopLine Value="1550"/>
+        <CursorPos X="1" Y="1579"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
       </Unit146>
       <Unit147>
@@ -1261,10 +1262,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="24"/>
-        <CursorPos X="1" Y="24"/>
-        <UsageCount Value="16"/>
+        <TopLine Value="712"/>
+        <CursorPos X="1" Y="750"/>
+        <UsageCount Value="17"/>
+        <Loaded Value="True"/>
       </Unit148>
       <Unit149>
         <Filename Value="../../../Extended/composants/U_FormMainIni.pas"/>
@@ -1280,10 +1283,12 @@
       <Unit150>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="111"/>
-        <CursorPos X="7" Y="134"/>
+        <TopLine Value="81"/>
+        <CursorPos X="7" Y="104"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit150>
       <Unit151>
         <Filename Value="../../../ManFrames/forms/U_FenetrePrincipale.pas"/>
@@ -1327,9 +1332,9 @@
         <UnitName Value="u_xmlform"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="557"/>
-        <CursorPos X="58" Y="580"/>
-        <UsageCount Value="17"/>
+        <TopLine Value="851"/>
+        <CursorPos X="50" Y="865"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
       </Unit155>
       <Unit156>
@@ -1363,13 +1368,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4054"/>
         <CursorPos X="1" Y="4076"/>
         <UsageCount Value="15"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit159>
       <Unit160>
@@ -1606,12 +1608,10 @@
       <Unit190>
         <Filename Value="../../../ManFrames/fonctions/unite_variables.pas"/>
         <UnitName Value="unite_variables"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="194"/>
         <CursorPos X="118" Y="223"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit190>
       <Unit191>
@@ -1693,23 +1693,20 @@
       <Unit200>
         <Filename Value="../../../Extended/composants/U_ExtDBNavigator.pas"/>
         <UnitName Value="U_ExtDBNavigator"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="426"/>
         <CursorPos X="1" Y="448"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit200>
       <Unit201>
         <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
         <UnitName Value="u_framework_dbcomponents"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="204"/>
         <CursorPos X="18" Y="248"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit201>
       <Unit202>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
@@ -1722,154 +1719,166 @@
       <Unit203>
         <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
         <UnitName Value="rxdbgrid"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="151"/>
         <CursorPos X="15" Y="195"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit203>
       <Unit204>
         <Filename Value="../../../Extended/fonctions/fonctions_dbcomponents.pas"/>
         <UnitName Value="fonctions_dbcomponents"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="76"/>
         <CursorPos X="3" Y="102"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit204>
       <Unit205>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/grids.pas"/>
         <UnitName Value="Grids"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="91"/>
         <CursorPos X="3" Y="113"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit205>
+      <Unit206>
+        <Filename Value="../../fonctions/fonctions_autocomponents.pas"/>
+        <UnitName Value="fonctions_autocomponents"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="7"/>
+        <CursorPos X="21" Y="17"/>
+        <UsageCount Value="10"/>
+      </Unit206>
+      <Unit207>
+        <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
+        <UnitName Value="ALXmlDoc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2300"/>
+        <CursorPos X="43" Y="2328"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit207>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="229" Column="41" TopLine="207"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1514" Column="1" TopLine="1497"/>
       </Position1>
       <Position2>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="230" Column="17" TopLine="205"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1515" Column="1" TopLine="1497"/>
       </Position2>
       <Position3>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="1550" Column="3" TopLine="1550"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1519" Column="1" TopLine="1497"/>
       </Position3>
       <Position4>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1520" Column="1" TopLine="1497"/>
       </Position4>
       <Position5>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="126" Column="20" TopLine="89"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1522" Column="1" TopLine="1497"/>
       </Position5>
       <Position6>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="137" Column="51" TopLine="100"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1523" Column="1" TopLine="1497"/>
       </Position6>
       <Position7>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="238" Column="20" TopLine="201"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1524" Column="1" TopLine="1497"/>
       </Position7>
       <Position8>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="310" Column="67" TopLine="273"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1525" Column="1" TopLine="1497"/>
       </Position8>
       <Position9>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="140" Column="63" TopLine="140"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1526" Column="1" TopLine="1497"/>
       </Position9>
       <Position10>
-        <Filename Value="../../../Extended/fonctions/fonctions_dbcomponents.pas"/>
-        <Caret Line="134" Column="31" TopLine="126"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1531" Column="1" TopLine="1497"/>
       </Position10>
       <Position11>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="169" Column="12" TopLine="146"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1532" Column="1" TopLine="1497"/>
       </Position11>
       <Position12>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="566" Column="10" TopLine="558"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1533" Column="1" TopLine="1497"/>
       </Position12>
       <Position13>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1534" Column="1" TopLine="1497"/>
       </Position13>
       <Position14>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="11" Column="5" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1580" Column="25" TopLine="1550"/>
       </Position14>
       <Position15>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="293" Column="40" TopLine="256"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1577" Column="60" TopLine="1550"/>
       </Position15>
       <Position16>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="262" Column="70" TopLine="242"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1568" Column="20" TopLine="1563"/>
       </Position16>
       <Position17>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="624" Column="3" TopLine="622"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1585" Column="34" TopLine="1563"/>
       </Position17>
       <Position18>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="16" Column="22" TopLine="7"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position18>
       <Position19>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="169" Column="1" TopLine="153"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1562" Column="29" TopLine="1524"/>
       </Position19>
       <Position20>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="564" Column="28" TopLine="542"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1568" Column="26" TopLine="1530"/>
       </Position20>
       <Position21>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="239" Column="45" TopLine="229"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1585" Column="34" TopLine="1547"/>
       </Position21>
       <Position22>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="339" Column="24" TopLine="302"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1633" Column="18" TopLine="1598"/>
       </Position22>
       <Position23>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="515" Column="74" TopLine="478"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1797" Column="1" TopLine="1759"/>
       </Position23>
       <Position24>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="517" Column="18" TopLine="480"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1798" Column="38" TopLine="1785"/>
       </Position24>
       <Position25>
-        <Filename Value="../../../../Lazarus/composants/rxfpc/rxdbgrid.pas"/>
-        <Caret Line="584" Column="30" TopLine="547"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1827" Column="23" TopLine="1789"/>
       </Position25>
       <Position26>
-        <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1417" Column="69" TopLine="1395"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position26>
       <Position27>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="634" Column="20" TopLine="628"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1523" Column="22" TopLine="1511"/>
       </Position27>
       <Position28>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="165" Column="18" TopLine="165"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1808" Column="38" TopLine="1787"/>
       </Position28>
       <Position29>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="632" Column="43" TopLine="609"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position29>
       <Position30>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="637" Column="30" TopLine="613"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1577" Column="1" TopLine="1550"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1886,14 +1895,9 @@
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <OptimizationLevel Value="3"/>
+        <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
-    <Linking>
-      <Debugging>
-        <UseLineInfoUnit Value="False"/>
-      </Debugging>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>

@@ -21,6 +21,7 @@ uses
   ComCtrls, SysUtils,	TypInfo, Variants,
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
+  fonctions_manbase,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -298,23 +299,25 @@ Begin
 
   if not ( csDesigning in ComponentState ) Then
     Try
-      gstl_SQLWork := nil ;
       GlobalNameSpace.BeginWrite;
-
-      p_InitFrameWork ( AOwner );
-      // Creating objects
-      p_CreateColumns;
+      Include(FFormState, fsCreating);
 
       {$IFDEF FPC}
       CreateNew(AOwner, 1 );
       {$ELSE}
       CreateNew(AOwner);
       {$ENDIF}
+      Exclude(FFormState, fsCreating);
+    Finally
+      GlobalNameSpace.EndWrite;
+      gstl_SQLWork := nil ;
+      p_InitFrameWork ( AOwner );
+      // Creating objects
+      p_CreateColumns;
+
       {$IFDEF SFORM}
       InitSuperForm;
       {$ENDIF}
-    Finally
-      GlobalNameSpace.EndWrite;
     End
   Else
    Begin
@@ -776,7 +779,11 @@ begin
   EnableAlign ;
   Position := poDesktopCenter;
 //  FormStyle:=fsNoStayOnTop;
+  {$IFDEF FPC}
+  Visible := True;
+  {$ELSE}
   Show;
+  {$ENDIF}
 end;
 // procedure p_CloseLoginAction
 // Login close event

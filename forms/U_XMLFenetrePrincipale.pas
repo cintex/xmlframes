@@ -181,7 +181,6 @@ type
 
   public
     procedure p_AccesstoSoft; virtual;
-    procedure DoShow ; override;
     function f_IniGetConfigFile( {$IFNDEF CSV}acco_Conn: TComponent;{$ENDIF} as_NomConnexion: string): TIniFile; override;
     { Déclarations publiques }
     // Procédures qui sont appelées automatiquement pour l'initialisation et la sauvegarde
@@ -195,6 +194,7 @@ type
                         			             ab_ScrollEnfoncee: boolean); override;
     procedure   p_ApresSauvegardeParamIni; override;
     procedure   p_editionTransfertVariable(as_nom,as_titre,as_chemin:String;ats_edition_nom_params,ats_edition_params,ats_edition_params_values: TStrings);
+    procedure   Doshow;override;
   published
     procedure p_ConnectToData ();
   end;
@@ -523,8 +523,6 @@ end;
 // Connexion aux données de l'application
 procedure TF_FenetrePrincipale.p_ConnectToData ();
 begin
-  F_splashForm.Free;
-  F_splashForm := nil ;
   Screen.Cursor := crSQLWait;
 
   fb_ReadXMLEntitites ();
@@ -577,12 +575,6 @@ begin
     im_led.{$IFDEF FPC}Checked{$ELSE}Status{$ENDIF} := ab_Status ;
   Except
   End ;
-end;
-
-procedure TF_FenetrePrincipale.DoShow;
-begin
-  inherited DoShow;
-  p_ConnectToData ;
 end;
 
 procedure TF_FenetrePrincipale.dbt_aideClick(Sender: TObject);
@@ -748,6 +740,13 @@ begin
   end;
 
 
+end;
+
+procedure TF_FenetrePrincipale.Doshow;
+begin
+  inherited Doshow;
+  F_splashForm.Free;
+  F_splashForm := nil ;
 end;
 
 

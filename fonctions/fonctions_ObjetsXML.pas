@@ -543,20 +543,141 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     li_Action           : LongInt;
     li_Compteur         ,
     li_CompteurFonctions: Integer ; // Compteur fonctions
-    ls_Menu             , // Menu en cours
+    lr_Function         ,
+    lr_FunctionOld      : TLeonFunction;
     ls_SMenu,
-    ls_MenuAction       ,
     ls_MenuClep         ,
-    ls_MenuPrefix       ,
-    ls_MenuGroup        ,
-    ls_MenuValue        ,
-    ls_MenuName         : string ;
-    ls_MenuLabel        : WideString ;// Sous Menu en cours
+    ls_MenuClep2        : String;
+    ls_MenuLabel        ,
+    ls_MenuLabelOld     : WideString ;// Sous Menu en cours
 //    lbmp_BitmapOrigine  : TBitmap ;  // bitmap en cours
     lNode, lNodeChild   : TALXMLNode ;
     lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
     li_TopXPBar         : Integer ;
     aIma_ImagesTempo    : TImageList ;
+    procedure p_SetOneFunctiontoBar;
+    Begin
+        // Si une fonction dans le dernier enregistrement affectation dans l'ancienne xpbar
+       if ( ls_MenuClep2 <> '' )
+       and ( lr_FunctionOld.Groupe <> lr_Function.Groupe )
+       and ( li_CompteurFonctions = 1 )
+        Then
+         Begin
+           ls_MenuLabel := fs_GetLabelCaption ( lr_FunctionOld.Name );
+           p_getImageToBitmap ( lr_FunctionOld.Prefix,  lbmp_FonctionImage );
+           p_ModifieXPBar( aF_FormParent         ,
+                           ldx_WinXpBar        ,
+                           ls_MenuClep2        ,
+                           ls_MenuLabel        ,
+                           lr_FunctionOld.Value        ,
+                           ''                  ,
+                           lr_FunctionOld.Name         ,
+                           aIma_ImagesTempo    ,
+                           lbmp_FonctionImage  ,
+                           aBmp_DefaultPicture ,
+                           ab_AjouteEvenement  );
+         end;
+
+    end;
+
+    procedure p_MenuGrouping;
+    Begin
+
+      // SI les sous-menus ou menus sont différents ou pas de sous menu alors création d''une xpbar
+      // SI les sous-menus ou menus sont différents ou pas de sous menu alors création d''une xpbar
+      if  ( lr_Function    .Groupe <> '' )
+       Then
+        Begin
+          if ( lr_Function.Groupe <> lr_Functionold.Groupe )
+{                     or (     lb_UtiliseSMenu
+                       and (    ( gT_TableauMenus [ li_CompteurMenus ].SousMenu <> ls_SMenu )
+                             or ( gT_TableauMenus [ li_CompteurMenus ].SousMenu = ''        )))))}
+            Then
+             Begin
+               // création d''une xpbar
+               if assigned ( ldx_WinXpBar )
+                Then
+                 Begin
+                   p_SetOneFunctiontoBar;
+                   ldx_WinXpBar.Refresh ;
+                   li_TopXPBar := ldx_WinXpBar.Top + ldx_WinXpBar.Height + 1 ;
+                 End ;
+               ldx_WinXpBar := TJvXpBar.Create ( af_FormEnfant );//aF_FormParent );
+
+               // Affectation des valeurs
+               //Gestion des raccourcis d'aide
+               ldx_WinXpBar.HelpType    := aCon_ParentContainer.HelpType ;
+               ldx_WinXpBar.HelpKeyword := aCon_ParentContainer.HelpKeyword ;
+               ldx_WinXpBar.HelpContext := aCon_ParentContainer.HelpContext ;
+
+               // Aligne en haut
+               ldx_WinXpBar.Top   := li_TopXPBar ;
+               ldx_WinXpBar.ImageList := aIma_ImagesXPBars ;
+               ldx_WinXpBar.Align := alTop ;
+
+               // Couleurs originelles
+               ldx_WinXpBar.Colors.BodyColor := $00F7DFD6 ;
+               ldx_WinXpBar.Colors.CheckedColor := $00D9C1BB;
+               ldx_WinXpBar.Colors.CheckedFrameColor := clHighlight ;
+               ldx_WinXpBar.Colors.FocusedColor := $00D8ACB0 ;
+               ldx_WinXpBar.Colors.FocusedFrameColor := clHotLight ;
+               ldx_WinXpBar.Colors.GradientFrom := clWhite ;
+               ldx_WinXpBar.Colors.GradientTo := $00F7D7C6 ;
+               ldx_WinXpBar.Colors.SeparatorColor := $00F7D7C6 ;
+
+               // Fontes
+               ldx_WinXpBar.Font.Size := 10 ;
+               ldx_WinXpBar.HeaderFont.Size := 10 ;
+
+                // affectation du compteur de nom
+//                           p_setComponentName ( ldx_WinXpBar, lr_Function.Groupe );
+               // Parent
+
+
+               ldx_WinXpBar.Parent := aCon_ParentContainer ;
+               p_getImageToBitmap ( lr_Function.Prefix, lbmp_FonctionImage );
+                     // affectation du libellé du menu
+                // Gestion sans base de données
+               p_ModifieXPBar  ( aF_FormParent       ,
+                                     ldx_WinXpBar        ,
+                                     lr_Function.Groupe        ,
+                                     fs_GetLabelCaption ( lr_Function.Groupe )        ,
+                                     ''                  ,
+                                     ''                  ,
+                                     lr_Function.Groupe        ,
+                                     aIma_ImagesTempo    ,
+                                     lbmp_FonctionImage    ,
+                                     abmp_DefaultPicture ,
+//                                       li_Compteur         ,
+                                     False  );
+
+                // On remet le compteur des fonctions à 0
+               li_CompteurFonctions := 0 ;
+
+             End
+            else
+            // Si une fonction dans l'enregistrement précédent affectation dans l'ancienne xpbar
+             if ( li_CompteurFonctions = 1 )
+              Then
+                Begin
+                  p_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
+                // fonction dans la file d'attente
+                  fdxi_AddItemXPBar ( aF_FormParent       ,
+                                      ldx_WinXpBar        ,
+                                      ls_MenuClep         ,
+                                      ls_MenuLabel        ,
+                                      lr_Function.Value        ,
+                                      ''                  ,
+                                      lr_Function.Name         ,
+                                      aIma_ImagesXPBars   ,
+                                      lbmp_FonctionImage  ,
+                                      aBmp_DefaultPicture ,
+                                      li_Compteur - 1     );
+
+                end;
+        End;
+    end;
+
 Begin
 // un noeud et la main form doivent exister
   Result := False ;
@@ -573,8 +694,8 @@ Begin
 {  if lb_UtiliseSMenu
    Then li_CompteurMenus     := fi_ChercheMenu ( as_LeMenu )
    Else li_CompteurMenus     := 0 ;}
-  ls_Menu              := '' ;
-  ls_MenuGroup         := '' ;
+  lr_Functionold.Groupe  := '' ;
+  lr_Function   .Groupe  := '' ;
   ls_SMenu             := '' ;
   li_CompteurFonctions := 0 ;
   li_Compteur          := 0 ;
@@ -585,6 +706,7 @@ Begin
   aIma_ImagesTempo     := TImageList.Create ( af_FormParent );
   aIma_ImagesTempo     .Width  := 32 ;
   aIma_ImagesTempo     .Height := 32 ;
+  ls_MenuClep2 := '';
 
   // Premier enregistrement
   // Création des XPBars
@@ -597,152 +719,45 @@ Begin
       if ( lNode.NodeName = CST_LEON_ACTIONS ) then
         for li_j := 0 to lNode.ChildNodes.Count - 1 do
           Begin
-                  // SI les sous-menus ou menus sont différents ou pas de sous menu alors création d''une xpbar
-                  // SI les sous-menus ou menus sont différents ou pas de sous menu alors création d''une xpbar
-                  if  ( ls_MenuGroup <> '' ) Then
-                    Begin
-                      if ( ls_MenuGroup <> ls_Menu )
-          {                     or (     lb_UtiliseSMenu
-                                   and (    ( gT_TableauMenus [ li_CompteurMenus ].SousMenu <> ls_SMenu )
-                                         or ( gT_TableauMenus [ li_CompteurMenus ].SousMenu = ''        )))))}
-                        Then
-                         Begin
-                         // Si une fonction dans l'enregistrement précédent affectation dans l'ancienne xpbar
-                           if ( li_CompteurFonctions = 1 )
-                            Then
-                             Begin
-                               p_getImageToBitmap ( ls_MenuPrefix,  lbmp_FonctionImage );
-                               p_ModifieXPBar  ( aF_FormParent       ,
-                                                 ldx_WinXpBar        ,
-                                                 ls_MenuClep         ,
-                                                 ls_MenuLabel        ,
-                                                 ls_MenuValue        ,
-                                                 ''                  ,
-                                                 ls_MenuName         ,
-                                                 aIma_ImagesTempo    ,
-                                                 lbmp_FonctionImage    ,
-                                                 abmp_DefaultPicture ,
-          //                                       li_Compteur         ,
-                                                 ab_AjouteEvenement  );
-                             End ;
-                    // Affectation des valeurs
-                         ls_Menu  := ls_MenuGroup ;
-
-                           // création d''une xpbar
-                           if assigned ( ldx_WinXpBar )
-                            Then
-                             Begin
-                               ldx_WinXpBar.Refresh ;
-                               li_TopXPBar := ldx_WinXpBar.Top + ldx_WinXpBar.Height + 1 ;
-                             End ;
-                           ldx_WinXpBar := TJvXpBar.Create ( af_FormEnfant );//aF_FormParent );
-
-                           //Gestion des raccourcis d'aide
-                           ldx_WinXpBar.HelpType    := aCon_ParentContainer.HelpType ;
-                           ldx_WinXpBar.HelpKeyword := aCon_ParentContainer.HelpKeyword ;
-                           ldx_WinXpBar.HelpContext := aCon_ParentContainer.HelpContext ;
-
-                           // Aligne en haut
-                           ldx_WinXpBar.Top   := li_TopXPBar ;
-                           ldx_WinXpBar.ImageList := aIma_ImagesXPBars ;
-                           ldx_WinXpBar.Align := alTop ;
-
-                           // Couleurs originelles
-                           ldx_WinXpBar.Colors.BodyColor := $00F7DFD6 ;
-                           ldx_WinXpBar.Colors.CheckedColor := $00D9C1BB;
-                           ldx_WinXpBar.Colors.CheckedFrameColor := clHighlight ;
-                           ldx_WinXpBar.Colors.FocusedColor := $00D8ACB0 ;
-                           ldx_WinXpBar.Colors.FocusedFrameColor := clHotLight ;
-                           ldx_WinXpBar.Colors.GradientFrom := clWhite ;
-                           ldx_WinXpBar.Colors.GradientTo := $00F7D7C6 ;
-                           ldx_WinXpBar.Colors.SeparatorColor := $00F7D7C6 ;
-
-                           // Fontes
-                           ldx_WinXpBar.Font.Size := 10 ;
-                           ldx_WinXpBar.HeaderFont.Size := 10 ;
-
-                            // affectation du compteur de nom
-//                           p_setComponentName ( ldx_WinXpBar, ls_MenuGroup );
-                           // Parent
-
-
-                           ldx_WinXpBar.Parent := aCon_ParentContainer ;
-                           p_getImageToBitmap ( ls_MenuPrefix, lbmp_FonctionImage );
-                                 // affectation du libellé du menu
-                            // Gestion sans base de données
-                           p_ModifieXPBar  ( aF_FormParent       ,
-                                                 ldx_WinXpBar        ,
-                                                 ls_MenuGroup        ,
-                                                 fs_GetLabelCaption ( ls_MenuGroup )        ,
-                                                 ''                  ,
-                                                 ''                  ,
-                                                 ls_MenuGroup        ,
-                                                 aIma_ImagesTempo    ,
-                                                 lbmp_FonctionImage    ,
-                                                 abmp_DefaultPicture ,
-          //                                       li_Compteur         ,
-                                                 False  );
-
-                            // On remet le compteur des fonctions à 0
-                           li_CompteurFonctions := 0 ;
-
-                         End
-                        else
-                         if ( li_CompteurFonctions = 1 )
-                          Then
-                            Begin
-                              p_getImageToBitmap ( ls_MenuPrefix,  lbmp_FonctionImage );
-                            // fonction dans la file d'attente
-                              fdxi_AddItemXPBar ( aF_FormParent       ,
-                                                  ldx_WinXpBar        ,
-                                                  ls_MenuClep         ,
-                                                  ls_MenuLabel        ,
-                                                  ls_MenuValue        ,
-                                                  ''                  ,
-                                                  ls_MenuName         ,
-                                                  aIma_ImagesXPBars   ,
-                                                  lbmp_FonctionImage  ,
-                                                  aBmp_DefaultPicture ,
-                                                  li_Compteur - 1     );
-
-                            end;
-                    End;
              lNodeChild := lNode.ChildNodes [ li_j ];
       //      ShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
             // Les sous-menus et menus doivent avoir des noms
             if  (  not ( lNodeChild.HasAttribute ( CST_LEON_ID )) // Ou alors pas de sous menu on crée la fonction
                and not ( lNodeChild.HasAttribute ( CST_LEON_ACTION_IDREF ))) // Ou alors pas de sous menu on crée la fonction
             or  (     ( lNodeChild.NodeName <> CST_LEON_ACTION )
-                 and  ( lNodeChild.NodeName <> CST_LEON_ACTION_REF ))
+                 and  ( lNodeChild.NodeName <> CST_LEON_ACTION_REF )
+                 and  ( lNodeChild.NodeName <> CST_LEON_COMPOUND_ACTION ))
               Then
                Begin
                // Enregistrement sans donnée valide on va au suivant
                  Continue ;
                End ;
-              Result := True ;
+            p_MenuGrouping;
+            Result := True ;
+            ls_MenuClep2 := ls_MenuClep;
+            lr_FunctionOld := lr_Function;
             if lNodeChild.HasAttribute(CST_LEON_ACTION_IDREF) then
               ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ]
              Else
               ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ID ];
-            ls_MenuAction := '' ;
-            ls_MenuName   := '' ;
-            ls_MenuGroup  := '' ;
-            ls_MenuValue  := '' ;
+            lr_Function.Name   := '' ;
+            lr_Function.Groupe  := '' ;
+            lr_Function.Value  := '' ;
             // SI le menu existe et si il est différent création d'un menu
               if  ( ls_MenuClep   <> '' )
                Then
                 Begin
+                  inc ( li_CompteurFonctions );
                   li_Action := fi_FindAction ( ls_MenuClep );
                   if li_Action = -1 then
                     Continue;
-                  ls_MenuAction := ga_Functions [ li_Action ].Groupe ;
-                  ls_MenuPrefix := ga_Functions [ li_Action ].Prefix ;
-                  ls_MenuName   := ga_Functions [ li_Action ].Name   ;
-                  ls_MenuValue  := ga_Functions [ li_Action ].Value  ;
-                  ls_MenuGroup  := ga_Functions [ li_Action ].Groupe ;
-                  if ( ls_MenuName = '' ) then
+                  lr_Function.Prefix := ga_Functions [ li_Action ].Prefix ;
+                  lr_Function.Name   := ga_Functions [ li_Action ].Name   ;
+                  lr_Function.Value  := ga_Functions [ li_Action ].Value  ;
+                  lr_Function.Groupe  := ga_Functions [ li_Action ].Groupe ;
+                  if ( lr_Function.Name = '' ) then
                      Continue;
-                 ls_MenuLabel  := fs_GetLabelCaption ( ls_MenuName );
+                 ls_MenuLabel  := fs_GetLabelCaption ( lr_Function.Name );
                   Result := True ;
 
                   // A chaque fonction création d'une action dans la bar XP
@@ -752,20 +767,19 @@ Begin
       //                  and ( gT_TableauMenus [ li_CompteurMenus ].Fonction <> '' ))
                    Then
                     Begin
-                      inc ( li_CompteurFonctions );
                       inc ( li_Compteur          );
                       if ( li_CompteurFonctions > 1 ) // Ajoute si plus d'une fonction
                        Then
                         Begin
                           // fonction dans la file d'attente
-                          p_getImageToBitmap ( ls_MenuPrefix,  lbmp_FonctionImage );
+                          p_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
                           fdxi_AddItemXPBar  ( aF_FormParent       ,
                                               ldx_WinXpBar        ,
                                               ls_MenuClep         ,
                                               ls_MenuLabel        ,
-                                              ls_MenuValue        ,
+                                              lr_Function.Value        ,
                                               ''                  ,
-                                              ls_MenuName         ,
+                                              lr_Function.Name         ,
                                               aIma_ImagesXPBars   ,
                                               lbmp_FonctionImage  ,
                                               aBmp_DefaultPicture ,
@@ -774,24 +788,7 @@ Begin
                     End ;
                     // Au suivant !
               End ;
-              // Si une fonction dans le dernier enregistrement affectation dans l'ancienne xpbar
-             if ( li_CompteurFonctions = 1 )
-              Then
-               Begin
-                 p_getImageToBitmap ( ls_MenuPrefix,  lbmp_FonctionImage );
-                 p_ModifieXPBar( aF_FormParent         ,
-                                 ldx_WinXpBar        ,
-                                 ls_MenuClep         ,
-                                 ls_MenuLabel        ,
-                                 ls_MenuValue        ,
-                                 ''                  ,
-                                 ls_MenuName         ,
-                                 aIma_ImagesTempo    ,
-                                 lbmp_FonctionImage  ,
-                                 aBmp_DefaultPicture ,
-          //                       li_Compteur         ,
-                                 ab_AjouteEvenement  );
-               end;
+             p_SetOneFunctiontoBar;
             End ;
           End;
    if assigned ( aMen_MenuVolet )
@@ -886,14 +883,11 @@ var //lMen_Menu           ,
     li_Action           ,
     li_CompteurMenu     : LongInt ;  // Compteur barres xp
 //    li_CompteurFonctions: Integer ; // Compteur fonctions
+    lr_Function         : TLeonFunction;
     ls_Menu             , // Menu en cours
     ls_SMenu,
     ls_MenuAction       ,
-    ls_MenuClep         ,
-    ls_MenuPrefix       ,
-    ls_MenuGroup        ,
-    ls_MenuValue        ,
-    ls_MenuName         : string ;
+    ls_MenuClep         : string ;
     lMen_MenuEnfant     : TMenuItem;
     ls_MenuLabel        : WideString ;// Sous Menu en cours
 {    ls_Fonction         ,          // Fonction en cours
@@ -1005,14 +999,14 @@ Begin
                 if li_Action = -1 then
                   Continue;
                 ls_MenuAction := ga_Functions [ li_Action ].Groupe ;
-                ls_MenuPrefix := ga_Functions [ li_Action ].Prefix ;
-                ls_MenuName   := ga_Functions [ li_Action ].Name   ;
-                ls_MenuValue  := ga_Functions [ li_Action ].Value  ;
-                ls_MenuGroup  := ga_Functions [ li_Action ].Groupe ;
-                 if ( ls_MenuName = '' ) then
+                lr_Function.Prefix := ga_Functions [ li_Action ].Prefix ;
+                lr_Function.Name   := ga_Functions [ li_Action ].Name   ;
+                lr_Function.Value  := ga_Functions [ li_Action ].Value  ;
+                lr_Function.Groupe  := ga_Functions [ li_Action ].Groupe ;
+                 if ( lr_Function.Name = '' ) then
                    Continue;
-                 ls_MenuLabel  := fs_GetLabelCaption ( ls_MenuName );
-                 if (   ls_MenuGroup <> ls_Menu  )
+                 ls_MenuLabel  := fs_GetLabelCaption ( lr_Function.Name );
+                 if (   lr_Function.Groupe <> ls_Menu  )
                   Then
                    begin
                      // compteur de nom
@@ -1025,11 +1019,11 @@ Begin
                      lMen_MenuEnCours.HelpContext := aMen_MenuVolet.HelpContext ;
 
                       // affectation du compteur de nom
-                     p_setComponentName ( lMen_MenuEnCours, ls_MenuName );
+                     p_setComponentName ( lMen_MenuEnCours, lr_Function.Name );
                      aMen_MenuParent.Add ( lMen_MenuEnCours );
                        // Menu Parent
 //                     lMen_Menu        := lMen_MenuEnCours ;
-                     ls_Menu  := ls_MenuGroup ;
+                     ls_Menu  := lr_Function.Groupe ;
                      // affectation du libellé du menu
                      lMen_MenuEnCours.Caption := fs_getLabelCaption ( ls_MenuAction );
                      lMen_MenuEnCours.Hint    := lMen_MenuEnCours.Caption;
@@ -1051,7 +1045,7 @@ Begin
                  // Si un menu n'est pas null alors on ajoute un sous menu
                  and (   lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ] <> Null )
                  // Si un sous menu n'est pas null et différent alors on ajoute un sous menu
-                 and   (   ls_MenuGroup <> ls_SMenu )
+                 and   (   lr_Function.Groupe <> ls_SMenu )
 //                 and (   axdo_FichierXML.FieldByName ( CST_SOUM_Clep ).Value <> Null )
                     Then
                      begin
@@ -1119,7 +1113,7 @@ Begin
               Begin
       //          inc ( li_CompteurFonctions );
                 inc ( li_CompteurMenu );
-                 p_getImageToBitmap ( ls_MenuPrefix, lbmp_BitmapOrigine );
+                 p_getImageToBitmap ( lr_Function.Prefix, lbmp_BitmapOrigine );
                  // Affectation des valeurs de la queue
                       // Chargement de la fonction à partir de la table des fonctions
 //                   lb_AjouteBitmap := fb_AssignDBImage ( axdo_FichierXML.FieldByName ( CST_FONC_Bmp ), lbmp_BitmapOrigine, aBmp_DefaultPicture );
@@ -1128,9 +1122,9 @@ Begin
                                             lMen_MenuEnCours     ,
                                             ls_MenuClep ,
                                             ls_MenuLabel, //axdo_FichierXML.FieldByName (  CST_FONC_Libelle ).AsString ,
-                                            ls_MenuValue, //axdo_FichierXML.FieldByName (  CST_FONC_Type    ).AsString ,
+                                            lr_Function.Value, //axdo_FichierXML.FieldByName (  CST_FONC_Type    ).AsString ,
                                             '', //axdo_FichierXML.FieldByName (  CST_FONC_Mode    ).AsString ,
-                                            ls_MenuName, //axdo_FichierXML.FieldByName (  CST_FONC_Nom     ).AsString ,
+                                            lr_Function.Name, //axdo_FichierXML.FieldByName (  CST_FONC_Nom     ).AsString ,
                                             li_CompteurMenu      ,
                                             lbmp_BitmapOrigine   ,
                                             lb_AjouteBitmap      ,
@@ -1466,14 +1460,14 @@ End ;
 
 /////////////////////////////////////////////////////////////////////////
 // procedure p_LoadNodesEntities
-// Searching some nodes in xml tree view
+// Searching some dashboard nodes in xml tree view
 // ano_Node : A node
 // ano_Parent  : Parent node
 // ai_LastCFonction : Last compound function
 /////////////////////////////////////////////////////////////////////////
 procedure p_LoadNodesEntities ( const ano_Node,ano_Parent : TALXMLNode ; ai_LastCFonction  : Longint );
 var li_i, li_j  : LongInt ;
-    lNode, lNodeChild : TALXMLNode ;
+    lNodeChild : TALXMLNode ;
     ls_Mode,
     lParam1,lParam2,lParam3,lPrefix: String;
     procedure p_SetAttributeValues;
@@ -1484,115 +1478,110 @@ var li_i, li_j  : LongInt ;
           lParam1 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ]
          else
           if lnodeChild.NodeName = CST_LEON_ACTION_GROUP then
-            lParam2 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ];
+            lParam2 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ]
+          else
+            if ( lnodeChild.NodeName = CST_LEON_PARAMETER )
+            and ( lnodeChild.Attributes [ CST_LEON_PARAMETER_NAME ]= CST_LEON_ACTION_CLASSINFO ) then
+              lParam3 :=  lnodeChild.Attributes [ CST_LEON_ACTION_IDREF ];
       end;
 
 Begin
-  for li_i := 0 to ano_Node.ChildNodes.Count - 1 do
+  if ( ano_Node.NodeName = CST_LEON_ACTION )
+  or ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
     Begin
-      lNode := ano_Node.ChildNodes [ li_i ];;
-      if ( lNode.NodeName = CST_LEON_ACTION )
-      or ( lNode.NodeName = CST_LEON_COMPOUND_ACTION ) then
-        Begin
-          if lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD then
-            Begin
-              gnod_DashBoard := lnode;
-              if gnod_DashBoard.HasChildNodes Then
-                for li_j := 0 to gnod_DashBoard.ChildNodes.Count -1 do
-                  if gnod_DashBoard.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS Then
-                    p_LoadNodesEntities ( gnod_DashBoard.ChildNodes [ li_j ], gnod_DashBoard, -1 );
-              Continue;
-            End;
 
-          lParam1 := '' ;
-          lParam2 := '' ;
-          lParam3 := '' ;
-          lPrefix := '';
+      lParam1 := '' ;
+      lParam2 := '' ;
+      lParam3 := '' ;
+      lPrefix := '';
 
-//          Showmessage ( lNode.XML );
-//          if lnode.HasAttribute ( CST_LEON_TEMPLATE ) then
-//              ShowMessage ( lNode.XML );
+//          ShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
 
-          // On ajoute la fonction complémentaire
-          if  ( lnode.HasChildNodes ) then
-            for  li_j := 0 to lNode.ChildNodes.count - 1 do
-              Begin
-                lNodeChild := lNode.ChildNodes [ li_j ];
-                p_SetAttributeValues;
-                if lnodeChild.NodeName = CST_LEON_PARAMETER then
-                  Begin
-                    if  ( lnodeChild.HasAttribute ( CST_LEON_PARAMETER_name ) )
-                    and ( lnodeChild.Attributes [ CST_LEON_PARAMETER_name ] = CST_LEON_PARAMETER_CLASSINFO ) Then
-                      lParam3 :=  lnodeChild.Attributes [ CST_LEON_PARAMETER_IDREF ];
-                  End;
-              End;
+//          Showmessage ( ano_Node.XML );
+//          if ano_Node.HasAttribute ( CST_LEON_TEMPLATE ) then
+//              ShowMessage ( ano_Node.XML );
 
-          // On ajoute la fonction action
-           Begin
-             SetLength ( ga_Functions, high ( ga_Functions ) + 2 );
-             with ga_Functions [ high ( ga_Functions )] do
-               Begin
-                 Clep := lnode.Attributes [ CST_LEON_ID ];
-                 Groupe := lParam2;
-                 Name   := lParam1;
-                 AFile  := lParam3;
-                 Prefix := lPrefix;
-{                 if (  Name = '' ) then
-                   Begin
-                     ShowMessage (  Gs_EmptyFunctionName +  Clep );
-                   End;   }
-                 if lNode.Attributes [ CST_LEON_ACTION_TEMPLATE ] = CST_LEON_TEMPLATE_MULTIPAGETABLE then
-                   Template := atMultiPageTable ;
-                 finalize ( Functions );
-                 if ls_Mode =' '
-                   Then Mode := fsStayOnTop
-                   Else if ls_Mode = ' '
-                     Then Mode := fsNormal
-                     Else Mode := fsMDIChild ;
-               End;
-
-             if ( lNode.NodeName = CST_LEON_COMPOUND_ACTION ) then
-               if  ( lnode.HasChildNodes ) then
-                 for  li_j := 0 to  lNode.ChildNodes.Count- 1 do
-                  Begin
-                    lNodeChild := lNode.ChildNodes [ li_j ];
-                    p_SetAttributeValues;
-                    finalize (ga_Functions [high ( ga_Functions )].Functions);
-                    if  ( lnode.NodeName = CST_LEON_COMPOUND_ACTION ) Then
-                      p_LoadNodesEntities ( lnode, ano_Node, high ( ga_Functions ) );
-                  End;
-           End;
-        End
-       else
-        if  ( lnode.NodeName = CST_LEON_ACTION_REF )
-        and ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
+      // On ajoute la fonction complémentaire
+      if  ( ano_Node.HasChildNodes ) then
+        for  li_j := 0 to ano_Node.ChildNodes.count - 1 do
           Begin
-            SetLength ( ga_Functions [ ai_LastCFonction ].Functions, high ( ga_Functions [ ai_LastCFonction ].Functions ) + 2 );
-            ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := lnode.Attributes [ CST_LEON_ACTION_IDREF ];
+            lNodeChild := ano_Node.ChildNodes [ li_j ];
+            p_SetAttributeValues;
           End;
-    End;
+
+      // On ajoute la fonction action
+       SetLength ( ga_Functions, high ( ga_Functions ) + 2 );
+       with ga_Functions [ high ( ga_Functions )] do
+         Begin
+           Clep := ano_Node.Attributes [ CST_LEON_ID ];
+           Groupe := lParam2;
+           Name   := lParam1;
+           AFile  := lParam3;
+           Prefix := lPrefix;
+{                 if (  Name = '' ) then
+             Begin
+               ShowMessage (  Gs_EmptyFunctionName +  Clep );
+             End;   }
+           if ano_Node.Attributes [ CST_LEON_ACTION_TEMPLATE ] = CST_LEON_TEMPLATE_MULTIPAGETABLE then
+             Template := atMultiPageTable ;
+           finalize ( Functions );
+           if ls_Mode =' '
+             Then Mode := fsStayOnTop
+             Else if ls_Mode = ' '
+               Then Mode := fsNormal
+               Else Mode := fsMDIChild ;
+         End;
+
+       if ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
+         if  ( ano_Node.HasChildNodes ) then
+           for  li_j := 0 to  ano_Node.ChildNodes.Count- 1 do
+            Begin
+              lNodeChild := ano_Node.ChildNodes [ li_j ];
+              p_SetAttributeValues;
+              finalize (ga_Functions [high ( ga_Functions )].Functions);
+              if  ( lNodeChild.NodeName = CST_LEON_COMPOUND_ACTION ) Then
+                p_LoadNodesEntities ( lNodeChild, lNodeChild, high ( ga_Functions ) );
+            End;
+    End
+   else
+    if  ( ano_Node.NodeName = CST_LEON_ACTION_REF )
+    and ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
+      Begin
+        SetLength ( ga_Functions [ ai_LastCFonction ].Functions, high ( ga_Functions [ ai_LastCFonction ].Functions ) + 2 );
+        ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := ano_Node.Attributes [ CST_LEON_ACTION_IDREF ];
+      End;
 End;
 
 /////////////////////////////////////////////////////////////////////////
-// Procédure  p_LoadNavigationTree
-// Searching in XML Navigation tree document for entities
-// Chargement de l'arbre de login et menu
-// axdo_FichierXML : XML Navigation tree file
+// procedure p_Loaddashboard
+// Searching some dashboard in xml tree view
+// ano_Node : A node
+// ano_Parent  : Parent node
+// ai_LastCFonction : Last compound function
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadNavigationTree  ( const axdo_FichierXML : TALXMLDocument );
-var lnod_Node : TALXMLNode ;
-    li_i, li_j : Longint ;
+procedure p_LoadDashBoard ( const ano_Node : TALXMLNode );
+var li_i, li_j  : LongInt ;
+    lNode : TALXMLNode ;
+
 Begin
-  for li_i := 0 to axdo_FichierXML.ChildNodes.Count - 1 do
-    Begin
-      lnod_Node := axdo_FichierXML.ChildNodes [ li_i ];
-      if lnod_Node.NodeName = CST_LEON_ACTION then
-        for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
-         if lnod_Node.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS Then
-           p_LoadNodesEntities ( lnod_Node.ChildNodes [ li_j ], nil, -1 );
-    End;
+  if ano_Node.HasChildNodes Then
+    for li_i := 0 to ano_Node.ChildNodes.Count - 1 do
+      Begin
+        lNode := ano_Node.ChildNodes [ li_i ];
+        if lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD then
+          Begin
+            gnod_DashBoard := lnode;
+            if gnod_DashBoard.HasChildNodes Then
+              for li_j := 0 to gnod_DashBoard.ChildNodes.Count -1 do
+                if gnod_DashBoard.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS Then
+                  p_LoadDashBoard ( gnod_DashBoard.ChildNodes [ li_j ] );
+            Continue;
+          End;
+        p_LoadNodesEntities ( lNode, nil, -1 );
+      end;
 
 end;
+
 
 /////////////////////////////////////////////////////////////////////////
 // Procédure  p_CreateRootEntititiesForm
@@ -1636,7 +1625,7 @@ End;
 procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
 
 Begin
-  p_LoadNodesEntities ( axdo_FichierXML.node, nil , -1 );
+  p_LoadDashBoard ( axdo_FichierXML.node );
 End;
 
 /////////////////////////////////////////////////////////////////////////
@@ -1863,7 +1852,7 @@ End;
 /////////////////////////////////////////////////////////////////////////
 function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
 var
-    li_i : Longint;
+    li_i, li_j : Longint;
     lnod_Node : TALXMLNode ;
 Begin
  if not assigned ( gxdo_MenuXML ) Then
@@ -1871,7 +1860,6 @@ Begin
  Result := False;
  if fb_LoadXMLFile ( gxdo_MenuXML, as_EntityFile ) then
    Begin
-     p_LoadNavigationTree ( gxdo_MenuXML );
      for li_i := 0 to gxdo_MenuXML.ChildNodes.Count -1  do
        Begin
          lnod_Node := gxdo_MenuXML.ChildNodes [li_i];
@@ -1880,6 +1868,10 @@ Begin
          and ( lnod_Node.Attributes[CST_LEON_TEMPLATE] = CST_LEON_TEMPLATE_LOGIN )
           Then
            Begin
+             if  lnod_Node.HasChildNodes Then
+             for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
+               if ( lnod_Node.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS ) Then
+                 p_LoadDashBoard(lnod_Node.ChildNodes [ li_j ]);
              gf_Users := TF_XMLForm.Create ( Application );
              (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML);
              Result := True;

@@ -70,9 +70,9 @@
 </CLASS>
 
 <GROUP id="identification_group" value="GROUP_IDENTIFICATION">
-	<CONSTRAINT colSpan="1" remainder="false" fill="BOTH"/>
+	<CONSTRAINT colSpan="1" remainder="false"/>
 </GROUP>
 
 <GROUP id="data_group" value="GROUP_DATA">
-	<CONSTRAINT colSpan="2" fill="BOTH"/>
+	<CONSTRAINT colSpan="2"/>
 </GROUP>

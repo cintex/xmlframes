@@ -7,6 +7,7 @@
 	<!-- Root include -->
 	<!ENTITY ROOT SYSTEM 'hotel/info/rootEntities.xml'>
 	<!ENTITY NAVIGATION SYSTEM 'hotel/info/navigationTree.xml'>
+	<!ENTITY location SYSTEM 'hotel/info/location.xml'>
 
 	<!-- Classes includes -->
 	<!ENTITY city SYSTEM 'hotel/info/city.xml'>
@@ -26,8 +27,6 @@
 
 	<!-- Root declarations -->
 	&ROOT;
-
-	<!-- Locations -->
 	<L_SQL id="hotel_db"
 			url="jdbc:mysql://localhost:3306/"
 			driver="com.mysql.jdbc.Driver"
@@ -35,15 +34,17 @@
 			password="vraduser"
 			dbName="hotel"
 			valueSep="&#010;"/>
+	<!-- Locations -->
+	&location;
 
 	<!-- Classes declarations -->
 	&city;
 	&client;
-	&reservation;
 	&current_reservation;
 	&establishment;
 	&manager;
 	&province;
+	&reservation;
 	&room;
 
 	<!-- Navigation Tree -->

@@ -14,6 +14,7 @@ uses
   ComCtrls, SysUtils,	TypInfo, Variants,
   fonctions_string, fonctions_xml, ExtCtrls,
   U_FormMainIni, u_framework_dbcomponents,
+  fonctions_manbase,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}

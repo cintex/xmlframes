@@ -15,7 +15,7 @@
 		<FIELD_REF idref="reservation_check_out"/>
 		<FIELD_REF idref="reservation_days"/>
 		<FIELD_REF idref="reservation_establishment"/>
-		<RELATION id="current_reservation_rooms" template="reservation_rooms" multiple='true' noContext='true'>
+		<RELATION id="current_reservation_rooms" multiple='true' noContext='true'>
 			<NAME value="NAME_RESERVATION_ROOMS"/>
 			<GROUP value="GROUP_ROOMS"/>
 			<F_MARKS create='true' set='true' needPost='true'/>
@@ -49,13 +49,7 @@
 		<ACTION_REF idref="_clone"/>
 		<ACTION_REF idref="_set"/>
 		<ACTION_REF idref="_delete"/>
-		<ACTION id="print_model_current_reservation" template="_printModel"
-				behavior="hotel.behavior.PrintReservationBehavior">
-			<NAME value="NAME_PRINT_MODEL_RESERVATION"/>
-			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/print/reservation_model.rtf"/>
-			<PARAMETER name="_output" value="$LY_APP_DOC_DIR$/print/Facture.rtf"/>
-			<PARAMETER name="_synchronous" value='true'/>
-		</ACTION>
+		<ACTION_REF idref="print_model_reservation"/>
 		<ACTION_REF idref="change_reservation_state"/>
 	</ACTIONS>
 </CLASS>
