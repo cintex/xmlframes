@@ -176,8 +176,16 @@ uses StrUtils, fonctions_init, u_multidonnees, fonctions_string, Dialogs;
 // Getting label caption from name
 // Name of caption
 function fs_GetLabelCaption ( const as_Name : String ):WideString;
+{$IFNDEF FPC}
+var ls_temp:  String;
+{$ENDIF}
 Begin
-  Result  := gstl_Labels.Values [ as_Name ];
+  ls_temp := gstl_Labels.Values [ as_Name ];
+{$IFNDEF FPC}
+  Result  := UTF8decode ( ls_temp );
+  if ( Result = '' ) then
+    Result := ls_temp ;
+{$ENDIF}
   if ( Result = '' ) then
     Result := as_Name ;
 End;
