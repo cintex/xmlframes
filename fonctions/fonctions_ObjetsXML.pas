@@ -549,8 +549,7 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     ls_SMenu,
     ls_MenuClep         ,
     ls_MenuClep2        : String;
-    ls_MenuLabel        ,
-    ls_MenuLabelOld     : WideString ;// Sous Menu en cours
+    ls_MenuLabel        : WideString ;// Sous Menu en cours
 //    lbmp_BitmapOrigine  : TBitmap ;  // bitmap en cours
     lNode, lNodeChild   : TALXMLNode ;
     lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
@@ -1467,7 +1466,7 @@ End ;
 // ai_LastCFonction : Last compound function
 /////////////////////////////////////////////////////////////////////////
 procedure p_LoadNodesEntities ( const ano_Node,ano_Parent : TALXMLNode ; ai_LastCFonction  : Longint );
-var li_i, li_j  : LongInt ;
+var li_j  : LongInt ;
     lNodeChild : TALXMLNode ;
     ls_Mode,
     lParam1,lParam2,lParam3,lPrefix: String;
@@ -2198,7 +2197,7 @@ end;
 
 procedure p_setFieldDefs ( const adat_Dataset : TDataset ; const alis_NodeFields : TList );
 var lfds_FieldDefs : TFieldDefs;
-    li_i, li_j : Integer ;
+    li_i : Integer ;
 begin
   lfds_FieldDefs := fobj_getComponentObjectProperty(adat_Dataset,'FieldDefs') as TFieldDefs;
   for li_i := 0 to  alis_NodeFields.count - 1 do

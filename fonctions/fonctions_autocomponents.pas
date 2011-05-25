@@ -202,7 +202,7 @@ begin
   else if as_FieldType = CST_LEON_FIELD_DATE then
     Begin
       if ab_IsLocal then
-        Result := {$IFDEF FPC}TFWDateEdit{$ELSE}TFWDateTimePicker{$ENDIF}.Create ( acom_Owner )
+        Result := TFWDateEdit.Create ( acom_Owner )
        Else
         Result := TFWDBDateEdit.Create ( acom_Owner );
     End
