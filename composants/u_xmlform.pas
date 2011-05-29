@@ -169,6 +169,9 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
+     {$IFDEF SFORM}
+     CompSuperForm,
+     {$ENDIF}
      u_buttons_appli, unite_variables, StdCtrls;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
