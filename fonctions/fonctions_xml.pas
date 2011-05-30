@@ -11,7 +11,7 @@ uses
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
-  ALXMLDoc,
+  ALXmlDoc,
   Forms;
 
 const CST_LEON_File_Extension = '.xml';
@@ -139,11 +139,12 @@ const CST_LEON_File_Extension = '.xml';
                                      FileUnit : 'fonctions_xml' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des données des objets dynamiques du composant Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory :  'Version 0.9.0.1 : Images Directory.' + #13#10 +
+              			                 BugsStory :  'Version 0.9.0.2 : centralising searching on xml nodes.' + #13#10 +
+                                                              'Version 0.9.0.1 : Images Directory.' + #13#10 +
                                                               'Version 0.9.0.0 : Unit functionnal.' + #13#10 +
                                                               'Version 0.1.0.0 : Création de l''unité.';
               			                 UnitType : 1 ;
-              			                 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 1 );
+              			                 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 2 );
 
 {$ENDIF}
 function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileXML : String ): Boolean;
@@ -151,6 +152,10 @@ function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileX
 // XML parameters
 var gs_ProjectFile  : String;
     gs_RootEntities : String ;
+    gNod_DashBoard  : TALXMLNode = nil;
+    gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+    gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+    gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
     gch_SeparatorCSV: Char = '|';
     gs_entities     : String  = 'rootEntities' ;
     gs_Encoding     : String = 'ISO-8859-1';
@@ -166,6 +171,7 @@ procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched
 function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
 function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute : String ) : String ;
 function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode ;
+function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
 
 implementation
@@ -176,9 +182,11 @@ uses StrUtils, fonctions_init, u_multidonnees, fonctions_string, Dialogs;
 // Getting label caption from name
 // Name of caption
 function fs_GetLabelCaption ( const as_Name : String ):WideString;
+{$IFNDEF FPC}
 var ls_temp:  String;
+{$ENDIF}
 Begin
-  ls_temp := gstl_Labels.Values [ as_Name ];
+  {$IFDEF FPC}Result{$ELSE}ls_temp{$ENDIF} := gstl_Labels.Values [ as_Name ];
 {$IFNDEF FPC}
   Result  := UTF8decode ( ls_temp );
   if ( Result = '' ) then
@@ -283,6 +291,31 @@ begin
       or ( lnod_Node.NodeName = CST_LEON_CLASS ) Then
         Result := lnod_Node;
     End;
+end;
+
+// function fnod_GetNodeFromIdRef
+// getting node from idref attributes of node
+// anod_Node : Node containing or not containing idref
+function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
+var li_i : Integer ;
+    lnod_Node : TALXMLNode;
+    ls_Template : String;
+begin
+
+  Result := anod_Node;
+  if ( anod_Node.Attributes [ CST_LEON_TEMPLATE ] <> Null ) Then
+    Begin
+      ls_Template := anod_Node.Attributes [ CST_LEON_TEMPLATE ];
+      for li_i := 0 to gxdo_RootXML.ChildNodes.Count -1 do
+        Begin
+          lnod_Node := gxdo_RootXML.ChildNodes [ li_i ];
+          if ( lnod_Node.Attributes[CST_LEON_ID] = ls_Template ) Then
+            Begin
+              Result := lnod_Node;
+              Break;
+            end;
+        End;
+    end;
 end;
 
 // function fs_getSoftInfo

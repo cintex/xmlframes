@@ -83,12 +83,8 @@ type
                                    end;
       TLeonFields = Array of TLeonField;
 var
-      gNod_DashBoard : TALXMLNode = nil;
       gs_SommaireEnCours      : string       ;   // Sommaire en cours MAJ régulièrement
       gF_FormParent           : {$IFDEF TNT}TTntForm{$ELSE}TForm{$ENDIF}        ;   // Form parent initialisée au create
-      gxdo_FichierXML         : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-      gxdo_MenuXML            : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-      gxdo_ActionsXML         : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
       gBmp_DefaultPicture     : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
       gWin_ParentContainer    : TScrollingWinControl  ;   // Volet d'accès
       gIco_DefaultPicture     : TIcon        ;   // Ico apparaissant si il n'y a pas d'image
@@ -1796,9 +1792,9 @@ Begin
                          Begin
                            lb_CreateNavigation := True;
                            if not assigned ( gxdo_MenuXML ) Then
-                             gxdo_ActionsXML := TALXMLDocument.Create(Application);
-                           if fb_LoadXMLFile ( gxdo_ActionsXML, ls_EntityFile ) then
-                             p_LoadEntitites ( gxdo_ActionsXML );
+                             gxdo_RootXML := TALXMLDocument.Create(Application);
+                           if fb_LoadXMLFile ( gxdo_RootXML, ls_EntityFile ) then
+                             p_LoadEntitites ( gxdo_RootXML );
                          End;
                       if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode.NodeName ) > 0 )
                        then
@@ -1809,7 +1805,7 @@ Begin
                        if not ( lb_Login )
                        and lb_CreateNavigation
                        and assigned ( gxdo_MenuXML )
-                       and assigned ( gxdo_ActionsXML ) then
+                       and assigned ( gxdo_RootXML ) then
                          p_CreeAppliFromNode ( ls_entityFile );
                      End;
                   boConnect :
@@ -2005,9 +2001,9 @@ End;
 function fb_ReadXMLEntitites () : Boolean;
 Begin
   Result := gs_ProjectFile <> '';
-  gxdo_ActionsXML.Free;
+  gxdo_RootXML.Free;
   gxdo_MenuXML   .Free;
-  gxdo_ActionsXML := nil;
+  gxdo_RootXML := nil;
   gxdo_MenuXML    := nil;
   if result Then
     Begin

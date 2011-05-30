@@ -31,7 +31,7 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_GROUPVIEW_BUTTONS_WIDTH       = 80;
       CST_XML_FIELDS_INTERLEAVING       = 4;
       CST_XML_FIELDS_CAPTION_SPACE      = 150;
-      CST_XML_SEGUND_COLMUN_MIN_POSWIDTH= 320;
+      CST_XML_SEGUND_COLUMN_MIN_POSWIDTH= 320;
       CST_XML_DETAIL_MINHEIGHT          = 560;
       CST_XML_FIELDS_LABEL_INTERLEAVING = 15;
       CST_XML_FIELDS_CHARLENGTH         = 10;
@@ -134,7 +134,7 @@ Begin
       afcf_ColumnField.HintName := '| ' + afcf_ColumnField.CaptionName;
     end;
   if ab_Column then
-    awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE + CST_XML_SEGUND_COLMUN_MIN_POSWIDTH
+    awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE + CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
    Else
     awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE ;
 end;
