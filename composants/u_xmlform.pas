@@ -118,6 +118,7 @@ type
     procedure p_setNodeId(const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afwc_Column : TFWXMLColumn);
   protected
     gxml_SourceFile : TALXMLDocument ;
+    procedure p_ScruteComposantsFiche (); override;
     procedure p_setChoiceComponent(const argr_Control: TDBRadioGroup); virtual;
     procedure p_CreateCsvFile(const afd_FieldsDefs: TFieldDefs; const afwc_Column : TFWXMLColumn ); virtual;
     function fpc_CreatePageControl(const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl): TPageControl; virtual;
@@ -134,8 +135,7 @@ type
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
-    function ffwc_CreateSource(const as_Class : String ; const av_Connection: Variant;
-      const ai_Counter: Integer): TFWXMLColumn; virtual;
+    function ffwc_CreateSource(const as_Class : String ; const av_Connection: Variant): TFWXMLColumn; virtual;
     function ffwc_SearchSource(const as_Class: String ): TFWXMLColumn; virtual;
     function  CreateSources: TFWSources; override;
     function  fwin_CreateFieldComponent ( const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ab_isLarge, ab_IsLocal : Boolean ; const ai_FieldCounter, ai_counter : Longint ):TWinControl;
@@ -160,7 +160,7 @@ type
     procedure p_setLogin ( const axml_Login : TALXMLDocument );
     procedure BeforeCreateFrameWork(Sender: TComponent);  override;
     procedure DestroyComponents ( const acom_Parent : TWinControl ); virtual;
-    procedure p_CreateFormComponents ( const as_XMLFile, as_Name : String ;  awin_Parent : TWinControl ; var ai_Counter : Longint ) ; virtual;
+    procedure p_CreateFormComponents ( const as_XMLFile, as_Name : String ;  awin_Parent : TWinControl ) ; virtual;
     constructor Create ( AOwner : TComponent ); override;
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
     property MainPanel   : TPanel read FMainPanel write FMainPanel;
@@ -174,9 +174,6 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
-     {$IFDEF SFORM}
-     CompSuperForm,
-     {$ENDIF}
      u_buttons_appli, unite_variables, StdCtrls;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
@@ -376,8 +373,7 @@ begin
   Result := True;
 end;
 
-function TF_XMLForm.ffwc_CreateSource(const as_Class: String ; const av_Connection: Variant;
-  const ai_Counter: Integer): TFWXMLColumn;
+function TF_XMLForm.ffwc_CreateSource(const as_Class: String ; const av_Connection: Variant): TFWXMLColumn;
 var li_Connection : Integer;
 begin
   if av_Connection = Null Then
@@ -386,7 +382,7 @@ begin
   with ga_Connections [ li_Connection ] do
     Begin
       Result := Sources.Add as TFWXMLColumn;
-      Result.Datasource := fds_CreateDataSourceAndTable ( as_Class, s_dataURL + IntToStr ( li_Connection ), IntToStr ( ai_Counter ), dtt_DatasetType, dat_QueryCopy, Self);
+      Result.Datasource := fds_CreateDataSourceAndTable ( as_Class, s_dataURL + IntToStr ( li_Connection ), IntToStr ( Sources.Count - 1 ), dtt_DatasetType, dat_QueryCopy, Self);
       Result.Table := as_Class;
       if dtt_DatasetType = dtCSV Then
         Begin
@@ -447,6 +443,7 @@ begin
   Result := fscb_CreateScrollBox ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_CONTROLS + as_Name, Self, alClient );
   lfwc_Column.Panels.Add.Panel := Result ;
 End;
+
 
 
 // function fdbg_GroupViewComponents
@@ -749,7 +746,7 @@ begin
                     else
                      ls_location := '';
 
-                   lfwc_Column := ffwc_CreateSource ( lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location, 0 );
+                   lfwc_Column := ffwc_CreateSource ( lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location );
                  end;
             end;
           li_Counter := 0 ;
@@ -893,8 +890,7 @@ End;
 // Creating the components of the form from TLeonFunction into array
 // a_Value : Menu function
 procedure TF_XMLForm.p_setFunction(const a_Value: TLeonFunction);
-var li_NumSource,
-    li_i : Integer ;
+var li_i : Integer ;
     li_Action : Longint ;
     lpan_Panel : TPanel;
 begin
@@ -905,14 +901,13 @@ begin
  DisableAlign ;
  Name := CST_COMPONENTS_FORM_BEGIN + a_value.Clep;
  Caption := fs_GetLabelCaption ( gr_Function.Name );
- li_NumSource := 0 ;
  with gr_Function do
    Begin
      // Simple function
     if (high ( Functions ) < 0 ) then
       Begin
         DestroyComponents ( nil );
-        p_CreateFormComponents ( gr_Function.AFile,gr_Function.Name, fpan_CreateActionPanel ( Self, Self, FActionPanel ), li_NumSource );
+        p_CreateFormComponents ( gr_Function.AFile,gr_Function.Name, fpan_CreateActionPanel ( Self, Self, FActionPanel ) );
       End
     else
       Begin
@@ -922,8 +917,7 @@ begin
         for li_i := 0 to ( high ( Functions )) do
           Begin
             li_Action := fi_FindAction ( Functions [ li_i ] );
-            p_CreateFormComponents ( ga_Functions [ li_Action ].AFile, ga_Functions [ li_Action ].Name, lpan_Panel, li_NumSource );
-            inc ( li_NumSource );
+            p_CreateFormComponents ( ga_Functions [ li_Action ].AFile, ga_Functions [ li_Action ].Name, lpan_Panel );
           End;
        End;
    End;
@@ -1121,6 +1115,10 @@ Begin
     End;
 end;
 
+procedure TF_XMLForm.p_ScruteComposantsFiche();
+begin
+end;
+
 // procedure p_CreateFieldComponentAndProperties
 // Creating the column components
 // as_Table : Table Name
@@ -1177,76 +1175,93 @@ var lnod_FieldProperties : TALXMLNode ;
 
     end;
 
-    procedure p_CreateComponents ;
-    var li_k, li_l : LongInt ;
+    procedure p_CreateArrayStructComponents ;
+    var li_k, li_l, li_FieldCounter : LongInt ;
         lb_column : Boolean;
         ls_NodeId : String;
         lwin_Parent : TWinControl;
         lnod_FieldsNode : TALXmlNode;
         ls_Table : String ;
         lfwc_Column : TFWXMLColumn ;
+        lfd_FieldsDefs : TFieldDefs ;
+    begin
+      ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
+      Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
+      lb_IsLocal := False;
+      lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
+      if anod_Field <> lnod_OriginalNode Then
+       Begin
+        ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
+        lfwc_Column  := ffwc_CreateSource(ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION] );
+        lfd_FieldsDefs := fobj_GetcomponentObjectProperty ( lfwc_Column.Datasource.Dataset, 'FieldDefs' ) as TFieldDefs;
+        li_FieldCounter := 0 ;
+        with afwc_Column.Linked.Add do
+          Begin
+            Source:=Sources.Count - 1;
+            LookupFields := ls_NodeId;
+          end;
+        with lfwc_Column.Linked.Add do
+          Begin
+            Source:=ai_Counter;
+          end;
+       end;
+      if lnod_OriginalNode.HasChildNodes then
+        for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
+          Begin
+            lnod_FieldsNode := lnod_OriginalNode.ChildNodes [ li_k ];
+            if lnod_FieldsNode.NodeName = CST_LEON_NAME then
+              Begin
+                p_SetComponentProperty(Result,'Caption',fs_GetLabelCaption(lnod_FieldsNode.Attributes[CST_LEON_VALUE]));
+                Continue;
+              End;
+            if (   lnod_OriginalNode.NodeName = CST_LEON_STRUCT )
+            and lnod_OriginalNode.ChildNodes [ li_k ].HasChildNodes then
+              Begin
+                lb_column := False;
+                lwin_Parent := Result ;
+                lwin_Last := nil;
+                if lnod_FieldsNode.NodeName = CST_LEON_FIELDS Then
+                  Begin
+                    for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
+                      Begin
+                        if anod_Field <> lnod_OriginalNode Then
+                          fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_FieldsNode.ChildNodes [ li_l ], li_FieldCounter, Sources.Count - 1,
+                                                                   lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
+                         else
+                          fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
+                                                                   awin_Parent, awin_Last, ab_column, afwc_Column, afd_FieldsDefs );
+                      end;
+                  end
+                 Else
+                  // The parent parameter is a var : so do not want to change it in the function
+                  if anod_Field <> lnod_OriginalNode Then
+                    fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ], li_FieldCounter, Sources.Count - 1,
+                                                             lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
+                   else
+                    fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
+                                                             awin_Parent, awin_Last, ab_column, afwc_Column, afd_FieldsDefs );
+                inc ( ai_FieldCounter );
+                lb_IsLocal:=True;
+              end;
+          end;
+      if not lb_IsLocal Then
+        Begin
+
+        end;
+      p_setFieldComponentTop ( Result, ab_Column );
+      p_setComponentLeft  ( Result, ab_Column );
+      lwin_Last := nil;
+
+    end;
+
+    procedure p_CreateComponents ;
+    var li_k : LongInt ;
     Begin
       if ( anod_Field.NodeName = CST_LEON_ARRAY )
       or ( anod_Field.NodeName = CST_LEON_STRUCT )
        Then
         Begin
-          ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
-          Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
-          lb_IsLocal := False;
-          lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
-          if anod_Field <> lnod_OriginalNode Then
-           Begin
-            ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
-            lfwc_Column  := ffwc_CreateSource(ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], Sources.Count);
-            with afwc_Column.Childs.Add do
-              Begin
-                Source:=Sources.Count - 1;
-                LookupFields := ls_NodeId;
-              end;
-           end
-           Else
-            Begin
-              ls_Table:=as_Table;
-              lfwc_Column := afwc_Column;
-            end;
-          if lnod_OriginalNode.HasChildNodes then
-            for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
-              Begin
-                lnod_FieldsNode := lnod_OriginalNode.ChildNodes [ li_k ];
-                if lnod_FieldsNode.NodeName = CST_LEON_NAME then
-                  Begin
-                    p_SetComponentProperty(Result,'Caption',fs_GetLabelCaption(lnod_FieldsNode.Attributes[CST_LEON_VALUE]));
-                    Continue;
-                  End;
-                if (   lnod_OriginalNode.NodeName = CST_LEON_STRUCT )
-                and lnod_OriginalNode.ChildNodes [ li_k ].HasChildNodes then
-                  Begin
-                    lb_column := False;
-                    lwin_Parent := Result ;
-                    lwin_Last := nil;
-                    if lnod_FieldsNode.NodeName = CST_LEON_FIELDS Then
-                      Begin
-                        for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
-                          Begin
-                            fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
-                                                                     lwin_Parent, lwin_Last, lb_column, lfwc_Column, afd_FieldsDefs );
-                          end;
-                      end
-                     Else
-                      // The parent parameter is a var : so do not want to change it in the function
-                      fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ], ai_FieldCounter, ai_Counter,
-                                                               lwin_Parent, lwin_Last, lb_column, lfwc_Column, afd_FieldsDefs );
-                    inc ( ai_FieldCounter );
-                    lb_IsLocal:=True;
-                  end;
-              end;
-          if not lb_IsLocal Then
-            Begin
-
-            end;
-          p_setFieldComponentTop ( Result, ab_Column );
-          p_setComponentLeft  ( Result, ab_Column );
-          lwin_Last := nil;
+          p_CreateArrayStructComponents;
           Exit;
         end;
       if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
@@ -1425,7 +1440,7 @@ End;
 // as_Name : Name of form
 // awin_Parent : Parent component
 // ai_Counter : The column counter for other XML File
-procedure TF_XMLForm.p_CreateFormComponents ( const as_XMLFile, as_Name : String ; awin_Parent : TWinControl ; var ai_Counter : Longint );
+procedure TF_XMLForm.p_CreateFormComponents ( const as_XMLFile, as_Name : String ; awin_Parent : TWinControl );
 var li_i, li_j, li_NoField : LongInt ;
     lnod_Node : TALXMLNode ;
     ls_ProjectFile : String ;
@@ -1441,24 +1456,24 @@ var li_i, li_j, li_NoField : LongInt ;
   Begin
     if not lb_FieldFound Then
       Begin
-        if ( ai_Counter = 0 ) Then
+        if ( Sources.Count = 1 ) Then
             Begin
-              awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, ai_Counter );
+              awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, Sources.Count - 1 );
               Hint := fs_GetLabelCaption ( as_Name );
               ShowHint := True;
             End
          else
           Begin
             awin_Parent := fscb_CreateTabSheet ( FPageControl, Self, FMainPanel, as_Name, as_Name );
-            awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, ai_Counter );
+            awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name , Sources.Count - 1);
           End;
         lb_FieldFound := True;
       end;
     lwin_Last := nil;
     if lnod_Node.Attributes [ CST_LEON_ID ] = Null then
-      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, ai_counter, li_NoField, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs )
+      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, li_NoField, Sources.Count - 1, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs )
      else
-      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, ai_counter, li_NoField, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs );
+      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, li_NoField, Sources.Count - 1, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs );
     inc ( li_NoField );
 
   end;
@@ -1477,10 +1492,8 @@ var li_i, li_j, li_NoField : LongInt ;
             p_CreateParentAndFieldsComponent ( anod_ANode.ChildNodes [ li_k ] );
           End;
        p_CreateCsvFile ( lfd_FieldsDefs, lfwc_Column );
-       ai_counter := Sources.Count;
       End;
-    if  ( li_Counter < Sources.Count )
-    and ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
+    if  ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
         Begin
           for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
             Begin
@@ -1495,7 +1508,7 @@ var li_i, li_j, li_NoField : LongInt ;
   procedure p_CreateXMLColumn ( const as_Table, as_Connection : String );
   Begin
     lfd_FieldsDefs := nil;
-    lfwc_Column :=ffwc_CreateSource ( as_Table, as_Connection, ai_Counter );
+    lfwc_Column :=ffwc_CreateSource ( as_Table, as_Connection );
     gs_connection := as_Connection;
     if lfwc_Column.gr_Connection.dtt_DatasetType = dtCSV then
       Begin
@@ -1507,7 +1520,8 @@ begin
   if not assigned ( gxml_SourceFile ) Then
     gxml_SourceFile := TALXMLDocument.Create ( Self );
   ls_ProjectFile := fs_getProjectDir ( ) + as_XMLFile + CST_LEON_File_Extension;
-  li_Counter := ai_Counter ;
+  // For actions at the end of xml file
+  li_Counter := Sources.Count;
   If ( FileExists ( ls_ProjectFile )) Then
    // reading the special XML form File
     try
@@ -1569,9 +1583,7 @@ begin
           ShowMessage ( 'Erreur : ' + E.Message );
         End;
     End ;
-  if   li_Counter < ai_Counter  then
-    dec ( ai_Counter );
-  
+
 end;
 
 // overrided procedure BeforeCreateFrameWork
