@@ -635,6 +635,7 @@ begin
       Exit;
     End;
 
+  Result.Name := anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
   Result.Parent := awin_Parent ;
   Result.Tag := ai_Counter + 1;
 end;
@@ -667,7 +668,7 @@ begin
   if ab_Column then
     awin_Control.Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
    Else
-    awin_Control.Left := 0 ;
+    awin_Control.Left := CST_XML_FIELDS_INTERLEAVING ;
 
 end;
 
@@ -991,7 +992,12 @@ Begin
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_NAME then
           Begin
-            REsult := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );
+            if ( awin_Control is TCustomRadioGroup ) Then
+              Begin
+                awin_Control.Caption:= fs_GetLabelCaption(lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
+              end
+             Else
+               REsult := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );
             Continue;
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS then
@@ -1138,8 +1144,11 @@ var lnod_FieldProperties : TALXMLNode ;
     lwin_Last : TWinControl;
     lnod_OriginalNode : TALXmlNode;
 
-    procedure p_getFieldOptions;
+    // Function fb_getFieldOptions
+    // Result : quitting
+    function fb_getFieldOptions: Boolean;
     begin
+      Result := False;
       if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
         Begin
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_local )
@@ -1153,6 +1162,7 @@ var lnod_FieldProperties : TALXMLNode ;
             Begin
               lffd_ColumnFieldDef.AffiCol := -1;
               lffd_ColumnFieldDef.AffiRech := -1;
+              Result := True;
               Exit;
             End;
           lffd_ColumnFieldDef.AffiCol := ai_counter + 1;
@@ -1229,7 +1239,7 @@ var lnod_FieldProperties : TALXMLNode ;
                                                                    lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                          else
                           fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
-                                                                   awin_Parent, awin_Last, ab_column, afwc_Column, afd_FieldsDefs );
+                                                                   awin_Parent, lwin_Last, ab_column, afwc_Column, afd_FieldsDefs );
                       end;
                   end
                  Else
@@ -1239,7 +1249,7 @@ var lnod_FieldProperties : TALXMLNode ;
                                                              lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                    else
                     fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
-                                                             awin_Parent, awin_Last, ab_column, afwc_Column, afd_FieldsDefs );
+                                                             awin_Parent, lwin_Last, ab_column, afwc_Column, afd_FieldsDefs );
                 inc ( ai_FieldCounter );
                 lb_IsLocal:=True;
               end;
@@ -1250,9 +1260,11 @@ var lnod_FieldProperties : TALXMLNode ;
         end;
       p_setFieldComponentTop ( Result, ab_Column );
       p_setComponentLeft  ( Result, ab_Column );
-      lwin_Last := nil;
 
     end;
+
+    // procedure p_CreateComponents
+    // Creating the component and setting data link
 
     procedure p_CreateComponents ;
     var li_k : LongInt ;
@@ -1262,6 +1274,7 @@ var lnod_FieldProperties : TALXMLNode ;
        Then
         Begin
           p_CreateArrayStructComponents;
+          // Quitting because having created component
           Exit;
         end;
       if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
@@ -1288,7 +1301,8 @@ var lnod_FieldProperties : TALXMLNode ;
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-            p_getFieldOptions;
+            if fb_getFieldOptions Then
+              Exit;
             if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
             or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
               lb_IsLarge := True;
@@ -1304,6 +1318,7 @@ var lnod_FieldProperties : TALXMLNode ;
 
       if not assigned ( Result ) then
         Exit;
+//      ShowMessage(awin_Parent.Name+ ' ' +Result.Name);
 
       p_setFieldComponentTop ( Result, ab_Column );
 
@@ -1312,11 +1327,23 @@ var lnod_FieldProperties : TALXMLNode ;
 
       llab_Label := flab_setFieldComponentProperties ( anod_Field, Result, awin_Parent, lfd_FieldDef, ai_Counter, ab_Column, lffd_ColumnFieldDef );
 
-      p_setLabelComponent ( Result, llab_Label, ab_Column );
+      if assigned ( llab_Label ) Then
+        p_setLabelComponent ( Result, llab_Label, ab_Column )
+       Else
+        p_setComponentLeft  ( Result, ab_Column );
+    end;
 
+    // procedure p_SetParentWidth
+    // Setting parent component width
+    procedure p_SetParentWidth ;
+    Begin
+      if Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
+        awin_Parent.ClientWidth := Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING;
+      awin_Parent.ClientHeight := Result.Top + Result.Height + CST_XML_FIELDS_INTERLEAVING;
     end;
 
 begin
+   Result := nil;
    If  ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT)
    and not ( awin_Parent is TGroupBox ) Then
      with afwc_Column do
@@ -1332,31 +1359,32 @@ begin
 
   p_CreateComponents ;
 
-  if awin_Last <> nil then
-    Begin
-      Result.Top := awin_Last.Top + awin_Last.Height + CST_XML_FIELDS_INTERLEAVING;
-      llab_Label.Top:=Result.Top;
-      awin_Parent.Height := Result.Top + Result.Height ;
-      if Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
-        awin_Parent.ClientWidth := Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING;
-      awin_Parent.ClientHeight := Result.Top + Result.Height + CST_XML_FIELDS_INTERLEAVING;
-      awin_Last := Result;
-    end
-   Else
-    if ( awin_Parent is TGroupBox )
-     Then
-       Begin
-         Result.Top:=CST_XML_FIELDS_INTERLEAVING;
-         llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
-         awin_Last := Result;
-       end
-      Else
+  if assigned ( Result ) Then
+    if awin_Last <> nil then
       Begin
-        ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
-        gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
-        if gi_LastFormFieldsHeight < Result.Top + Result.Height then
-          gi_LastFormFieldsHeight := Result.Top + Result.Height ;
-      end ;
+        Result.Top := awin_Last.Top + awin_Last.Height + CST_XML_FIELDS_INTERLEAVING;
+        if Assigned(llab_Label) Then
+          llab_Label.Top:=Result.Top;
+        p_SetParentWidth ;
+        awin_Last := Result;
+      end
+     Else
+      if ( awin_Parent is TGroupBox )
+       Then
+         Begin
+           Result.Top:=CST_XML_FIELDS_INTERLEAVING;
+           if Assigned(llab_Label) Then
+             llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
+           p_SetParentWidth ;
+           awin_Last := Result;
+         end
+        Else
+        Begin
+          ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
+          gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
+          if gi_LastFormFieldsHeight < Result.Top + Result.Height then
+            gi_LastFormFieldsHeight := Result.Top + Result.Height ;
+        end ;
 end;
 // fonction fpc_CreatePageControl
 // Creating a pagecontrol
