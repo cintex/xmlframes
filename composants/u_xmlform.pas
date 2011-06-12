@@ -358,7 +358,6 @@ begin
     if ( not assigned ( acom_Parent )
         or (( Components [ li_i ] is TWinControl ) and ( acom_Parent = ( Components [ li_i ] as TWinControl ).Parent ))) Then
       Begin
-//        ShowMessage ( Components[li_i].Name );
         Components [ li_i ].Free ;
       End ;
   gxml_SourceFile := nil ;
@@ -782,6 +781,7 @@ begin
                          lfwl_Label  .Top := 100 ;
                          lfwl_Label  .Caption := GS_PASSWORD;
                          gfwe_Password := lwin_Control as TFWEdit;
+                         gfwe_Password.PasswordChar:='*';
                        End;
                      p_setLabelComponent ( lwin_Control, lfwl_Label, False );
                      with lfwc_Column.FieldsDefs [ lfwc_Column.FieldsDefs.Count - 1 ] do
@@ -1239,7 +1239,7 @@ var lnod_FieldProperties : TALXMLNode ;
                                                                    lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                          else
                           fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
-                                                                   awin_Parent, lwin_Last, ab_column, afwc_Column, afd_FieldsDefs );
+                                                                   lwin_Parent, lwin_Last, ab_column, afwc_Column, afd_FieldsDefs );
                       end;
                   end
                  Else
@@ -1249,15 +1249,11 @@ var lnod_FieldProperties : TALXMLNode ;
                                                              lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                    else
                     fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
-                                                             awin_Parent, lwin_Last, ab_column, afwc_Column, afd_FieldsDefs );
-                inc ( ai_FieldCounter );
+                                                             lwin_Parent, lwin_Last, ab_column, afwc_Column, afd_FieldsDefs );
+                inc ( li_FieldCounter );
                 lb_IsLocal:=True;
               end;
           end;
-      if not lb_IsLocal Then
-        Begin
-
-        end;
       p_setFieldComponentTop ( Result, ab_Column );
       p_setComponentLeft  ( Result, ab_Column );
 
@@ -1318,7 +1314,6 @@ var lnod_FieldProperties : TALXMLNode ;
 
       if not assigned ( Result ) then
         Exit;
-//      ShowMessage(awin_Parent.Name+ ' ' +Result.Name);
 
       p_setFieldComponentTop ( Result, ab_Column );
 
@@ -1499,9 +1494,9 @@ var li_i, li_j, li_NoField : LongInt ;
       end;
     lwin_Last := nil;
     if lnod_Node.Attributes [ CST_LEON_ID ] = Null then
-      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, li_NoField, Sources.Count - 1, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs )
+      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs )
      else
-      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, li_NoField, Sources.Count - 1, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs );
+      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs );
     inc ( li_NoField );
 
   end;

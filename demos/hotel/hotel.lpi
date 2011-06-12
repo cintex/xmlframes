@@ -64,7 +64,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="178"/>
+        <UsageCount Value="180"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit0>
@@ -74,7 +74,7 @@
         <UnitName Value="U_ConstMessage"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="178"/>
+        <UsageCount Value="180"/>
       </Unit1>
       <Unit2>
         <Filename Value="../XMLFrames/composants/u_formxml.pas"/>
@@ -1132,20 +1132,23 @@
       <Unit149>
         <Filename Value="../../composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1253"/>
-        <CursorPos X="1" Y="1276"/>
-        <UsageCount Value="25"/>
+        <TopLine Value="625"/>
+        <CursorPos X="219" Y="663"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit149>
       <Unit150>
         <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
         <UnitName Value="ALXmlDoc"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2295"/>
         <CursorPos X="1" Y="2328"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit150>
       <Unit151>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
@@ -1242,10 +1245,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="6576"/>
-        <CursorPos X="33" Y="6598"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="3437"/>
+        <CursorPos X="3" Y="3445"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit163>
       <Unit164>
@@ -1262,11 +1267,11 @@
       <Unit165>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="551"/>
         <CursorPos X="17" Y="574"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="24"/>
         <Loaded Value="True"/>
       </Unit165>
       <Unit166>
@@ -1281,11 +1286,11 @@
       <Unit167>
         <Filename Value="../../fonctions/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="171"/>
-        <CursorPos X="27" Y="214"/>
-        <UsageCount Value="18"/>
+        <TopLine Value="145"/>
+        <CursorPos X="3" Y="183"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
       </Unit167>
       <Unit168>
@@ -1299,12 +1304,10 @@
       <Unit169>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
         <UnitName Value="DbCtrls"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="66"/>
         <CursorPos X="17" Y="89"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit169>
       <Unit170>
         <Filename Value="../../forms/u_multidonnees.pas"/>
@@ -1317,11 +1320,11 @@
       <Unit171>
         <Filename Value="../../../ManFrames/composants/u_formdico.pas"/>
         <UnitName Value="u_formdico"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="300"/>
-        <CursorPos X="74" Y="338"/>
-        <UsageCount Value="17"/>
+        <TopLine Value="1"/>
+        <CursorPos X="52" Y="35"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit171>
@@ -1355,11 +1358,11 @@
       <Unit175>
         <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
         <UnitName Value="u_framework_dbcomponents"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="53"/>
         <CursorPos X="55" Y="58"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit175>
       <Unit176>
@@ -1381,12 +1384,10 @@
       <Unit178>
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/db.pas"/>
         <UnitName Value="db"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1404"/>
         <CursorPos X="15" Y="1427"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit178>
       <Unit179>
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/dataset.inc"/>
@@ -1397,154 +1398,149 @@
       </Unit179>
       <Unit180>
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/datasource.inc"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="269"/>
         <CursorPos X="3" Y="285"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit180>
       <Unit181>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="149"/>
         <CursorPos X="1" Y="172"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit181>
       <Unit182>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/extctrls.pp"/>
         <UnitName Value="ExtCtrls"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="843"/>
         <CursorPos X="3" Y="866"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit182>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="1304" Column="1" TopLine="1272"/>
       </Position1>
       <Position2>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="717" Column="11" TopLine="679"/>
+        <Caret Line="1305" Column="1" TopLine="1272"/>
       </Position2>
       <Position3>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="765" Column="28" TopLine="727"/>
+        <Caret Line="1301" Column="1" TopLine="1272"/>
       </Position3>
       <Position4>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="766" Column="28" TopLine="728"/>
+        <Caret Line="1302" Column="1" TopLine="1272"/>
       </Position4>
       <Position5>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="767" Column="28" TopLine="729"/>
+        <Caret Line="1304" Column="1" TopLine="1272"/>
       </Position5>
       <Position6>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="768" Column="28" TopLine="730"/>
+        <Caret Line="1305" Column="1" TopLine="1272"/>
       </Position6>
       <Position7>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="769" Column="85" TopLine="731"/>
+        <Caret Line="1308" Column="1" TopLine="1272"/>
       </Position7>
       <Position8>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="773" Column="32" TopLine="735"/>
+        <Caret Line="1313" Column="1" TopLine="1275"/>
       </Position8>
       <Position9>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="776" Column="46" TopLine="738"/>
+        <Caret Line="1315" Column="1" TopLine="1277"/>
       </Position9>
       <Position10>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="781" Column="32" TopLine="743"/>
+        <Caret Line="620" Column="1" TopLine="597"/>
       </Position10>
       <Position11>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="621" Column="1" TopLine="597"/>
       </Position11>
       <Position12>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1140" Column="10" TopLine="1102"/>
+        <Caret Line="623" Column="1" TopLine="597"/>
       </Position12>
       <Position13>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1331" Column="62" TopLine="1290"/>
+        <Caret Line="624" Column="1" TopLine="597"/>
       </Position13>
       <Position14>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="556" Column="65" TopLine="538"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="626" Column="1" TopLine="597"/>
       </Position14>
       <Position15>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="631" Column="1" TopLine="597"/>
       </Position15>
       <Position16>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="172" Column="3" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="638" Column="1" TopLine="600"/>
       </Position16>
       <Position17>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1276" Column="1" TopLine="1253"/>
+        <Caret Line="639" Column="1" TopLine="601"/>
       </Position17>
       <Position18>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="172" Column="1" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="640" Column="1" TopLine="602"/>
       </Position18>
       <Position19>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="173" Column="1" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="641" Column="1" TopLine="603"/>
       </Position19>
       <Position20>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="176" Column="1" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1317" Column="1" TopLine="1294"/>
       </Position20>
       <Position21>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="178" Column="1" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1320" Column="1" TopLine="1294"/>
       </Position21>
       <Position22>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="186" Column="1" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1322" Column="1" TopLine="1294"/>
       </Position22>
       <Position23>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="187" Column="1" TopLine="163"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="665" Column="185" TopLine="636"/>
       </Position23>
       <Position24>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="1679" Column="1" TopLine="1656"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="660" Column="1" TopLine="636"/>
       </Position24>
       <Position25>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="1680" Column="1" TopLine="1656"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="665" Column="1" TopLine="636"/>
       </Position25>
       <Position26>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="1682" Column="1" TopLine="1656"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1491" Column="23" TopLine="1475"/>
       </Position26>
       <Position27>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="1677" Column="27" TopLine="1656"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1581" Column="21" TopLine="1570"/>
       </Position27>
       <Position28>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbctrls.pp"/>
-        <Caret Line="89" Column="17" TopLine="66"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position28>
       <Position29>
-        <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/datasource.inc"/>
-        <Caret Line="285" Column="3" TopLine="269"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="361" Column="1" TopLine="323"/>
       </Position29>
       <Position30>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/dbedit.inc"/>
-        <Caret Line="79" Column="1" TopLine="56"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="632" Column="12" TopLine="594"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
