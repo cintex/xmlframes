@@ -174,6 +174,7 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
+     u_extdbgrid,
      u_buttons_appli, unite_variables, StdCtrls;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
@@ -413,7 +414,7 @@ function TF_XMLForm.fpan_GridNavigationComponents ( const awin_Parent : TWinCont
 var lpan_ParentPanel : TPanel ;
     lpan_Panel : TPanel ;
     ldbn_Navigator : TExtDBNavigator ;
-    ldbg_Grid      : TFWDBGrid ;
+    ldbg_Grid      : TExtDBGrid ;
     lfwc_Column    : TFWXMLColumn ;
     lcon_Control   : TControl ;
 begin

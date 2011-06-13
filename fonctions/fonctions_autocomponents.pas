@@ -14,7 +14,7 @@ uses
   ComCtrls, SysUtils,	TypInfo, Variants,
   fonctions_string, fonctions_xml, ExtCtrls,
   U_FormMainIni, u_framework_dbcomponents,
-  fonctions_manbase, StdCtrls,
+  fonctions_manbase, StdCtrls, u_extdbgrid,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -93,7 +93,7 @@ function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name
 function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TScrollBox;
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
-function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TFWDBGrid;
+function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
 function fspl_CreateSPlitter ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TControl;
 function fds_CreateDataSourceAndDataset ( const as_Table, as_NameEnd : String  ; const adat_QueryCopy : TDataset ; const acom_Owner : TComponent): TDatasource;
 function fds_CreateDataSourceAndTable ( const as_Table, as_NameEnd, as_DataURL : String  ; const adtt_DatasetType : TDatasetType ; const adat_QueryCopy : TDataset ; const acom_Owner : TComponent): TDatasource;
@@ -379,9 +379,9 @@ End;
 // aal_Align : Align property to set
 // returns a DB Grid
 //////////////////////////////////////////////////////////////////////////
-function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TFWDBGrid;
+function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
 Begin
-  Result := TFWDBGrid.create ( acom_Owner );
+  Result := TExtDBGrid.create ( acom_Owner );
   Result.parent := awin_Parent;
   Result.Name := as_Name;
   Result.Align := alClient ;

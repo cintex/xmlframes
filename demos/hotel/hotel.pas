@@ -2,7 +2,6 @@ program hotel;
 
 {$MODE Delphi}
 
-
 uses
   Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents, lazfonctions,
