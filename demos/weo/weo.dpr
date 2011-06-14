@@ -16,7 +16,6 @@ uses
   Dialogs,
   U_ConstMessage in 'U_ConstMessage.pas';
 
-{$R *.res}
 {$R WindowsXP.res}
 
 

@@ -1349,7 +1349,7 @@ begin
          ab_Column:=False;
          awin_Parent := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent,
                           CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
-                          Gs_DetailsSheet );
+                          {$IFNDEF FPC}UTF8Decode{$ENDIF}( Gs_DetailsSheet ));
          afwc_Column.Panels.add.Panel := awin_Parent;
        End;
 
