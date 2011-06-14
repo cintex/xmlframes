@@ -176,9 +176,9 @@ function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
 implementation
 
-uses StrUtils, fonctions_init, u_multidonnees,
+uses fonctions_init, u_multidonnees,
 {$IFNDEF FPC}
-     Variants,
+     Variants, StrUtils,
 {$ENDIF}
      fonctions_string, Dialogs;
 

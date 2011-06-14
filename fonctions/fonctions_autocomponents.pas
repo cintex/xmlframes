@@ -10,7 +10,7 @@ interface
 
 uses
   Controls, Classes, Dialogs, DB,
-  U_ExtDBNavigator, Buttons, Forms, DBCtrls, Grids,
+  U_ExtDBNavigator, Buttons, Forms, DBCtrls,
   ComCtrls, SysUtils,	TypInfo, Variants,
   fonctions_string, fonctions_xml, ExtCtrls,
   U_FormMainIni, u_framework_dbcomponents,

@@ -155,6 +155,11 @@ type
     procedure p_AfterColumnFrameShow( const aFWColumn : TFWSource ); override;
     procedure DoClose ( var CloseAction : TCloseAction ); override;
     function fb_ChargeDonnees : Boolean; override;
+    function fb_InsereCompteur ( const adat_Dataset : TDataset ;
+                                 const aslt_Cle : TStringlist ;
+                                 const as_ChampCompteur, as_Table, as_PremierLettrage : String ;
+                                 const ach_DebutLettrage, ach_FinLettrage : Char ;
+                                 const ali_Debut, ali_LimiteRecherche : Int64 ): Boolean; override;
   public
     { Déclarations publiques }
     procedure p_setLogin ( const axml_Login : TALXMLDocument );
@@ -446,6 +451,7 @@ End;
 
 
 
+
 // function fdbg_GroupViewComponents
 // Creates a full N-N or N-1 relationships management
 // awin_Parent : the parent component of the created components
@@ -704,6 +710,14 @@ end;
 function TF_XMLForm.fb_ChargeDonnees: Boolean;
 begin
   Result:= True;
+end;
+
+function TF_XMLForm.fb_InsereCompteur(const adat_Dataset: TDataset;
+  const aslt_Cle: TStringlist; const as_ChampCompteur, as_Table,
+  as_PremierLettrage: String; const ach_DebutLettrage, ach_FinLettrage: Char;
+  const ali_Debut, ali_LimiteRecherche: Int64): Boolean;
+begin
+  Result:=False;
 end;
 
 // procedure p_setLogin

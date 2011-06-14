@@ -55,7 +55,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="72">
+    <Units Count="77">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
@@ -553,7 +553,6 @@
       <Unit66>
         <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
         <UnitName Value="u_extdbgrid"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="446"/>
@@ -564,17 +563,15 @@
       <Unit67>
         <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
         <UnitName Value="u_framework_dbcomponents"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="3"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit67>
       <Unit68>
         <Filename Value="../../../Extended/composants/u_extsearchedit.pas"/>
         <UnitName Value="u_extsearchedit"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="12"/>
@@ -584,7 +581,7 @@
       <Unit69>
         <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
         <UnitName Value="fonctions_Objets_Dynamiques"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="387"/>
         <CursorPos X="20" Y="410"/>
@@ -595,94 +592,176 @@
       <Unit70>
         <Filename Value="../../../Extended/fonctions/fonctions_init.pas"/>
         <UnitName Value="fonctions_init"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="366"/>
         <CursorPos X="18" Y="389"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit70>
       <Unit71>
         <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
         <UnitName Value="u_customframework"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="6326"/>
-        <CursorPos X="39" Y="6350"/>
+        <TopLine Value="640"/>
+        <CursorPos X="1" Y="663"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit71>
+      <Unit72>
+        <Filename Value="../../../ManFrames/composants/u_formdico.pas"/>
+        <UnitName Value="u_formdico"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="12" Y="36"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit72>
+      <Unit73>
+        <Filename Value="../../fonctions/fonctions_autocomponents.pas"/>
+        <UnitName Value="fonctions_autocomponents"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="46" Y="13"/>
+        <UsageCount Value="10"/>
+      </Unit73>
+      <Unit74>
+        <Filename Value="../../fonctions/fonctions_xml.pas"/>
+        <UnitName Value="fonctions_xml"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="156"/>
+        <CursorPos X="26" Y="181"/>
+        <UsageCount Value="10"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <UnitName Value="fonctions_ObjetsXML"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="325"/>
+        <CursorPos X="40" Y="368"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit75>
+      <Unit76>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <UnitName Value="u_xmlform"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="96"/>
+        <CursorPos X="75" Y="164"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit76>
     </Units>
-    <JumpHistory Count="17" HistoryIndex="16">
+    <JumpHistory Count="26" HistoryIndex="25">
       <Position1>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="25" Column="32" TopLine="14"/>
+        <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position1>
       <Position2>
         <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="46" Column="15" TopLine="1"/>
+        <Caret Line="559" Column="102" TopLine="534"/>
       </Position2>
       <Position3>
         <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="576" Column="24" TopLine="533"/>
+        <Caret Line="81" Column="8" TopLine="53"/>
       </Position3>
       <Position4>
         <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="54" Column="10" TopLine="32"/>
       </Position4>
       <Position5>
-        <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="559" Column="102" TopLine="534"/>
+        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position5>
       <Position6>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="518" Column="42" TopLine="513"/>
+        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
+        <Caret Line="162" Column="67" TopLine="139"/>
       </Position6>
       <Position7>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="173" Column="4" TopLine="157"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="../../../Extended/composants/u_framework_dbcomponents.pas"/>
-        <Caret Line="205" Column="4" TopLine="196"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="6349" Column="35" TopLine="6326"/>
       </Position8>
       <Position9>
         <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="81" Column="8" TopLine="53"/>
+        <Caret Line="373" Column="29" TopLine="357"/>
       </Position9>
       <Position10>
-        <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="54" Column="10" TopLine="32"/>
+        <Filename Value="../../../ManFrames/composants/u_formdico.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position10>
       <Position11>
-        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../../ManFrames/composants/u_formdico.pas"/>
+        <Caret Line="42" Column="27" TopLine="19"/>
       </Position11>
       <Position12>
-        <Filename Value="../../../Extended/fonctions/fonctions_init.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="6350" Column="39" TopLine="6326"/>
       </Position12>
       <Position13>
-        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Caret Line="162" Column="67" TopLine="139"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="792" Column="42" TopLine="769"/>
       </Position13>
       <Position14>
-        <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="58" Column="61" TopLine="542"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="3710" Column="5" TopLine="3705"/>
       </Position14>
       <Position15>
         <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="2485" Column="23" TopLine="2462"/>
       </Position15>
       <Position16>
         <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
-        <Caret Line="6349" Column="35" TopLine="6326"/>
+        <Caret Line="3626" Column="9" TopLine="3618"/>
       </Position16>
       <Position17>
-        <Filename Value="../../../Extended/composants/u_extdbgrid.pas"/>
-        <Caret Line="373" Column="29" TopLine="357"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position17>
+      <Position18>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="545" Column="1" TopLine="522"/>
+      </Position18>
+      <Position19>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="693" Column="1" TopLine="670"/>
+      </Position19>
+      <Position20>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="882" Column="1" TopLine="859"/>
+      </Position20>
+      <Position21>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="921" Column="1" TopLine="898"/>
+      </Position21>
+      <Position22>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="3684" Column="70" TopLine="3665"/>
+      </Position22>
+      <Position23>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="663" Column="14" TopLine="640"/>
+      </Position23>
+      <Position24>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="162" Column="99" TopLine="144"/>
+      </Position24>
+      <Position25>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="451" Column="1" TopLine="439"/>
+      </Position25>
+      <Position26>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="720" Column="17" TopLine="697"/>
+      </Position26>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -698,10 +777,18 @@
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <OptimizationLevel Value="0"/>
+        <OptimizationLevel Value="3"/>
       </Optimizations>
     </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <UseLineInfoUnit Value="False"/>
+      </Debugging>
+    </Linking>
     <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
@@ -737,7 +824,7 @@
       </Item7>
       <Item8>
         <Source Value="../../../ManFrames/composants/u_customframework.pas"/>
-        <Line Value="3420"/>
+        <Line Value="3421"/>
       </Item8>
       <Item9>
         <Source Value="../../../ManFrames/composants/u_customframework.pas"/>

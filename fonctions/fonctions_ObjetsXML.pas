@@ -542,7 +542,6 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     li_CompteurFonctions: Integer ; // Compteur fonctions
     lr_Function         ,
     lr_FunctionOld      : TLeonFunction;
-    ls_SMenu,
     ls_MenuClep         ,
     ls_MenuClep2        : String;
     ls_MenuLabel        : WideString ;// Sous Menu en cours
@@ -691,7 +690,6 @@ Begin
    Else li_CompteurMenus     := 0 ;}
   lr_Functionold.Groupe  := '' ;
   lr_Function   .Groupe  := '' ;
-  ls_SMenu             := '' ;
   li_CompteurFonctions := 0 ;
   li_Compteur          := 0 ;
   li_TopXPBar          := 1 ;
@@ -881,7 +879,6 @@ var //lMen_Menu           ,
 //    li_CompteurFonctions: Integer ; // Compteur fonctions
     lr_Function         : TLeonFunction;
     ls_Menu             , // Menu en cours
-    ls_SMenu,
     ls_MenuAction       ,
     ls_MenuClep         : string ;
     lMen_MenuEnfant     : TMenuItem;
@@ -921,7 +918,6 @@ Begin
 //  lb_AjouteBitmap    := False ;
 
   ls_Menu              := '' ;
-  ls_SMenu             := '' ;
 {  ls_FonctionType      := '' ;
   ls_FonctionMode      := '' ;
   ls_FonctionNom       := '' ;
