@@ -995,7 +995,7 @@ Begin
           Begin
             if ( awin_Control is TCustomRadioGroup ) Then
               Begin
-                awin_Control.Caption:= fs_GetLabelCaption(lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
+                p_setComponentProperty ( awin_Control, 'Caption', fs_GetLabelCaption(lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]));
               end
              Else
                REsult := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );

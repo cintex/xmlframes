@@ -176,7 +176,11 @@ function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
 implementation
 
-uses StrUtils, fonctions_init, u_multidonnees, fonctions_string, Dialogs;
+uses StrUtils, fonctions_init, u_multidonnees,
+{$IFNDEF FPC}
+     Variants,
+{$ENDIF}
+     fonctions_string, Dialogs;
 
 // function fs_GetLabelCaption
 // Getting label caption from name

@@ -12,6 +12,7 @@ uses
   ADODB,
   fonctions_ObjetsXML,
   fonctions_string,
+  fonctions_xml,
   Dialogs,
   U_ConstMessage in 'U_ConstMessage.pas';
 
