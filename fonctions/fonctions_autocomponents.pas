@@ -94,7 +94,11 @@ function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
 function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
-function fspl_CreateSPlitter ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TControl;
+function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
+                               const as_Name : String;
+                               const acom_Owner : TComponent ;
+                               const aal_Align : TAlign
+                               ):{$IFDEF FPC}TSplitter{$ELSE}TJvSplitter{$ENDIF} ;
 function fds_CreateDataSourceAndDataset ( const as_Table, as_NameEnd : String  ; const adat_QueryCopy : TDataset ; const acom_Owner : TComponent): TDatasource;
 function fds_CreateDataSourceAndTable ( const as_Table, as_NameEnd, as_DataURL : String  ; const adtt_DatasetType : TDatasetType ; const adat_QueryCopy : TDataset ; const acom_Owner : TComponent): TDatasource;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
@@ -307,7 +311,11 @@ End;
 // aal_Align : Align value
 // returns a Splitter
 //////////////////////////////////////////////////////////////////////////
-function fspl_CreateSPlitter ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TControl;
+function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
+                               const as_Name : String;
+                               const acom_Owner : TComponent ;
+                               const aal_Align : TAlign
+                               ):{$IFDEF FPC}TSplitter{$ELSE}TJvSplitter{$ENDIF} ;
 Begin
   {$IFDEF FPC}
   Result := TSplitter.create ( acom_Owner );

@@ -109,7 +109,7 @@ procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TAConnection; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
-function fdoc_GetCrossLinkFunction( const as_FunctionClep :String;
+function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
 procedure p_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ) ;
@@ -2076,7 +2076,7 @@ End ;
 // aanod_idRelation   : List to add link
 // anod_NodeCrossLink : linked node in other file
 ////////////////////////////////////////////////////////////////////////////////
-function fdoc_GetCrossLinkFunction( const as_FunctionClep :String;
+function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
 var li_i , li_j, li_k: Integer ;
@@ -2162,7 +2162,7 @@ begin
         Begin
           lft_FieldType := ftString;
         End
-      else if anod_Field.NodeName = CST_LEON_FIELD_RELATION then
+      else if anod_Field.NodeName = CST_LEON_RELATION then
         Begin
         End
       else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
@@ -2206,13 +2206,15 @@ End;
 ////////////////////////////////////////////////////////////////////////////////
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
 var
-    li_i : Integer ;
+    li_i, li_j : Integer ;
 Begin
   Result := as_Empty;
+  li_j := 0;
   for li_i := 0 to  alis_NodeFields.count - 1 do
-    if li_i = 0 Then
+    if li_j = 0 Then
       Begin
         Result := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
+        inc ( li_j );
         Break;
       end
      Else
