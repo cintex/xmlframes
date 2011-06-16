@@ -66,6 +66,7 @@ type
       TBuildOrder              = (boConnect,boMenus);
       TLeonFunctionID          = String ;
       TLeonFunctions           = Array of TLeonFunctionID;
+      TStringArray             = Array Of String;
       TLeonFunction            = Record
                                         Clep     : String ;
                                         Groupe   : String ;
@@ -107,7 +108,7 @@ var
 
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
-function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
+function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TAConnection; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
@@ -130,6 +131,7 @@ function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 function fi_FindAction ( const aClep : String ):Longint ;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
+function fa_GetArrayFields  ( const alis_NodeFields : TList ):TStringArray;
 procedure p_initialisationSommaire ( const as_SommaireEnCours      : String       );
 procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}TTntForm{$ELSE}TForm{$ENDIF}        ;
                                     const aMen_MenuLanguage       : TMenuItem       ;
@@ -2204,7 +2206,7 @@ End;
 // alis_NodeFields : Node fields
 // as_Empty        : if empty put this string
 ////////////////////////////////////////////////////////////////////////////////
-function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
+function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_AddOne : Boolean ):String;
 var
     li_i, li_j : Integer ;
 Begin
@@ -2215,10 +2217,27 @@ Begin
       Begin
         Result := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
         inc ( li_j );
-        Break;
+        if ab_AddOne Then
+          Break;
       end
      Else
       Result := Result + ',' + fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
+end;
+////////////////////////////////////////////////////////////////////////////////
+// function fs_GetIDFields
+// getting a list separated by comma from nodes
+// alis_NodeFields : Node fields
+// as_Empty        : if empty put this string
+////////////////////////////////////////////////////////////////////////////////
+function fa_GetArrayFields  ( const alis_NodeFields : TList ):TStringArray;
+var
+    li_i : Integer ;
+Begin
+  for li_i := 0 to  alis_NodeFields.count - 1 do
+    Begin
+      SetLength(Result, high ( Result ) + 2);
+      Result [high ( Result )] := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_NAME );
+    end
 end;
 
 function fs_GetDisplayFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;

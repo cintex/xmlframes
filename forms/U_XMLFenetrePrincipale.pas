@@ -61,10 +61,11 @@ const
        			                 FileUnit : 'U_XMLFenetrePrincipale' ;
        			                 Owner : 'Matthieu Giroux' ;
        			                 Comment : 'Fenêtre principale utilisée pour la gestion automatisée à partir du fichier INI, avec des menus composés à partir des données.' + #13#10 + 'Elle dépend du composant Fenêtre principale qui lui n''est pas lié à l''application.' ;
-      			                 BugsStory : 'Version 0.1.0.1 : No ExtToolbar on LAZARUS.' + #13#10
+      			                 BugsStory : 'Version 0.1.0.2 : Connection window shows only one time.' + #13#10
+                                                   + 'Version 0.1.0.1 : No ExtToolbar on LAZARUS.' + #13#10
                                                    + 'Version 0.1.0.0 : Création à partir de U_FenetrePrincipale' ;
 			                 UnitType : CST_TYPE_UNITE_FICHE ;
-			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 1 );
+			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 2 );
 {$ENDIF}
 
 type
@@ -452,6 +453,7 @@ begin
 
       // Init. du menu barre de fonction checked ou pas
       mu_barreoutils.Checked := tbar_outils.Visible;
+      gb_FirstAcces := False;
 
       dbt_identClick(Sender);
     end;
@@ -565,7 +567,6 @@ Begin
   if assigned ( Connector ) then
     p_setComponentBoolProperty ( Connector, 'Connected', False );
 {$ENDIF}
-  gb_FirstAcces := False;
   tbar_voletDockChanged ( tbar_volet );
   mu_voletchange ( mu_voletexplore.Checked );
 End;
