@@ -211,6 +211,8 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
      {$IFDEF FPC}
      LCLType,
+     {$ELSE}
+     Windows,
      {$ENDIF}
      u_extdbgrid,
      u_buttons_appli, unite_variables, StdCtrls;
@@ -511,7 +513,7 @@ var lpan_ParentPanel   : TWinControl;
     lpan_Panel : TPanel ;
     ldgv_GroupViewRight : TDBGroupView ;
     lfwc_Column    : TFWXMLColumn ;
-    lcon_Control   : TWinControl;
+    lcon_Control   : TControl;
 
     procedure p_setGroupmentfields ( const adgv_GroupView : TDBGroupView );
     Begin
@@ -584,7 +586,7 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonIn := TFWInSelect.Create ( Self );
           ButtonIn.Name := CST_COMPONENTS_IN_BEGIN + as_ClassRelation;
-          ButtonIn.Caption := '' ;
+          ( ButtonIn as TFWGroupButtonMoving ).Caption := '' ;
           lpan_PanelActions.Width := ButtonIn.Width;
           ButtonIn.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonIn );
@@ -594,7 +596,7 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonOut := TFWOutSelect.Create ( Self );
           ButtonOut.Name := CST_COMPONENTS_OUT_BEGIN + as_ClassRelation;
-          ButtonOut.Caption := '' ;
+          ( ButtonOut as TFWGroupButtonMoving ).Caption := '' ;
           ButtonOut.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonOut );
           ButtonOut.Align := alTop ;
@@ -603,7 +605,7 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonTotalIn := TFWInAll.Create ( Self );
           ButtonTotalIn.Name := CST_COMPONENTS_INALL_BEGIN + as_ClassRelation;
-          ButtonTotalIn.Caption := '' ;
+          ( ButtonTotalIn as TFWGroupButtonMoving ).Caption := '' ;
           ButtonTotalIn.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonTotalIn );
           ButtonTotalIn.Align := alTop ;
@@ -612,7 +614,7 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonTotalOut := TFWOutAll.Create ( Self );
           ButtonTotalOut.Name := CST_COMPONENTS_OUTALL_BEGIN + as_ClassRelation;
-          ButtonTotalOut.Caption := '' ;
+          ( ButtonTotalOut as TFWGroupButtonMoving ).Caption := '' ;
           ButtonTotalOut.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonTotalOut );
           ButtonTotalOut.Align := alTop ;

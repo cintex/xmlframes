@@ -98,7 +98,7 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const as_Name : String;
                                const acom_Owner : TComponent ;
                                const aal_Align : TAlign
-                               ):{$IFDEF FPC}TSplitter{$ELSE}TJvSplitter{$ENDIF} ;
+                               ):TControl ;
 function fds_CreateDataSourceAndDataset ( const as_Table, as_NameEnd : String  ; const adat_QueryCopy : TDataset ; const acom_Owner : TComponent): TDatasource;
 function fds_CreateDataSourceAndTable ( const as_Table, as_NameEnd, as_DataURL : String  ; const adtt_DatasetType : TDatasetType ; const adat_QueryCopy : TDataset ; const acom_Owner : TComponent): TDatasource;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
@@ -315,7 +315,7 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const as_Name : String;
                                const acom_Owner : TComponent ;
                                const aal_Align : TAlign
-                               ):{$IFDEF FPC}TSplitter{$ELSE}TJvSplitter{$ENDIF} ;
+                               ):TControl ;
 Begin
   {$IFDEF FPC}
   Result := TSplitter.create ( acom_Owner );
