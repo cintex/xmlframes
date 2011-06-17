@@ -55,15 +55,16 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="105">
+    <Units Count="106">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="hotel"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <CursorPos X="1" Y="17"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -597,7 +598,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="208"/>
         <CursorPos X="15" Y="231"/>
@@ -631,7 +632,7 @@
       <Unit74>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="66"/>
         <CursorPos X="126" Y="72"/>
@@ -641,7 +642,7 @@
       <Unit75>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="90"/>
         <CursorPos X="10" Y="113"/>
@@ -653,8 +654,8 @@
         <UnitName Value="u_xmlform"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1421"/>
+        <CursorPos X="19" Y="1560"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit76>
@@ -766,11 +767,10 @@
       <Unit90>
         <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
         <UnitName Value="U_GroupView"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
-        <CursorPos X="69" Y="50"/>
+        <CursorPos X="37" Y="50"/>
         <UsageCount Value="15"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -795,7 +795,7 @@
       <Unit93>
         <Filename Value="../../../Extended/composants/U_DBListView.pas"/>
         <UnitName Value="U_DBListView"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="112" Y="58"/>
@@ -805,7 +805,7 @@
       <Unit94>
         <Filename Value="../../../Extended/fonctions/fonctions_db.pas"/>
         <UnitName Value="fonctions_db"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="502"/>
         <CursorPos X="3" Y="512"/>
@@ -863,7 +863,7 @@
       <Unit101>
         <Filename Value="../../forms/U_XMLFenetrePrincipale.pas"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="47"/>
         <CursorPos X="90" Y="64"/>
@@ -873,7 +873,7 @@
       <Unit102>
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/db.pas"/>
         <UnitName Value="db"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1290"/>
         <CursorPos X="15" Y="1313"/>
@@ -882,7 +882,7 @@
       </Unit102>
       <Unit103>
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/dataset.inc"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1760"/>
         <CursorPos X="3" Y="1819"/>
@@ -892,134 +892,144 @@
       <Unit104>
         <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
         <UnitName Value="fonctions_string"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="113" Y="73"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit104>
+      <Unit105>
+        <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
+        <UnitName Value="ALXmlDoc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2295"/>
+        <CursorPos X="1" Y="2328"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit105>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="3399" Column="97" TopLine="3388"/>
+        <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
+        <Caret Line="2323" Column="1" TopLine="2295"/>
       </Position1>
       <Position2>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="3432" Column="1" TopLine="3401"/>
+        <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
+        <Caret Line="2328" Column="1" TopLine="2295"/>
       </Position2>
       <Position3>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="3426" Column="58" TopLine="3409"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1649" Column="1" TopLine="1626"/>
       </Position3>
       <Position4>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1650" Column="1" TopLine="1626"/>
       </Position4>
       <Position5>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="518" Column="21" TopLine="496"/>
+        <Caret Line="1651" Column="1" TopLine="1626"/>
       </Position5>
       <Position6>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="516" Column="30" TopLine="493"/>
+        <Caret Line="1664" Column="1" TopLine="1652"/>
       </Position6>
       <Position7>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="684" Column="29" TopLine="646"/>
+        <Caret Line="1561" Column="1" TopLine="1538"/>
       </Position7>
       <Position8>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="516" Column="27" TopLine="500"/>
+        <Caret Line="1563" Column="1" TopLine="1538"/>
       </Position8>
       <Position9>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="694" Column="1" TopLine="662"/>
+        <Caret Line="1578" Column="1" TopLine="1566"/>
       </Position9>
       <Position10>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="518" Column="1" TopLine="504"/>
+        <Caret Line="1638" Column="1" TopLine="1615"/>
       </Position10>
       <Position11>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="786" Column="16" TopLine="748"/>
+        <Caret Line="1691" Column="1" TopLine="1668"/>
       </Position11>
       <Position12>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="917" Column="14" TopLine="879"/>
+        <Caret Line="1808" Column="1" TopLine="1785"/>
       </Position12>
       <Position13>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1172" Column="16" TopLine="1134"/>
+        <Caret Line="1810" Column="1" TopLine="1785"/>
       </Position13>
       <Position14>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1912" Column="18" TopLine="1874"/>
+        <Caret Line="1807" Column="31" TopLine="1785"/>
       </Position14>
       <Position15>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="170" Column="16" TopLine="147"/>
       </Position15>
       <Position16>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="786" Column="16" TopLine="748"/>
+        <Caret Line="1605" Column="48" TopLine="1559"/>
       </Position16>
       <Position17>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="917" Column="14" TopLine="879"/>
+        <Caret Line="1561" Column="1" TopLine="1527"/>
       </Position17>
       <Position18>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1172" Column="16" TopLine="1134"/>
+        <Caret Line="1563" Column="1" TopLine="1527"/>
       </Position18>
       <Position19>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1885" Column="34" TopLine="1874"/>
+        <Caret Line="1578" Column="1" TopLine="1555"/>
       </Position19>
       <Position20>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="1579" Column="1" TopLine="1555"/>
       </Position20>
       <Position21>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="786" Column="16" TopLine="748"/>
+        <Caret Line="1639" Column="1" TopLine="1616"/>
       </Position21>
       <Position22>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="917" Column="14" TopLine="879"/>
+        <Caret Line="1666" Column="1" TopLine="1643"/>
       </Position22>
       <Position23>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1172" Column="16" TopLine="1134"/>
+        <Caret Line="1667" Column="1" TopLine="1643"/>
       </Position23>
       <Position24>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="644" Column="44" TopLine="629"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1676" Column="1" TopLine="1643"/>
       </Position24>
       <Position25>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="784" Column="3" TopLine="746"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1687" Column="1" TopLine="1649"/>
       </Position25>
       <Position26>
         <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="683" Column="74" TopLine="672"/>
+        <Caret Line="1688" Column="1" TopLine="1650"/>
       </Position26>
       <Position27>
-        <Filename Value="../../../Extended/composants/U_DBListView.pas"/>
-        <Caret Line="1250" Column="71" TopLine="1247"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1689" Column="1" TopLine="1651"/>
       </Position27>
       <Position28>
-        <Filename Value="../../../ManFrames/composants/U_GroupView.pas"/>
-        <Caret Line="751" Column="57" TopLine="746"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1690" Column="1" TopLine="1652"/>
       </Position28>
       <Position29>
-        <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
-        <Caret Line="620" Column="89" TopLine="611"/>
+        <Filename Value="../../composants/u_xmlform.pas"/>
+        <Caret Line="1692" Column="1" TopLine="1654"/>
       </Position29>
       <Position30>
-        <Filename Value="../../forms/U_XMLFenetrePrincipale.pas"/>
-        <Caret Line="427" Column="135" TopLine="417"/>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="12" Column="103" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

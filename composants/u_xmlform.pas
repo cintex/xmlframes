@@ -518,7 +518,7 @@ var lpan_ParentPanel   : TWinControl;
     procedure p_setGroupmentfields ( const adgv_GroupView : TDBGroupView );
     Begin
       with adgv_GroupView do
-        if pos ( afws_source.Table, aa_FieldsBind [ 0 ].GroupField ) > 0 Then
+        if pos ( as_OtherClass, aa_FieldsBind [ 0 ].GroupField ) = 0 Then
          Begin
            DataFieldGroup := aa_FieldsBind [ 0 ].GroupField;
            DataFieldUnit  := aa_FieldsBind [ 1 ].GroupField;
@@ -1575,6 +1575,7 @@ var lnod_FieldProperties : TALXMLNode ;
         Begin
           p_CreateArrayStructComponents;
           // Quitting because having created component
+          Result := True;
           Exit;
         end;
       if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
