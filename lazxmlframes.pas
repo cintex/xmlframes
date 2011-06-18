@@ -1,5 +1,5 @@
-{ Ce fichier a été automatiquement créé par Lazarus. Ne pas l'éditer !
-  Cette source est seulement employée pour compiler et installer le paquet.
+{ This file was automatically created by Lazarus. Do not edit!
+  This source is only used to compile and install the package.
  }
 
 unit lazxmlframes; 
@@ -8,7 +8,8 @@ interface
 
 uses
     u_xmlform, fonctions_xml, U_XMLFenetrePrincipale, fonctions_ObjetsXML, 
-  fonctions_autocomponents, u_languagevars, u_multidonnees, LazarusPackageIntf;
+  fonctions_autocomponents, u_languagevars, u_multidonnees, 
+  fonctions_leon_format, LazarusPackageIntf;
 
 implementation
 

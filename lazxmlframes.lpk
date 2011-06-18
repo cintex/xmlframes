@@ -19,7 +19,7 @@
       </Other>
     </CompilerOptions>
     <Version Minor="9" Release="3"/>
-    <Files Count="9">
+    <Files Count="10">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
@@ -56,6 +56,10 @@
         <Filename Value="forms/u_multidonnees.pas"/>
         <UnitName Value="u_multidonnees"/>
       </Item9>
+      <Item10>
+        <Filename Value="fonctions/fonctions_leon_format.pas"/>
+        <UnitName Value="fonctions_leon_format"/>
+      </Item10>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
