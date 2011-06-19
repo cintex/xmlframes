@@ -3,13 +3,27 @@ unit fonctions_leon_format;
 interface
 
 uses
-  StrUtils, SysUtils;
+  StrUtils,
+{$IFDEF VERSIONS}
+  fonctions_version,
+{$ENDIF}
+  SysUtils;
 
 const
+  {$IFDEF VERSIONS}
+      gVer_fonctions_leon_format : T_Version = ( Component : 'Gestion des nombres formatés de LEONARDI' ;
+                                                 FileUnit : 'fonctions_leon_format' ;
+                          			 Owner : 'Matthieu Giroux' ;
+                          			 Comment : 'Traduction du formatage des chaînes et nombres de LEONARDI.' ;
+                          			 BugsStory : 'Version 0.9.0.0 : Certaines fonctions sont non implémentées.';
+                          			 UnitType : 1 ;
+                          			 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 0 );
+  {$ENDIF}
   CST_FORMAT_NUMBER_MIN_CHAR = '0';
   CST_FORMAT_NUMBER_MAX_CHAR = '9';
   EMPTY_CHAR = ' ';
   EMPTY_NUMBER = '0';
+
 
 type
   TArrayStrings = array of string;
@@ -773,5 +787,9 @@ begin
 
 end;
 
+{$IFDEF VERSIONS}
+initialization
+  p_ConcatVersion ( gVer_fonctions_leon_format );
+{$ENDIF}
 end.
 
