@@ -1,5 +1,8 @@
 unit fonctions_leon_format;
 
+// Auteur : Matthieu GIROUX - liberlog.fr
+// Traduction à partir de LyJFormat de LEONARDI
+
 interface
 
 uses
@@ -14,7 +17,8 @@ const
       gVer_fonctions_leon_format : T_Version = ( Component : 'Gestion des nombres formatés de LEONARDI' ;
                                                  FileUnit : 'fonctions_leon_format' ;
                           			 Owner : 'Matthieu Giroux' ;
-                          			 Comment : 'Traduction du formatage des chaînes et nombres de LEONARDI.' ;
+                          			 Comment : 'Traduction du formatage des chaînes et nombres de LEONARDI.' + #13#10
+                                                         + 'Traduction à partir de LyJFormat de LEONARDI.' ;
                           			 BugsStory : 'Version 0.9.0.0 : Certaines fonctions sont non implémentées.';
                           			 UnitType : 1 ;
                           			 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 0 );

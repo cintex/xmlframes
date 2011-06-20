@@ -1,9 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Nom Unité :  U_Données
+//	Nom Unité :  U_MultiDonnées
 //	Description :	Datamodule divers de données
-//	Crée par Microcelt
-//	Modifié le 05/07/2004
+//	Créée par Matthieu GIROUX liberlog.fr en 2010
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,19 +19,19 @@ interface
 
 uses
   Classes,
+{$IFDEF CSV}
 {$IFDEF FPC}
   SDFData,
 {$ELSE}
   JvCSvData,
 {$ENDIF}
-{$IFNDEF CSV}
+{$ENDIF}
 {$IFDEF EADO}
   ADODB,
 {$ENDIF}
 {$IFDEF ZEOS}
   ZConnection,
   ZDataset,
-{$ENDIF}
 {$ENDIF}
 {$IFDEF VERSIONS}
   fonctions_version,

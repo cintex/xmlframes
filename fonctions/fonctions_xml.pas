@@ -143,7 +143,8 @@ const CST_LEON_File_Extension = '.xml';
   gver_fonctions_XML : T_Version = ( Component : 'Librairie de fonctions XML' ;
                                      FileUnit : 'fonctions_xml' ;
               			                 Owner : 'Matthieu Giroux' ;
-              			                 Comment : 'Gestion des données des objets dynamiques du composant Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
+              			                 Comment : 'Gestion des fichiers XML.' + #13#10 +
+                                                           'Il ne doit pas y avoir de lien vers les objets à créer.' ;
               			                 BugsStory :  'Version 0.9.0.2 : centralising searching on xml nodes.' + #13#10 +
                                                               'Version 0.9.0.1 : Images Directory.' + #13#10 +
                                                               'Version 0.9.0.0 : Unit functionnal.' + #13#10 +

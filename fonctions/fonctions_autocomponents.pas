@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Nom Unité :  fonctions_autocomponents
+//	Description :	Création automatisée de composants, sans gestion XML
+//	Créée par Matthieu GIROUX liberlog.fr en 2010
+//
+////////////////////////////////////////////////////////////////////////////////
 unit fonctions_autocomponents;
 
 {$I ..\extends.inc}
@@ -74,10 +81,11 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
 var  gi_FontHeight : Integer = 22 ;
 
 {$IFDEF VERSIONS}
+const
   gver_fonctions_autocomponents : T_Version = ( Component : 'Creating and setting components from parameters' ;
                                      FileUnit : 'fonctions_autocomponents' ;
               			                 Owner : 'Matthieu Giroux' ;
-              			                 Comment : 'Dynamic components creating for XML Form.';
+              			                 Comment : 'Dynamic components creating for XML Form, with no XML variables.';
               			                 BugsStory :  'Version 1.1.0.0 : Creating components and setting them from parameters' +
                                                               'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
@@ -188,7 +196,10 @@ begin
   if as_FieldType = CST_LEON_FIELD_NUMBER then
     Begin
       if ab_IsLocal then
-        Result := TExtNumEdit.Create ( acom_Owner )
+        Begin
+         Result := TExtNumEdit.Create ( acom_Owner );
+         (Result as TExtNumEdit).Text:='';
+        end
        else
         Result := TExtDBNumEdit.Create ( acom_Owner );
     End

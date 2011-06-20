@@ -55,7 +55,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="109">
+    <Units Count="122">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
@@ -63,7 +63,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="33" Y="11"/>
+        <CursorPos X="97" Y="12"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -597,10 +597,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="208"/>
-        <CursorPos X="15" Y="231"/>
+        <TopLine Value="5317"/>
+        <CursorPos X="164" Y="5327"/>
         <UsageCount Value="26"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -612,40 +612,42 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_formdico"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="39"/>
-        <CursorPos X="97" Y="51"/>
-        <UsageCount Value="26"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="4"/>
+        <UsageCount Value="28"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit72>
       <Unit73>
         <Filename Value="../../fonctions/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="367"/>
-        <CursorPos X="43" Y="408"/>
-        <UsageCount Value="14"/>
+        <TopLine Value="178"/>
+        <CursorPos X="26" Y="200"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
       </Unit73>
       <Unit74>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="66"/>
-        <CursorPos X="126" Y="72"/>
-        <UsageCount Value="26"/>
+        <TopLine Value="118"/>
+        <CursorPos X="88" Y="173"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit74>
       <Unit75>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="90"/>
         <CursorPos X="10" Y="113"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit75>
       <Unit76>
@@ -653,9 +655,9 @@
         <UnitName Value="u_xmlform"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="26"/>
+        <TopLine Value="14"/>
+        <CursorPos X="1" Y="25"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit76>
       <Unit77>
@@ -670,8 +672,8 @@
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/maskedit.pp"/>
         <UnitName Value="MaskEdit"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="153"/>
-        <CursorPos X="33" Y="176"/>
+        <TopLine Value="296"/>
+        <CursorPos X="15" Y="228"/>
         <UsageCount Value="16"/>
       </Unit78>
       <Unit79>
@@ -768,9 +770,9 @@
         <UnitName Value="U_GroupView"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="40"/>
-        <CursorPos X="37" Y="50"/>
-        <UsageCount Value="19"/>
+        <TopLine Value="30"/>
+        <CursorPos X="1" Y="52"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit90>
@@ -794,21 +796,21 @@
       <Unit93>
         <Filename Value="../../../Extended/composants/U_DBListView.pas"/>
         <UnitName Value="U_DBListView"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="32"/>
-        <CursorPos X="60" Y="59"/>
-        <UsageCount Value="17"/>
+        <TopLine Value="269"/>
+        <CursorPos X="80" Y="278"/>
+        <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit93>
       <Unit94>
         <Filename Value="../../../Extended/fonctions/fonctions_db.pas"/>
         <UnitName Value="fonctions_db"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="502"/>
-        <CursorPos X="3" Y="512"/>
-        <UsageCount Value="18"/>
+        <TopLine Value="14"/>
+        <CursorPos X="85" Y="14"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit94>
       <Unit95>
@@ -871,8 +873,8 @@
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/db.pas"/>
         <UnitName Value="db"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1290"/>
-        <CursorPos X="15" Y="1313"/>
+        <TopLine Value="1500"/>
+        <CursorPos X="3" Y="1523"/>
         <UsageCount Value="14"/>
       </Unit102>
       <Unit103>
@@ -885,10 +887,12 @@
       <Unit104>
         <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
         <UnitName Value="fonctions_string"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="711"/>
-        <CursorPos X="1" Y="755"/>
+        <TopLine Value="575"/>
+        <CursorPos X="3" Y="585"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit104>
       <Unit105>
         <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
@@ -904,8 +908,8 @@
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="34" Y="787"/>
-        <UsageCount Value="14"/>
+        <CursorPos X="58" Y="21"/>
+        <UsageCount Value="17"/>
         <Loaded Value="True"/>
       </Unit106>
       <Unit107>
@@ -918,124 +922,250 @@
       <Unit108>
         <Filename Value="../../../ExtCopy/composants/u_regextfilecopy.pas"/>
         <UnitName Value="u_regextfilecopy"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="29" Y="49"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit108>
+      <Unit109>
+        <Filename Value="../../../Extended/fonctions/fonctions_numedit.pas"/>
+        <UnitName Value="fonctions_numedit"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="42"/>
+        <CursorPos X="17" Y="65"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit109>
+      <Unit110>
+        <Filename Value="../../../ManFrames/composants/u_propform.pas"/>
+        <UnitName Value="u_propform"/>
+        <EditorIndex Value="12"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="51" Y="5"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit110>
+      <Unit111>
+        <Filename Value="/usr/lib/lazarus/0.9.30/examples/address_book/frmmain.pas"/>
+        <UnitName Value="frmmain"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="157"/>
+        <CursorPos X="11" Y="180"/>
+        <UsageCount Value="10"/>
+      </Unit111>
+      <Unit112>
+        <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/dbase/dbf.pas"/>
+        <UnitName Value="dbf"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2342"/>
+        <CursorPos X="24" Y="2380"/>
+        <UsageCount Value="10"/>
+      </Unit112>
+      <Unit113>
+        <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/bufdataset.pas"/>
+        <UnitName Value="BufDataset"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="444"/>
+        <CursorPos X="15" Y="467"/>
+        <UsageCount Value="10"/>
+      </Unit113>
+      <Unit114>
+        <Filename Value="/usr/lib/lazarus/0.9.30/components/sdf/registersdf.pas"/>
+        <UnitName Value="RegisterSDF"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="44" Y="33"/>
+        <UsageCount Value="10"/>
+      </Unit114>
+      <Unit115>
+        <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/sdf/sdfdata.pp"/>
+        <UnitName Value="SdfData"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="115"/>
+        <CursorPos X="3" Y="138"/>
+        <UsageCount Value="10"/>
+      </Unit115>
+      <Unit116>
+        <Filename Value="../../../Extended/fonctions/fonctions_dbcomponents.pas"/>
+        <UnitName Value="fonctions_dbcomponents"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="59"/>
+        <CursorPos X="1" Y="82"/>
+        <UsageCount Value="10"/>
+      </Unit116>
+      <Unit117>
+        <Filename Value="../../../Extended/composants/U_FormMainIni.pas"/>
+        <UnitName Value="U_FormMainIni"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="299"/>
+        <CursorPos X="22" Y="322"/>
+        <UsageCount Value="10"/>
+      </Unit117>
+      <Unit118>
+        <Filename Value="../../../Extended/composants/u_regfwbuttons.pas"/>
+        <UnitName Value="u_regfwbuttons"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="3" Y="31"/>
+        <UsageCount Value="10"/>
+      </Unit118>
+      <Unit119>
+        <Filename Value="../../forms/u_multidonnees.pas"/>
+        <UnitName Value="u_multidonnees"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="5"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit119>
+      <Unit120>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <UnitName Value="U_ExtNumEdits"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="247"/>
+        <CursorPos X="1" Y="285"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit120>
+      <Unit121>
+        <Filename Value="../../../ManFrames/composants/u_searchcomponents.pas"/>
+        <UnitName Value="u_searchcomponents"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="157"/>
+        <CursorPos X="143" Y="180"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit121>
     </Units>
-    <JumpHistory Count="27" HistoryIndex="26">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="657" Column="43" TopLine="636"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="725" Column="26" TopLine="689"/>
       </Position1>
       <Position2>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="40" Column="79" TopLine="40"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="106" Column="18" TopLine="87"/>
       </Position2>
       <Position3>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="659" Column="68" TopLine="636"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="122" Column="63" TopLine="87"/>
       </Position3>
       <Position4>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="714" Column="43" TopLine="680"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="718" Column="24" TopLine="680"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="106" Column="25" TopLine="68"/>
       </Position5>
       <Position6>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="62" Column="23" TopLine="24"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="122" Column="63" TopLine="84"/>
       </Position6>
       <Position7>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="705" Column="13" TopLine="682"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="712" Column="38" TopLine="687"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="728" Column="5" TopLine="689"/>
       </Position8>
       <Position9>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="718" Column="1" TopLine="684"/>
+        <Filename Value="../../../Extended/fonctions/fonctions_numedit.pas"/>
+        <Caret Line="52" Column="1" TopLine="31"/>
       </Position9>
       <Position10>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="717" Column="36" TopLine="684"/>
+        <Filename Value="../../../Extended/fonctions/fonctions_numedit.pas"/>
+        <Caret Line="65" Column="67" TopLine="42"/>
       </Position10>
       <Position11>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="12" Column="12" TopLine="1"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="93" Column="5" TopLine="73"/>
       </Position11>
       <Position12>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="718" Column="48" TopLine="685"/>
+        <Filename Value="../../../Extended/fonctions/fonctions_numedit.pas"/>
+        <Caret Line="50" Column="1" TopLine="42"/>
       </Position12>
       <Position13>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="722" Column="28" TopLine="685"/>
+        <Filename Value="../../../Extended/fonctions/fonctions_numedit.pas"/>
+        <Caret Line="25" Column="1" TopLine="1"/>
       </Position13>
       <Position14>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="45" Column="1" TopLine="22"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="727" Column="18" TopLine="704"/>
       </Position14>
       <Position15>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="714" Column="20" TopLine="691"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="730" Column="12" TopLine="704"/>
       </Position15>
       <Position16>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="765" Column="124" TopLine="739"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position16>
       <Position17>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="770" Column="13" TopLine="739"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="727" Column="17" TopLine="704"/>
       </Position17>
       <Position18>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="702" Column="76" TopLine="691"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="93" Column="5" TopLine="70"/>
       </Position18>
       <Position19>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="51" Column="25" TopLine="19"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="730" Column="6" TopLine="704"/>
       </Position19>
       <Position20>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="714" Column="65" TopLine="691"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="122" Column="58" TopLine="99"/>
       </Position20>
       <Position21>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="58" Column="1" TopLine="34"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="231" Column="15" TopLine="208"/>
       </Position21>
       <Position22>
-        <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1430" Column="60" TopLine="1421"/>
+        <Filename Value="../../../ManFrames/composants/u_searchcomponents.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position22>
       <Position23>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="6" Column="21" TopLine="1"/>
+        <Filename Value="../../../ManFrames/composants/u_searchcomponents.pas"/>
+        <Caret Line="180" Column="156" TopLine="157"/>
       </Position23>
       <Position24>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="792" Column="35" TopLine="749"/>
+        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
+        <Caret Line="231" Column="11" TopLine="208"/>
       </Position24>
       <Position25>
-        <Filename Value="../../fonctions/fonctions_leon_format.pas"/>
-        <Caret Line="14" Column="7" TopLine="1"/>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="7" Column="30" TopLine="1"/>
       </Position25>
       <Position26>
-        <Filename Value="../../../Extended/composants/U_DBListView.pas"/>
-        <Caret Line="97" Column="32" TopLine="79"/>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="12" Column="97" TopLine="1"/>
       </Position26>
       <Position27>
-        <Filename Value="../../../Extended/composants/U_DBListView.pas"/>
-        <Caret Line="107" Column="22" TopLine="79"/>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="379" Column="17" TopLine="356"/>
       </Position27>
+      <Position28>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="346" Column="47" TopLine="308"/>
+      </Position29>
+      <Position30>
+        <Filename Value="../../../Extended/composants/U_ExtNumEdits.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1051,14 +1181,9 @@
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <OptimizationLevel Value="3"/>
+        <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
-    <Linking>
-      <Debugging>
-        <UseLineInfoUnit Value="False"/>
-      </Debugging>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>
