@@ -191,6 +191,9 @@ type
 
     procedure KeyUp(var Key: Word; Shift: TShiftState); override;
   public
+    {$IFDEF FPC}
+    procedure DoShow; override;
+    {$ENDIF}
     { Déclarations publiques }
     procedure p_setLogin ( const axml_Login : TALXMLDocument );
     procedure BeforeCreateFrameWork(Sender: TComponent);  override;
@@ -215,7 +218,7 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      Windows,
      {$ENDIF}
      u_extdbgrid,
-     u_buttons_appli, unite_variables, StdCtrls;
+     u_buttons_appli, unite_variables, StdCtrls, JvXPButtons;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
 // functions and procédures not methods
@@ -487,7 +490,6 @@ begin
 End;
 
 
-
 // function fdbg_GroupViewComponents
 // Creates a full N-N or N-1 relationships management
 // awin_Parent : the parent component of the created components
@@ -666,7 +668,6 @@ var lpan_ParentPanel   : TWinControl;
                Caption := fs_GetLabelCaption(aa_FieldsDisplayNames [ li_i ]);
              end;
          ShowColumnHeaders:=True;
-         Loaded;
        end;
 
    end;
@@ -1010,6 +1011,23 @@ begin
    p_LoginOKClick (Self );
 end;
 
+{$IFDEF FPC}
+procedure TF_XMLForm.Doshow;
+var li_i : Integer;
+begin
+  // No LFM Bug
+  for li_i := 0 to ComponentCount - 1 do
+    Begin
+      if Components [ li_i ] is TJvXPButton Then
+       (Components [ li_i ] as TJvXPButton).Loaded;
+      if Components [ li_i ] is TDBGroupView Then
+       (Components [ li_i ] as TDBGroupView).Loaded;
+
+    end;
+  inherited;
+end;
+{$ENDIF}
+
 // procedure p_setLogin
 // Special Login model
 // axml_Login : XML Document of login form
@@ -1203,31 +1221,35 @@ begin
       p_CopyLeonFunction ( a_Value, gr_Function );
     End;
  DisableAlign ;
- Name := CST_COMPONENTS_FORM_BEGIN + a_value.Clep;
- Caption := fs_GetLabelCaption ( gr_Function.Name );
- with gr_Function do
-   Begin
-     // Simple function
-    if (high ( Functions ) < 0 ) then
-      Begin
-        DestroyComponents ( nil );
-        p_CreateFormComponents ( gr_Function.AFile,gr_Function.Name, fpan_CreateActionPanel ( Self, Self, FActionPanel ) );
-      End
-    else
-      Begin
-        // Compound function
-        DestroyComponents ( nil );
-        lpan_Panel := fpan_CreateActionPanel ( Self, Self, FActionPanel );
-        for li_i := 0 to ( high ( Functions )) do
-          Begin
-            li_Action := fi_FindAction ( Functions [ li_i ] );
-            p_CreateFormComponents ( ga_Functions [ li_Action ].AFile, ga_Functions [ li_Action ].Name, lpan_Panel );
-          End;
-       End;
-   End;
- FormCreate ( Self );
- gfin_FormIni.p_ExecuteLecture(Self);
- EnableAlign ;
+ try
+   Name := CST_COMPONENTS_FORM_BEGIN + a_value.Clep;
+   Caption := fs_GetLabelCaption ( gr_Function.Name );
+   with gr_Function do
+     Begin
+       // Simple function
+      if (high ( Functions ) < 0 ) then
+        Begin
+          DestroyComponents ( nil );
+          p_CreateFormComponents ( gr_Function.AFile,gr_Function.Name, fpan_CreateActionPanel ( Self, Self, FActionPanel ) );
+        End
+      else
+        Begin
+          // Compound function
+          DestroyComponents ( nil );
+          lpan_Panel := fpan_CreateActionPanel ( Self, Self, FActionPanel );
+          for li_i := 0 to ( high ( Functions )) do
+            Begin
+              li_Action := fi_FindAction ( Functions [ li_i ] );
+              p_CreateFormComponents ( ga_Functions [ li_Action ].AFile, ga_Functions [ li_Action ].Name, lpan_Panel );
+            End;
+         End;
+     End;
+   FormCreate ( Self );
+
+   gfin_FormIni.p_ExecuteLecture(Self);
+ finally
+   EnableAlign ;
+ end;
 end;
 
 // procedure p_setChoiceComponent
@@ -1261,8 +1283,6 @@ Begin
             Result := True;
             Continue;
           End;
-
-
       End;
 End;
 

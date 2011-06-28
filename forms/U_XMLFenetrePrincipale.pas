@@ -52,7 +52,7 @@ uses
   IniFiles, Dialogs, Printers,
   JvXPBar, Forms,  U_FormMainIni, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
-  u_buttons_appli, fonctions_string,
+  u_buttons_appli,
   U_OnFormInfoIni, DBCtrls;
 
 {$IFDEF VERSIONS}
