@@ -53,12 +53,13 @@ const // Champs utilisés
                                      FileUnit : 'fonctions_ObjetsXML' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory : 'Version 1.0.0.3 : Better menu.' + #13#10 +
+              			                 BugsStory : 'Version 1.0.0.4 : Testing.' + #13#10 +
+                                                             'Version 1.0.0.3 : Better menu.' + #13#10 +
                                                              'Version 1.0.0.2 : Better Ini.' + #13#10 +
                                                              'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
                                                              'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 3 );
+              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 4 );
 
 {$ENDIF}
 type
@@ -692,6 +693,7 @@ Begin
    Else li_CompteurMenus     := 0 ;}
   lr_Functionold.Groupe  := '' ;
   lr_Function   .Groupe  := '' ;
+  ls_MenuClep            := '' ;
   li_CompteurFonctions := 0 ;
   li_Compteur          := 0 ;
   li_TopXPBar          := 1 ;
@@ -1489,11 +1491,11 @@ Begin
   if ( ano_Node.NodeName = CST_LEON_ACTION )
   or ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
     Begin
-
+      ls_Mode := '' ;
       lParam1 := '' ;
       lParam2 := '' ;
       lParam3 := '' ;
-      lPrefix := '';
+      lPrefix := '' ;
 
 //          ShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
 
@@ -2233,6 +2235,7 @@ function fa_GetArrayFields  ( const alis_NodeFields : TList ):TStringArray;
 var
     li_i : Integer ;
 Begin
+  Finalize(Result);
   for li_i := 0 to  alis_NodeFields.count - 1 do
     Begin
       SetLength(Result, high ( Result ) + 2);

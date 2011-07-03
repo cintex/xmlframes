@@ -119,7 +119,7 @@ uses Forms, Controls, SysUtils,
   FileUtil,
 {$ENDIF}
   U_FormMainIni, Dialogs,
-  fonctions_string, fonctions_dbcomponents, fonctions_proprietes ;
+  fonctions_string, fonctions_proprietes ;
 
 {$IFNDEF CSV}
 ////////////////////////////////////////////////////////////////////////////////

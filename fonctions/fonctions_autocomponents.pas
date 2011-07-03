@@ -19,7 +19,7 @@ uses
   Controls, Classes, Dialogs, DB,
   U_ExtDBNavigator, Buttons, Forms, DBCtrls,
   ComCtrls, SysUtils,	TypInfo, Variants,
-  fonctions_string, fonctions_xml, ExtCtrls,
+  fonctions_xml, ExtCtrls,
   U_FormMainIni, u_framework_dbcomponents,
   fonctions_manbase, StdCtrls, u_extdbgrid,
 {$IFDEF VERSIONS}
@@ -86,10 +86,11 @@ const
                                      FileUnit : 'fonctions_autocomponents' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Dynamic components creating for XML Form, with no XML variables.';
-              			                 BugsStory :  'Version 1.1.0.0 : Creating components and setting them from parameters' +
+              			                 BugsStory :  'Version 1.1.0.1 : Testing.' + #13#10 +
+                                                              'Version 1.1.0.0 : Creating components and setting them from parameters.' + #13#10 +
                                                               'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 1 ; Release : 0 ; Build : 0 );
+              			                 Major : 1 ; Minor : 1 ; Release : 0 ; Build : 1 );
 
 {$ENDIF}
 
