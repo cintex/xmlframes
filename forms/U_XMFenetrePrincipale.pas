@@ -1,4 +1,4 @@
-{$DEFINE CLR}
+﻿{$DEFINE CLR}
 
 // ************************************************************************ //
 // Dfm2Pas: WARNING!
@@ -43,7 +43,7 @@ uses
   TntDBCtrls, TntMenus,TntStdCtrls, TntExtCtrls, DKLang, TntActnList,
   TntDialogs, TntGraphics, TntForms,
 {$ENDIF}
-  u_multidonnees, extdock, ExtTBTlwn, ExtTBTlbr,
+  u_multidonnees,
   Controls, Graphics, Classes, SysUtils, StrUtils,
   ExtCtrls, ActnList, Menus,
   JvXPContainer, ComCtrls, JvXPButtons,

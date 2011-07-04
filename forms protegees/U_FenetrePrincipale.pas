@@ -45,7 +45,7 @@ uses
   TntDBCtrls, TntMenus,TntStdCtrls, TntExtCtrls, DKLang, TntActnList,
   TntDialogs, TntGraphics, TntForms,
 {$ENDIF}
-  U_Donnees, ExtTBTls, extdock, ExtTBTlwn, ExtTBTlbr,
+  U_Donnees, 
   Controls, Graphics, Classes, SysUtils, StrUtils,
   ExtCtrls, ActnList, Menus, Messages,
   JvXPContainer, ComCtrls, JvXPButtons,

@@ -32,7 +32,7 @@ uses
    LCLIntf, LCLType, SQLDB, PCheck,
 {$ELSE}
   Windows, OleDB, JvComponent, StoHtmlHelp, JvScrollBox,
-  extdock, ExtTBTlbr, ImgList,
+  ImgList,
   JvExExtCtrls, JvSplitter, JvLED, U_ExtScrollBox,
   StdActns, JvExForms, JvExControls, JvXPCore, Messages,
 {$ENDIF}
@@ -53,7 +53,8 @@ uses
   JvXPBar, Forms,  U_FormMainIni, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
-  U_OnFormInfoIni, DBCtrls;
+  U_OnFormInfoIni, DBCtrls, menutbar,
+  u_extmenutoolbar, ToolWin;
 
 {$IFDEF VERSIONS}
 const
@@ -61,11 +62,12 @@ const
        			                 FileUnit : 'U_XMLFenetrePrincipale' ;
        			                 Owner : 'Matthieu Giroux' ;
        			                 Comment : 'Fenêtre principale utilisée pour la gestion automatisée à partir du fichier INI, avec des menus composés à partir des données.' + #13#10 + 'Elle dépend du composant Fenêtre principale qui lui n''est pas lié à l''application.' ;
-      			                 BugsStory : 'Version 0.1.0.2 : Connection window shows only one time.' + #13#10
+      			                 BugsStory : 'Version 0.1.0.3 : No ExtToolbar.' + #13#10
+                                                   + 'Version 0.1.0.2 : Connection window shows only one time.' + #13#10
                                                    + 'Version 0.1.0.1 : No ExtToolbar on LAZARUS.' + #13#10
                                                    + 'Version 0.1.0.0 : Création à partir de U_FenetrePrincipale' ;
 			                 UnitType : CST_TYPE_UNITE_FICHE ;
-			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 2 );
+			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 3 );
 {$ENDIF}
 
 type
@@ -75,7 +77,7 @@ type
   TF_FenetrePrincipale = class(TF_FormMainIni)
     mu_apropos: TMenuItem;
     mu_cascade: TMenuItem;
-    mu_MainMenu: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
+    mu_MainMenu: TTntMainMenu;
     mu_file: TMenuItem;
     mu_mosaiqueh: TMenuItem;
     mu_mosaiquev: TMenuItem;
@@ -93,9 +95,7 @@ type
     mu_sep2: TMenuItem;
     mu_Reinitiliserpresentation: TMenuItem;
     mu_sep3: TMenuItem;
-
-    ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
-    pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    ActionList: TTntActionList;
     {$IFDEF MDI}
     WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
     WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
@@ -108,25 +108,6 @@ type
     SvgFormInfoIni: TOnFormInfoIni;
     im_Liste: TImageList;
 
-    {$IFDEF FPC}
-    spl_volet: TSplitter;
-    {$ELSE}
-    dock_outils: TDock;
-    dock_volet: TDock;
-    {$ENDIF}
-    tbsep_1: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
-    tbsep_3: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
-    tbsep_2: {$IFDEF FPC}TPanel{$ELSE}TExtToolbarSep{$ENDIF};
-    tbar_outils: {$IFDEF FPC}TToolbar{$ELSE}TExtToolbar{$ENDIF};
-    tbar_volet: {$IFDEF FPC}TToolbar{$ELSE}TExtToolbar{$ENDIF};
-
-    pa_1: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_3: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_4: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    dbt_ident: TJVXPButton;
-    dbt_quitter: TJvXPButton;
-    dbt_aide: TJVXPButton;
-
     br_statusbar: TStatusBar;
 
     im_led: {$IFDEF FPC}TPCheck{$ELSE}TJvLED{$ENDIF};
@@ -135,7 +116,22 @@ type
     im_acces: TImage;
     im_about: TImage;
     mu_langue: TMenuItem;
+    tbar_outils: TToolBar;
+    pa_1: TTntPanel;
+    dbt_ident: TJvXPButton;
+    tbsep_1: TPanel;
+    pa_2: TTntPanel;
+    tbsep_2: TPanel;
+    pa_3: TTntPanel;
+    dbt_aide: TJvXPButton;
+    tbsep_3: TPanel;
+    pa_4: TTntPanel;
+    dbt_quitter: TJvXPButton;
+    pa_5: TTntPanel;
+    tbar_volet: TToolBar;
     scb_Volet: TScrollBox;
+    mtb_CustomizedMenu: TExtMenuToolBar;
+    spl_volet: TJvSplitter;
 
     procedure pa_5Resize(Sender: TObject);
     procedure p_ChargeAide;
@@ -443,14 +439,6 @@ begin
   // Identification par la fenêtre de Login uniquement au démarrage de l'application
   if gb_FirstAcces then
     begin
-      // Initialisation de la toolbar mauvaise si dans le create et si maximised
-{$IFNDEF FPC}
-      if gs_ModeConnexion = CST_MACHINE then
-        IniLoadToolbarPositions(Self, ExtractFilePath(Application.ExeName) + CST_Avant_Fichier + gs_computer  + '.INI', '')
-      else
-        IniLoadToolbarPositions(Self, ExtractFilePath(Application.ExeName) + CST_Avant_Fichier + gs_sessionuser  + '.INI', '');
-{$ENDIF}
-
       // Init. du menu barre de fonction checked ou pas
       mu_barreoutils.Checked := tbar_outils.Visible;
       gb_FirstAcces := False;
@@ -608,15 +596,6 @@ end;
 procedure TF_FenetrePrincipale.mu_voletchange(const ab_visible : Boolean);
 begin
   mu_voletexplore.Checked := ab_visible;
-{$IFNDEF FPC}
-  tbar_volet.Visible := ab_visible;
-  dock_volet.Visible := ab_visible;
-//  pa_5      .Visible := ab_visible;
-//  spl_volet .Visible := ab_visible;
-  if tbar_volet.Visible then
-    tbar_voletDockChanged(Self);
-{$ENDIF}
-//  spl_volet.Left := pa_5.Width;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -685,14 +664,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure TF_FenetrePrincipale.p_ApresSauvegardeParamIni;
 begin
-  {$IFNDEF FPC}
-  if gb_AccesAuto then
-    if gs_ModeConnexion = CST_MACHINE then
-      IniSaveToolbarPositions(Self, ExtractFilePath(Application.ExeName) + CST_Avant_Fichier + gs_computer  + '.INI', '')
-    else
-      IniSaveToolbarPositions(Self, ExtractFilePath(Application.ExeName) + CST_Avant_Fichier + gs_sessionuser  + '.INI', '');
-
-  {$ENDIF}
   if gb_Reinit then
     if gs_ModeConnexion = CST_MACHINE then
       DeleteFile(ExtractFilePath(Application.ExeName) + CST_Avant_Fichier + gs_computer  + '.INI')

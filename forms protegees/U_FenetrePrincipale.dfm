@@ -1,10 +1,10 @@
 object F_FenetrePrincipale: TF_FenetrePrincipale
   Left = 232
   Top = 167
-  Width = 773
-  Height = 549
   HelpContext = 1400
   Caption = 'Exemple'
+  ClientHeight = 513
+  ClientWidth = 757
   Color = 13565951
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -32,7 +32,8 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Left = 197
     Top = 45
     Width = 5
-    Height = 439
+    Height = 449
+    ExplicitHeight = 439
   end
   object im_appli: TImage
     Left = 248
@@ -61,8 +62,9 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   object dock_outils: TDock97
     Left = 0
     Top = 0
-    Width = 765
+    Width = 757
     Height = 45
+    ExplicitWidth = 765
     object tbar_outils: TToolbar97
       Left = 0
       Top = 0
@@ -186,8 +188,8 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object br_statusbar: TStatusBar
     Left = 0
-    Top = 484
-    Width = 765
+    Top = 494
+    Width = 757
     Height = 19
     AutoHint = True
     BiDiMode = bdRightToLeft
@@ -228,28 +230,32 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end>
     ParentBiDiMode = False
     OnDrawPanel = br_statusbarDrawPanel
+    ExplicitTop = 484
+    ExplicitWidth = 765
   end
   object pa_5: TPanel
     Left = 0
     Top = 45
     Width = 197
-    Height = 439
+    Height = 449
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 2
     OnResize = pa_5Resize
+    ExplicitHeight = 439
     object dock_volet: TDock97
       Left = 0
       Top = 0
       Width = 197
-      Height = 439
+      Height = 449
       Position = dpLeft
+      ExplicitHeight = 439
       object tbar_volet: TToolWindow97
         Left = 0
         Top = 0
         Caption = 'Volet d'#39'acc'#232's'
         CloseButtonWhenDocked = True
-        ClientAreaHeight = 421
+        ClientAreaHeight = 431
         ClientAreaWidth = 193
         DockableTo = [dpLeft]
         DockPos = 0
@@ -266,7 +272,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
           Left = 0
           Top = 0
           Width = 193
-          Height = 421
+          Height = 431
           Hint = 'Cliquer pour acc'#233'der aux fonctions'
           HelpContext = 1440
           HorzScrollBar.Smooth = True
@@ -283,6 +289,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
           ParentShowHint = False
           ShowHint = True
           TabOrder = 0
+          ExplicitHeight = 421
         end
       end
     end

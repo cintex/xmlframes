@@ -52,132 +52,14 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object dock_outils: TDock
-    Left = 0
-    Top = 0
-    Width = 757
-    Height = 45
-    object tbar_outils: TExtToolbar
-      Left = 0
-      Top = 0
-      Hint = 'Cliquer sur un bouton pour acc'#233'der '#224' une fonction'
-      HelpContext = 1430
-      Caption = 'Barre d'#39'acc'#232's'
-      DockableTo = [dpTop]
-      DockPos = 0
-      FullSize = True
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      UseLastDock = False
-      OnClose = tbar_outilsClose
-      OnDockChanged = F_FormMainIniResize
-      object tbsep_3: TExtToolbarSep
-        Left = 656
-        Top = 0
-      end
-      object tbsep_1: TExtToolbarSep
-        Left = 57
-        Top = 0
-      end
-      object tbsep_2: TExtToolbarSep
-        Left = 593
-        Top = 0
-      end
-      object pa_4: TTntPanel
-        Left = 662
-        Top = 0
-        Width = 57
-        Height = 41
-        Align = alRight
-        BevelOuter = bvNone
-        TabOrder = 0
-        object dbt_quitter: TJvXPButton
-          Left = 9
-          Top = 0
-          Width = 41
-          Height = 41
-          Hint = 'Quitter'
-          HelpContext = 1430
-          TabOrder = 0
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          OnClick = dbt_quitterClick
-        end
-      end
-      object pa_1: TTntPanel
-        Left = 0
-        Top = 0
-        Width = 57
-        Height = 41
-        Align = alLeft
-        BevelOuter = bvNone
-        TabOrder = 1
-        object dbt_ident: TJvXPButton
-          Left = 6
-          Top = 0
-          Width = 40
-          Height = 41
-          Hint = 'S'#39'identifier/d'#233'connecter|Ouvrir la fen'#234'tre d'#39'identification'
-          HelpContext = 1430
-          TabOrder = 0
-          Layout = blGlyphRight
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          OnClick = dbt_identClick
-        end
-      end
-      object pa_2: TTntPanel
-        Left = 63
-        Top = 0
-        Width = 530
-        Height = 41
-        BevelOuter = bvNone
-        TabOrder = 2
-      end
-      object pa_3: TTntPanel
-        Left = 599
-        Top = 0
-        Width = 57
-        Height = 41
-        Align = alRight
-        BevelOuter = bvNone
-        TabOrder = 3
-        object dbt_aide: TJvXPButton
-          Left = 9
-          Top = 0
-          Width = 41
-          Height = 41
-          Hint = 'Ouvrir l'#39'aide|Rubrique d'#39'aide'
-          HelpContext = 1430
-          TabOrder = 0
-          Layout = blGlyphRight
-          Spacing = 0
-          Align = alCustom
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'MS Sans Serif'
-          Font.Style = []
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          OnClick = dbt_aideClick
-        end
-      end
-    end
+  object spl_volet: TJvSplitter
+    Left = 227
+    Top = 29
+    Width = 5
+    Height = 465
+    ExplicitLeft = 197
+    ExplicitTop = 45
+    ExplicitHeight = 439
   end
   object br_statusbar: TStatusBar
     Left = 0
@@ -224,35 +106,160 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     ParentBiDiMode = False
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object dock_volet: TDock
+  object tbar_outils: TToolBar
     Left = 0
-    Top = 45
-    Width = 201
-    Height = 449
-    FixAlign = True
-    Position = dpLeft
-    object tbar_volet: TExtToolbar
+    Top = 0
+    Width = 757
+    Height = 29
+    Hint = 'Cliquer sur un bouton pour acc'#195#402#194#169'der '#195#402#194#160' une fonction'
+    HelpContext = 1430
+    Caption = 'Barre d'#39'acc'#195#402#194#168's'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
+    object pa_1: TTntPanel
       Left = 0
       Top = 0
-      Caption = 'Volet d'#39'acc'#232's'
-      CloseButtonWhenDocked = True
-      DockableTo = [dpLeft]
-      DockPos = 0
-      FloatingMode = fmOnTopOfAllForms
-      FullSize = True
+      Width = 57
+      Height = 22
+      BevelOuter = bvNone
       TabOrder = 0
-      UseLastDock = False
-      OnClose = tbar_voletClose
-      OnDockChanged = tbar_voletDockChanged
+      object dbt_ident: TJvXPButton
+        Left = 9
+        Top = 0
+        Width = 40
+        Height = 41
+        Hint = 
+          'S'#39'identifier/d'#195#402#194#169'connecter|Ouvrir la fen'#195#402#194#170'tre d'#39'identificatio' +
+          'n'
+        HelpContext = 1430
+        TabOrder = 0
+        Layout = blGlyphRight
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = dbt_identClick
+      end
+    end
+    object tbsep_1: TPanel
+      Left = 57
+      Top = 0
+      Width = 3
+      Height = 22
+      TabOrder = 4
+    end
+    object pa_2: TTntPanel
+      Left = 60
+      Top = 0
+      Width = 573
+      Height = 22
+      BevelOuter = bvNone
+      TabOrder = 1
+    end
+    object tbsep_2: TPanel
+      Left = 633
+      Top = 0
+      Width = 3
+      Height = 22
+      TabOrder = 5
+    end
+    object pa_3: TTntPanel
+      Left = 636
+      Top = 0
+      Width = 57
+      Height = 22
+      Align = alRight
+      BevelOuter = bvNone
+      TabOrder = 2
+      object dbt_aide: TJvXPButton
+        Left = 9
+        Top = 0
+        Width = 41
+        Height = 41
+        Hint = 'Ouvrir l'#39'aide|Rubrique d'#39'aide'
+        HelpContext = 1430
+        TabOrder = 0
+        Layout = blGlyphRight
+        Spacing = 0
+        Align = alCustom
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = dbt_aideClick
+      end
+    end
+    object tbsep_3: TPanel
+      Left = 693
+      Top = 0
+      Width = 3
+      Height = 22
+      TabOrder = 3
+    end
+    object pa_4: TTntPanel
+      Left = 696
+      Top = 0
+      Width = 57
+      Height = 22
+      Align = alRight
+      BevelOuter = bvNone
+      TabOrder = 6
+      object dbt_quitter: TJvXPButton
+        Left = 9
+        Top = 0
+        Width = 41
+        Height = 41
+        Hint = 'Quitter'
+        HelpContext = 1430
+        TabOrder = 0
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = dbt_quitterClick
+      end
+    end
+  end
+  object pa_5: TTntPanel
+    Left = 0
+    Top = 29
+    Width = 197
+    Height = 465
+    Align = alLeft
+    BevelOuter = bvNone
+    DockSite = True
+    TabOrder = 2
+    object tbar_volet: TToolBar
+      Left = 0
+      Top = 0
+      Width = 197
+      Height = 465
+      Align = alClient
+      ButtonHeight = 436
+      Caption = 'Volet d'#39'acc'#232's'
+      TabOrder = 0
+      ExplicitHeight = 29
       object scb_Volet: TScrollBox
         Left = 0
         Top = 0
         Width = 197
-        Height = 458
+        Height = 436
         Hint = 'Cliquez pour acc'#233'der aux fonctions'
         HelpContext = 1440
         Align = alClient
-        AutoSize = True
         BorderStyle = bsNone
         Constraints.MinHeight = 10
         Constraints.MinWidth = 10
@@ -262,6 +269,22 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         TabOrder = 0
       end
     end
+  end
+  object mtb_CustomizedMenu: TExtMenuToolBar
+    Left = 197
+    Top = 29
+    Width = 30
+    Height = 465
+    Align = alLeft
+    AutoSize = False
+    Caption = 'mtb_CustomizedMenu'
+    Color = cl3DLight
+    HotImages = im_Liste
+    List = False
+    ParentColor = False
+    ShowCaptions = False
+    TabOrder = 3
+    Visible = False
   end
   object im_Liste: TImageList
     Left = 256

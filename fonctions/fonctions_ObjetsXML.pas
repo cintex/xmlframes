@@ -28,9 +28,8 @@ uses Forms, JvXPBar, JvXPContainer,
 {$IFDEF FPC}
    LCLIntf, LCLType, ComCtrls,
 {$ELSE}
-   Windows,
+   Windows, ToolWin,
 {$ENDIF}
-//  ExtTBTls, extdock, ExtTBTlwn, ExtTBTlbr,
   Controls, Classes, JvXPButtons, ExtCtrls,
   Menus, DB,
 {$IFDEF VERSIONS}
@@ -53,13 +52,14 @@ const // Champs utilisés
                                      FileUnit : 'fonctions_ObjetsXML' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory : 'Version 1.0.0.4 : Testing.' + #13#10 +
-                                                             'Version 1.0.0.3 : Better menu.' + #13#10 +
-                                                             'Version 1.0.0.2 : Better Ini.' + #13#10 +
-                                                             'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
-                                                             'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
+              			                 BugsStory : 'Version 1.0.0.5 : No ExtToolbar.' + #13#10 +
+                                                 'Version 1.0.0.4 : Testing.' + #13#10 +
+                                                 'Version 1.0.0.3 : Better menu.' + #13#10 +
+                                                 'Version 1.0.0.2 : Better Ini.' + #13#10 +
+                                                 'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
+                                                 'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 4 );
+              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 5 );
 
 {$ENDIF}
 type
@@ -92,7 +92,7 @@ var
       gIco_DefaultPicture     : TIcon        ;   // Ico apparaissant si il n'y a pas d'image
       gi_TailleUnPanel        ,                  // Taille d'un panel de dxbutton
       gi_FinCompteurImages    : Integer      ;   // Un seul imagelist des menus donc efface après la dernière image
-      gBar_ToolBarParent      : TCustomControl  = nil;   // Barre d'accès
+      gBar_ToolBarParent      : {$IFDEF FPC}TCustomControl{$ELSE}TToolWindow{$ENDIF}  = nil;   // Barre d'accès
       gSep_ToolBarSepareDebut : TControl= nil;   // Séparateur de début délimitant les boutons à effacer
       gPan_PanelSepareFin     : {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF}       = nil;   // Panel      de fin   délimitant les boutons à effacer
       gb_UtiliseSMenu         : Boolean      ;            // Utilise-t-on les sous-menus
@@ -140,7 +140,7 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
 //                                    const aWin_BarreVolet         : TWinControl  ;
                                     const aMen_MenuVolet          : TMenuItem    ;
                                     const aIco_DefaultPicture     : TIcon        ;
-                                    const aBar_ToolBarParent      : TCustomControl ;
+                                    const aBar_ToolBarParent      : {$IFDEF FPC}TCustomControl{$ELSE}TToolWindow{$ENDIF} ;
                                     const aSep_ToolBarSepareDebut : TControl;
                                     const aPan_PanelSepareFin     : {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF}       ;
                                     const ai_TailleUnPanel        : Integer      ;
@@ -477,7 +477,7 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
               			    const aWin_PanelVolet         : TScrollingWinControl  ;
                                     const aMen_MenuVolet          : TMenuItem    ;
                                     const aIco_DefaultPicture     : TIcon        ;
-                                    const aBar_ToolBarParent      : TCustomControl   ;
+                                    const aBar_ToolBarParent      : {$IFDEF FPC}TCustomControl{$ELSE}TToolWindow{$ENDIF}   ;
                                     const aSep_ToolBarSepareDebut : TControl;
                                     const aPan_PanelSepareFin     : {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF}       ;
                                     const ai_TailleUnPanel        : Integer      ;
@@ -1169,23 +1169,7 @@ End ;
 // ai_TailleUnPanel        : La taille d'un panel
 // axdo_FichierXML    : Requête ADO des fonctions par menus et sous menus des utilisateurs
 // aIco_DefaultPicture     : l'image par défaut si pas d'image
-{
-function  fi_CreeSommaireBlank () : Integer ;
-Begin
-  Result :=  fi_CreeSommaire ( gF_FormParent          ,
-                        			 gF_FormParent          ,
-                        			 gs_SommaireEnCours     ,
-                        			 gxdo_FichierXML   ,
-                        			 gIco_DefaultPicture    ,
-                        			 gBar_ToolBarParent     ,
-                               gSep_ToolBarSepareDebut,
-                               gPan_PanelSepareFin    ,
-                        			 gi_TailleUnPanel       ,
-                        			 gBmp_DefaultPicture    ,
-                        			 True                   ) ;
 
-End ;
- }
 {
 function  fi_CreeSommaire (         const aF_FormMain             : TCustomForm  ;
                         			      const aF_FormParent           : TCustomForm  ;
