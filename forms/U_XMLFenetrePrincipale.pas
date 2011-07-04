@@ -77,7 +77,7 @@ type
   TF_FenetrePrincipale = class(TF_FormMainIni)
     mu_apropos: TMenuItem;
     mu_cascade: TMenuItem;
-    mu_MainMenu: TTntMainMenu;
+    mu_MainMenu: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
     mu_file: TMenuItem;
     mu_mosaiqueh: TMenuItem;
     mu_mosaiquev: TMenuItem;
@@ -95,7 +95,7 @@ type
     mu_sep2: TMenuItem;
     mu_Reinitiliserpresentation: TMenuItem;
     mu_sep3: TMenuItem;
-    ActionList: TTntActionList;
+    ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
     {$IFDEF MDI}
     WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
     WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
@@ -103,6 +103,12 @@ type
     WindowMinimizeAll: {$IFDEF TNT}TTntWindowMinimizeAll{$ELSE}TWindowMinimizeAll{$ENDIF};
     WindowArrangeAll: {$IFDEF TNT}TTntWindowArrange{$ELSE}TWindowArrange{$ENDIF};
     {$ENDIF}
+    pa_1: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    pa_3: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    pa_4: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    pa_5: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    spl_volet: {$IFDEF FPC}TSplitter;{$ELSE}TJvSplitter;{$ENDIF}
 
     Timer: TTimer;
     SvgFormInfoIni: TOnFormInfoIni;
@@ -117,21 +123,15 @@ type
     im_about: TImage;
     mu_langue: TMenuItem;
     tbar_outils: TToolBar;
-    pa_1: TTntPanel;
     dbt_ident: TJvXPButton;
     tbsep_1: TPanel;
-    pa_2: TTntPanel;
     tbsep_2: TPanel;
-    pa_3: TTntPanel;
     dbt_aide: TJvXPButton;
     tbsep_3: TPanel;
-    pa_4: TTntPanel;
     dbt_quitter: TJvXPButton;
-    pa_5: TTntPanel;
     tbar_volet: TToolBar;
     scb_Volet: TScrollBox;
     mtb_CustomizedMenu: TExtMenuToolBar;
-    spl_volet: TJvSplitter;
 
     procedure pa_5Resize(Sender: TObject);
     procedure p_ChargeAide;
