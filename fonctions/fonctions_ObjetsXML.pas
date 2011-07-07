@@ -803,11 +803,8 @@ Begin
       End
      Else
       Begin
-        if gb_FirstAcces Then
-          aMen_MenuVolet.Checked := False
-        Else
-          if aMen_MenuVolet.Checked
-           Then aMen_MenuVolet.OnClick ( aMen_MenuVolet );
+        if aMen_MenuVolet.Checked Then
+          aMen_MenuVolet.Click;
         aMen_MenuVolet.Enabled := False ;
       End ;
    try

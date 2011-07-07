@@ -54,7 +54,7 @@ uses
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
   U_OnFormInfoIni, DBCtrls, menutbar,
-  u_extmenutoolbar, ToolWin;
+  u_extmenutoolbar, u_extmenucustomize, ToolWin;
 
 {$IFDEF VERSIONS}
 const
@@ -62,12 +62,13 @@ const
        			                 FileUnit : 'U_XMLFenetrePrincipale' ;
        			                 Owner : 'Matthieu Giroux' ;
        			                 Comment : 'Fenêtre principale utilisée pour la gestion automatisée à partir du fichier INI, avec des menus composés à partir des données.' + #13#10 + 'Elle dépend du composant Fenêtre principale qui lui n''est pas lié à l''application.' ;
-      			                 BugsStory : 'Version 0.1.0.3 : No ExtToolbar.' + #13#10
+      			                 BugsStory : 'Version 0.1.0.4 : Adding customized menu Toolbar.' + #13#10
+                                                   + 'Version 0.1.0.3 : No ExtToolbar.' + #13#10
                                                    + 'Version 0.1.0.2 : Connection window shows only one time.' + #13#10
                                                    + 'Version 0.1.0.1 : No ExtToolbar on LAZARUS.' + #13#10
                                                    + 'Version 0.1.0.0 : Création à partir de U_FenetrePrincipale' ;
 			                 UnitType : CST_TYPE_UNITE_FICHE ;
-			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 3 );
+			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 4 );
 {$ENDIF}
 
 type
@@ -75,10 +76,14 @@ type
   { TF_FenetrePrincipale }
 
   TF_FenetrePrincipale = class(TF_FormMainIni)
+    im_ListeDisabled: TImageList;
+    mc_Customize: TExtMenuCustomize;
+    mi_CustomizedMenu: TMenuItem;
     mu_apropos: TMenuItem;
     mu_cascade: TMenuItem;
     mu_MainMenu: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
     mu_file: TMenuItem;
+    mu_MenuIni: TMainMenu;
     mu_mosaiqueh: TMenuItem;
     mu_mosaiquev: TMenuItem;
     mu_organiser: TMenuItem;
@@ -103,11 +108,13 @@ type
     WindowMinimizeAll: {$IFDEF TNT}TTntWindowMinimizeAll{$ELSE}TWindowMinimizeAll{$ENDIF};
     WindowArrangeAll: {$IFDEF TNT}TTntWindowArrange{$ELSE}TWindowArrange{$ENDIF};
     {$ENDIF}
-    pa_1: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_2: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_3: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_4: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
-    pa_5: {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF};
+    tbar_volet : TToolBar;
+    pa_1: TPanel;
+    pa_2: TPanel;
+    pa_3: TPanel;
+    pa_4: TPanel;
+    scb_Volet: TScrollBox;
+    tbsep_4: TPanel;
     spl_volet: {$IFDEF FPC}TSplitter;{$ELSE}TJvSplitter;{$ENDIF}
 
     Timer: TTimer;
@@ -129,10 +136,10 @@ type
     dbt_aide: TJvXPButton;
     tbsep_3: TPanel;
     dbt_quitter: TJvXPButton;
-    tbar_volet: TToolBar;
-    scb_Volet: TScrollBox;
     mtb_CustomizedMenu: TExtMenuToolBar;
 
+    procedure mi_CustomizedMenuClick(Sender: TObject);
+    procedure mtb_CustomizedMenuClickCustomize(Sender: TObject);
     procedure pa_5Resize(Sender: TObject);
     procedure p_ChargeAide;
     procedure p_OnClickFonction(Sender: TObject);
@@ -171,6 +178,7 @@ type
     lb_MsgDeconnexion : Boolean ;
 
     procedure mu_voletchange(const ab_visible: Boolean);
+    procedure mu_voletPersonnalisechange(const ab_visible: Boolean);
     procedure p_SetLedColor(const ab_Status: Boolean );
 {$IFNDEF FPC}
     procedure WMHelp (var Message: TWMHelp); message WM_HELP;
@@ -231,6 +239,8 @@ Constructor TF_FenetrePrincipale.Create(AOwner: TComponent);
 var li_Language : Longint;
 {$ENDIF}
 begin
+  mi_CustomizedMenu := nil;
+  mu_voletexplore   := nil;
   inherited ;
   AutoIni   := True;
   AutoIniDB := False;
@@ -361,6 +371,17 @@ begin
 
 end;
 
+procedure TF_FenetrePrincipale.mtb_CustomizedMenuClickCustomize(Sender: TObject
+  );
+begin
+  p_CustomizedMenuClickCustomize(mc_Customize, mtb_CustomizedMenu, mu_MenuIni );
+end;
+
+procedure TF_FenetrePrincipale.mi_CustomizedMenuClick(Sender: TObject);
+begin
+  mu_voletPersonnalisechange( not mi_CustomizedMenu.Checked );
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 //  Gestion du splitter
 ////////////////////////////////////////////////////////////////////////////////
@@ -489,6 +510,7 @@ begin
   p_SetLengthSB(br_statusbar.Panels[2]);
   // Le volet d'exploration est fermé et inaccessible
   mu_voletchange ( False );
+  mu_voletPersonnalisechange ( False );
 
   // Connexion à la base d'accès aux utilisateurs et sommaires
 {$IFNDEF CSV}
@@ -516,6 +538,7 @@ begin
   Screen.Cursor := crSQLWait;
 
   fb_ReadXMLEntitites ();
+  mu_voletchange(mu_voletexplore.Checked);
 
 End;
 
@@ -593,9 +616,15 @@ begin
   mu_voletchange( not mu_voletexplore.Checked );
 end;
 
+procedure TF_FenetrePrincipale.mu_voletPersonnalisechange(
+  const ab_visible : Boolean);
+begin
+  p_voletPersonnalisechange(ab_visible, tbar_volet, mu_voletexplore, mi_CustomizedMenu, spl_volet, mtb_CustomizedMenu );
+end;
+
 procedure TF_FenetrePrincipale.mu_voletchange(const ab_visible : Boolean);
 begin
-  mu_voletexplore.Checked := ab_visible;
+  p_voletchange(ab_visible, tbar_volet, mu_voletexplore, mi_CustomizedMenu, spl_volet, mtb_CustomizedMenu );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
