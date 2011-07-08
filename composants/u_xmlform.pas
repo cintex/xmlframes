@@ -26,7 +26,7 @@ uses
   fonctions_version,
 {$ENDIF}
   u_framework_components, u_framework_dbcomponents,
-  u_multidonnees,
+  u_multidonnees, JvXPButtons, Menus,
   U_FormMainIni, fonctions_ObjetsXML, U_GroupView;
 
 {$IFDEF VERSIONS}
@@ -195,7 +195,12 @@ type
     procedure DoShow; override;
     {$ENDIF}
     { Déclarations publiques }
-    procedure p_setLogin ( const axml_Login : TALXMLDocument );
+    procedure p_setLogin ( const axml_Login : TALXMLDocument;
+                           const axb_ident : TJvXPButton ;
+                           const amen_MenuIdent : TMenuItem ;
+                           const aiml_Images : TImageList ;
+                           const abmp_DefaultImage : TBitmap ;
+                           var ai_CountImages : Longint );
     procedure BeforeCreateFrameWork(Sender: TComponent);  override;
     procedure DestroyComponents ( const acom_Parent : TWinControl ); virtual;
     procedure p_CreateFormComponents ( const as_XMLFile, as_Name : String ;  awin_Parent : TWinControl ) ; virtual;
@@ -217,9 +222,11 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      {$ELSE}
      Windows,
      {$ENDIF}
-     u_extdbgrid,
-     u_buttons_appli, unite_variables, StdCtrls, JvXPButtons;
+     u_extdbgrid, fonctions_images,
+     fonctions_Objets_Dynamiques,
+     u_buttons_appli, unite_variables, StdCtrls;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
+    gb_LoginFormLoaded : Boolean = False;
 
 // functions and procédures not methods
 
@@ -1031,14 +1038,19 @@ end;
 // procedure p_setLogin
 // Special Login model
 // axml_Login : XML Document of login form
-procedure TF_XMLForm.p_setLogin(const axml_Login: TALXMLDocument);
+procedure TF_XMLForm.p_setLogin ( const axml_Login: TALXMLDocument;
+                                  const axb_ident : TJvXPButton ;
+                                  const amen_MenuIdent : TMenuItem ;
+                                  const aiml_Images : TImageList ;
+                                  const abmp_DefaultImage : TBitmap ;
+                                  var ai_CountImages : Longint );
 var
     li_i, li_j, li_Counter : Longint;
     lnod_Node, lnod_NodeChild : TALXMLNode ;
-    ls_location : String;
+    ls_location   : String;
     lwin_Control  : TWinControl;
     lfwl_Label    : TFWLabel;
-    lfwc_Column     : TFWSource ;
+    lfwc_Column   : TFWSource ;
 begin
   DisableAlign ;
   Screen.Cursor := Self.Cursor;
@@ -1055,6 +1067,12 @@ begin
           for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
             Begin
               lnod_NodeChild := lnod_Node.ChildNodes [ li_j ];
+              if  ( lnod_NodeChild.NodeName = CST_LEON_ACTION_PREFIX )
+              and not gb_LoginFormLoaded then
+               Begin
+                 p_setPrefixToMenuAndXPButton ( lnod_NodeChild.Attributes [ CST_LEON_VALUE ], axb_ident, amen_MenuIdent, aiml_Images );
+                 gb_LoginFormLoaded := True;
+               end;
               if lnod_NodeChild.NodeName = CST_LEON_NAME Then
                 Caption := fs_GetLabelCaption(lnod_NodeChild.Attributes [ CST_LEON_VALUE ]);
               if  ( lnod_NodeChild.NodeName = CST_LEON_PARAMETER )
@@ -1116,16 +1134,26 @@ begin
           // Setting buttons
           lwin_Control := TFWOK.Create(Self);
           lwin_Control.Parent := Self;
+          lwin_Control.Width  := 90;
+          lwin_Control.Height := 25;
           lwin_Control.Left:= Width div 2 - ( lwin_Control.Width * 2 ) div 2;
           lwin_Control.Top := 150 ;
           ( lwin_Control as TFWOK ).OnClick := p_LoginOKClick;
           lwin_Control := TFWCancel.Create(Self);
           lwin_Control.Parent := Self;
+          lwin_Control.Width  := 90;
+          lwin_Control.Height := 25;
           lwin_Control.Left:= Width div 2 + lwin_Control.Width div 2;
           lwin_Control.Top := 150 ;
           ( lwin_Control as TFWCancel ).OnClick := p_LoginCancelClick;
         end;
     end;
+  if not gb_LoginFormLoaded Then
+    Begin
+      gb_LoginFormLoaded := True;
+      p_setImageToMenuAndXPButton(abmp_DefaultImage,axb_ident,amen_MenuIdent,aiml_Images);
+    end;
+  ai_CountImages:=aiml_Images.Count;
   OnClose:=p_CloseLoginAction;
   Name := CST_COMPONENTS_FORM_BEGIN + 'AutoLoginForm' ;
   // Initiate data and showing
@@ -1184,6 +1212,7 @@ Begin
         end;
       if lb_ok Then
         Begin
+          gs_user := gfwe_Login.Text;
           p_CreeAppliFromNode ( '' );
           Close;
           Exit;

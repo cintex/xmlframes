@@ -76,6 +76,8 @@ type
   { TF_FenetrePrincipale }
 
   TF_FenetrePrincipale = class(TF_FormMainIni)
+    im_aide: TImage;
+    im_quit: TImage;
     im_ListeDisabled: TImageList;
     mc_Customize: TExtMenuCustomize;
     mi_CustomizedMenu: TMenuItem;
@@ -168,7 +170,6 @@ type
     procedure tbar_voletClose(Sender: TObject);
     procedure tbar_outilsClose(Sender: TObject);
 
-    procedure tbar_voletDockChanged(Sender: TObject);
     function CloseQuery: Boolean; override;
     procedure mu_ReinitiliserpresentationClick(Sender: TObject);
 
@@ -180,6 +181,7 @@ type
     procedure mu_voletchange(const ab_visible: Boolean);
     procedure mu_voletPersonnalisechange(const ab_visible: Boolean);
     procedure p_SetLedColor(const ab_Status: Boolean );
+    procedure p_VoletsSave;
 {$IFNDEF FPC}
     procedure WMHelp (var Message: TWMHelp); message WM_HELP;
 {$ENDIF}
@@ -277,7 +279,13 @@ begin
   // Initialisation du composant de fabrication dynamique de fonctions
   p_initialisationBoutons(Self, mu_langue, scb_volet, mu_voletexplore,
                           nil, tbar_outils, tbsep_1, pa_2, CST_LARGEUR_PANEL,
-                          nil, mu_ouvrir, im_Liste, im_Liste.Count);
+                          nil, mu_ouvrir, im_Liste,
+                          im_acces.Picture,
+                          im_aide.Picture,
+                          im_quit.Picture,
+                          mu_identifier, dbt_ident  ,
+                          mu_ouvriraide, dbt_aide   ,
+                          mu_quitter   , dbt_quitter);
 
 {  // Initialisation de l'icone de l'application ainsi que de son titre
   Self.Caption := gs_NomApli + ' - ' + gs_NomLog;
@@ -377,21 +385,9 @@ begin
   p_CustomizedMenuClickCustomize(mc_Customize, mtb_CustomizedMenu, mu_MenuIni );
 end;
 
-procedure TF_FenetrePrincipale.mi_CustomizedMenuClick(Sender: TObject);
-begin
-  mu_voletPersonnalisechange( not mi_CustomizedMenu.Checked );
-end;
-
 ////////////////////////////////////////////////////////////////////////////////
 //  Gestion du splitter
 ////////////////////////////////////////////////////////////////////////////////
-
-procedure TF_FenetrePrincipale.tbar_voletDockChanged(Sender: TObject);
-begin
-
-//  p_tbar_voletDockChanged( pa_5, tbar_volet, tbar_outils, spl_volet);
-
-end;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -508,10 +504,6 @@ begin
   p_SetLengthSB(br_statusbar.Panels[1]);
   br_statusbar.Panels[2].Text := GS_LBL_PB;
   p_SetLengthSB(br_statusbar.Panels[2]);
-  // Le volet d'exploration est fermé et inaccessible
-  mu_voletchange ( False );
-  mu_voletPersonnalisechange ( False );
-
   // Connexion à la base d'accès aux utilisateurs et sommaires
 {$IFNDEF CSV}
   try
@@ -532,16 +524,16 @@ begin
 
 end;
 
+// procedure TF_FenetrePrincipale.p_ConnectToData
 // Connexion aux données de l'application
 procedure TF_FenetrePrincipale.p_ConnectToData ();
 begin
   Screen.Cursor := crSQLWait;
-
   fb_ReadXMLEntitites ();
-  mu_voletchange(mu_voletexplore.Checked);
-
 End;
 
+// procedure  TF_FenetrePrincipale.p_AccesstoSoft
+// Connexion de l'utilisateur
 procedure  TF_FenetrePrincipale.p_AccesstoSoft;
 Begin
   if ( gs_User <> ''  ) Then
@@ -578,8 +570,12 @@ Begin
   if assigned ( Connector ) then
     p_setComponentBoolProperty ( Connector, 'Connected', False );
 {$ENDIF}
-  tbar_voletDockChanged ( tbar_volet );
-  mu_voletchange ( mu_voletexplore.Checked );
+  if not mc_Customize.LoadIni ( gs_user ) then
+    mc_Customize.LoadIni;
+  mtb_CustomizedMenu.Menu := nil;
+  mtb_CustomizedMenu.Menu := mu_MenuIni;
+  mu_voletchange ( FInifile.ReadBool ( Name,  'tbar_volet.Visible', mu_voletexplore.Checked ));
+  mu_voletPersonnalisechange ( FInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked ));
 End;
 procedure TF_FenetrePrincipale.p_SetLedColor( const ab_Status : Boolean );
 begin
@@ -614,7 +610,16 @@ end;
 procedure TF_FenetrePrincipale.mu_voletexploreClick(Sender: TObject);
 begin
   mu_voletchange( not mu_voletexplore.Checked );
+  p_VoletsSave;
 end;
+
+procedure TF_FenetrePrincipale.mi_CustomizedMenuClick(Sender: TObject);
+begin
+  mu_voletPersonnalisechange( not mi_CustomizedMenu.Checked );
+  p_VoletsSave;
+end;
+
+
 
 procedure TF_FenetrePrincipale.mu_voletPersonnalisechange(
   const ab_visible : Boolean);
@@ -627,6 +632,11 @@ begin
   p_voletchange(ab_visible, tbar_volet, mu_voletexplore, mi_CustomizedMenu, spl_volet, mtb_CustomizedMenu );
 end;
 
+procedure TF_FenetrePrincipale.p_VoletsSave;
+begin
+  FInifile.WriteBool ( Name, 'tbar_volet.Visible' , mu_voletexplore.Checked );
+  FInifile.WriteBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked );
+end;
 ////////////////////////////////////////////////////////////////////////////////
 //  Boîte de dialogue à propos
 ////////////////////////////////////////////////////////////////////////////////
@@ -643,16 +653,14 @@ end;
 procedure TF_FenetrePrincipale.SvgFormInfoIniIniLoad( const
    AInifile: TCustomInifile; var Continue: Boolean);
 begin
-  AInifile.ReadBool ( 'F_FenetrePrincipale', 'tbar_outils.Visible', tbar_outils.Visible );
-  tbar_outils    .Visible := AInifile.ReadBool ( 'F_FenetrePrincipale', 'tbar_outils.Visible', tbar_outils.Visible );
-  mu_voletchange ( AInifile.ReadBool ( 'F_FenetrePrincipale',  'tbar_volet.Visible', mu_voletexplore.Checked ));
+  tbar_outils    .Visible := AInifile.ReadBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
+
 end;
 
 procedure TF_FenetrePrincipale.SvgFormInfoIniIniWrite(
   const AInifile: TCustomInifile; var Continue: Boolean);
 begin
-  AInifile.WriteBool ( 'F_FenetrePrincipale', 'tbar_volet.Visible' , tbar_volet.Visible );
-  AInifile.WriteBool ( 'F_FenetrePrincipale', 'tbar_outils.Visible', tbar_outils.Visible );
+  AInifile.WriteBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
 
 end;
 

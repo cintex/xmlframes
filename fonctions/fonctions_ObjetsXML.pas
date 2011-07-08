@@ -48,18 +48,19 @@ const // Champs utilisés
       CST_INI_PROJECT_FILE = 'LY_PROJECT_FILE';
       CST_INI_LANGUAGE = 'LY_LANGUAGE';
 {$IFDEF VERSIONS}
-  gver_fonctions_Objets_XML : T_Version = ( Component : 'Gestion des objets dynamiques XML' ;
-                                     FileUnit : 'fonctions_ObjetsXML' ;
-              			                 Owner : 'Matthieu Giroux' ;
-              			                 Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			                 BugsStory : 'Version 1.0.0.5 : No ExtToolbar.' + #13#10 +
-                                                 'Version 1.0.0.4 : Testing.' + #13#10 +
-                                                 'Version 1.0.0.3 : Better menu.' + #13#10 +
-                                                 'Version 1.0.0.2 : Better Ini.' + #13#10 +
-                                                 'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
-                                                 'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
-              			                 UnitType : 1 ;
-              			                 Major : 1 ; Minor : 0 ; Release : 0 ; Build : 5 );
+  gver_fonctions_Objets_XML : T_Version = (Component : 'Gestion des objets dynamiques XML' ;
+                                           FileUnit : 'fonctions_ObjetsXML' ;
+              			           Owner : 'Matthieu Giroux' ;
+              			           Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
+              			           BugsStory : 'Version 1.0.0.6 : Images on menu items.' + #13#10 +
+                                                       'Version 1.0.0.5 : No ExtToolbar.' + #13#10 +
+                                                       'Version 1.0.0.4 : Testing.' + #13#10 +
+                                                       'Version 1.0.0.3 : Better menu.' + #13#10 +
+                                                       'Version 1.0.0.2 : Better Ini.' + #13#10 +
+                                                       'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
+                                                       'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
+              			           UnitType : 1 ;
+              			           Major : 1 ; Minor : 0 ; Release : 0 ; Build : 6 );
 
 {$ENDIF}
 type
@@ -88,6 +89,7 @@ var
       gs_SommaireEnCours      : string       ;   // Sommaire en cours MAJ régulièrement
       gF_FormParent           : {$IFDEF TNT}TTntForm{$ELSE}TForm{$ENDIF}        ;   // Form parent initialisée au create
       gBmp_DefaultPicture     : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
+      gBmp_DefaultAcces       : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
       gWin_ParentContainer    : TScrollingWinControl  ;   // Volet d'accès
       gIco_DefaultPicture     : TIcon        ;   // Ico apparaissant si il n'y a pas d'image
       gi_TailleUnPanel        ,                  // Taille d'un panel de dxbutton
@@ -98,7 +100,9 @@ var
       gb_UtiliseSMenu         : Boolean      ;            // Utilise-t-on les sous-menus
       gMen_MenuLangue         : TMenuItem    = nil;
       gMen_MenuVolet          : TMenuItem    = nil;
+      gMen_MenuIdent          : TMenuItem    = nil;
       gMen_MenuParent         : TMenuItem    = nil;
+      gxb_Ident               : TJvXPButton  = nil;
       gIma_ImagesXPBars       : TImageList   = nil;
       gIma_ImagesMenus        : TImageList   = nil;
       gf_Users                : TCustomForm=nil;
@@ -107,6 +111,11 @@ var
       ga_Functions : Array of TLeonFunction;
       gs_Language : String;
 
+
+procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
+                                        const axb_Button : TJvXPButton ;
+                                        const amen_Menu : TMenuItem ;
+                                        const aiml_Images : TImageList );
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
@@ -114,7 +123,7 @@ function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_Name
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
-procedure p_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ) ;
+function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
 procedure p_CreateRootEntititiesForm;
 procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const adx_WinXpBar        : TJvXpBar ;
@@ -147,7 +156,15 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
                                     const aBmp_DefaultPicture     : TBitmap      ;
                                     const aMen_MenuParent         : TMenuItem    ;
                                     const aIma_ImagesMenus        : TImageList   ;
-                                    const ai_FinCompteurImages    : Integer      );
+                                    const aPic_DefaultAcces       ,
+                                          aPic_DefaultAide        ,
+                                          aPic_DefaultQuit        : TPicture     ;
+                                    const aMen_MenuIdent          : TMenuItem    ;
+                                    const axb_ident               : TJvXPButton  ;
+                                    const aMen_MenuAide           : TMenuItem    ;
+                                    const axb_Aide                : TJvXPButton  ;
+                                    const aMen_MenuQuitter        : TMenuItem    ;
+                                    const axb_Quitter             : TJvXPButton  );
 
 
 procedure  p_DetruitLeSommaire ;
@@ -195,6 +212,7 @@ function fb_CreeLeMenu : Boolean ;
 procedure p_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        );
 procedure p_ExecuteFonction ( const as_Fonction                  : String    ;  const ab_Ajuster : Boolean        ); overload;
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
+procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
 
 implementation
 
@@ -267,7 +285,7 @@ end;
 // as_Prefix : XML Prefix of image
 // abmp_Bitmap : Bitmap to set
 /////////////////////////////////////////////////////////////////////////
-procedure p_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ) ;
+function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
 Begin
   {$IFDEF DELPHI}
   abmp_Bitmap.Dormant ;
@@ -276,6 +294,7 @@ Begin
   abmp_Bitmap.Handle := 0 ;
   p_getNomImageToBitmap ( as_Prefix, abmp_Bitmap );
   p_RecuperePetitBitmap ( abmp_Bitmap );
+  Result := abmp_Bitmap.Handle <> 0;
 end;
 
 /////////////////////////////////////////////////////////////////////////
@@ -353,7 +372,7 @@ begin
     End;
 
   lbmp_Bitmap := TBitmap.Create;
-  p_getImageToBitmap(llf_Function.Prefix,lbmp_Bitmap);
+  fb_getImageToBitmap(llf_Function.Prefix,lbmp_Bitmap);
   lico_Icon := TIcon.Create;
   p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
 // Assigne l'icône si existe
@@ -484,7 +503,15 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
                                     const aBmp_DefaultPicture     : TBitmap      ;
                                     const aMen_MenuParent         : TMenuItem    ;
                                     const aIma_ImagesMenus        : TImageList   ;
-                                    const ai_FinCompteurImages    : Integer      );
+                                    const aPic_DefaultAcces       ,
+                                          aPic_DefaultAide        ,
+                                          aPic_DefaultQuit        : TPicture     ;
+                                    const aMen_MenuIdent          : TMenuItem    ;
+                                    const axb_ident               : TJvXPButton  ;
+                                    const aMen_MenuAide           : TMenuItem    ;
+                                    const axb_Aide                : TJvXPButton  ;
+                                    const aMen_MenuQuitter        : TMenuItem    ;
+                                    const axb_Quitter             : TJvXPButton  );
 
 Begin
   gF_FormParent           := aF_FormParent           ;
@@ -497,11 +524,16 @@ Begin
   gBmp_DefaultPicture     := aBmp_DefaultPicture     ;
   gMen_MenuParent         := aMen_MenuParent         ;
   gMen_MenuVolet          := aMen_MenuVolet          ;
+  gMen_MenuIdent          := aMen_MenuIdent          ;
   gMen_MenuLangue         := aMen_MenuLanguage       ;
+  gxb_Ident               := axb_ident               ;
   gIma_ImagesMenus        := aIma_ImagesMenus        ;
-  gi_FinCompteurImages    := ai_FinCompteurImages    ;
   gIma_ImagesXPBars       := TImageList.Create ( aF_FormParent );
-
+  gBmp_DefaultAcces       := TBitmap.Create;
+  p_setImageToMenuAndXPButton ( aPic_DefaultAide.Bitmap, axb_Aide   , aMen_MenuAide   , aIma_ImagesMenus );
+  p_setImageToMenuAndXPButton ( aPic_DefaultQuit.Bitmap, axb_Quitter, aMen_MenuQuitter, aIma_ImagesMenus );
+  gi_FinCompteurImages    := aIma_ImagesMenus.Count - 1    ;
+  gBmp_DefaultAcces.Assign(aPic_DefaultAcces.Bitmap);
 End ;
 /////////////////////////////////////////////////////////////////////////
 // function fb_CreeXPButtons
@@ -562,14 +594,14 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
         Then
          Begin
            ls_MenuLabel := fs_GetLabelCaption ( lr_FunctionOld.Name );
-           p_getImageToBitmap ( lr_FunctionOld.Prefix,  lbmp_FonctionImage );
-           p_ModifieXPBar( aF_FormParent         ,
+           fb_getImageToBitmap ( lr_FunctionOld.Prefix,  lbmp_FonctionImage );
+           p_ModifieXPBar( aF_FormParent       ,
                            ldx_WinXpBar        ,
                            ls_MenuClep2        ,
                            ls_MenuLabel        ,
-                           lr_FunctionOld.Value        ,
+                           lr_FunctionOld.Value,
                            ''                  ,
-                           lr_FunctionOld.Name         ,
+                           lr_FunctionOld.Name ,
                            aIma_ImagesTempo    ,
                            lbmp_FonctionImage  ,
                            aBmp_DefaultPicture ,
@@ -632,7 +664,7 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
 
 
                ldx_WinXpBar.Parent := aCon_ParentContainer ;
-               p_getImageToBitmap ( lr_Function.Prefix, lbmp_FonctionImage );
+               fb_getImageToBitmap ( lr_Function.Prefix, lbmp_FonctionImage );
                      // affectation du libellé du menu
                 // Gestion sans base de données
                p_ModifieXPBar  ( aF_FormParent       ,
@@ -657,7 +689,7 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
              if ( li_CompteurFonctions = 1 )
               Then
                 Begin
-                  p_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
+                  fb_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
                 // fonction dans la file d'attente
                   fdxi_AddItemXPBar ( aF_FormParent       ,
                                       ldx_WinXpBar        ,
@@ -769,7 +801,7 @@ Begin
                        Then
                         Begin
                           // fonction dans la file d'attente
-                          p_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
+                          fb_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
                           fdxi_AddItemXPBar  ( aF_FormParent       ,
                                               ldx_WinXpBar        ,
                                               ls_MenuClep         ,
@@ -796,15 +828,12 @@ Begin
       Begin
         aMen_MenuVolet.Enabled := True ;
         if gb_FirstAcces Then
-          aMen_MenuVolet.Checked := True
-        Else
-          if not aMen_MenuVolet.Checked
-           Then aMen_MenuVolet.OnClick ( aMen_MenuVolet );
+          aMen_MenuVolet.Checked := True;
       End
      Else
       Begin
         if aMen_MenuVolet.Checked Then
-          aMen_MenuVolet.Click;
+          aMen_MenuVolet.Checked := False;
         aMen_MenuVolet.Enabled := False ;
       End ;
    try
@@ -938,10 +967,8 @@ Begin
   aIma_ImagesTempo     .Width  := 32 ;
   aIma_ImagesTempo     .Height := 32 ;
 
-  if ( ai_FinCompteurImages < aIma_ImagesMenus.Count )
-   Then
-    For li_i := aIma_ImagesMenus.Count - 1 downto ai_FinCompteurImages do
-      aIma_ImagesMenus.Delete( li_i );
+  For li_i := aIma_ImagesMenus.Count - 1 downto ai_FinCompteurImages do
+    aIma_ImagesMenus.Delete( li_i );
 
   if  ( ai_FinCompteurImages = aIma_ImagesMenus.Count )
   and assigned ( aBmp_DefaultPicture )
@@ -1106,7 +1133,7 @@ Begin
               Begin
       //          inc ( li_CompteurFonctions );
                 inc ( li_CompteurMenu );
-                 p_getImageToBitmap ( lr_Function.Prefix, lbmp_BitmapOrigine );
+                 lb_AjouteBitmap := fb_getImageToBitmap ( lr_Function.Prefix, lbmp_BitmapOrigine );
                  // Affectation des valeurs de la queue
                       // Chargement de la fonction à partir de la table des fonctions
 //                   lb_AjouteBitmap := fb_AssignDBImage ( axdo_FichierXML.FieldByName ( CST_FONC_Bmp ), lbmp_BitmapOrigine, aBmp_DefaultPicture );
@@ -1422,7 +1449,7 @@ Begin
   gNod_DashBoard := nil ;
   if gMen_MenuVolet .Checked
    Then
-    gMen_MenuVolet .OnClick ( gMen_MenuVolet );
+    gMen_MenuVolet .Checked := False;
   gMen_MenuVolet .Enabled := False ;
   gMen_MenuParent.Visible := False ;
 // destruction des items de menu
@@ -1843,6 +1870,7 @@ function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
 var
     li_i, li_j : Longint;
     lnod_Node : TALXMLNode ;
+    lbmp_Bitmap : TBitmap;
 Begin
  if not assigned ( gxdo_MenuXML ) Then
    gxdo_MenuXML := TALXMLDocument.Create(Application);
@@ -1862,7 +1890,7 @@ Begin
                if ( lnod_Node.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS ) Then
                  p_LoadDashBoard(lnod_Node.ChildNodes [ li_j ]);
              gf_Users := TF_XMLForm.Create ( Application );
-             (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML);
+             (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML, gxb_Ident, gMen_MenuIdent, gIma_ImagesMenus, gBmp_DefaultAcces, gi_FinCompteurImages );
              Result := True;
            end;
        end;
@@ -2271,10 +2299,36 @@ begin
   Result.Dataset.Open;
 end;
 
+// procedure p_setImageToMenuAndXPButton
+// Set the xpbutton and menu from prefix
+procedure p_setPrefixToMenuAndXPButton( const as_Prefix : String;
+                                        const axb_Button : TJvXPButton ;
+                                        const amen_Menu : TMenuItem ;
+                                        const aiml_Images : TImageList );
+var lbmp_Bitmap   : TBitmap ;
+Begin
+  lbmp_Bitmap := TBitmap.Create;
+  p_getNomImageToBitmap(as_Prefix, lbmp_Bitmap);
+  p_setImageToMenuAndXPButton ( lbmp_Bitmap,
+                                axb_Button  ,
+                                amen_Menu   ,
+                                aiml_Images );
+{$IFDEF DELPHI}
+  lbmp_Bitmap.Dormant;
+{$ENDIF}
+  lbmp_Bitmap.free;
+end;
 
 
 initialization
 {$IFDEF VERSIONS}
   p_ConcatVersion ( gVer_fonctions_Objets_XML );
 {$ENDIF}
+  if assigned ( gBmp_DefaultAcces ) Then
+    Begin
+      {$IFDEF DELPHI}
+      gBmp_DefaultAcces.dormant;
+      {$ENDIF}
+      gBmp_DefaultAcces.free;
+    End;
 end.

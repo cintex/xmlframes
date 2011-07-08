@@ -37,7 +37,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_SYSTEM_NAVIGATION = 'NAVIGATION SYSTEM';
 
       CST_LEON_DIR           = '$LY_APP_DIR$';
-      CST_IMAGES_DIR         = 'images/';
+      CST_IMAGES_DIR         = 'images' + DirectorySeparator;
 
       CST_LEON_DATA_FILE     = 'L_FILE' ;
       CST_LEON_DATA_SQL      = 'L_SQL' ;
