@@ -54,8 +54,7 @@ uses
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
   U_OnFormInfoIni, DBCtrls, menutbar,
-  u_extmenutoolbar, u_extmenucustomize, ToolWin, TntStdActns, TntActnList,
-  TntMenus;
+  u_extmenutoolbar, u_extmenucustomize, ToolWin;
 
 {$IFDEF VERSIONS}
 const
