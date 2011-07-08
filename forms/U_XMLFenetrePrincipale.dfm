@@ -53,13 +53,28 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
   end
   object spl_volet: TJvSplitter
-    Left = 227
+    Left = 196
     Top = 29
     Width = 5
     Height = 465
-    ExplicitLeft = 197
-    ExplicitTop = 45
-    ExplicitHeight = 439
+    ExplicitLeft = 207
+    ExplicitTop = 35
+  end
+  object im_aide: TImage
+    Left = 464
+    Top = 104
+    Width = 49
+    Height = 49
+    AutoSize = True
+    Visible = False
+  end
+  object im_quit: TImage
+    Left = 528
+    Top = 104
+    Width = 49
+    Height = 49
+    AutoSize = True
+    Visible = False
   end
   object br_statusbar: TStatusBar
     Left = 0
@@ -117,7 +132,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
-    object pa_1: TTntPanel
+    object pa_1: TPanel
       Left = 0
       Top = 0
       Width = 57
@@ -153,7 +168,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Height = 22
       TabOrder = 4
     end
-    object pa_2: TTntPanel
+    object pa_2: TPanel
       Left = 60
       Top = 0
       Width = 573
@@ -168,7 +183,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Height = 22
       TabOrder = 5
     end
-    object pa_3: TTntPanel
+    object pa_3: TPanel
       Left = 636
       Top = 0
       Width = 57
@@ -205,7 +220,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Height = 22
       TabOrder = 3
     end
-    object pa_4: TTntPanel
+    object pa_4: TPanel
       Left = 696
       Top = 0
       Width = 57
@@ -233,58 +248,55 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
   end
-  object pa_5: TTntPanel
-    Left = 0
-    Top = 29
-    Width = 197
-    Height = 465
-    Align = alLeft
-    BevelOuter = bvNone
-    DockSite = True
-    TabOrder = 2
-    object tbar_volet: TToolBar
-      Left = 0
-      Top = 0
-      Width = 197
-      Height = 465
-      Align = alClient
-      ButtonHeight = 436
-      Caption = 'Volet d'#39'acc'#232's'
-      TabOrder = 0
-      ExplicitHeight = 29
-      object scb_Volet: TScrollBox
-        Left = 0
-        Top = 0
-        Width = 197
-        Height = 436
-        Hint = 'Cliquez pour acc'#233'der aux fonctions'
-        HelpContext = 1440
-        Align = alClient
-        BorderStyle = bsNone
-        Constraints.MinHeight = 10
-        Constraints.MinWidth = 10
-        DockSite = True
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 0
-      end
-    end
-  end
   object mtb_CustomizedMenu: TExtMenuToolBar
-    Left = 197
+    Left = 0
     Top = 29
     Width = 30
     Height = 465
     Align = alLeft
     AutoSize = False
+    ButtonHeight = 38
+    ButtonWidth = 39
     Caption = 'mtb_CustomizedMenu'
-    Color = cl3DLight
+    Color = clBtnFace
+    DisabledImages = im_ListeDisabled
     HotImages = im_Liste
     List = False
+    Menu = mu_MenuIni
     ParentColor = False
     ShowCaptions = False
-    TabOrder = 3
+    TabOrder = 2
     Visible = False
+  end
+  object tbar_volet: TToolBar
+    Left = 30
+    Top = 29
+    Width = 166
+    Height = 465
+    Align = alLeft
+    ButtonHeight = 436
+    Caption = 'Volet d'#39'acc'#232's'
+    Color = clMoneyGreen
+    ParentColor = False
+    TabOrder = 3
+    object scb_Volet: TScrollBox
+      Left = 0
+      Top = 0
+      Width = 197
+      Height = 436
+      Hint = 'Cliquez pour acc'#233'der aux fonctions'
+      HelpContext = 1440
+      Align = alClient
+      BorderStyle = bsNone
+      Constraints.MinHeight = 10
+      Constraints.MinWidth = 10
+      DockSite = True
+      Color = clBtnFace
+      ParentColor = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
   end
   object im_Liste: TImageList
     Left = 256
@@ -1089,7 +1101,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       FDDF81FFF87FFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000
       000000000000}
   end
-  object mu_MainMenu: TTntMainMenu
+  object mu_MainMenu: TMainMenu
     Images = im_Liste
     Left = 256
     Top = 266
@@ -1166,6 +1178,10 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         HelpContext = 1420
         OnClick = mu_voletexploreClick
       end
+      object mi_CustomizedMenu: TMenuItem
+        Caption = 'Volet personnalis'#233
+        OnClick = mi_CustomizedMenuClick
+      end
     end
     object mu_aide: TMenuItem
       Caption = '&Aide'
@@ -1189,34 +1205,34 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
   end
-  object ActionList: TTntActionList
+  object ActionList: TActionList
     Images = im_Liste
     Left = 256
     Top = 317
-    object WindowCascade: TTntWindowCascade
+    object WindowCascade: TWindowCascade
       Category = 'Fen'#234'tre'
       Caption = '&Cascade'
       Hint = 'Cascade'
       ImageIndex = 17
     end
-    object WindowTileHorizontal: TTntWindowTileHorizontal
+    object WindowTileHorizontal: TWindowTileHorizontal
       Category = 'Fen'#234'tre'
       Caption = 'Mosa'#239'que &horizontale'
       Hint = 'Mosa'#239'que horizontale'
       ImageIndex = 15
     end
-    object WindowTileVertical: TTntWindowTileVertical
+    object WindowTileVertical: TWindowTileVertical
       Category = 'Fen'#234'tre'
       Caption = 'Mosa'#239'que &verticale'
       Hint = 'Mosa'#239'que verticale'
       ImageIndex = 16
     end
-    object WindowMinimizeAll: TTntWindowMinimizeAll
+    object WindowMinimizeAll: TWindowMinimizeAll
       Category = 'Fen'#234'tre'
       Caption = '&Tout r'#233'duire'
       Hint = 'Tout r'#233'duire'
     end
-    object WindowArrangeAll: TTntWindowArrange
+    object WindowArrangeAll: TWindowArrange
       Category = 'Fen'#234'tre'
       Caption = 'Tout r'#233'&organiser'
       Hint = 'Tout r'#233'organiser'
@@ -1241,6 +1257,22 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Height = 32
     Width = 32
     Left = 336
+    Top = 216
+  end
+  object mc_Customize: TExtMenuCustomize
+    MenuIni = mu_MenuIni
+    MainMenu = mu_MainMenu
+    Left = 408
+    Top = 264
+  end
+  object mu_MenuIni: TMainMenu
+    Left = 336
+    Top = 264
+  end
+  object im_ListeDisabled: TImageList
+    Height = 32
+    Width = 32
+    Left = 408
     Top = 216
   end
 end

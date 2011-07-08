@@ -54,7 +54,8 @@ uses
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
   U_OnFormInfoIni, DBCtrls, menutbar,
-  u_extmenutoolbar, u_extmenucustomize, ToolWin;
+  u_extmenutoolbar, u_extmenucustomize, ToolWin, TntStdActns, TntActnList,
+  TntMenus;
 
 {$IFDEF VERSIONS}
 const
@@ -76,61 +77,54 @@ type
   { TF_FenetrePrincipale }
 
   TF_FenetrePrincipale = class(TF_FormMainIni)
-    im_aide: TImage;
-    im_quit: TImage;
-    im_ListeDisabled: TImageList;
-    mc_Customize: TExtMenuCustomize;
-    mi_CustomizedMenu: TMenuItem;
     mu_apropos: TMenuItem;
-    mu_cascade: TMenuItem;
+    mu_MenuIni: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
     mu_MainMenu: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
-    mu_file: TMenuItem;
-    mu_MenuIni: TMainMenu;
-    mu_mosaiqueh: TMenuItem;
-    mu_mosaiquev: TMenuItem;
-    mu_organiser: TMenuItem;
-    mu_ouvrir: TMenuItem;
-    mu_sep1: TMenuItem;
-    mu_quitter: TMenuItem;
-    mu_fenetre: TMenuItem;
-    mu_reduire: TMenuItem;
-    mu_affichage: TMenuItem;
-    mu_barreoutils: TMenuItem;
-    mu_voletexplore: TMenuItem;
-    mu_aide: TMenuItem;
-    mu_ouvriraide: TMenuItem;
-    mu_sep2: TMenuItem;
-    mu_Reinitiliserpresentation: TMenuItem;
-    mu_sep3: TMenuItem;
+    mu_file: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_ouvrir: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_sep1: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_quitter: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_fenetre: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_reduire: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_affichage: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_barreoutils: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_voletexplore: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_aide: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_ouvriraide: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_sep2: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_sep3: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
     ActionList: {$IFDEF TNT}TTntActionList{$ELSE}TActionList{$ENDIF};
-    {$IFDEF MDI}
-    WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
-    WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
-    WindowTileVertical: {$IFDEF TNT}TTntWindowTileVertical{$ELSE}TWindowTileVertical{$ENDIF};
-    WindowMinimizeAll: {$IFDEF TNT}TTntWindowMinimizeAll{$ELSE}TWindowMinimizeAll{$ENDIF};
-    WindowArrangeAll: {$IFDEF TNT}TTntWindowArrange{$ELSE}TWindowArrange{$ENDIF};
-    {$ENDIF}
-    tbar_volet : TToolBar;
     pa_1: TPanel;
     pa_2: TPanel;
     pa_3: TPanel;
     pa_4: TPanel;
-    scb_Volet: TScrollBox;
-    tbsep_4: TPanel;
     spl_volet: {$IFDEF FPC}TSplitter;{$ELSE}TJvSplitter;{$ENDIF}
 
     Timer: TTimer;
     SvgFormInfoIni: TOnFormInfoIni;
     im_Liste: TImageList;
 
+    {$IFDEF MDI}
+    mu_cascade: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_mosaiqueh: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_mosaiquev: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_organiser: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    mu_Reinitiliserpresentation: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
+    WindowCascade: {$IFDEF TNT}TTntWindowCascade{$ELSE}TWindowCascade{$ENDIF};
+    WindowTileHorizontal: {$IFDEF TNT}TTntWindowTileHorizontal{$ELSE}TWindowTileHorizontal{$ENDIF};
+    WindowTileVertical: {$IFDEF TNT}TTntWindowTileVertical{$ELSE}TWindowTileVertical{$ENDIF};
+    WindowMinimizeAll: {$IFDEF TNT}TTntWindowMinimizeAll{$ELSE}TWindowMinimizeAll{$ENDIF};
+    WindowArrangeAll: {$IFDEF TNT}TTntWindowArrange{$ELSE}TWindowArrange{$ENDIF};
+    {$ENDIF}
+
     br_statusbar: TStatusBar;
 
     im_led: {$IFDEF FPC}TPCheck{$ELSE}TJvLED{$ENDIF};
-    mu_identifier: TMenuItem;
+    mu_identifier: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
     im_appli: TImage;
     im_acces: TImage;
     im_about: TImage;
-    mu_langue: TMenuItem;
+    mu_langue: {$IFDEF TNT}TTntMenuItem{$ELSE}TMenuItem{$ENDIF};
     tbar_outils: TToolBar;
     dbt_ident: TJvXPButton;
     tbsep_1: TPanel;
@@ -139,6 +133,13 @@ type
     tbsep_3: TPanel;
     dbt_quitter: TJvXPButton;
     mtb_CustomizedMenu: TExtMenuToolBar;
+    im_aide: TImage;
+    im_quit: TImage;
+    mc_Customize: TExtMenuCustomize;
+    im_ListeDisabled: TImageList;
+    mi_CustomizedMenu: TMenuItem;
+    tbar_volet: TToolBar;
+    scb_Volet: TScrollBox;
 
     procedure mi_CustomizedMenuClick(Sender: TObject);
     procedure mtb_CustomizedMenuClickCustomize(Sender: TObject);
@@ -185,6 +186,7 @@ type
 {$IFNDEF FPC}
     procedure WMHelp (var Message: TWMHelp); message WM_HELP;
 {$ENDIF}
+    procedure Doshow;override;
 
   public
     procedure p_AccesstoSoft; virtual;
@@ -201,7 +203,6 @@ type
                         			             ab_ScrollEnfoncee: boolean); override;
     procedure   p_ApresSauvegardeParamIni; override;
     procedure   p_editionTransfertVariable(as_nom,as_titre,as_chemin:String;ats_edition_nom_params,ats_edition_params,ats_edition_params_values: TStrings);
-    procedure   Doshow;override;
   published
     procedure p_ConnectToData ();
   end;
@@ -237,7 +238,7 @@ uses
 //  chercher la bonne fonction d'initialisation
 ////////////////////////////////////////////////////////////////////////////////
 Constructor TF_FenetrePrincipale.Create(AOwner: TComponent);
-{$IFNDEF TNT}
+{$IFDEF FPC}
 var li_Language : Longint;
 {$ENDIF}
 begin
@@ -251,15 +252,19 @@ begin
 {$IFDEF TNT}
   p_RegisterLanguages ( mu_langue );
 {$ELSE}
+  {$IFDEF FPC}
   p_RegisterALanguage ( 'en', 'English' );
   p_RegisterALanguage ( 'fr', 'Français' );
   p_RegisterALanguage ( 'en', 'Español' );
   CreateLanguagesController ( mu_langue );
+  {$ENDIF}
 {$ENDIF}
   {$IFDEF TNT}
   {$ELSE}
+  {$IFDEF FPC}
   li_Language := fi_findLanguage(gs_Language);
   ChangeLanguage( li_Language );
+  {$ENDIF}
   {$ENDIF}
 
   gs_DefaultUser := gmif_MainFormIniInit.Readstring ( INISEC_PAR, INISEC_UTI, '' );
@@ -819,7 +824,9 @@ procedure TF_FenetrePrincipale.p_OnClickMenuLang(Sender:TObject);
 begin
     iIndex := ( Sender as TMenuItem ).Tag;
     ChangeLanguage( iIndex );
+    {$IFDEF FPC}
     fb_ReadLanguage ( {$IFDEF TNT}GetLanguageCode ( LangManager.LanguageID ){$ELSE}ga_SoftwareLanguages [ iIndex ].LittleLang{$ENDIF});
+    {$ENDIF}
 end;
 initialization
 {$IFDEF VERSIONS}

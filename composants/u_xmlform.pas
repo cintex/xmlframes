@@ -1042,7 +1042,7 @@ procedure TF_XMLForm.p_setLogin ( const axml_Login: TALXMLDocument;
                                   const axb_ident : TJvXPButton ;
                                   const amen_MenuIdent : TMenuItem ;
                                   const aiml_Images : TImageList ;
-                                  const abmp_DefaultImage : TBitmap ;
+                                  const abmp_DefaultImage : Graphics.TBitmap ;
                                   var ai_CountImages : Longint );
 var
     li_i, li_j, li_Counter : Longint;

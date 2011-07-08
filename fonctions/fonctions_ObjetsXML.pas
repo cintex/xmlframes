@@ -96,7 +96,7 @@ var
       gi_FinCompteurImages    : Integer      ;   // Un seul imagelist des menus donc efface après la dernière image
       gBar_ToolBarParent      : {$IFDEF FPC}TCustomControl{$ELSE}TToolWindow{$ENDIF}  = nil;   // Barre d'accès
       gSep_ToolBarSepareDebut : TControl= nil;   // Séparateur de début délimitant les boutons à effacer
-      gPan_PanelSepareFin     : {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF}       = nil;   // Panel      de fin   délimitant les boutons à effacer
+      gPan_PanelSepareFin     : TPanel       = nil;   // Panel      de fin   délimitant les boutons à effacer
       gb_UtiliseSMenu         : Boolean      ;            // Utilise-t-on les sous-menus
       gMen_MenuLangue         : TMenuItem    = nil;
       gMen_MenuVolet          : TMenuItem    = nil;
@@ -151,7 +151,7 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
                                     const aIco_DefaultPicture     : TIcon        ;
                                     const aBar_ToolBarParent      : {$IFDEF FPC}TCustomControl{$ELSE}TToolWindow{$ENDIF} ;
                                     const aSep_ToolBarSepareDebut : TControl;
-                                    const aPan_PanelSepareFin     : {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF}       ;
+                                    const aPan_PanelSepareFin     : TPanel       ;
                                     const ai_TailleUnPanel        : Integer      ;
                                     const aBmp_DefaultPicture     : TBitmap      ;
                                     const aMen_MenuParent         : TMenuItem    ;
@@ -498,7 +498,7 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
                                     const aIco_DefaultPicture     : TIcon        ;
                                     const aBar_ToolBarParent      : {$IFDEF FPC}TCustomControl{$ELSE}TToolWindow{$ENDIF}   ;
                                     const aSep_ToolBarSepareDebut : TControl;
-                                    const aPan_PanelSepareFin     : {$IFDEF TNT}TTntPanel{$ELSE}TPanel{$ENDIF}       ;
+                                    const aPan_PanelSepareFin     : TPanel       ;
                                     const ai_TailleUnPanel        : Integer      ;
                                     const aBmp_DefaultPicture     : TBitmap      ;
                                     const aMen_MenuParent         : TMenuItem    ;
