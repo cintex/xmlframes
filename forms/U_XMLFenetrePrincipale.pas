@@ -1,4 +1,4 @@
-﻿
+
 // ************************************************************************ //
 // Dfm2Pas: WARNING!
 // -----------------
@@ -172,7 +172,6 @@ type
 
     function CloseQuery: Boolean; override;
     procedure mu_ReinitiliserpresentationClick(Sender: TObject);
-
   private
 
     { Déclarations privées }

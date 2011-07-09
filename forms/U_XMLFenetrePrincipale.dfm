@@ -39,8 +39,8 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   object im_acces: TImage
     Left = 312
     Top = 104
-    Width = 49
-    Height = 49
+    Width = 32
+    Height = 32
     AutoSize = True
     Visible = False
   end
@@ -53,26 +53,27 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
   end
   object spl_volet: TJvSplitter
-    Left = 196
-    Top = 29
+    Left = 225
+    Top = 46
     Width = 5
-    Height = 465
+    Height = 448
     ExplicitLeft = 207
     ExplicitTop = 35
+    ExplicitHeight = 465
   end
   object im_aide: TImage
     Left = 464
     Top = 104
-    Width = 49
-    Height = 49
+    Width = 32
+    Height = 32
     AutoSize = True
     Visible = False
   end
   object im_quit: TImage
     Left = 528
     Top = 104
-    Width = 49
-    Height = 49
+    Width = 32
+    Height = 32
     AutoSize = True
     Visible = False
   end
@@ -125,9 +126,10 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Left = 0
     Top = 0
     Width = 757
-    Height = 29
+    Height = 46
     Hint = 'Cliquer sur un bouton pour acc'#195#402#194#169'der '#195#402#194#160' une fonction'
     HelpContext = 1430
+    ButtonHeight = 46
     Caption = 'Barre d'#39'acc'#195#402#194#168's'
     ParentShowHint = False
     ShowHint = True
@@ -136,7 +138,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Left = 0
       Top = 0
       Width = 57
-      Height = 22
+      Height = 46
       BevelOuter = bvNone
       TabOrder = 0
       object dbt_ident: TJvXPButton
@@ -144,7 +146,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         Top = 0
         Width = 40
         Height = 41
-        Hint = 
+        Hint =
           'S'#39'identifier/d'#195#402#194#169'connecter|Ouvrir la fen'#195#402#194#170'tre d'#39'identificatio' +
           'n'
         HelpContext = 1430
@@ -165,14 +167,14 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Left = 57
       Top = 0
       Width = 3
-      Height = 22
+      Height = 46
       TabOrder = 4
     end
     object pa_2: TPanel
       Left = 60
       Top = 0
       Width = 573
-      Height = 22
+      Height = 46
       BevelOuter = bvNone
       TabOrder = 1
     end
@@ -180,14 +182,14 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Left = 633
       Top = 0
       Width = 3
-      Height = 22
+      Height = 46
       TabOrder = 5
     end
     object pa_3: TPanel
       Left = 636
       Top = 0
       Width = 57
-      Height = 22
+      Height = 46
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 2
@@ -217,14 +219,14 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Left = 693
       Top = 0
       Width = 3
-      Height = 22
+      Height = 46
       TabOrder = 3
     end
     object pa_4: TPanel
       Left = 696
       Top = 0
       Width = 57
-      Height = 22
+      Height = 46
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 6
@@ -250,9 +252,9 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object mtb_CustomizedMenu: TExtMenuToolBar
     Left = 0
-    Top = 29
+    Top = 46
     Width = 30
-    Height = 465
+    Height = 448
     Align = alLeft
     AutoSize = False
     ButtonHeight = 38
@@ -270,11 +272,11 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object tbar_volet: TToolBar
     Left = 30
-    Top = 29
-    Width = 166
-    Height = 465
+    Top = 46
+    Width = 195
+    Height = 448
     Align = alLeft
-    ButtonHeight = 436
+    ButtonHeight = 449
     Caption = 'Volet d'#39'acc'#232's'
     Color = clMoneyGreen
     ParentColor = False
@@ -283,7 +285,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       Left = 0
       Top = 0
       Width = 197
-      Height = 436
+      Height = 449
       Hint = 'Cliquez pour acc'#233'der aux fonctions'
       HelpContext = 1440
       Align = alClient
@@ -1266,12 +1268,11 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Top = 264
   end
   object mu_MenuIni: TMainMenu
+    Images = im_Liste
     Left = 336
     Top = 264
   end
   object im_ListeDisabled: TImageList
-    Height = 32
-    Width = 32
     Left = 408
     Top = 216
   end
