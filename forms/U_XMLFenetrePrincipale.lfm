@@ -994,22 +994,25 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Menu = mu_MenuIni
     OnClickCustomize = mtb_CustomizedMenuClickCustomize
   end
-  object tbar_volet: TToolBar[8]
+  object tbar_volet: TPanel[8]
     Left = 30
     Height = 549
     Top = 50
     Width = 197
     Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 549
+    ClientWidth = 197
     Color = cl3DLight
     ParentColor = False
     TabOrder = 5
     Visible = False
     object scb_Volet: TScrollBox
-      Left = 1
-      Height = 547
+      Left = 0
+      Height = 549
       Hint = 'Cliquez pour accéder aux fonctions'
-      Top = 2
-      Width = 196
+      Top = 0
+      Width = 197
       HelpContext = 1440
       Align = alClient
       BorderStyle = bsNone
@@ -1037,7 +1040,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       6B85EA008DA1EF008097ED006F88EB0097A8F000EEF0FC00E9EDFC00899DEE00
       3A5CE3003053DC001E3EBC005E79E8007A91EC00A6B5F200B1BDF4007086EA00
       6B83E900B0BDF40095A8F0003053E1002342BD00536FE7006C85EA0097A9F100
-      8093ED004C67E5004261E4003A5BE3003054E2006C86EB00728AEC002D51DC00
+      8083ED004C67E5004261E4003A5BE3003054E2006C86EB00728AEC002D51DC00
       2342BE00637DE800EFF1FD00B7C2F500516CE6004865E4002C52E200264EE200
       B0BFF500E0E6FB002A50DC002141BF004564E5005A75E8008195ED00506CE600
       4867E5002C55E4002450E4006483EC00254EDE001D3FBF003F5FE400506DE600

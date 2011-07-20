@@ -270,7 +270,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     TabOrder = 2
     Visible = False
   end
-  object tbar_volet: TToolBar
+  object tbar_volet: TPanel
     Left = 30
     Top = 46
     Width = 195

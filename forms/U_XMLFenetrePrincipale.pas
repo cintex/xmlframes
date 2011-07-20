@@ -62,13 +62,14 @@ const
        			                 FileUnit : 'U_XMLFenetrePrincipale' ;
        			                 Owner : 'Matthieu Giroux' ;
        			                 Comment : 'Fenêtre principale utilisée pour la gestion automatisée à partir du fichier INI, avec des menus composés à partir des données.' + #13#10 + 'Elle dépend du composant Fenêtre principale qui lui n''est pas lié à l''application.' ;
-      			                 BugsStory : 'Version 0.1.0.4 : Adding customized menu Toolbar.' + #13#10
+      			                 BugsStory : 'Version 0.1.0.5 : A Left Toolbar to Panel.' + #13#10
+                                                   + 'Version 0.1.0.4 : Adding customized menu Toolbar.' + #13#10
                                                    + 'Version 0.1.0.3 : No ExtToolbar.' + #13#10
                                                    + 'Version 0.1.0.2 : Connection window shows only one time.' + #13#10
                                                    + 'Version 0.1.0.1 : No ExtToolbar on LAZARUS.' + #13#10
                                                    + 'Version 0.1.0.0 : Création à partir de U_FenetrePrincipale' ;
 			                 UnitType : CST_TYPE_UNITE_FICHE ;
-			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 4 );
+			                 Major : 0 ; Minor : 1 ; Release : 0 ; Build : 5 );
 {$ENDIF}
 
 type
@@ -137,7 +138,7 @@ type
     mc_Customize: TExtMenuCustomize;
     im_ListeDisabled: TImageList;
     mi_CustomizedMenu: TMenuItem;
-    tbar_volet: TToolBar;
+    tbar_volet: TPanel;
     scb_Volet: TScrollBox;
 
     procedure mi_CustomizedMenuClick(Sender: TObject);
