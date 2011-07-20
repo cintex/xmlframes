@@ -9,7 +9,7 @@ interface
 uses
     u_xmlform, fonctions_xml, U_XMLFenetrePrincipale, fonctions_ObjetsXML, 
   fonctions_autocomponents, u_languagevars, u_multidonnees, 
-  fonctions_leon_format, LazarusPackageIntf;
+  fonctions_leon_format, u_xmlfillcombobutton, LazarusPackageIntf;
 
 implementation
 

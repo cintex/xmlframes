@@ -119,7 +119,8 @@ uses JvXPButtons,fonctions_dbcomponents,
      JvSplitter,
 {$ENDIF}
      U_ExtNumEdits,
-     u_buttons_appli, fonctions_proprietes ;
+     u_buttons_appli, fonctions_proprietes,
+     u_xmlfillcombobutton;
 
 /////////////////////////////////////////////////////////////////////////
 // function ffwl_CreateALabelComponent
@@ -150,6 +151,7 @@ Begin
     awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE + CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
    Else
     awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE ;
+
 end;
 
 /////////////////////////////////////////////////////////////////////////

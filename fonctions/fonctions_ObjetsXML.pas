@@ -52,7 +52,8 @@ const // Champs utilisés
                                            FileUnit : 'fonctions_ObjetsXML' ;
               			           Owner : 'Matthieu Giroux' ;
               			           Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			           BugsStory : 'Version 1.0.0.6 : Images on menu items.' + #13#10 +
+              			           BugsStory : 'Version 1.0.1.0 : Integrating TXMLFillCombo button.'  + #13#10 +
+                                                       'Version 1.0.0.6 : Images on menu items.' + #13#10 +
                                                        'Version 1.0.0.5 : No ExtToolbar.' + #13#10 +
                                                        'Version 1.0.0.4 : Testing.' + #13#10 +
                                                        'Version 1.0.0.3 : Better menu.' + #13#10 +
@@ -60,7 +61,7 @@ const // Champs utilisés
                                                        'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
                                                        'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			           UnitType : 1 ;
-              			           Major : 1 ; Minor : 0 ; Release : 0 ; Build : 6 );
+              			           Major : 1 ; Minor : 0 ; Release : 1 ; Build : 0 );
 
 {$ENDIF}
 type
@@ -138,6 +139,7 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const ab_AjouteEvenement   : Boolean   );
 function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
+function fi_FindActionFile ( const afile : String ):Longint ;
 function fi_FindAction ( const aClep : String ):Longint ;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
@@ -209,8 +211,6 @@ function fb_CreeMenu (              const aF_FormParent           : TForm       
                                     var   ab_UtiliseSousMenu      : Boolean      ): Boolean ;
 function fb_CreeLeMenu : Boolean ;
 
-procedure p_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        );
-procedure p_ExecuteFonction ( const as_Fonction                  : String    ;  const ab_Ajuster : Boolean        ); overload;
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
 procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
 
@@ -234,6 +234,24 @@ Begin
   Result := -1 ;
   for li_i := 0 to high ( ga_Functions ) do
     if ga_Functions [ li_i ].Clep = aClep then
+      Begin
+        Result := li_i;
+        Exit;
+      End;
+
+End;
+
+/////////////////////////////////////////////////////////////////////////
+// function fi_FindAction
+// Find a function with a key
+// aClep : Key of function
+/////////////////////////////////////////////////////////////////////////
+function fi_FindActionFile ( const afile : String ):Longint ;
+var li_i : Longint ;
+Begin
+  Result := -1 ;
+  for li_i := 0 to high ( ga_Functions ) do
+    if ga_Functions [ li_i ].AFile = afile then
       Begin
         Result := li_i;
         Exit;
@@ -317,109 +335,9 @@ begin
   if ( ls_NomObjet <> '' ) then
     Begin
       ls_FonctionClep := copy (ls_NomObjet, 1, length ( ls_NomObjet ) - 1 );
-      p_ExecuteFonction ( ls_FonctionClep, True );
+      fxf_ExecuteFonction ( ls_FonctionClep, True );
     End;
   // Se place sur la fonction
-End ;
-
-/////////////////////////////////////////////////////////////////////////
-// procedure p_ExecuteFonction
-// Execute a funtion with key as_Fonction
-// Fonction qui exécute une fonction à partir d'une clé de fonction
-// as_Fonction : la clé de la fonction
-// as_Fonction : the key of function
-// ab_Ajuster  : Adjust the form of function
-/////////////////////////////////////////////////////////////////////////
-procedure p_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        );
-begin
-  // Recherche dans ce qui a été chargé par les fichiers XML
-  p_ExecuteNoFonction ( fi_findAction ( as_Fonction ), ab_ajuster);
-End ;
-
-/////////////////////////////////////////////////////////////////////////
-// procedure p_ExecuteNoFonction
-// Execute a function number
-// Fonction qui exécute une fonction à partir d'une clé de fonction
-// as_Fonction : The number of function
-// ab_Ajuster  : Adjust the form of function
-/////////////////////////////////////////////////////////////////////////
-procedure p_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        );
-var lf_Formulaire    : TF_XMLForm ;
-    lb_Unload        : Boolean ;
-    li_i : Longint;
-    lfs_newFormStyle : TFormStyle ;
-    llf_Function      : TLeonFunction;
-    lico_icon : TIcon ;
-    lbmp_Bitmap : TBitmap ;
-begin
-  // Recherche dans ce qui a été chargé par les fichiers XML
-  if ai_Fonction < 0 then
-    Exit;
-  //Trouvé
-  lf_Formulaire := nil;
-  // Fichier XML de la fonction
-  llf_Function := ga_functions [ ai_Fonction ];
-  // La fiche peut être déjà créée
-  for li_i := 0 to Application.ComponentCount -1 do
-    if ( Application.Components [ li_i ] is TF_XMLForm )
-    and (( Application.Components [ li_i ] as TF_XMLForm ).Fonction.Clep = llf_Function.Clep ) Then
-      lf_Formulaire := Application.Components [ li_i ] as TF_XMLForm ;
-  // Se place sur la bonne fonction
-  if not assigned ( lf_Formulaire ) Then
-    Begin
-      lf_Formulaire := TF_XMLForm.create ( Application );
-      lf_Formulaire.Fonction := llf_Function;
-    End;
-
-  lbmp_Bitmap := TBitmap.Create;
-  fb_getImageToBitmap(llf_Function.Prefix,lbmp_Bitmap);
-  lico_Icon := TIcon.Create;
-  p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
-// Assigne l'icône si existe
-  If not lico_Icon.Empty
-   Then
-    try
-      lf_Formulaire.Icon.Modified := False ;
-      lf_Formulaire.Icon.PaletteModified := False ;
-      if lf_Formulaire.Icon.Handle <> 0 Then
-        Begin
-          lf_Formulaire.Icon.ReleaseHandle ;
-          lf_Formulaire.Icon.CleanupInstance ;
-        End ;
-      lf_Formulaire.Icon.Handle := 0 ;
-      lf_Formulaire.Icon.width  := 16 ;
-      lf_Formulaire.Icon.Height := 16 ;
-      lf_Formulaire.Icon.Assign ( lico_Icon );
-      lf_Formulaire.Icon.Modified := True ;
-      lf_Formulaire.Icon.PaletteModified := True ;
-
-      lf_Formulaire.Invalidate ;
-    Except
-    End ;
-  {$IFDEF FPC}
-   lico_Icon.FreeImage;
-  {$ENDIF}
-   lico_Icon.Free;
-  {$IFDEF DELPHI}
-   lbmp_Bitmap.Dormant ;
-  {$ENDIF}
-   lbmp_Bitmap.FreeImage;
-   lbmp_Bitmap.Free;
-    // Paramètres d'affichage
-  if  ab_Ajuster then
-    Begin
-      lb_Unload := fb_getComponentBoolProperty ( lf_Formulaire, 'DataUnload' );
-     // Initialisation de l'ouverture de fiche
-      lfs_newFormStyle := llf_Function.Mode ;
-      if not lb_Unload Then
-        Begin
-          if  ( Application.MainForm is TF_FormMainIni )
-            Then
-              ( Application.MainForm as TF_FormMainIni ).fb_setNewFormStyle( lf_Formulaire, lfs_newFormStyle, ab_Ajuster)
-        End
-      else
-        lf_Formulaire.Free ;
-    End ;
 End ;
 
 /////////////////////////////////////////////////////////////////////////
@@ -1854,7 +1772,7 @@ Begin
          Name  := fs_GetNameSoft;
          Mode  := fsMDIChild;
        end;
-     p_ExecuteNoFonction(high ( ga_Functions ), True);
+     fxf_ExecuteNoFonction(high ( ga_Functions ), True);
    End
  Else
   fb_CreeLeMenu ( );

@@ -21,6 +21,7 @@ uses
   ComCtrls, SysUtils,	TypInfo, Variants,
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
+  u_xmlfillcombobutton,
   fonctions_manbase,
 {$IFDEF VERSIONS}
   fonctions_version,
@@ -36,16 +37,16 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.0 : Really integrating group view.'  +
-                                              '0.9.0.2 : Childs Source for struct node.'  +
-                                              '0.9.0.1 : Creating struct fields and components.'  +
-                                              '0.9.0.0 : Reading a LEONARDI file and creating HMI.'  +
-                                              '0.0.2.0 : Identification, more functionalities.'  +
+                                  BugsStory : '0.9.1.1 : Integrating TXMLFillCombo button.'  + #13#10 +
+                                              '0.9.1.0 : Really integrating group view.'  + #13#10 +
+                                              '0.9.0.2 : Childs Source for struct node.'  + #13#10 +
+                                              '0.9.0.1 : Creating struct fields and components.'  + #13#10 +
+                                              '0.9.0.0 : Reading a LEONARDI file and creating HMI.'  + #13#10 +
+                                              '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 0 );
+                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 1 );
 {$ENDIF}
-
 
 type
   {CSV Counters}
@@ -127,7 +128,8 @@ type
     procedure p_setChoiceComponent(const argr_Control: TDBRadioGroup); virtual;
     procedure p_CreateCsvFile(const afd_FieldsDefs: TFieldDefs; const afws_Source : TFWXMLColumn ); virtual;
     function fpc_CreatePageControl(const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl): TPageControl; virtual;
-    procedure p_setControl ( const awin_Control: TWinControl;
+    procedure p_setControl ( const as_BeginName : String ;
+                             const awin_Control: TWinControl;
                              const awin_Parent: TWinControl;
                              const anod_Field: TALXMLNode;
                              const ai_FieldCounter, ai_counter: Longint); virtual;
@@ -137,7 +139,7 @@ type
                                             as_FieldsDisplay, as_Name : String;
                                       const alis_IdRelation : TList;
                                       const ai_FieldCounter, ai_Counter : Integer
-                                      ): TFWDBLookupCombo; virtual;
+                                      ): TXMLFillCombo; virtual;
     function fdbg_GroupViewComponents ( const afws_source : TFWSource ;
                                         const awin_Parent : TWinControl ;
                                         const ai_Connection : Integer;
@@ -212,6 +214,10 @@ type
   end;
 
 function fs_getFileNameOfTableColumn ( const afws_Source    : TFWXMLColumn ): String;
+function fxf_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+function fxf_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+
 
 implementation
 
@@ -728,26 +734,32 @@ function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
                                                    as_FieldsDisplay, as_Name : String;
                                              const alis_IdRelation : TList;
                                              const ai_FieldCounter, ai_Counter : Integer)
-                                             :TFWDBLookupCombo;
+                                             :TXMLFillCombo;
 var
     ls_Fields : String;
 Begin
-  Result := TFWDBLookupCombo.Create ( Self );
-  if as_FieldsDisplay <> '' Then
-   Begin
-     ls_Fields := as_FieldsID + ',' + as_FieldsDisplay;
-     Result.{$IFDEF FPC}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
-   end
-  Else
-   ls_Fields := as_FieldsID;
-  if ls_Fields <> '' Then
-    Result.{$IFDEF FPC}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
-  if as_Name <> '' Then
+  Result :=  TXMLFillCombo.Create(Self);
+  Result.Combo := TFWDBLookupCombo.Create ( Self );
+  Result.FormRegisteredName:=as_Table;
+  with Result.Combo do
     Begin
-     Result.Hint:=fs_GetLabelCaption(as_Name);
-     Result.ShowHint:=True;
+      Parent := awin_Parent;
+      if as_FieldsDisplay <> '' Then
+       Begin
+         ls_Fields := as_FieldsID + ',' + as_FieldsDisplay;
+         {$IFDEF FPC}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
+       end
+      Else
+       ls_Fields := as_FieldsID;
+      if ls_Fields <> '' Then
+        {$IFDEF FPC}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+      if as_Name <> '' Then
+        Begin
+         Hint:=fs_GetLabelCaption(as_Name);
+         ShowHint:=True;
+        end;
+      {$IFDEF FPC}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
     end;
-  Result.{$IFDEF FPC}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
 end;
 
 // function ffwc_getRelationComponent
@@ -929,9 +941,9 @@ begin
     End;
 
 end;
-procedure TF_XMLForm.p_setControl  ( const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint  );
+procedure TF_XMLForm.p_setControl  ( const as_BeginName : String ; const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint  );
 begin
-  awin_Control.Name := anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
+  awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
   awin_Control.Parent := awin_Parent ;
   awin_Control.Tag := ai_FieldCounter + 1;
 End;
@@ -965,7 +977,6 @@ begin
     awin_Control.Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
    Else
     awin_Control.Left := CST_XML_FIELDS_INTERLEAVING ;
-
 end;
 
 // procedure p_setLabelComponent
@@ -1251,7 +1262,7 @@ begin
     End;
  DisableAlign ;
  try
-   Name := CST_COMPONENTS_FORM_BEGIN + a_value.Clep;
+   Name := a_value.Clep;
    Caption := fs_GetLabelCaption ( gr_Function.Name );
    with gr_Function do
      Begin
@@ -1495,6 +1506,7 @@ var lnod_FieldProperties : TALXMLNode ;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lwin_Last : TWinControl;
     lnod_OriginalNode : TALXmlNode;
+    lxfc_ButtonCombo : TXMLFillCombo;
 
     // Function fb_getFieldOptions
     // Result : quitting
@@ -1672,7 +1684,17 @@ var lnod_FieldProperties : TALXMLNode ;
 
       Result := True;
 
-      p_setControl(awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+      if awin_Control is TXMLFillCombo
+       then
+         Begin
+           lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
+           p_setControl( 'xfc_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+           awin_Control := ( awin_Control as TXMLFillCombo ).Combo;
+         end
+        Else
+         lxfc_ButtonCombo := nil;
+
+      p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
 
       p_setFieldComponentTop ( awin_Control, ab_Column );
 
@@ -1685,6 +1707,10 @@ var lnod_FieldProperties : TALXMLNode ;
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
        Else
         p_setComponentLeft  ( awin_Control, ab_Column );
+      if assigned ( lxfc_ButtonCombo ) Then
+        Begin
+          lxfc_ButtonCombo.AutoPlace;
+        end;
     end;
 
     // procedure p_SetParentWidth
@@ -1979,6 +2005,120 @@ begin
   gfin_FormIni.AutoUpdate := True;
   gfin_FormIni.AutoLoad   := False;
 end;
+
+/////////////////////////////////////////////////////////////////////////
+// function fxf_ExecuteFonction
+// Execute a funtion with key as_Fonction
+// Fonction qui exécute une fonction à partir d'une clé de fonction
+// as_Fonction : la clé de la fonction
+// as_Fonction : the key of function
+// ab_Ajuster  : Adjust the form of function
+/////////////////////////////////////////////////////////////////////////
+function fxf_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+begin
+  // Recherche dans ce qui a été chargé par les fichiers XML
+  Result := fxf_ExecuteNoFonction ( fi_findAction ( as_Fonction ), ab_ajuster);
+End ;
+
+/////////////////////////////////////////////////////////////////////////
+// function fxf_ExecuteFonction
+// Execute a funtion with key as_Fonction
+// Fonction qui exécute une fonction à partir d'une clé de fonction
+// as_Fonction : la clé de la fonction
+// as_Fonction : the key of function
+// ab_Ajuster  : Adjust the form of function
+/////////////////////////////////////////////////////////////////////////
+function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+begin
+  // Recherche dans ce qui a été chargé par les fichiers XML
+  Result := fxf_ExecuteNoFonction ( fi_findActionFile ( as_FonctionFile ), ab_ajuster);
+End ;
+
+/////////////////////////////////////////////////////////////////////////
+// function fxf_ExecuteNoFonction
+// Execute a function number
+// Fonction qui exécute une fonction à partir d'une clé de fonction
+// as_Fonction : The number of function
+// ab_Ajuster  : Adjust the form of function
+/////////////////////////////////////////////////////////////////////////
+function fxf_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+var lb_Unload        : Boolean ;
+    li_i : Longint;
+    lfs_newFormStyle : TFormStyle ;
+    llf_Function      : TLeonFunction;
+    lico_icon : TIcon ;
+    lbmp_Bitmap : TBitmap ;
+begin
+  Result := nil;
+  // Recherche dans ce qui a été chargé par les fichiers XML
+  if ai_Fonction < 0 then
+    Exit;
+  //Trouvé
+  // Fichier XML de la fonction
+  llf_Function := ga_functions [ ai_Fonction ];
+  // La fiche peut être déjà créée
+  for li_i := 0 to Application.ComponentCount -1 do
+    if ( Application.Components [ li_i ] is TF_XMLForm )
+    and (( Application.Components [ li_i ] as TF_XMLForm ).Fonction.Clep = llf_Function.Clep ) Then
+      Result := Application.Components [ li_i ] as TF_XMLForm ;
+  // Se place sur la bonne fonction
+  if not assigned ( Result ) Then
+    Begin
+      Result := TF_XMLForm.create ( Application );
+      Result.Fonction := llf_Function;
+    End;
+
+  lbmp_Bitmap := TBitmap.Create;
+  fb_getImageToBitmap(llf_Function.Prefix,lbmp_Bitmap);
+  lico_Icon := TIcon.Create;
+  p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
+// Assigne l'icône si existe
+  If not lico_Icon.Empty
+   Then
+    try
+      Result.Icon.Modified := False ;
+      Result.Icon.PaletteModified := False ;
+      if Result.Icon.Handle <> 0 Then
+        Begin
+          Result.Icon.ReleaseHandle ;
+          Result.Icon.CleanupInstance ;
+        End ;
+      Result.Icon.Handle := 0 ;
+      Result.Icon.width  := 16 ;
+      Result.Icon.Height := 16 ;
+      Result.Icon.Assign ( lico_Icon );
+      Result.Icon.Modified := True ;
+      Result.Icon.PaletteModified := True ;
+
+      Result.Invalidate ;
+    Except
+    End ;
+  {$IFDEF FPC}
+   lico_Icon.FreeImage;
+  {$ENDIF}
+   lico_Icon.Free;
+  {$IFDEF DELPHI}
+   lbmp_Bitmap.Dormant ;
+  {$ENDIF}
+   lbmp_Bitmap.FreeImage;
+   lbmp_Bitmap.Free;
+    // Paramètres d'affichage
+  if  ab_Ajuster then
+    Begin
+      lb_Unload := fb_getComponentBoolProperty ( Result, 'DataUnload' );
+     // Initialisation de l'ouverture de fiche
+      lfs_newFormStyle := llf_Function.Mode ;
+      if not lb_Unload Then
+        Begin
+          if  ( Application.MainForm is TF_FormMainIni )
+            Then
+              ( Application.MainForm as TF_FormMainIni ).fb_setNewFormStyle( Result, lfs_newFormStyle, ab_Ajuster)
+        End
+      else
+        Result.Free ;
+    End ;
+End ;
+
 
 
 {$IFDEF VERSIONS}
