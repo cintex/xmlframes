@@ -16,7 +16,12 @@ interface
 ///////////////////////////////////////////////////////////////////////
 
 uses
-  Graphics, Controls, Classes, Dialogs, DB,
+ {$IFDEF FPC}
+ LCLType,
+ {$ELSE}
+ Windows,
+ {$ENDIF}
+  Controls, Classes, Dialogs, DB,
   U_ExtDBNavigator, Buttons, Forms, DBCtrls,
   ComCtrls, SysUtils,	TypInfo, Variants,
   U_CustomFrameWork, U_OnFormInfoIni,
@@ -28,7 +33,8 @@ uses
 {$ENDIF}
   u_framework_components, u_framework_dbcomponents,
   u_multidonnees, JvXPButtons, Menus,
-  U_FormMainIni, fonctions_ObjetsXML, U_GroupView;
+  U_FormMainIni, fonctions_ObjetsXML,
+  Graphics, U_GroupView;
 
 {$IFDEF VERSIONS}
 const
@@ -207,6 +213,7 @@ type
     procedure DestroyComponents ( const acom_Parent : TWinControl ); virtual;
     procedure p_CreateFormComponents ( const as_XMLFile, as_Name : String ;  awin_Parent : TWinControl ) ; virtual;
     constructor Create ( AOwner : TComponent ); override;
+  published
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
     property MainPanel   : TPanel read FMainPanel write FMainPanel;
     property PageControl : TPageControl read FPageControl write FPageControl;
@@ -223,11 +230,6 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
-     {$IFDEF FPC}
-     LCLType,
-     {$ELSE}
-     Windows,
-     {$ENDIF}
      u_extdbgrid, fonctions_images,
      fonctions_Objets_Dynamiques,
      u_buttons_appli, unite_variables, StdCtrls;
@@ -1760,9 +1762,16 @@ begin
           Else
           Begin
             ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
+            if FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
+              Width := FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width;
             gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
             if gi_LastFormFieldsHeight < Result.Top + Result.Height then
-              gi_LastFormFieldsHeight := Result.Top + Result.Height ;
+              Begin
+                gi_LastFormFieldsHeight := Result.Top + Result.Height ;
+                if FMainPanel.Top + FActionPanel.Height + Result.Top + Result.Height > Height then
+                  Height := FMainPanel.Top + Result.Top + FActionPanel.Height + Result.Height;
+
+              End;
           end ;
 end;
 // fonction fpc_CreatePageControl

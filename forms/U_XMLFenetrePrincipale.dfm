@@ -146,7 +146,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
         Top = 0
         Width = 40
         Height = 41
-        Hint =
+        Hint = 
           'S'#39'identifier/d'#195#402#194#169'connecter|Ouvrir la fen'#195#402#194#170'tre d'#39'identificatio' +
           'n'
         HelpContext = 1430
@@ -276,19 +276,20 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Width = 195
     Height = 448
     Align = alLeft
-    ButtonHeight = 449
+    BevelOuter = bvNone
     Caption = 'Volet d'#39'acc'#232's'
     Color = clMoneyGreen
-    ParentColor = False
     TabOrder = 3
     object scb_Volet: TScrollBox
       Left = 0
       Top = 0
-      Width = 197
-      Height = 449
+      Width = 195
+      Height = 448
       Hint = 'Cliquez pour acc'#233'der aux fonctions'
       HelpContext = 1440
       Align = alClient
+      BevelInner = bvNone
+      BevelOuter = bvNone
       BorderStyle = bsNone
       Constraints.MinHeight = 10
       Constraints.MinWidth = 10

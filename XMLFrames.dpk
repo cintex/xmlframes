@@ -83,7 +83,10 @@ requires
   dxPack2D10,
   JvPageCompsD10R,
   JvHMID10R,
-  JvGlobusD10R;
+  JvGlobusD10R,
+  ManFrames,
+  dmenutoolbar,
+  RVFree_D6;
 
 contains
   U_ASQLBuilder in 'composants\U_ASQLBuilder.pas',
@@ -93,6 +96,7 @@ contains
   U_XMLFenetrePrincipale in 'forms\U_XMLFenetrePrincipale.pas',
   u_languagevars in 'fonctions\u_languagevars.pas',
   fonctions_autocomponents in 'fonctions\fonctions_autocomponents.pas',
-  u_multidonnees in 'forms\u_multidonnees.pas';
+  u_multidonnees in 'forms\u_multidonnees.pas',
+  u_xmlfillcombobutton in 'composants\u_xmlfillcombobutton.pas';
 
 end.
