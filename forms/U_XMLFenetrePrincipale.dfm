@@ -278,7 +278,6 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Align = alLeft
     BevelOuter = bvNone
     Caption = 'Volet d'#39'acc'#232's'
-    Color = clMoneyGreen
     TabOrder = 3
     object scb_Volet: TScrollBox
       Left = 0
