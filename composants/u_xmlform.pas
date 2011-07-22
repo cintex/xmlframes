@@ -43,7 +43,8 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.1 : Integrating TXMLFillCombo button.'  + #13#10 +
+                                  BugsStory : '0.9.1.2 : Forcing Not registered forms when searching form xml file.'  + #13#10 +
+                                              '0.9.1.1 : Integrating TXMLFillCombo button.'  + #13#10 +
                                               '0.9.1.0 : Really integrating group view.'  + #13#10 +
                                               '0.9.0.2 : Childs Source for struct node.'  + #13#10 +
                                               '0.9.0.1 : Creating struct fields and components.'  + #13#10 +
@@ -51,7 +52,7 @@ const
                                               '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 1 );
+                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 2 );
 {$ENDIF}
 
 type
@@ -213,17 +214,18 @@ type
     procedure DestroyComponents ( const acom_Parent : TWinControl ); virtual;
     procedure p_CreateFormComponents ( const as_XMLFile, as_Name : String ;  awin_Parent : TWinControl ) ; virtual;
     constructor Create ( AOwner : TComponent ); override;
+    property Fonction : TLeonFunction read gr_Function write p_setfunction;
   published
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
     property MainPanel   : TPanel read FMainPanel write FMainPanel;
     property PageControl : TPageControl read FPageControl write FPageControl;
-    property Fonction : TLeonFunction read gr_Function write p_setfunction;
   end;
 
 function fs_getFileNameOfTableColumn ( const afws_Source    : TFWXMLColumn ): String;
 function fxf_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 function fxf_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 
 
 implementation
@@ -1264,7 +1266,7 @@ begin
     End;
  DisableAlign ;
  try
-   Name := a_value.Clep;
+   Name := a_value.AFile;
    Caption := fs_GetLabelCaption ( gr_Function.Name );
    with gr_Function do
      Begin
@@ -2038,9 +2040,19 @@ End ;
 // ab_Ajuster  : Adjust the form of function
 /////////////////////////////////////////////////////////////////////////
 function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+var llf_Function      : TLeonFunction;
 begin
   // Recherche dans ce qui a été chargé par les fichiers XML
   Result := fxf_ExecuteNoFonction ( fi_findActionFile ( as_FonctionFile ), ab_ajuster);
+
+  // Form not found in registered forms, but can exists in files.
+  if Result = nil Then
+    Begin
+      llf_Function.Clep  := as_FonctionFile;
+      llf_Function.AFile := as_FonctionFile;
+      llf_Function.Name  := CST_LEON_NAME_BEGIN + UpperCase(as_FonctionFile);
+      Result :=  fxf_ExecuteAFonction ( llf_Function, ab_Ajuster );
+    end;
 End ;
 
 /////////////////////////////////////////////////////////////////////////
@@ -2065,20 +2077,38 @@ begin
   //Trouvé
   // Fichier XML de la fonction
   llf_Function := ga_functions [ ai_Fonction ];
+  Result := fxf_ExecuteAFonction ( llf_Function, ab_Ajuster );
+End ;
+
+/////////////////////////////////////////////////////////////////////////
+// function fxf_ExecuteAFonction
+// Execute a function record
+// Fonction qui exécute une fonction à partir d'un enregistrement fonction
+// as_Fonction : The number of function
+// ab_Ajuster  : Adjust the form of function
+/////////////////////////////////////////////////////////////////////////
+function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
+var lb_Unload        : Boolean ;
+    li_i : Longint;
+    lfs_newFormStyle : TFormStyle ;
+    lico_icon : TIcon ;
+    lbmp_Bitmap : TBitmap ;
+begin
+  Result := nil;
   // La fiche peut être déjà créée
   for li_i := 0 to Application.ComponentCount -1 do
     if ( Application.Components [ li_i ] is TF_XMLForm )
-    and (( Application.Components [ li_i ] as TF_XMLForm ).Fonction.Clep = llf_Function.Clep ) Then
+    and (( Application.Components [ li_i ] as TF_XMLForm ).Fonction.Clep = alf_Function.Clep ) Then
       Result := Application.Components [ li_i ] as TF_XMLForm ;
   // Se place sur la bonne fonction
   if not assigned ( Result ) Then
     Begin
       Result := TF_XMLForm.create ( Application );
-      Result.Fonction := llf_Function;
+      Result.Fonction := alf_Function;
     End;
 
   lbmp_Bitmap := TBitmap.Create;
-  fb_getImageToBitmap(llf_Function.Prefix,lbmp_Bitmap);
+  fb_getImageToBitmap(alf_Function.Prefix,lbmp_Bitmap);
   lico_Icon := TIcon.Create;
   p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
 // Assigne l'icône si existe
@@ -2116,7 +2146,7 @@ begin
     Begin
       lb_Unload := fb_getComponentBoolProperty ( Result, 'DataUnload' );
      // Initialisation de l'ouverture de fiche
-      lfs_newFormStyle := llf_Function.Mode ;
+      lfs_newFormStyle := alf_Function.Mode ;
       if not lb_Unload Then
         Begin
           if  ( Application.MainForm is TF_FormMainIni )

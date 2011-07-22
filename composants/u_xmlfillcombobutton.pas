@@ -19,17 +19,18 @@ const
                                        FileUnit : 'u_xmlfillcombobutton' ;
                                        Owner : 'Matthieu Giroux' ;
                                        Comment : 'Composant bouton de remplissage de lien 1-N avec lien XML.' ;
-                                       BugsStory : '0.8.0.0 : Not Finished.';
+                                       BugsStory : '1.0.0.1 : CreateForm can inherit.' + #13#10
+                                                 + '1.0.0.0 : Working on DELPHI.' + #13#10
+                                                 + '0.8.0.0 : Not Finished.';
                                        UnitType : 3 ;
-                                       Major : 0 ; Minor : 8 ; Release : 0 ; Build : 0 );
+                                       Major : 1 ; Minor : 0 ; Release : 0 ; Build : 1 );
 {$ENDIF}
 
-{ TFWFillCombo }
 type
 
   { TXMLFillCombo }
 
-  TXMLFillCombo = class ( TFWFillCombo )
+  TXMLFillCombo = class ( TExtFillCombo )
      protected
       procedure CreateForm(const aico_Icon: TIcon); override;
     End;
@@ -38,13 +39,18 @@ implementation
 
 uses u_xmlform;
 
-{ TFWFillCombo }
+{ TExtFillCombo }
+
+// procedure TXMLFillCombo.CreateForm
+// Creating the registered xml form
+// aico_Icon : parameter not used because not needed
 
 procedure TXMLFillCombo.CreateForm(const aico_Icon: TIcon);
 begin
 
   FFormModal := fxf_ExecuteFonctionFile ( FormRegisteredName, False );
-
+  if not assigned ( FFormModal ) Then
+    inherited CreateForm ( aico_Icon );
 end;
 
 
