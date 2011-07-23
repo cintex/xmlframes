@@ -60,4 +60,3 @@
 
 <!-- Actions -->
 <ACTION id="hotel_outline" template="_outline" target="hotelOutlineZone"/>
-<ACTION id="hotel_error" template="_error" target="hotelErrorZone"/>

@@ -40,11 +40,11 @@
 	<!-- Classes declarations -->
 	&city;
 	&client;
+	&reservation;
 	&current_reservation;
 	&establishment;
 	&manager;
 	&province;
-	&reservation;
 	&room;
 
 	<!-- Navigation Tree -->

@@ -3,6 +3,7 @@
 		behavior="hotel.behavior.ReservationClassBehavior">
 	<C_BIND value="reservation" location="hotel_db"/>
 	<NAME value="NAME_RESERVATION"/>
+	<PREFIX value="reservation"/>
 	<FIELDS>
 		<NUMBER id="reservation_number">
 			<NAME value="NAME_RESERVATION_NUMBER"/>

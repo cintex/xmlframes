@@ -1,4 +1,4 @@
-{ Ceci est un fichier ressource généré automatiquement par Lazarus }
+{ This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TM_Donnees','FORMDATA',[
   'TPF0'#10'TM_Donnees'#9'M_Donnees'#8'OnCreate'#7#16'DataModuleCreate'#14'OldC'

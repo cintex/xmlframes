@@ -2,6 +2,7 @@
 <CLASS id="client">
 	<C_BIND value="client" location="hotel_db"/>
 	<NAME value="NAME_CLIENT"/>
+	<PREFIX value="client"/>
 	<FIELDS>
 		<NUMBER id="client_number">
 			<NAME value="NAME_CLIENT_NUMBER"/>

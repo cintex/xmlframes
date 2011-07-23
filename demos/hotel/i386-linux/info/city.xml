@@ -2,6 +2,7 @@
 <CLASS id="city">
 	<C_BIND value="city" location="hotel_db"/>
 	<NAME value="NAME_CITY"/>
+	<PREFIX value="city"/>
 	<FIELDS>
 		<TEXT id="city_name">
 			<NAME value="NAME_CITY_NOM_NOM"/>

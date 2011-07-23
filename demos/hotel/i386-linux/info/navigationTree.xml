@@ -5,6 +5,7 @@
 	<PARAMETER name="_loginFieldInfo" idref="manager_id"/>
 	<PARAMETER name="_passwordFieldInfo" idref="manager_password"/>
 	<PARAMETER name="_userClassInfo" idref="manager"/>
+	<PARAMETER name="_allowReconnect" value="false"/>
 	<ACTIONS>
 		<ACTION id="hotel_dashboard" template="_dashboard" target="hotelDashboardZone">
 			<NAME value="NAME_HOTEL_DASHBOARD_RES"/>
@@ -18,18 +19,58 @@
 					<TIP value="HOTEL_MANAGER_LIST_TIP"/>
 					<PARAMETER name="_classInfo" idref="manager"/>
 				</ACTION>
+				<COMPOUND_ACTION id="establishment_tree_map_list" sizes="60 40" style="VERTICAL" target="hotelPrincipalZone">
+					<NAME value="NAME_ESTABLISHMENT_TREE_MAP_LIST"/>
+					<GROUP value="GROUP_GEST"/>
+					<PREFIX value="map"/>
+					<COMPOUND_ACTION id="establishment_tree_map" sizes="30 70">
+						<NAME value="NAME_ESTABLISHMENT_TREE_MAP"/>
+						<ACTION id="establishment_tree" template="_tree">
+							<NAME value="NAME_ESTABLISHMENT_TREE"/>
+							<PREFIX value="establishment"/>
+							<PARAMETER name="_classInfo" idref="province"/>
+							<PARAMETER name="_classInfo1" idref="city"/>
+							<PARAMETER name="_classInfo11" idref="establishment"/>
+							<RESOURCE name="LY_DIR_CLOSED" type='IMAGE' value="map.gif"/>
+							<RESOURCE name="LY_DIR_OPEN" type='IMAGE' value="map.gif"/>
+							<RESOURCE name="LY_TREE_ROOT" type='STRING' value="France"/>
+						</ACTION>
+						<ACTION id="establishment_map" template="_map"
+								behavior="hotel.behavior.ProvinceMapBehavior">
+							<NAME value="NAME_ESTABLISHMENT_MAP"/>
+							<PREFIX value="map"/>
+							<PARAMETER name="_classInfo" idref="establishment"/>
+							<RESOURCE name="LY_MAP_BACKGROUND" value="17 111 183" type="COLOR"/>
+						</ACTION>
+					</COMPOUND_ACTION>
+					<ACTION id="establishment_list" template="_complexTable"
+							behavior="hotel.behavior.EstablishmentComplexListBehavior">
+						<NAME value="NAME_ESTABLISHMENT_LIST"/>
+						<PREFIX value="establishment"/>
+						<PARAMETER name="_classInfo" idref="establishment"/>
+						<PARAMETER name="_expandable" value="true"/>
+						<PARAMETER name="_fieldMarks">
+							<F_MARKS operation='RESET'>
+								<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+							</F_MARKS>
+						</PARAMETER>
+						<ACTIONS>
+							<ACTION_REF idref="_table" class="province"/>
+							<ACTION_REF idref="_table" class="city"/>
+						</ACTIONS>
+					</ACTION>
+				</COMPOUND_ACTION>
 				<COMPOUND_ACTION id="client_list_consult" sizes="55 45" target="hotelPrincipalZone">
 					<NAME value="NAME_CLIENT_LIST_CONSULT"/>
 					<GROUP value="GROUP_GEST_BOOKING"/>
 					<PREFIX value="client"/>
-					<TIP value="HOTEL_CLIENT_LIST_TIP"/>
 					<ACTION id="client_list" template="_editTable">
 						<NAME value="NAME_CLIENT_LIST"/>
 						<PREFIX value="client"/>
+						<TIP value="HOTEL_CLIENT_LIST_TIP"/>
 						<PARAMETER name="_classInfo" idref="client"/>
 						<PARAMETER name="_viewLimit" value="10"/>
 						<PARAMETER name="_displayPagesNumber" value="false"/>
-						<RESOURCE name="LY_COMBO_MIN_WIDTH" value="20"/>
 					</ACTION>
 					<ACTION id="client_consult" template="_consult">
 						<NAME value="NAME_CLIENT_CONSULT"/>
@@ -37,12 +78,12 @@
 						<PARAMETER name="_classInfo" idref="client"/>
 					</ACTION>
 				</COMPOUND_ACTION>
-				<COMPOUND_ACTION id="terminated_reservation_filter_list" style='VERTICAL' sizes="290px 45"  target="hotelPrincipalZone">
+				<COMPOUND_ACTION id="terminated_reservation_filter_list" style='VERTICAL' sizes="170px 45"  target="hotelPrincipalZone">
 					<NAME value="NAME_TERMINATED_RESERVATION_FILTER_LIST"/>
 					<GROUP value="GROUP_HISTO"/>
 					<PREFIX value="history"/>
-					<TIP value="HOTEL_FILTER_TIP"/>
 					<ACTION id="terminated_reservation_filter" template="__filter_new">
+						<TIP value="HOTEL_FILTER_TIP"/>
 						<PARAMETER name="_classInfo" idref="reservation"/>
 					</ACTION>
 					<ACTION id="reservation_history" template="_multiPageTable">
@@ -59,7 +100,7 @@
 					<PARAMETER_DECL name="_url" required='true'/>
 					<PARAMETER name="_url" value="HOTEL_HELP_FILE"/>
 				</ACTION>
-				<ACTION id="reservation_establishment_chart" template="_graphicalChart"  target="hotelPrincipalZone">
+				<ACTION id="reservation_establishment_chart" template="_graphicalChart">
 					<NAME value="NAME_RESERVATION_ESTABLISHMENT_CHART"/>
 					<ALIAS value="ALIAS_ESTABLISHMENT"/>
 					<GROUP value="GROUP_HISTO"/>
@@ -76,7 +117,7 @@
 					</PARAMETER>
 					<PARAMETER name="_classInfo" idref="current_reservation"/>
 				</ACTION>
-				<ACTION id="reservation_month_chart" template="_graphicalChart" target="hotelPrincipalZone">
+				<ACTION id="reservation_month_chart" template="_graphicalChart">
 					<NAME value="NAME_RESERVATION_MONTH_CHART"/>
 					<ALIAS value="ALIAS_BY_MONTH"/>
 					<GROUP value="GROUP_HISTO"/>
@@ -101,13 +142,13 @@
 					<ALIAS value="ALIAS_PLANNING"/>
 					<GROUP value="GROUP_GEST_BOOKING"/>
 					<PREFIX value="reservation"/>
-					<TIP value="HOTEL_GANTT_TIP"/>
 					<ACTION id="reservation_planning" template="_gantt"
 							behavior="hotel.behavior.ReservationGanttBehavior"
 							defaultAction="_consult">
 						<NAME value="NAME_RESERVATION_PLANNING"/>
 						<ALIAS value="Planning"/>
 						<PREFIX value="reservation"/>
+						<TIP value="HOTEL_GANTT_TIP"/>
 						<PARAMETER_DECL name="_classInfo1" type='CLASS'/>
 						<PARAMETER name="_beginDateFieldInfo" idref="reservation_check_in"/>
 						<PARAMETER name="_classInfo" idref="establishment"/>
@@ -155,48 +196,6 @@
 			 		<RESOURCE name='LY_TREEMAP_MAX_COLOR_CODE' type='STRING' value='CornflowerBlue'/>
 			 		<RESOURCE name='reservation_state_confirmed' type='IMAGE' value=' '/>
 				</ACTION>
-				<COMPOUND_ACTION id="establishment_tree_map_list" sizes="60 40" style="VERTICAL" target="hotelPrincipalZone">
-					<NAME value="NAME_ESTABLISHMENT_TREE_MAP_LIST"/>
-					<GROUP value="GROUP_GEST"/>
-					<PREFIX value="map"/>
-					<TIP value="HOTEL_ESTABLISHMENT_LIST_TIP"/>
-					<COMPOUND_ACTION id="establishment_tree_map" sizes="30 70">
-						<NAME value="NAME_ESTABLISHMENT_TREE_MAP"/>
-						<ACTION id="establishment_tree" template="_tree">
-							<NAME value="NAME_ESTABLISHMENT_TREE"/>
-							<PREFIX value="establishment"/>
-							<PARAMETER name="_classInfo" idref="province"/>
-							<PARAMETER name="_classInfo1" idref="city"/>
-							<PARAMETER name="_classInfo11" idref="establishment"/>
-							<RESOURCE name="LY_DIR_CLOSED" type='IMAGE' value="map.gif"/>
-							<RESOURCE name="LY_DIR_OPEN" type='IMAGE' value="map.gif"/>
-							<RESOURCE name="LY_TREE_ROOT" type='STRING' value="France"/>
-						</ACTION>
-						<ACTION id="establishment_map" template="_map"
-								behavior="hotel.behavior.ProvinceMapBehavior">
-							<NAME value="NAME_ESTABLISHMENT_MAP"/>
-							<PREFIX value="map"/>
-							<PARAMETER name="_classInfo" idref="establishment"/>
-							<RESOURCE name="LY_MAP_BACKGROUND" value="17 111 183" type="COLOR"/>
-						</ACTION>
-					</COMPOUND_ACTION>
-					<ACTION id="establishment_list" template="_complexTable"
-							behavior="hotel.behavior.EstablishmentComplexListBehavior">
-						<NAME value="NAME_ESTABLISHMENT_LIST"/>
-						<PREFIX value="establishment"/>
-						<PARAMETER name="_classInfo" idref="establishment"/>
-						<PARAMETER name="_expandable" value="true"/>
-						<PARAMETER name="_fieldMarks">
-							<F_MARKS operation='RESET'>
-								<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
-							</F_MARKS>
-						</PARAMETER>
-						<ACTIONS>
-							<ACTION_REF idref="_table" class="province"/>
-							<ACTION_REF idref="_table" class="city"/>
-						</ACTIONS>
-					</ACTION>
-				</COMPOUND_ACTION>
 			</ACTIONS>
 			<RESOURCE name="LY_DEFAULT_IMAGE_HEIGHT" value="25"/>
 			<RESOURCE name="LY_DEFAULT_IMAGE_WIDTH" value="25"/>

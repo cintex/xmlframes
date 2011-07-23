@@ -1600,7 +1600,12 @@ Begin
           end
          Else
           Begin
-            M_Donnees.CreateConnection ( dtZEOS, ls_ConnectionClep );
+            {$IFDEF IBX}
+            if ( pos ( CST_LEON_DATA_FIREBIRD, s_DataDriver ) > 0 )
+              M_Donnees.CreateConnection ( dtIBX, ls_ConnectionClep )
+             Else
+            {$ENDIF}
+            M_Donnees.CreateConnection ( {$IFDEF ZEOS}dtZEOS{$ELSE}{$IFDEF EADO}dtADO{$ELSE}dtCSV{$ENDIF}{$ENDIF}, ls_ConnectionClep );
             with ga_Connections [ high ( ga_Connections )] do
               Begin
                 s_dataURL := lNode.Attributes [ CST_LEON_DATA_URL ];

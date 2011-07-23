@@ -2,6 +2,7 @@
 <CLASS id="room">
 	<C_BIND value="room" location="hotel_db"/>
 	<NAME value="NAME_ROOM"/>
+	<PREFIX value="room"/>
 	<FIELDS>
 		<NUMBER id="room_id">
 			<NAME value="NAME_ROOM_ID"/>

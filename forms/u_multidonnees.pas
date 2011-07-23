@@ -29,6 +29,9 @@ uses
 {$IFDEF EADO}
   ADODB,
 {$ENDIF}
+{$IFDEF IBX}
+  IBQuery, IB, IBDatabase,
+{$ENDIF}
 {$IFDEF ZEOS}
   ZConnection,
   ZDataset,
@@ -43,13 +46,14 @@ const
       gver_M_Donnees : T_Version = ( Component : 'Data Module with connections and cloned queries.' ; FileUnit : 'U_multidonnees' ;
                         			           Owner : 'Matthieu Giroux' ;
                         			           Comment : 'Created from XML file.' ;
-                        			           BugsStory   : 'Version 1.0.0.0 : ZEOS, CSV and DELPHI ADO Version.'  ;
+                        			           BugsStory   : 'Version 1.0.0.1 : IBX Version.' + #13#10
+                                                                       + 'Version 1.0.0.0 : ZEOS, CSV and DELPHI ADO Version.'  ;
                         			           UnitType : 2 ;
                         			           Major : 1 ; Minor : 0 ; Release : 0 ; Build : 0 );
 {$ENDIF}
 
       // ADO ZEOS CSV
-type TDatasetType = ({$IFNDEF FPC}dtADO,{$ENDIF}{$IFDEF ZEOS}dtZEOS,{$ENDIF}dtCSV);
+type TDatasetType = ({$IFNDEF FPC}dtADO,{$ENDIF}{$IFDEF ZEOS}dtZEOS,{$ENDIF}{$IFDEF IBX}dtIBX,{$ENDIF}dtCSV);
     // Connection parameters
      TAConnection = Record
                      Clep : String ;
@@ -246,6 +250,15 @@ Begin
                   dat_QueryCopy := TZQuery.Create(Self);
                   com_Connection :=TZConnection.Create(Self);
                   ( dat_QueryCopy as TZQuery ).Connection := com_Connection as TZConnection;
+                End;
+       {$ENDIF}
+       {$IFDEF IBX}
+       dtIBX  : Begin
+                  dat_QueryCopy := TIBQuery.Create(Self);
+                  com_Connection :=TIBDataBase.Create(Self);
+                  ( dat_QueryCopy as TIBQuery ).Transaction := TIBTransaction.Create ( Self );
+                  ( dat_QueryCopy as TIBQuery ).Transaction.DefaultDatabase := com_Connection as TIBDataBase;
+                  ( dat_QueryCopy as TIBQuery ).Database := com_Connection as TIBDataBase;
                 End;
        {$ENDIF}
        {$IFDEF EADO}

@@ -2,6 +2,7 @@
 <CLASS id="manager">
 	<C_BIND value="manager" location="hotel_db"/>
 	<NAME value="NAME_MANAGER"/>
+	<PREFIX value="manager"/>
 	<FIELDS>
 		<TEXT id="manager_id">
 			<NAME value="NAME_MANAGER_ID"/>
@@ -26,13 +27,13 @@
 		<FILE id="manager_picture" mimeTypes="image" directory="$LY_APP_DOC_DIR$/images/managers">
 			<NAME value="_null"/>
 			<ALIAS value="NAME_MANAGER_PICTURE"/>
-			<GROUP value="GROUP_PICTURE"/>
+			<GROUP_REF idref="picture_group"/>
 			<F_MARKS create='true' set='true' main='true' optional='true' complexTable='true'/>
 		</FILE>
 		<DATE id="manager_date" type='DATE'>
 			<NAME value="NAME_MANAGER_DATE"/>
 			<GROUP_REF idref="data_group"/>
-			<F_MARKS consult='true' main='true' complexTable='true'/>
+			<F_MARKS create='true' set='true' main='true' complexTable='true'/>
 			<DEFAULT value="_now"/>
 		</DATE>
 		<RELATION id="manager_establishments" multiple='true'>
@@ -70,9 +71,13 @@
 </CLASS>
 
 <GROUP id="identification_group" value="GROUP_IDENTIFICATION">
-	<CONSTRAINT colSpan="1" remainder="false"/>
+	<CONSTRAINT colSpan="1" remainder="false" fill="BOTH"/>
 </GROUP>
 
 <GROUP id="data_group" value="GROUP_DATA">
-	<CONSTRAINT colSpan="2"/>
+	<CONSTRAINT colSpan="2" fill="BOTH"/>
+</GROUP>
+
+<GROUP id="picture_group" value="GROUP_PICTURE">
+	<CONSTRAINT colSpan="1" fill="VERTICAL" remainder="true"/>
 </GROUP>
