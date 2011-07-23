@@ -928,7 +928,6 @@ Begin
               ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ]
              Else
               ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ID ];
-            lb_AjouteBitmap := False;
             // SI le menu existe et si il est différent création d'un menu
               if  ( ls_MenuClep   <> '' )
                Then
@@ -1788,7 +1787,6 @@ function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
 var
     li_i, li_j : Longint;
     lnod_Node : TALXMLNode ;
-    lbmp_Bitmap : TBitmap;
 Begin
  if not assigned ( gxdo_MenuXML ) Then
    gxdo_MenuXML := TALXMLDocument.Create(Application);

@@ -192,14 +192,14 @@ type
     procedure p_AfterColumnFrameShow( const aFWColumn : TFWSource ); override;
     procedure DoClose ( var CloseAction : TCloseAction ); override;
     function fb_ChargeDonnees : Boolean; override;
+    procedure KeyUp(var Key: Word; Shift: TShiftState); override;
+  public
     function fb_InsereCompteur ( const adat_Dataset : TDataset ;
                                  const aslt_Cle : TStringlist ;
                                  const as_ChampCompteur, as_Table, as_PremierLettrage : String ;
                                  const ach_DebutLettrage, ach_FinLettrage : Char ;
                                  const ali_Debut, ali_LimiteRecherche : Int64 ): Boolean; override;
 
-    procedure KeyUp(var Key: Word; Shift: TShiftState); override;
-  public
     {$IFDEF FPC}
     procedure DoShow; override;
     {$ENDIF}
@@ -809,7 +809,7 @@ var ldoc_XMlRelation : TALXMLDocument ;
     var li_j : Integer ;
         lnod_Bind : TALXMLNode;
     Begin
-//      ShowMessage(anodeClass.ClassName);
+      Result := False;   
       if anod_Class.NodeName = CST_LEON_IDREFs Then
         Begin
           ls_ClassBind:=anod_Class.Attributes [ CST_LEON_VALUE ];
@@ -1264,9 +1264,11 @@ begin
     Begin
       p_CopyLeonFunction ( a_Value, gr_Function );
     End;
+ if a_value.AFile = ''
+  then Name := a_value.Name
+  Else Name := a_value.AFile;
  DisableAlign ;
  try
-   Name := a_value.AFile;
    Caption := fs_GetLabelCaption ( gr_Function.Name );
    with gr_Function do
      Begin
@@ -1616,7 +1618,7 @@ var lnod_FieldProperties : TALXMLNode ;
                     fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ], li_FieldCounter, Sources.Count - 1,
                                                              lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                    else
-                    fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
+                    fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_k ], ai_FieldCounter, ai_Counter,
                                                              lwin_Parent, lwin_Last, ab_column, afws_Source, afd_FieldsDefs );
                 inc ( li_FieldCounter );
                 lb_IsLocal:=True;
@@ -2063,12 +2065,7 @@ End ;
 // ab_Ajuster  : Adjust the form of function
 /////////////////////////////////////////////////////////////////////////
 function fxf_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-var lb_Unload        : Boolean ;
-    li_i : Longint;
-    lfs_newFormStyle : TFormStyle ;
-    llf_Function      : TLeonFunction;
-    lico_icon : TIcon ;
-    lbmp_Bitmap : TBitmap ;
+var llf_Function      : TLeonFunction;
 begin
   Result := nil;
   // Recherche dans ce qui a été chargé par les fichiers XML

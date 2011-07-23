@@ -16,12 +16,14 @@ uses
 
 const CST_LEON_File_Extension = '.xml';
       CST_LEON_Data_Extension = '.res';
+
       CST_LEON_DUMMY = 'DUMMY' ;
       CST_LEON_PROJECT = 'PROJECT' ;
       CST_LEON_CLASS = 'CLASS' ;
       CST_LEON_BOOL_FALSE = 'false' ;
       CST_LEON_BOOL_TRUE  = 'true' ;
 
+      CST_LEON_NAME_BEGIN     = 'NAME_' ;
       CST_LEON_LOCATION = 'location';
       CST_LEON_IDREF = 'idref';
       CST_LEON_VALUE = 'value';
@@ -246,16 +248,15 @@ End;
 // anod_FieldProperties : Node field properties
 
 function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
-var lnod_FieldProperties   ,
-    lnod_ClassesProperties : TALXMLNode ;
-    li_i , li_j : Integer;
+var lnod_ClassesProperties : TALXMLNode ;
+    li_j : Integer;
 Begin
   Result := False;
   if ( anod_FieldProperties.NodeName = CST_LEON_CLASSES )
   and anod_FieldProperties.HasChildNodes then
     for li_j :=  0 to anod_FieldProperties.ChildNodes.Count -1 do
     Begin
-      lnod_ClassesProperties := anod_FieldProperties.ChildNodes [ li_i ];
+      lnod_ClassesProperties := anod_FieldProperties.ChildNodes [ li_j ];
       if lnod_ClassesProperties.NodeName = CST_LEON_CLASS_REF  then
         Begin
           if ( as_ParentCLass = '' )
