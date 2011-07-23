@@ -747,7 +747,6 @@ Begin
   Result.FormRegisteredName:=as_Table;
   with Result.Combo do
     Begin
-      Parent := awin_Parent;
       if as_FieldsDisplay <> '' Then
        Begin
          ls_Fields := as_FieldsID + ',' + as_FieldsDisplay;
@@ -1694,7 +1693,7 @@ var lnod_FieldProperties : TALXMLNode ;
        then
          Begin
            lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
-           p_setControl( 'xfc_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+           p_setControl( 'xfc_', awin_Control, awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
            awin_Control := ( awin_Control as TXMLFillCombo ).Combo;
          end
         Else
