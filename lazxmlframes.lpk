@@ -70,41 +70,38 @@
       <OutDir Value="fonctions"/>
     </i18n>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="11">
+    <RequiredPkgs Count="10">
       <Item1>
-        <PackageName Value="ibexpress"/>
+        <PackageName Value="ExpertSuperForm"/>
       </Item1>
       <Item2>
-        <PackageName Value="ExpertSuperForm"/>
+        <PackageName Value="LCL"/>
       </Item2>
       <Item3>
-        <PackageName Value="LCL"/>
+        <PackageName Value="JvXPBarLaz"/>
       </Item3>
       <Item4>
-        <PackageName Value="JvXPBarLaz"/>
+        <PackageName Value="xmldocument"/>
       </Item4>
       <Item5>
-        <PackageName Value="xmldocument"/>
-      </Item5>
-      <Item6>
         <PackageName Value="FCL"/>
         <MinVersion Major="1" Valid="True"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="lazmansoft"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="lazfonctions"/>
       </Item7>
       <Item8>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazextcomponents"/>
       </Item8>
       <Item9>
-        <PackageName Value="lazextcomponents"/>
+        <PackageName Value="lazmanframes"/>
       </Item9>
       <Item10>
-        <PackageName Value="lazmanframes"/>
-      </Item10>
-      <Item11>
         <PackageName Value="rxnew"/>
-      </Item11>
+      </Item10>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>
