@@ -78,7 +78,7 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_CONTROLS           = 'Controls' ;
       CST_COMPONENTS_ACTIONS            = 'Actions' ;
 
-var  gi_FontHeight : Integer = 22 ;
+var  gi_FontHeight : Integer = 24 ;
 
 {$IFDEF VERSIONS}
 const

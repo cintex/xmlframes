@@ -100,6 +100,7 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_LEON_FIELD_F_MARKS  = 'F_MARKS' ;
       CST_LEON_FIELD_LOCAL    = 'local' ;
+      CST_LEON_FIELD_CREATE   = 'create' ;
       CST_LEON_FIELD_HIDDEN   = 'hidden' ;
       CST_LEON_FIELD_private  = 'private' ;
       CST_LEON_FIELD_optional = 'optional' ;

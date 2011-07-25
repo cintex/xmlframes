@@ -752,18 +752,18 @@ Begin
       if as_FieldsDisplay <> '' Then
        Begin
          ls_Fields := as_FieldsID + ',' + as_FieldsDisplay;
-         {$IFNDEF RXJV}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
+         {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
        end
       Else
        ls_Fields := as_FieldsID;
       if ls_Fields <> '' Then
-        {$IFNDEF RXJV}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+        {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
       if as_Name <> '' Then
         Begin
          Hint:=fs_GetLabelCaption(as_Name);
          ShowHint:=True;
         end;
-      {$IFNDEF RXJV}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
+      {$IFNDEF RXJVCOMBO}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
     end;
 end;
 
@@ -1034,22 +1034,35 @@ begin
    p_LoginOKClick (Self );
 end;
 
-{$IFDEF FPC}
 procedure TF_XMLForm.Doshow;
 var li_i : Integer;
+    lcom_Component : TComponent;
 begin
   // No LFM Bug
   for li_i := 0 to ComponentCount - 1 do
     Begin
-      if Components [ li_i ] is TJvXPButton Then
-       (Components [ li_i ] as TJvXPButton).Loaded;
-      if Components [ li_i ] is TDBGroupView Then
-       (Components [ li_i ] as TDBGroupView).Loaded;
+      lcom_Component := Components [ li_i ];
+      {$IFDEF FPC}
+      if lcom_Component is TJvXPButton Then
+       Begin
+        (lcom_Component as TJvXPButton).Loaded;
+        Continue;
+       end;
+      if lcom_Component is TDBGroupView Then
+       Begin
+         (lcom_Component as TDBGroupView).Loaded;
+         Continue;
+       end;
+      {$ENDIF}
+      if ( lcom_Component is TExtDBNumEdit )
+      and (( lcom_Component as TExtDBNumEdit ).Field is TIntegerField )   then
+        Begin
+          ( lcom_Component as TExtDBNumEdit ).NbAfterComma:=0;
+        end;
 
     end;
   inherited;
 end;
-{$ENDIF}
 
 // procedure p_setLogin
 // Special Login model
@@ -1304,8 +1317,12 @@ end;
 // argr_Control : Choice component
 
 procedure TF_XMLForm.p_setChoiceComponent( const argr_Control : TDBRadioGroup );
+var li_Size : Integer;
 Begin
-  argr_Control.Height:=argr_Control.Items.Count  * gi_FontHeight + flin_getComponentProperty ( argr_Control, 'BorderWidth' )  * 2 ;
+  with argr_Control do
+    begin
+      Height:= Items.Count  * gi_FontHeight + flin_getComponentProperty ( argr_Control, 'BorderWidth' )  * 2 ;
+    end;
 end;
 
 
@@ -1528,6 +1545,10 @@ var lnod_FieldProperties : TALXMLNode ;
             Begin
               lb_IsLocal := True;
             End;
+          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_CREATE)
+          and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE )
+           then lffd_ColumnFieldDef.ColCree  := True
+           Else lffd_ColumnFieldDef.ColCree  := False;
           p_setNodeId ( anod_Field, lnod_FieldProperties, afws_Source );
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_hidden )
           and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
@@ -1706,12 +1727,9 @@ var lnod_FieldProperties : TALXMLNode ;
 
       p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
 
-//      awin_Control.BeginUpdateBounds;
-
       p_setFieldComponentTop ( awin_Control, ab_Column );
 
       p_setFieldComponentData ( awin_Control, afws_Source, lffd_ColumnFieldDef, lb_IsLocal );
-
 
       llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, lfd_FieldDef, ai_Counter, ab_Column, lffd_ColumnFieldDef );
 
@@ -1719,7 +1737,6 @@ var lnod_FieldProperties : TALXMLNode ;
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
        Else
         p_setComponentLeft  ( awin_Control, ab_Column );
-//      awin_Control.EndUpdateBounds;
     end;
 
     // procedure p_SetParentWidth
@@ -1753,38 +1770,40 @@ begin
   // Placing the created control
   if fb_CreateComponents ( Result )  Then
     if assigned ( Result ) Then
-      if awin_Last <> nil then
-        Begin
-          Result.Top := awin_Last.Top + awin_Last.Height + CST_XML_FIELDS_INTERLEAVING;
-          if Assigned(llab_Label) Then
-            llab_Label.Top:=Result.Top;
-          p_SetParentWidth ;
-          awin_Last := Result;
-        end
-       Else
-        if ( awin_Parent is TGroupBox )
-         Then
-           Begin
-             Result.Top:=CST_XML_FIELDS_INTERLEAVING;
-             if Assigned(llab_Label) Then
-               llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
-             p_SetParentWidth ;
-             awin_Last := Result;
-           end
-          Else
+      Begin
+        if awin_Last <> nil then
           Begin
-            ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
-            if FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
-              Width := FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width;
-            gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
-            if gi_LastFormFieldsHeight < Result.Top + Result.Height then
-              Begin
-                gi_LastFormFieldsHeight := Result.Top + Result.Height ;
-                if FMainPanel.Top + FActionPanel.Height + Result.Top + Result.Height > Height then
-                  Height := FMainPanel.Top + Result.Top + FActionPanel.Height + Result.Height;
+            Result.Top := awin_Last.Top + awin_Last.Height + CST_XML_FIELDS_INTERLEAVING;
+            if Assigned(llab_Label) Then
+              llab_Label.Top:=Result.Top;
+            p_SetParentWidth ;
+            awin_Last := Result;
+          end
+         Else
+          if ( awin_Parent is TGroupBox )
+           Then
+             Begin
+               Result.Top:=CST_XML_FIELDS_INTERLEAVING;
+               if Assigned(llab_Label) Then
+                 llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
+               p_SetParentWidth ;
+               awin_Last := Result;
+             end
+            Else
+            Begin
+              ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
+              if FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
+                Width := FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width;
+              gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
+              if gi_LastFormFieldsHeight < Result.Top + Result.Height then
+                Begin
+                  gi_LastFormFieldsHeight := Result.Top + Result.Height ;
+                  if FMainPanel.Top + FActionPanel.Height + Result.Top + Result.Height > Height then
+                    Height := FMainPanel.Top + Result.Top + FActionPanel.Height + Result.Height;
 
-              End;
-          end ;
+                End;
+            end ;
+      end;
   if assigned ( lxfc_ButtonCombo ) Then
     Begin
       lxfc_ButtonCombo.AutoPlace;
