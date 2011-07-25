@@ -43,7 +43,8 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.2 : Forcing Not registered forms when searching form xml file.'  + #13#10 +
+                                  BugsStory : '0.9.1.3 : Testing.'  + #13#10 +
+                                              '0.9.1.2 : Forcing Not registered forms when searching form xml file.'  + #13#10 +
                                               '0.9.1.1 : Integrating TXMLFillCombo button.'  + #13#10 +
                                               '0.9.1.0 : Really integrating group view.'  + #13#10 +
                                               '0.9.0.2 : Childs Source for struct node.'  + #13#10 +
@@ -52,7 +53,7 @@ const
                                               '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 2 );
+                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 3 );
 {$ENDIF}
 
 type
@@ -165,7 +166,7 @@ type
       const ab_Column: Boolean);
     procedure p_setFieldComponentTop(const awin_Control: TWinControl;
       const ab_Column: Boolean);
-    procedure p_setFieldComponentData(const awin_Control: TWinControl; const afw_column: TFWSource; const afw_columnField: TFWFieldColumn; const ab_IsLocal : Boolean ); virtual;
+    procedure p_setFieldComponentData(const awin_Control: TWinControl; const afw_Source: TFWSource; const afw_columnField: TFWFieldColumn; const ab_IsLocal : Boolean ); virtual;
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
@@ -747,21 +748,22 @@ Begin
   Result.FormRegisteredName:=as_Table;
   with Result.Combo do
     Begin
+      Width := 100;
       if as_FieldsDisplay <> '' Then
        Begin
          ls_Fields := as_FieldsID + ',' + as_FieldsDisplay;
-         {$IFDEF FPC}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
+         {$IFNDEF RXJV}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
        end
       Else
        ls_Fields := as_FieldsID;
       if ls_Fields <> '' Then
-        {$IFDEF FPC}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+        {$IFNDEF RXJV}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
       if as_Name <> '' Then
         Begin
          Hint:=fs_GetLabelCaption(as_Name);
          ShowHint:=True;
         end;
-      {$IFDEF FPC}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
+      {$IFNDEF RXJV}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
     end;
 end;
 
@@ -876,8 +878,8 @@ Begin
           ls_ClassLink := fs_GetNodeAttribute( lnode, CST_LEON_ID );
         /// getting other xml file info
         ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_ClassBind, ls_ClassLink, ls_Connection, llis_IdRelation, llis_DisplayRelation, lnod_CrossLinkRelation );
-        li_i := fi_FindConnection(ls_Connection, True );
         ls_FieldsID := fs_GetStringFields  ( llis_IdRelation , '', True );
+        li_i := fi_FindConnection(ls_Connection, True );
 
         if high ( la_FieldsBind ) < 0 Then
          // 1-N relationships
@@ -953,7 +955,7 @@ End;
 //procedure p_setFieldComponent
 // after having fully read the field nodes last setting of field component
 // awin_Control : Component to set
-// afw_column : Form Column
+// afw_Source : Form Column
 // afw_columnField : Field Column
 // ab_IsLocal : Not linked to data
 // ab_Column : Second editing column
@@ -966,12 +968,12 @@ begin
     awin_Control.Top := gi_LastFormFieldsHeight + CST_XML_FIELDS_INTERLEAVING ;
 end;
 
-procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_column : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
+procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
 begin
   if not ab_IsLocal Then
     Begin
       p_setComponentProperty       ( awin_Control, 'DataField' , afw_columnField.FieldName );
-      p_setComponentObjectProperty ( awin_Control, 'Datasource', afw_column.Datasource );
+      p_setComponentObjectProperty ( awin_Control, 'Datasource', afw_Source.Datasource );
     end;
 end;
 procedure TF_XMLForm.p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
@@ -1171,8 +1173,8 @@ begin
   OnClose:=p_CloseLoginAction;
   Name := CST_COMPONENTS_FORM_BEGIN + 'AutoLoginForm' ;
   // Initiate data and showing
-  FormCreate ( Self );
   EnableAlign ;
+  FormCreate ( Self );
   Position := poDesktopCenter;
 //  FormStyle:=fsNoStayOnTop;
   {$IFDEF FPC}
@@ -1514,6 +1516,7 @@ var lnod_FieldProperties : TALXMLNode ;
     lxfc_ButtonCombo : TXMLFillCombo;
 
     // Function fb_getFieldOptions
+    // setting some data properties
     // Result : quitting
     function fb_getFieldOptions: Boolean;
     begin
@@ -1554,6 +1557,8 @@ var lnod_FieldProperties : TALXMLNode ;
 
     end;
 
+    // procedure p_CreateArrayStructComponents
+    // Creating groupbox with controls
     procedure p_CreateArrayStructComponents ;
     var li_k, li_l, li_FieldCounter : LongInt ;
         lb_column : Boolean;
@@ -1687,6 +1692,8 @@ var lnod_FieldProperties : TALXMLNode ;
       or ( awin_Control is TDBGroupView ) then
         Exit;
 
+      // The created control must be set and placed
+
       Result := True;
 
       if awin_Control is TXMLFillCombo
@@ -1695,11 +1702,11 @@ var lnod_FieldProperties : TALXMLNode ;
            lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
            p_setControl( 'xfc_', awin_Control, awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
            awin_Control := ( awin_Control as TXMLFillCombo ).Combo;
-         end
-        Else
-         lxfc_ButtonCombo := nil;
+         end;
 
       p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+
+//      awin_Control.BeginUpdateBounds;
 
       p_setFieldComponentTop ( awin_Control, ab_Column );
 
@@ -1712,10 +1719,7 @@ var lnod_FieldProperties : TALXMLNode ;
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
        Else
         p_setComponentLeft  ( awin_Control, ab_Column );
-      if assigned ( lxfc_ButtonCombo ) Then
-        Begin
-          lxfc_ButtonCombo.AutoPlace;
-        end;
+//      awin_Control.EndUpdateBounds;
     end;
 
     // procedure p_SetParentWidth
@@ -1729,6 +1733,7 @@ var lnod_FieldProperties : TALXMLNode ;
 
 begin
    Result := nil;
+   // create eventually a tabsheet if too many controls
    If  ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT)
    and not ( awin_Parent is TGroupBox ) Then
      with afws_Source do
@@ -1742,6 +1747,10 @@ begin
          afws_Source.Panels.add.Panel := awin_Parent;
        End;
 
+  // Initing fb_CreateComponents
+  lxfc_ButtonCombo := nil;
+
+  // Placing the created control
   if fb_CreateComponents ( Result )  Then
     if assigned ( Result ) Then
       if awin_Last <> nil then
@@ -1776,6 +1785,10 @@ begin
 
               End;
           end ;
+  if assigned ( lxfc_ButtonCombo ) Then
+    Begin
+      lxfc_ButtonCombo.AutoPlace;
+    end;
 end;
 // fonction fpc_CreatePageControl
 // Creating a pagecontrol
