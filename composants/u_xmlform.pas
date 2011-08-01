@@ -1546,9 +1546,9 @@ var lnod_FieldProperties : TALXMLNode ;
               lb_IsLocal := True;
             End;
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_CREATE)
-          and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE )
-           then lffd_ColumnFieldDef.ColCree  := True
-           Else lffd_ColumnFieldDef.ColCree  := False;
+           then lffd_ColumnFieldDef.ColCree  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
+          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_UNIQUE)
+           then lffd_ColumnFieldDef.ColUnique  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
           p_setNodeId ( anod_Field, lnod_FieldProperties, afws_Source );
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_hidden )
           and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
