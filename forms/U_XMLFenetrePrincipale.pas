@@ -578,8 +578,6 @@ Begin
     mc_Customize.LoadIni;
   mtb_CustomizedMenu.Menu := nil;
   mtb_CustomizedMenu.Menu := mu_MenuIni;
-  mu_voletchange ( FInifile.ReadBool ( Name,  'tbar_volet.Visible', mu_voletexplore.Checked ));
-  mu_voletPersonnalisechange ( FInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked ));
 End;
 procedure TF_FenetrePrincipale.p_SetLedColor( const ab_Status : Boolean );
 begin
@@ -658,6 +656,8 @@ procedure TF_FenetrePrincipale.SvgFormInfoIniIniLoad( const
    AInifile: TCustomInifile; var Continue: Boolean);
 begin
   tbar_outils    .Visible := AInifile.ReadBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
+  mu_voletchange ( FInifile.ReadBool ( Name,  'tbar_volet.Visible', mu_voletexplore.Checked ));
+  mu_voletPersonnalisechange ( FInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked ));
 
 end;
 

@@ -27,6 +27,7 @@ uses
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
+  U_ExtComboInsert,
   fonctions_manbase,
 {$IFDEF VERSIONS}
   fonctions_version,
@@ -140,13 +141,14 @@ type
                              const awin_Control: TWinControl;
                              const awin_Parent: TWinControl;
                              const anod_Field: TALXMLNode;
-                             const ai_FieldCounter, ai_counter: Longint); virtual;
+                             const ai_FieldCounter, ai_counter: Longint ); virtual;
     function fdbc_CreateLookupCombo ( const awin_Parent: TWinControl;
                                       const ai_Connection : Integer;
                                       const as_Table, as_FieldsID,
                                             as_FieldsDisplay, as_Name : String;
                                       const alis_IdRelation : TList;
-                                      const ai_FieldCounter, ai_Counter : Integer
+                                      const ai_FieldCounter, ai_Counter : Integer ;
+                                      const OneFieldToFill : Boolean
                                       ): TXMLFillCombo; virtual;
     function fdbg_GroupViewComponents ( const afws_source : TFWSource ;
                                         const awin_Parent : TWinControl ;
@@ -738,13 +740,16 @@ function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
                                              const as_Table, as_FieldsID,
                                                    as_FieldsDisplay, as_Name : String;
                                              const alis_IdRelation : TList;
-                                             const ai_FieldCounter, ai_Counter : Integer)
+                                             const ai_FieldCounter, ai_Counter : Integer;
+                                             const OneFieldToFill : Boolean )
                                              :TXMLFillCombo;
 var
     ls_Fields : String;
 Begin
   Result :=  TXMLFillCombo.Create(Self);
-  Result.Combo := TFWDBLookupCombo.Create ( Self );
+  if OneFieldToFill
+   Then Result.Combo := TExtDBComboInsert.Create ( Self )
+   Else Result.Combo := TFWDBLookupCombo.Create ( Self );
   Result.FormRegisteredName:=as_Table;
   with Result.Combo do
     Begin
@@ -758,6 +763,11 @@ Begin
        ls_Fields := as_FieldsID;
       if ls_Fields <> '' Then
         {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+      if OneFieldToFill Then
+        Begin
+         ( Result.Combo as TExtDBComboInsert).SearchSource := fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+        end;
+
       if as_Name <> '' Then
         Begin
          Hint:=fs_GetLabelCaption(as_Name);
@@ -786,6 +796,7 @@ var ldoc_XMlRelation : TALXMLDocument ;
     la_FieldsBind : TRelationBind;
     li_i : Integer;
     ls_FieldsID, ls_Name, ls_FieldsDisplay : String;
+    lb_OneFieldToFill : boolean;
 
     //  function fb_ClassRef
     //  Joining a 1-n relationship
@@ -876,8 +887,9 @@ Begin
         // Getting the class finally
         if ( ls_ClassLink = '' ) then
           ls_ClassLink := fs_GetNodeAttribute( lnode, CST_LEON_ID );
+        lb_OneFieldToFill := False;
         /// getting other xml file info
-        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_ClassBind, ls_ClassLink, ls_Connection, llis_IdRelation, llis_DisplayRelation, lnod_CrossLinkRelation );
+        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_ClassBind, ls_ClassLink, ls_Connection, llis_IdRelation, llis_DisplayRelation, lnod_CrossLinkRelation, lb_OneFieldToFill );
         ls_FieldsID := fs_GetStringFields  ( llis_IdRelation , '', True );
         li_i := fi_FindConnection(ls_Connection, True );
 
@@ -889,7 +901,7 @@ Begin
                                                ls_FieldsID, ls_FieldsDisplay,
                                                ls_Name,
                                                llis_idRelation,
-                                               ai_FieldCounter, ai_Counter );
+                                               ai_FieldCounter, ai_Counter, lb_OneFieldToFill );
           end
          else
            Begin
@@ -946,7 +958,7 @@ begin
     End;
 
 end;
-procedure TF_XMLForm.p_setControl  ( const as_BeginName : String ; const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint  );
+procedure TF_XMLForm.p_setControl  ( const as_BeginName : String ; const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint );
 begin
   awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
   awin_Control.Parent := awin_Parent ;

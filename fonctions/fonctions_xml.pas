@@ -178,6 +178,7 @@ function fs_getImagesDir : String;
 function fs_getProjectDir : String;
 function fs_LeonFilter ( const AString : String ): String;
 procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
+procedure p_CountMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean;  var ai_Count : Integer );
 function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
 function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute : String ) : String ;
 function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode ;
@@ -239,6 +240,33 @@ Begin
               Begin
                 aano_IdNOdes.Add ( anod_Field );
               End;
+            Break;
+          End;
+      End;
+End;
+
+// procedure p_GetMarkFunction
+// Getting field marks
+// anod_Field : Node Field
+// as_MarkSearched : Mark searched
+// aano_IdNodes : List to add scruted field node
+procedure p_CountMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean; var ai_Count : Integer );
+var lnod_FieldProperties : TALXMLNode ;
+    li_i : Integer ;
+Begin
+  if anod_Field.HasChildNodes then
+    for li_i := 0 to anod_Field.ChildNodes.Count -1 do
+      Begin
+        lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
+        if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
+          Begin
+            if  (         lnod_FieldProperties.HasAttribute ( as_MarkSearched )
+                   and (( not ( lnod_FieldProperties.Attributes [ as_MarkSearched ] = CST_LEON_BOOL_FALSE )
+                   and ab_IsTrue ))
+                or ( ( not lnod_FieldProperties.HasAttribute ( as_MarkSearched )
+                       or ( lnod_FieldProperties.Attributes [ as_MarkSearched ] = CST_LEON_BOOL_FALSE ))
+                      and not ab_IsTrue )) Then
+                inc ( ai_Count );
             Break;
           End;
       End;

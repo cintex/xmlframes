@@ -123,7 +123,7 @@ function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : 
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TAConnection; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
-                                    var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
+                                    var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
 function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
 procedure p_CreateRootEntititiesForm;
 procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
@@ -2012,14 +2012,16 @@ End ;
 ////////////////////////////////////////////////////////////////////////////////
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
-                                    var anod_NodeCrossLink : TALXMLNode ): TALXMLDocument ;
+                                    var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
 var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties,
     lnod_Node : TALXMLNode;
     ls_ProjectFile : String;
+    li_CountFields : Integer;
 begin
   Result := TALXMLDocument.Create ( Application );
   ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
+  li_CountFields := 0 ;
   If ( FileExists ( ls_ProjectFile )) Then
     try
       if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
@@ -2046,6 +2048,7 @@ begin
                             Begin
                               p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_id, aanod_idRelation );
                               p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_main, aanod_DisplayRelation );
+                              p_CountMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_optional, False, li_CountFields );
                             End;
                         End;
                     End;
@@ -2058,6 +2061,8 @@ begin
           ShowMessage ( 'Erreur : ' + E.Message );
         End;
     End ;
+  if li_CountFields <= 1 Then
+   ab_OnFieldToFill := True;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
