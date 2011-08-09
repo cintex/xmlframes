@@ -1046,6 +1046,7 @@ begin
    p_LoginOKClick (Self );
 end;
 
+{$IFDEF FPC}
 procedure TF_XMLForm.Doshow;
 var li_i : Integer;
     lcom_Component : TComponent;
@@ -1075,6 +1076,7 @@ begin
     end;
   inherited;
 end;
+{$ENDIF}
 
 // procedure p_setLogin
 // Special Login model
@@ -2060,6 +2062,7 @@ begin
   gfin_FormIni.Name := CST_COMPONENTS_FORMINI;
   gfin_FormIni.AutoUpdate := True;
   gfin_FormIni.AutoLoad   := False;
+  DataCloseMessage := True;
 end;
 
 /////////////////////////////////////////////////////////////////////////

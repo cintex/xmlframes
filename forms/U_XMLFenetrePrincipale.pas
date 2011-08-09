@@ -648,8 +648,8 @@ procedure TF_FenetrePrincipale.SvgFormInfoIniIniLoad( const
    AInifile: TCustomInifile; var Continue: Boolean);
 begin
   tbar_outils    .Visible := AInifile.ReadBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
-  mu_voletchange ( AInifile.ReadBool ( Name,  'tbar_volet.Visible', mu_voletexplore.Checked ));
-  mu_voletPersonnalisechange ( AInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked ));
+  mu_voletchange ( AInifile.ReadBool ( Name,  'tbar_volet.Visible', tbar_volet.Visible ));
+  mu_voletPersonnalisechange ( AInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mtb_CustomizedMenu.Visible ));
 
 end;
 
@@ -657,8 +657,8 @@ procedure TF_FenetrePrincipale.SvgFormInfoIniIniWrite(
   const AInifile: TCustomInifile; var Continue: Boolean);
 begin
   AInifile.WriteBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
-  AInifile.WriteBool ( Name, 'tbar_volet.Visible' , mu_voletexplore.Checked );
-  AInifile.WriteBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked );
+  AInifile.WriteBool ( Name, 'tbar_volet.Visible' , tbar_volet.Visible );
+  AInifile.WriteBool ( Name,  'tbar_voletcustom.Visible', mtb_CustomizedMenu.Visible );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
