@@ -181,7 +181,6 @@ type
     procedure mu_voletchange(const ab_visible: Boolean);
     procedure mu_voletPersonnalisechange(const ab_visible: Boolean);
     procedure p_SetLedColor(const ab_Status: Boolean );
-    procedure p_VoletsSave;
 {$IFNDEF FPC}
     procedure WMHelp (var Message: TWMHelp); message WM_HELP;
 {$ENDIF}
@@ -612,13 +611,11 @@ end;
 procedure TF_FenetrePrincipale.mu_voletexploreClick(Sender: TObject);
 begin
   mu_voletchange( not mu_voletexplore.Checked );
-  p_VoletsSave;
 end;
 
 procedure TF_FenetrePrincipale.mi_CustomizedMenuClick(Sender: TObject);
 begin
   mu_voletPersonnalisechange( not mi_CustomizedMenu.Checked );
-  p_VoletsSave;
 end;
 
 
@@ -634,11 +631,6 @@ begin
   p_voletchange(ab_visible, tbar_volet, mu_voletexplore, mi_CustomizedMenu, spl_volet, mtb_CustomizedMenu );
 end;
 
-procedure TF_FenetrePrincipale.p_VoletsSave;
-begin
-  FInifile.WriteBool ( Name, 'tbar_volet.Visible' , mu_voletexplore.Checked );
-  FInifile.WriteBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked );
-end;
 ////////////////////////////////////////////////////////////////////////////////
 //  Boîte de dialogue à propos
 ////////////////////////////////////////////////////////////////////////////////
@@ -656,8 +648,8 @@ procedure TF_FenetrePrincipale.SvgFormInfoIniIniLoad( const
    AInifile: TCustomInifile; var Continue: Boolean);
 begin
   tbar_outils    .Visible := AInifile.ReadBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
-  mu_voletchange ( FInifile.ReadBool ( Name,  'tbar_volet.Visible', mu_voletexplore.Checked ));
-  mu_voletPersonnalisechange ( FInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked ));
+  mu_voletchange ( AInifile.ReadBool ( Name,  'tbar_volet.Visible', mu_voletexplore.Checked ));
+  mu_voletPersonnalisechange ( AInifile.ReadBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked ));
 
 end;
 
@@ -665,7 +657,8 @@ procedure TF_FenetrePrincipale.SvgFormInfoIniIniWrite(
   const AInifile: TCustomInifile; var Continue: Boolean);
 begin
   AInifile.WriteBool ( Name, 'tbar_outils.Visible', tbar_outils.Visible );
-
+  AInifile.WriteBool ( Name, 'tbar_volet.Visible' , mu_voletexplore.Checked );
+  AInifile.WriteBool ( Name,  'tbar_voletcustom.Visible', mi_CustomizedMenu.Checked );
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
