@@ -190,7 +190,7 @@ msgstr ""
 
 #: unite_variables.gs_fermer_application
 msgid "Confirmez-vous la fermeture de l'application ?"
-msgstr ""
+msgstr "Do you confirm quitting ?"
 
 #: unite_variables.gs_form_erreur_charge_colonnes
 msgid "Erreur au chargement des colonnes de @ARG..."
@@ -198,7 +198,7 @@ msgstr ""
 
 #: unite_variables.gs_form_pas_bonne_colonne
 msgid "Un champ dans la table est mal renseigné"
-msgstr ""
+msgstr "A field is bad set"
 
 #: unite_variables.gs_form_pas_connexion
 msgid "Pas de connexion ADO pour les DataSources propriétés de la fiche."
@@ -225,11 +225,11 @@ msgstr ""
 
 #: unite_variables.gs_groupe_exclure
 msgid "Exclure"
-msgstr ""
+msgstr "Exclude"
 
 #: unite_variables.gs_groupe_inclure
 msgid "Inclure"
-msgstr ""
+msgstr "Include"
 
 #: unite_variables.gs_groupe_mauvais_boutons
 msgid ""
@@ -244,11 +244,11 @@ msgstr ""
 
 #: unite_variables.gs_groupe_tout_exclure
 msgid "Tout exclure"
-msgstr ""
+msgstr "Exclude all"
 
 #: unite_variables.gs_groupe_tout_inclure
 msgid "Tout inclure"
-msgstr ""
+msgstr "Include all"
 
 #: unite_variables.gs_groupe_vider
 msgid ""
@@ -258,11 +258,11 @@ msgstr ""
 
 #: unite_variables.gs_group_exclude_list
 msgid "Liste d'exclusion"
-msgstr ""
+msgstr "Exclude list"
 
 #: unite_variables.gs_group_include_list
 msgid "Liste d'inclusion"
-msgstr ""
+msgstr "Include list"
 
 #: unite_variables.gs_ini_file_fusion
 msgid "FUSION.TMP"
@@ -290,7 +290,7 @@ msgstr ""
 
 #: unite_variables.gs_inserer_enregistrement
 msgid "Insérer un enregistrement"
-msgstr ""
+msgstr "Insert a record"
 
 #: unite_variables.gs_invalidcomponentname
 msgid "Ce nom de composant est invalide : "
@@ -306,11 +306,11 @@ msgstr ""
 
 #: unite_variables.gs_login
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: unite_variables.gs_login_failed
 msgid "Le Login et son mot de passe sont incorrects."
-msgstr ""
+msgstr "Bad login or password."
 
 #: unite_variables.gs_menu_clep_en_double
 msgctxt "unite_variables.gs_menu_clep_en_double"
@@ -352,11 +352,11 @@ msgstr ""
 
 #: unite_variables.gs_navigateur_vers_le_bas
 msgid "Déplacer la ligne vers le bas"
-msgstr ""
+msgstr "Move line at the prior line"
 
 #: unite_variables.gs_navigateur_vers_le_haut
 msgid "Déplacer la ligne vers le haut"
-msgstr ""
+msgstr "Move line at the next line"
 
 #: unite_variables.gs_nom_utilisateur_invalide
 msgid ""
@@ -366,7 +366,7 @@ msgstr ""
 
 #: unite_variables.gs_password
 msgid "Mot de passe"
-msgstr ""
+msgstr "Password"
 
 #: unite_variables.gs_pas_cette_fonction
 msgid ""
@@ -444,21 +444,26 @@ msgstr ""
 
 #: unite_variables.gs_valider_modifications
 msgid "Valider les modifications"
-msgstr ""
+msgstr "Validate"
 
 #: unite_variables.gs_zones_obligatoires
 msgid ""
 "Les zones suivantes ne peuvent pas être vides : @ARG .\n"
 "\n"
 "Effectuer une saisie ou annuler.\n"
-msgstr ""
+msgstr "These fields can't be empty : @ARG .\n"
+"\n"
+"Modify them or cancel your changes.\n"
 
 #: unite_variables.gs_zones_uniques
 msgid ""
 "Les zones suivantes sont uniques : @ARG .\n"
 "\n"
 "Modifier ces champs, réessayer, ou annuler.\n"
-msgstr ""
+msgstr""
+"These fields can't be cloned : @ARG .\n"
+"\n"
+"Modify them, retry or cancel your changes.\n"
 
 #: unite_variables.gs_zone_obligatoire
 msgid ""
@@ -466,6 +471,8 @@ msgid ""
 "\n"
 "Effectuer une saisie ou annuler.\n"
 msgstr ""
+"The field @ARG can't be empty.\n"
+"Modify it or cancel your changes.\n"
 
 #: unite_variables.gs_zone_unique
 msgid ""
@@ -473,4 +480,7 @@ msgid ""
 "\n"
 "Modifier ce champ, réessayer, ou annuler.\n"
 msgstr ""
+"The field @ARG can't be cloned.\n"
+"\n"
+"Modify it, retry or cancel your changes.\n"
 
