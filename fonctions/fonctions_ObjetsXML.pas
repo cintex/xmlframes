@@ -147,7 +147,7 @@ function fa_GetArrayFields  ( const alis_NodeFields : TList ):TStringArray;
 procedure p_initialisationSommaire ( const as_SommaireEnCours      : String       );
 procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}TTntForm{$ELSE}TForm{$ENDIF}        ;
                                     const aMen_MenuLanguage       : TMenuItem       ;
-                        			      const aWin_PanelVolet         : TScrollingWinControl  ;
+                        	    const aWin_PanelVolet         : TScrollingWinControl  ;
 //                                    const aWin_BarreVolet         : TWinControl  ;
                                     const aMen_MenuVolet          : TMenuItem    ;
                                     const aIco_DefaultPicture     : TIcon        ;
