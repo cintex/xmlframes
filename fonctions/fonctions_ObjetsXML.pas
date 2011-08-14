@@ -213,6 +213,7 @@ function fb_CreeLeMenu : Boolean ;
 
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
 procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
+procedure p_RegisterLanguages;
 
 implementation
 
@@ -240,6 +241,15 @@ Begin
       End;
 
 End;
+
+procedure p_RegisterLanguages;
+var ls_softDir : String ;
+ Begin
+  ls_softDir := fs_getSoftDir ;
+// to be continued
+end;
+
+
 
 /////////////////////////////////////////////////////////////////////////
 // function fi_FindAction
