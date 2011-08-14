@@ -1616,12 +1616,12 @@ var lnod_FieldProperties : TALXMLNode ;
         li_FieldCounter := 0 ;
         with afws_Source.Linked.Add do
           Begin
-            Source:=Sources.Count - 1;
+            Source:=lfwc_Column;
             LookupFields := ls_NodeId;
           end;
         with lfwc_Column.Linked.Add do
           Begin
-            Source:=ai_Counter;
+            Source:=afws_Source;
           end;
        end;
       if lnod_OriginalNode.HasChildNodes then
