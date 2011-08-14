@@ -580,7 +580,7 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="229"/>
+        <TopLine Value="255"/>
         <CursorPos X="84" Y="256"/>
         <UsageCount Value="16"/>
         <Loaded Value="True"/>
@@ -1563,9 +1563,14 @@
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <OptimizationLevel Value="0"/>
+        <OptimizationLevel Value="3"/>
       </Optimizations>
     </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <UseLineInfoUnit Value="False"/>
+      </Debugging>
+    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>
@@ -1574,7 +1579,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="13">
+    <BreakPoints Count="12">
       <Item1>
         <Source Value="../Alcinoe/source/ALXMLDoc.pas"/>
         <Line Value="1513"/>
@@ -1623,10 +1628,6 @@
         <Source Value="../../../ManFrames/composants/u_customframework.pas"/>
         <Line Value="3329"/>
       </Item12>
-      <Item13>
-        <Source Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Line Value="274"/>
-      </Item13>
     </BreakPoints>
     <Exceptions Count="3">
       <Item1>
