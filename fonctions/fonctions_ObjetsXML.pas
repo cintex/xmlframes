@@ -217,7 +217,7 @@ procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBi
 implementation
 
 uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
-     fonctions_images , fonctions_init, U_XMLFenetrePrincipale, 
+     fonctions_images , fonctions_system , fonctions_init, U_XMLFenetrePrincipale,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents,
      unite_variables, u_xmlform, u_languagevars, Imaging ;
