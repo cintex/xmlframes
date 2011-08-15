@@ -55,15 +55,15 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="172">
+    <Units Count="178">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="hotel"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="97" Y="12"/>
+        <TopLine Value="10"/>
+        <CursorPos X="1" Y="23"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -577,11 +577,11 @@
       <Unit69>
         <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
         <UnitName Value="fonctions_Objets_Dynamiques"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="352"/>
-        <CursorPos X="19" Y="376"/>
-        <UsageCount Value="16"/>
+        <TopLine Value="320"/>
+        <CursorPos X="3" Y="328"/>
+        <UsageCount Value="17"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit69>
@@ -599,11 +599,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="6480"/>
         <CursorPos X="28" Y="6518"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit71>
       <Unit72>
@@ -639,9 +639,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="206"/>
-        <CursorPos X="41" Y="220"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="229"/>
+        <CursorPos X="1" Y="266"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit75>
       <Unit76>
@@ -651,7 +651,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="79"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="52"/>
         <Loaded Value="True"/>
       </Unit76>
       <Unit77>
@@ -818,9 +818,9 @@
       <Unit97>
         <Filename Value="/usr/share/fpcsrc/2.4.2/rtl/inc/systemh.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="742"/>
-        <CursorPos X="11" Y="765"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="464"/>
+        <CursorPos X="26" Y="120"/>
+        <UsageCount Value="10"/>
       </Unit97>
       <Unit98>
         <Filename Value="../../../Extended/composants/U_ExtComboInsert.pas"/>
@@ -852,11 +852,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="250"/>
-        <CursorPos X="21" Y="254"/>
-        <UsageCount Value="25"/>
+        <TopLine Value="231"/>
+        <CursorPos X="1" Y="254"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit101>
       <Unit102>
@@ -877,12 +877,10 @@
       <Unit104>
         <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
         <UnitName Value="fonctions_string"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="681"/>
         <CursorPos X="2" Y="707"/>
         <UsageCount Value="17"/>
-        <Loaded Value="True"/>
       </Unit104>
       <Unit105>
         <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
@@ -986,11 +984,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_FormMainIni"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="312"/>
         <CursorPos X="38" Y="326"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit117>
       <Unit118>
@@ -1401,12 +1399,10 @@
       <Unit168>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
         <UnitName Value="Translations"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="355"/>
         <CursorPos X="3" Y="359"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit168>
       <Unit169>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dialogs.pp"/>
@@ -1427,134 +1423,186 @@
       <Unit171>
         <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
         <UnitName Value="fonctions_system"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
         <CursorPos X="70" Y="27"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit171>
+      <Unit172>
+        <Filename Value="../../../ExtCopy/fonctions/fonctions_file.pas"/>
+        <UnitName Value="fonctions_file"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="66"/>
+        <CursorPos X="1" Y="85"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit172>
+      <Unit173>
+        <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-base/src/gettext.pp"/>
+        <UnitName Value="gettext"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="307"/>
+        <CursorPos X="3" Y="309"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit173>
+      <Unit174>
+        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/lclproc.pas"/>
+        <UnitName Value="LCLProc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="4500"/>
+        <CursorPos X="71" Y="4529"/>
+        <UsageCount Value="10"/>
+      </Unit174>
+      <Unit175>
+        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/defaulttranslator.pas"/>
+        <UnitName Value="DefaultTranslator"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="183"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit175>
+      <Unit176>
+        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/interfaces/gtk/gtkwinapi.inc"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="5107"/>
+        <CursorPos X="19" Y="5117"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit176>
+      <Unit177>
+        <Filename Value="/usr/lib/lazarus/0.9.30/ide/w32versioninfo.pas"/>
+        <UnitName Value="W32VersionInfo"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="67"/>
+        <CursorPos X="14" Y="90"/>
+        <UsageCount Value="10"/>
+      </Unit177>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="392" Column="1" TopLine="368"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="252" Column="1" TopLine="229"/>
       </Position1>
       <Position2>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="395" Column="1" TopLine="368"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="253" Column="1" TopLine="229"/>
       </Position2>
       <Position3>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="396" Column="1" TopLine="368"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="254" Column="1" TopLine="229"/>
       </Position3>
       <Position4>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="360" Column="1" TopLine="337"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="255" Column="1" TopLine="229"/>
       </Position4>
       <Position5>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="362" Column="1" TopLine="337"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="256" Column="1" TopLine="229"/>
       </Position5>
       <Position6>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="363" Column="1" TopLine="337"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="261" Column="58" TopLine="230"/>
       </Position6>
       <Position7>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="364" Column="1" TopLine="337"/>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="23" Column="1" TopLine="10"/>
       </Position7>
       <Position8>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="365" Column="1" TopLine="337"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1953" Column="94" TopLine="1915"/>
       </Position8>
       <Position9>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="366" Column="1" TopLine="337"/>
+        <Filename Value="../../forms/U_XMLFenetrePrincipale.pas"/>
+        <Caret Line="254" Column="1" TopLine="231"/>
       </Position9>
       <Position10>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="374" Column="1" TopLine="350"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="252" Column="1" TopLine="229"/>
       </Position10>
       <Position11>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="375" Column="1" TopLine="350"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="253" Column="1" TopLine="229"/>
       </Position11>
       <Position12>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="376" Column="1" TopLine="350"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="254" Column="1" TopLine="229"/>
       </Position12>
       <Position13>
-        <Filename Value="/usr/lib/lazarus/0.9.30/lcl/translations.pas"/>
-        <Caret Line="377" Column="1" TopLine="350"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="255" Column="1" TopLine="229"/>
       </Position13>
       <Position14>
-        <Filename Value="../../forms/U_XMLFenetrePrincipale.pas"/>
-        <Caret Line="254" Column="21" TopLine="250"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="256" Column="1" TopLine="229"/>
       </Position14>
       <Position15>
-        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Caret Line="375" Column="30" TopLine="368"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="258" Column="1" TopLine="229"/>
       </Position15>
       <Position16>
-        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="261" Column="1" TopLine="229"/>
       </Position16>
       <Position17>
-        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Caret Line="254" Column="56" TopLine="216"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="263" Column="1" TopLine="229"/>
       </Position17>
       <Position18>
-        <Filename Value="../../composants/u_xmlform.pas"/>
-        <Caret Line="1666" Column="34" TopLine="1653"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="261" Column="70" TopLine="229"/>
       </Position18>
       <Position19>
-        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1910" Column="36" TopLine="1909"/>
+        <Filename Value="../../forms/U_XMLFenetrePrincipale.pas"/>
+        <Caret Line="254" Column="1" TopLine="231"/>
       </Position19>
       <Position20>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="253" Column="1" TopLine="229"/>
       </Position20>
       <Position21>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1713" Column="43" TopLine="1675"/>
+        <Caret Line="254" Column="1" TopLine="229"/>
       </Position21>
       <Position22>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1831" Column="49" TopLine="1793"/>
+        <Caret Line="255" Column="1" TopLine="229"/>
       </Position22>
       <Position23>
-        <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
-        <Caret Line="68" Column="26" TopLine="46"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="256" Column="1" TopLine="229"/>
       </Position23>
       <Position24>
-        <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="258" Column="1" TopLine="229"/>
       </Position24>
       <Position25>
-        <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
-        <Caret Line="68" Column="1" TopLine="31"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="261" Column="1" TopLine="229"/>
       </Position25>
       <Position26>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="30" Column="19" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="263" Column="1" TopLine="229"/>
       </Position26>
       <Position27>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="34" Column="37" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="266" Column="1" TopLine="229"/>
       </Position27>
       <Position28>
-        <Filename Value="../../../Extended/composants/U_FormMainIni.pas"/>
-        <Caret Line="1750" Column="75" TopLine="1714"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="258" Column="1" TopLine="229"/>
       </Position28>
       <Position29>
-        <Filename Value="../../../ManFrames/fonctions/fonctions_Objets_Dynamiques.pas"/>
-        <Caret Line="85" Column="3" TopLine="75"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="261" Column="1" TopLine="229"/>
       </Position29>
       <Position30>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1831" Column="49" TopLine="1793"/>
+        <Caret Line="263" Column="1" TopLine="229"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1571,14 +1619,9 @@
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <OptimizationLevel Value="3"/>
+        <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
-    <Linking>
-      <Debugging>
-        <UseLineInfoUnit Value="False"/>
-      </Debugging>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>
@@ -1587,7 +1630,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="12">
+    <BreakPoints Count="14">
       <Item1>
         <Source Value="../Alcinoe/source/ALXMLDoc.pas"/>
         <Line Value="1513"/>
@@ -1636,6 +1679,14 @@
         <Source Value="../../../ManFrames/composants/u_customframework.pas"/>
         <Line Value="3329"/>
       </Item12>
+      <Item13>
+        <Source Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Line Value="253"/>
+      </Item13>
+      <Item14>
+        <Source Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Line Value="261"/>
+      </Item14>
     </BreakPoints>
     <Exceptions Count="3">
       <Item1>

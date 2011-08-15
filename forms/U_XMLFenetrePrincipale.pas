@@ -251,9 +251,7 @@ begin
   p_RegisterLanguages ( mu_langue );
 {$ELSE}
   {$IFDEF FPC}
-  p_RegisterALanguage ( 'en', 'English' );
-  p_RegisterALanguage ( 'fr', 'Français' );
-  p_RegisterALanguage ( 'en', 'Español' );
+  p_RegisterSomeLanguages;
   CreateLanguagesController ( mu_langue );
   {$ENDIF}
 {$ENDIF}

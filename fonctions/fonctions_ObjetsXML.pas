@@ -112,6 +112,9 @@ var
       ga_Functions : Array of TLeonFunction;
       gs_Language : String;
 
+const CST_DIR_LANGUAGE = 'properties'+ DirectorySeparator;
+      CST_SUBFILE_LANGUAGE =  'strings_';
+      CST_EXT_PROPERTIES = '.properties';
 
 procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
@@ -213,7 +216,7 @@ function fb_CreeLeMenu : Boolean ;
 
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
 procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
-procedure p_RegisterLanguages;
+procedure p_RegisterSomeLanguages;
 
 implementation
 
@@ -242,11 +245,30 @@ Begin
 
 End;
 
-procedure p_RegisterLanguages;
-var ls_softDir : String ;
+procedure p_RegisterSomeLanguages;
+var ls_Dir, ls_lang : String ;
+    lsr_Files : TSearchRec;
+    lb_IsFound : Boolean ;
  Begin
-  ls_softDir := fs_getSoftDir ;
-// to be continued
+  ls_Dir := fs_getSoftDir +CST_DIR_LANGUAGE;
+  try
+    lb_IsFound := FindFirst(ls_Dir+CST_SUBFILE_LANGUAGE+gs_NomApp+'_*'+CST_EXT_PROPERTIES, faAnyFile-faDirectory, lsr_Files) = 0;
+    while lb_IsFound do
+     begin
+        if FileExists ( ls_Dir + lsr_Files.Name )
+         Then
+          Begin
+            ls_lang:=Copy(lsr_Files.Name,Length(CST_SUBFILE_LANGUAGE+gs_NomApp+'_')+1, 2 );
+            {$IFDEF FPC}
+            p_RegisterALanguage ( ls_lang, ls_lang );
+            {$ENDIF}
+          end;
+        lb_IsFound := FindNext(lsr_Files) = 0;
+      end;
+    FindClose(lsr_Files);
+  Except
+    FindClose(lsr_Files);
+  End ;
 end;
 
 
@@ -278,17 +300,17 @@ End;
 procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
 var ls_ImagesDir : String;
     SR: TSearchRec;
-    IsFound : Boolean;
+    lb_IsFound : Boolean;
 Begin
   if as_Nom = '' Then
     Exit;
   ls_ImagesDir := fs_getImagesDir;
   try
-    IsFound := FindFirst(ls_ImagesDir + as_Nom + '.*', faAnyFile, SR) = 0 ;
+    lb_IsFound := FindFirst(ls_ImagesDir + as_Nom + '.*', faAnyFile, SR) = 0 ;
   Except
-    isFound := False;
+    lb_IsFound := False;
   End ;
-  while IsFound do
+  while lb_IsFound do
    begin
     if  FileExists ( ls_ImagesDir + SR.Name )
     and ( DetermineFileFormat ( ls_ImagesDir + SR.Name ) <> '' )
@@ -297,9 +319,9 @@ Begin
         p_SetFileToBitmap (ls_ImagesDir + SR.Name, abmp_Bitmap, True );
       End ;
     try
-      IsFound := FindNext(SR) = 0;
+      lb_IsFound := FindNext(SR) = 0;
     Except
-      isFound := False;
+      lb_IsFound := False;
     End ;
   end;
   FindClose(SR);
@@ -1916,9 +1938,9 @@ Begin
   Result := False;
   gstl_Labels.Free;
   gstl_Labels := TStringlist.Create ;
-  if fileExists ( fs_getSoftDir + 'properties'+ DirectorySeparator + 'strings_'+gs_NomApp + '_'+ as_little_lang+'.properties' ) then
+  if fileExists ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + '_' + as_little_lang+CST_EXT_PROPERTIES ) then
     Begin
-      gstl_Labels.LoadFromFile ( fs_getSoftDir + 'properties'+ DirectorySeparator + 'strings_'+gs_NomApp + '_'+ as_little_lang + '.properties' );
+      gstl_Labels.LoadFromFile ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + '_' +  as_little_lang + CST_EXT_PROPERTIES );
       if assigned ( gmif_MainFormIniInit ) then
         Begin
           gmif_MainFormIniInit.WriteString(INISEC_PAR,CST_INI_LANGUAGE,as_little_lang);
@@ -1928,9 +1950,9 @@ Begin
       fb_CreeLeMenu;
       Result := True;
     End
-  else if fileExists ( fs_getSoftDir + 'properties'+ DirectorySeparator + 'strings_'+gs_NomApp + '_en.properties' ) then
+  else if fileExists ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + CST_EXT_PROPERTIES ) then
     Begin
-      gstl_Labels.LoadFromFile ( fs_getSoftDir + 'properties'+ DirectorySeparator + 'strings_'+gs_NomApp + '_en.properties' );
+      gstl_Labels.LoadFromFile ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + CST_EXT_PROPERTIES );
     End;
 End;
 ////////////////////////////////////////////////////////////////////////////////
