@@ -13,6 +13,7 @@ uses
   fonctions_ObjetsXML,
   fonctions_string,
   fonctions_xml,
+  fonctions_system,
   Dialogs;
 
 {$R WindowsXP.res}

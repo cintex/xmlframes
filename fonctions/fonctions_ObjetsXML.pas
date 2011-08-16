@@ -272,9 +272,7 @@ var ls_Dir, ls_lang, ls_Language : String ;
             li_pos := Length(CST_SUBFILE_LANGUAGE+gs_NomApp+'_');
             ls_lang:=Copy(lsr_Files.Name,li_pos+1, posex ( '.', lsr_Files.Name, li_pos) - li_pos - 1);
             ls_Language:= fs_GetStringValue ( lini_Inifile, ls_lang );
-            {$IFDEF FPC}
             p_RegisterALanguage ( ls_lang, ls_Language);
-            {$ENDIF}
           end;
         lb_IsFound := FindNext(lsr_Files) = 0;
       end;

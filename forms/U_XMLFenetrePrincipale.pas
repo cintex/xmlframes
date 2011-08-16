@@ -247,14 +247,8 @@ begin
   AutoIniDB := False;
   if ( csDesigning in ComponentState ) Then
     Exit ;
-{$IFDEF TNT}
-  p_RegisterLanguages ( mu_langue );
-{$ELSE}
-  {$IFDEF FPC}
   p_RegisterSomeLanguages;
   CreateLanguagesController ( mu_langue );
-  {$ENDIF}
-{$ENDIF}
   {$IFDEF TNT}
   {$ELSE}
   {$IFDEF FPC}
@@ -815,9 +809,7 @@ procedure TF_FenetrePrincipale.p_OnClickMenuLang(Sender:TObject);
 begin
     iIndex := ( Sender as TMenuItem ).Tag;
     ChangeLanguage( iIndex );
-    {$IFDEF FPC}
     fb_ReadLanguage ( {$IFDEF TNT}GetLanguageCode ( LangManager.LanguageID ){$ELSE}ga_SoftwareLanguages [ iIndex ].LittleLang{$ENDIF});
-    {$ENDIF}
 end;
 initialization
 {$IFDEF VERSIONS}
