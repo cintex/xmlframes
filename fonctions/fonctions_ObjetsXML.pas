@@ -113,8 +113,10 @@ var
       gs_Language : String;
 
 const CST_DIR_LANGUAGE = 'properties'+ DirectorySeparator;
+      CST_DIR_LANGUAGE_LAZARUS = 'LangFiles'+ DirectorySeparator;
       CST_SUBFILE_LANGUAGE =  'strings_';
       CST_EXT_PROPERTIES = '.properties';
+      CST_FILE_LANGUAGES =  'languages'+CST_EXT_PROPERTIES;
 
 procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
@@ -223,8 +225,8 @@ implementation
 uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      fonctions_images , fonctions_system , fonctions_init, U_XMLFenetrePrincipale,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
-     fonctions_autocomponents, fonctions_dbcomponents,
-     unite_variables, u_xmlform, u_languagevars, Imaging ;
+     fonctions_autocomponents, fonctions_dbcomponents, strutils,
+     unite_variables, u_xmlform, u_languagevars, Imaging, fonctions_languages ;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -246,11 +248,20 @@ Begin
 End;
 
 procedure p_RegisterSomeLanguages;
-var ls_Dir, ls_lang : String ;
+var ls_Dir, ls_lang, ls_Language : String ;
     lsr_Files : TSearchRec;
     lb_IsFound : Boolean ;
+    lini_Inifile : TStringList;
+    li_pos : Cardinal;
  Begin
   ls_Dir := fs_getSoftDir +CST_DIR_LANGUAGE;
+  lini_Inifile := nil;
+  if FileExists( fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES) Then
+  try
+    lini_Inifile := TStringList.Create( );
+    lini_Inifile.LoadFromFile(fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES);
+  Except
+  End ;
   try
     lb_IsFound := FindFirst(ls_Dir+CST_SUBFILE_LANGUAGE+gs_NomApp+'_*'+CST_EXT_PROPERTIES, faAnyFile-faDirectory, lsr_Files) = 0;
     while lb_IsFound do
@@ -258,9 +269,11 @@ var ls_Dir, ls_lang : String ;
         if FileExists ( ls_Dir + lsr_Files.Name )
          Then
           Begin
-            ls_lang:=Copy(lsr_Files.Name,Length(CST_SUBFILE_LANGUAGE+gs_NomApp+'_')+1, 2 );
+            li_pos := Length(CST_SUBFILE_LANGUAGE+gs_NomApp+'_');
+            ls_lang:=Copy(lsr_Files.Name,li_pos+1, posex ( '.', lsr_Files.Name, li_pos) - li_pos - 1);
+            ls_Language:= fs_GetStringValue ( lini_Inifile, ls_lang );
             {$IFDEF FPC}
-            p_RegisterALanguage ( ls_lang, ls_lang );
+            p_RegisterALanguage ( ls_lang, ls_Language);
             {$ENDIF}
           end;
         lb_IsFound := FindNext(lsr_Files) = 0;
@@ -269,6 +282,7 @@ var ls_Dir, ls_lang : String ;
   Except
     FindClose(lsr_Files);
   End ;
+  lini_Inifile.Free;
 end;
 
 

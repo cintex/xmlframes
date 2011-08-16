@@ -225,7 +225,7 @@ uses
   fonctions_xml,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
-  fonctions_proprietes ;
+  fonctions_proprietes, fonctions_languages ;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +259,8 @@ begin
   {$ELSE}
   {$IFDEF FPC}
   li_Language := fi_findLanguage(gs_Language);
-  ChangeLanguage( li_Language );
+  if li_Language >= 0 Then
+    ChangeLanguage( li_Language );
   {$ENDIF}
   {$ENDIF}
 

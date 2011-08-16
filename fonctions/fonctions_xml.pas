@@ -197,19 +197,9 @@ uses fonctions_init, u_multidonnees,
 // Getting label caption from name
 // Name of caption
 function fs_GetLabelCaption ( const as_Name : String ):WideString;
-{$IFNDEF FPC}
-var ls_temp:  String;
-{$ENDIF}
 Begin
-  {$IFDEF FPC}Result{$ELSE}ls_temp{$ENDIF} := gstl_Labels.Values [ as_Name ];
-{$IFNDEF FPC}
-  Result  := UTF8decode ( ls_temp );
-  if ( Result = '' ) then
-    Result := ls_temp ;
-{$ENDIF}
-  if ( Result = '' ) then
-    Result := as_Name ;
-End;
+   Result := fs_GetStringValue ( gstl_Labels, as_Name );
+end;
 
 // function fs_LeonFilter
 // special words replacing
