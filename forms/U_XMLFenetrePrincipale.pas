@@ -53,8 +53,8 @@ uses
   JvXPBar, Forms,  U_FormMainIni, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
-  U_OnFormInfoIni, DBCtrls, menutbar,
-  u_extmenutoolbar, u_extmenucustomize, ToolWin;
+  U_OnFormInfoIni, DBCtrls,
+  u_extmenutoolbar, u_extmenucustomize;
 
 {$IFDEF VERSIONS}
 const
