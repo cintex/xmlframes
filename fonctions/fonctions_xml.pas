@@ -169,11 +169,10 @@ var gs_ProjectFile  : String;
     gch_SeparatorCSV: Char = '|';
     gs_entities     : String  = 'rootEntities' ;
     gs_Encoding     : String = 'ISO-8859-1';
-    gstl_Labels             : TStringlist = nil ;
+
 
 function fs_getSoftInfo : String;
 function fs_getSoftFiles : String;
-function fs_GetLabelCaption ( const as_Name : String ):WideString;
 function fs_getImagesDir : String;
 function fs_getProjectDir : String;
 function fs_LeonFilter ( const AString : String ): String;
@@ -193,13 +192,6 @@ uses fonctions_init, u_multidonnees,
 {$ENDIF}
      fonctions_string, Dialogs;
 
-// function fs_GetLabelCaption
-// Getting label caption from name
-// Name of caption
-function fs_GetLabelCaption ( const as_Name : String ):WideString;
-Begin
-   Result := fs_GetStringValue ( gstl_Labels, as_Name );
-end;
 
 // function fs_LeonFilter
 // special words replacing
@@ -406,6 +398,4 @@ initialization
 {$IFDEF VERSIONS}
   p_ConcatVersion ( gVer_fonctions_XML );
 {$ENDIF}
-finalization
-  gstl_Labels.Free;
 end.

@@ -64,7 +64,6 @@
         <TopLine Value="10"/>
         <CursorPos X="1" Y="23"/>
         <UsageCount Value="200"/>
-        <LoadedDesigner Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="../weo/U_ConstMessage.pas"/>
@@ -575,10 +574,11 @@
       <Unit69>
         <Filename Value="../../../Extended/fonctions/fonctions_languages.pas"/>
         <UnitName Value="fonctions_languages"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="47"/>
-        <CursorPos X="6" Y="50"/>
+        <TopLine Value="120"/>
+        <CursorPos X="1" Y="165"/>
         <UsageCount Value="19"/>
         <Loaded Value="True"/>
       </Unit69>
@@ -636,7 +636,7 @@
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="238"/>
-        <CursorPos X="1" Y="276"/>
+        <CursorPos X="94" Y="238"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit75>
@@ -846,13 +846,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="242"/>
         <CursorPos X="3" Y="263"/>
         <UsageCount Value="28"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit101>
       <Unit102>
         <Filename Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/db.pas"/>

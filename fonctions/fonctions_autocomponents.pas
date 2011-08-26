@@ -120,7 +120,7 @@ uses JvXPButtons,fonctions_dbcomponents,
 {$ENDIF}
      U_ExtNumEdits,
      u_buttons_appli, fonctions_proprietes,
-     u_xmlfillcombobutton;
+     u_xmlfillcombobutton,fonctions_languages;
 
 /////////////////////////////////////////////////////////////////////////
 // function ffwl_CreateALabelComponent

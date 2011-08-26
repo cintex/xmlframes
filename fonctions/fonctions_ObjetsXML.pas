@@ -42,7 +42,7 @@ uses Forms, JvXPBar, JvXPContainer,
   TntForms,TntStdCtrls, TntExtCtrls,
 {$ENDIF}
   DBCtrls, ALXmlDoc, IniFiles, Graphics,
-  u_multidonnees, fonctions_string ;
+  u_multidonnees, fonctions_string;
 
 const // Champs utilisés
       CST_INI_PROJECT_FILE = 'LY_PROJECT_FILE';
@@ -52,7 +52,8 @@ const // Champs utilisés
                                            FileUnit : 'fonctions_ObjetsXML' ;
               			           Owner : 'Matthieu Giroux' ;
               			           Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			           BugsStory : 'Version 1.0.1.0 : Integrating TXMLFillCombo button.'  + #13#10 +
+              			           BugsStory : 'Version 1.0.1.1 : Centralising getting Properties into fonctions_languages.'  + #13#10 +
+                                                       'Version 1.0.1.0 : Integrating TXMLFillCombo button.'  + #13#10 +
                                                        'Version 1.0.0.6 : Images on menu items.' + #13#10 +
                                                        'Version 1.0.0.5 : No ExtToolbar.' + #13#10 +
                                                        'Version 1.0.0.4 : Testing.' + #13#10 +
@@ -61,7 +62,7 @@ const // Champs utilisés
                                                        'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
                                                        'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			           UnitType : 1 ;
-              			           Major : 1 ; Minor : 0 ; Release : 1 ; Build : 0 );
+              			           Major : 1 ; Minor : 0 ; Release : 1 ; Build : 1 );
 
 {$ENDIF}
 type
@@ -115,8 +116,8 @@ var
 const CST_DIR_LANGUAGE = 'properties'+ DirectorySeparator;
       CST_DIR_LANGUAGE_LAZARUS = 'LangFiles'+ DirectorySeparator;
       CST_SUBFILE_LANGUAGE =  'strings_';
-      CST_EXT_PROPERTIES = '.properties';
-      CST_FILE_LANGUAGES =  'languages'+CST_EXT_PROPERTIES;
+var
+      CST_FILE_LANGUAGES : String =  'languages';
 
 procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
@@ -256,14 +257,14 @@ var ls_Dir, ls_lang, ls_Language : String ;
  Begin
   ls_Dir := fs_getSoftDir +CST_DIR_LANGUAGE;
   lini_Inifile := nil;
-  if FileExists( fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES) Then
+  if FileExists( fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES) Then
   try
     lini_Inifile := TStringList.Create( );
-    lini_Inifile.LoadFromFile(fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES);
+    lini_Inifile.LoadFromFile(fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES);
   Except
   End ;
   try
-    lb_IsFound := FindFirst(ls_Dir+CST_SUBFILE_LANGUAGE+gs_NomApp+'_*'+CST_EXT_PROPERTIES, faAnyFile-faDirectory, lsr_Files) = 0;
+    lb_IsFound := FindFirst(ls_Dir+CST_SUBFILE_LANGUAGE+gs_NomApp+'_*'+GS_EXT_LANGUAGES, faAnyFile-faDirectory, lsr_Files) = 0;
     while lb_IsFound do
      begin
         if FileExists ( ls_Dir + lsr_Files.Name )
@@ -1948,11 +1949,8 @@ End;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 Begin
   Result := False;
-  gstl_Labels.Free;
-  gstl_Labels := TStringlist.Create ;
-  if fileExists ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + '_' + as_little_lang+CST_EXT_PROPERTIES ) then
+  if  fb_LoadProperties (  fs_getSoftDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + gs_NomApp,  as_little_lang ) then
     Begin
-      gstl_Labels.LoadFromFile ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + '_' +  as_little_lang + CST_EXT_PROPERTIES );
       if assigned ( gmif_MainFormIniInit ) then
         Begin
           gmif_MainFormIniInit.WriteString(INISEC_PAR,CST_INI_LANGUAGE,as_little_lang);
@@ -1962,10 +1960,7 @@ Begin
       fb_CreeLeMenu;
       Result := True;
     End
-  else if fileExists ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + CST_EXT_PROPERTIES ) then
-    Begin
-      gstl_Labels.LoadFromFile ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + CST_EXT_PROPERTIES );
-    End;
+  else fb_LoadProperties ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + GS_EXT_LANGUAGES );
 End;
 ////////////////////////////////////////////////////////////////////////////////
 // function fb_ReadXMLEntitites

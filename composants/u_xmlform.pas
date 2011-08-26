@@ -237,6 +237,7 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
      u_extdbgrid, fonctions_images,
      fonctions_Objets_Dynamiques,
+     fonctions_languages,
      u_buttons_appli, unite_variables, StdCtrls;
 var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
     gb_LoginFormLoaded : Boolean = False;
