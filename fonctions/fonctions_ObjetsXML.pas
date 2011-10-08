@@ -329,7 +329,7 @@ Begin
     and ( DetermineFileFormat ( ls_ImagesDir + SR.Name ) <> '' )
      then
       Begin
-        p_SetFileToBitmap (ls_ImagesDir + SR.Name, abmp_Bitmap, True );
+        p_FileToBitmap (ls_ImagesDir + SR.Name, abmp_Bitmap, True );
       End ;
     try
       lb_IsFound := FindNext(SR) = 0;

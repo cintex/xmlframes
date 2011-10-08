@@ -44,14 +44,12 @@ requires
   VclSmp,
   rxbde,
   dsnap,
-  ZComponentDesign,
   dclstd,
   vcldesigner,
   dcldb,
   designdgm,
   dclado,
   inet,
-  ExtToolbarTools,
   VirtualTreesD10,
   JvXPCtrlsD10R,
   JvCtrlsD10R,
@@ -78,15 +76,12 @@ requires
   TntUnicodeVcl_R90,
   dcldklang10,
   TntUnicodeVcl_D90,
-  GJLSoftwareD10,
   JvCmpD10R,
-  dxPack2D10,
   JvPageCompsD10R,
   JvHMID10R,
   JvGlobusD10R,
   ManFrames,
-  dmenutoolbar,
-  RVFree_D6;
+  dmenutoolbar;
 
 contains
   U_ASQLBuilder in 'composants\U_ASQLBuilder.pas',
