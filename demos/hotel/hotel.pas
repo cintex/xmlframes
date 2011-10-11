@@ -16,7 +16,7 @@ var
 	gi_result: integer;
 {$ENDIF}
 
-{$IFDEF WINDOWS}{$R hotel.rc}{$ENDIF}
+{$IFNDEF FPC}{$R hotel.rc}{$ENDIF}
 
 begin
   {$I hotel.lrs}

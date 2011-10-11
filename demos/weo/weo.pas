@@ -23,7 +23,7 @@ var
 {$ENDIF}
 
 
-{$IFDEF WINDOWS}{$R weo.rc}{$ENDIF}
+{$IFNDEF FPC}{$R weo.rc}{$ENDIF}
 
 begin
   {$I weo.lrs}
