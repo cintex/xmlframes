@@ -1606,6 +1606,15 @@ Begin
   p_LoadDashBoard ( axdo_FichierXML.node );
 End;
 
+function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
+Begin
+  if  ( as_Value <> '' )
+  and ( as_Value [1] = '$' )
+  and Assigned(gmif_MainFormIniInit)
+   Then Result := gmif_MainFormIniInit.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -1 ), as_Value )
+   else Result := as_Value;
+End;
+
 /////////////////////////////////////////////////////////////////////////
 // Procédure p_Loaddata
 // Loading data link
@@ -1637,7 +1646,7 @@ Begin
             M_Donnees.CreateConnection ( dtCSV, ls_ConnectionClep );
             with ga_Connections [ high ( ga_Connections )] do
               Begin
-                s_dataURL := fs_LeonFilter ( lNode.Attributes [ CST_LEON_DATA_URL ])+DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
+                s_dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ])) +DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
                 {$IFDEF WINDOWS}
                 s_dataURL := fs_RemplaceChar ( s_DataURL, '/', '\' );
                 {$ENDIF}
@@ -1653,7 +1662,7 @@ Begin
             M_Donnees.CreateConnection ( {$IFDEF ZEOS}dtZEOS{$ELSE}{$IFDEF EADO}dtADO{$ELSE}dtCSV{$ENDIF}{$ENDIF}, ls_ConnectionClep );
             with ga_Connections [ high ( ga_Connections )] do
               Begin
-                s_dataURL := lNode.Attributes [ CST_LEON_DATA_URL ];
+                s_dataURL := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ]);
                 li_Pos := pos ( '//', s_dataURL );
                 s_dataURL := copy ( s_DataURL , li_pos + 2, length ( s_DataURL ) - li_pos - 1 );
                 i_DataPort := 0;
@@ -1671,10 +1680,10 @@ Begin
                   end;
                 if ( s_DataURL [ length ( s_DataURL )] = '/' ) Then
                   s_DataURL := copy ( s_DataURL , 1, length ( s_DataURL ) - 1 );
-                s_DataUser := lNode.Attributes [ CST_LEON_DATA_USER ];
-                s_DataPassword := lNode.Attributes [ CST_LEON_DATA_Password ];
-                s_Database := lNode.Attributes [ CST_LEON_DATA_DATABASE ];
-                s_DataDriver := lNode.Attributes [ CST_LEON_DATA_DRIVER ];
+                s_DataUser := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_USER ]);
+                s_DataPassword :=fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_Password ]);
+                s_Database := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DATABASE ]);
+                s_DataDriver := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DRIVER ]);
                 {$IFDEF ZEOS}
                 case dtt_DatasetType of
                     dtZEOS : Begin
@@ -1698,7 +1707,7 @@ Begin
                                p_setComponentBoolProperty ( com_Connection, 'Connected', True );
                              except
                                on e: Exception do
-                                 ShowMessage ( 'Could not initiate connection on ' + s_DataDriver + ' and ' + s_DataURL +#13#10 + 'User : ' + s_DataUser +#13#10 + 'Base : ' + s_Database +#13#10   );
+                                 ShowMessage ( 'Could not initiate connection on ' + s_DataDriver + ' and ' + s_DataURL +#13#10 + 'User : ' + s_DataUser +#13#10 + 'Base : ' + s_Database +#13#10 + e.Message   );
                              end;
                            end;
                 End;
@@ -1716,15 +1725,12 @@ End;
 // aNode : recursive node
 // abo_BuildOrder : entities to load
 /////////////////////////////////////////////////////////////////////////
-procedure p_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode; const abo_BuildOrder : TBuildOrder ) ;
+function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode; const abo_BuildOrder : TBuildOrder ; var ab_Navigation, ab_Login : Boolean ):String;
 var li_i : Integer ;
     lNode : TALXMLNode ;
-    ls_EntityFile   : String ;
     lxdo_FichierXML : TALXMLDocument;
-    lb_Login, lb_CreateNavigation : Boolean;
 Begin
    lxdo_FichierXML := nil ;
-   lb_Login := False;
    if ( aNode.HasChildNodes ) then
      for li_i := 0 to aNode.ChildNodes.Count - 1 do
       Begin
@@ -1741,47 +1747,40 @@ Begin
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
 //            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
-            ls_EntityFile := lNode.Attributes [ CST_LEON_DUMMY ];
+            Result := lNode.Attributes [ CST_LEON_DUMMY ];
             {$IFDEF WINDOWS}
-            ls_EntityFile := fs_RemplaceChar ( ls_EntityFile, '/', '\' );
+            Result := fs_RemplaceChar ( ls_EntityFile, '/', '\' );
             {$ENDIF}
             // Pas besoin du chemin complet
             if abo_BuildOrder = boMenus then
               Begin
-                gs_RootEntities := fs_EraseFirstDirectory ( fs_EraseFirstDirectory ( ls_EntityFile ));
+                gs_RootEntities := fs_EraseFirstDirectory ( fs_EraseFirstDirectory ( Result ));
                 if pos ( '.', gs_RootEntities ) > 0 then
                   Begin
                     gs_RootEntities := copy ( gs_RootEntities, 1, pos ( '.', gs_RootEntities ) - 1 );
                   End;
               End;
 
-            ls_EntityFile := fs_getSoftDir + fs_EraseFirstDirectory ( ls_EntityFile );
-            if FileExists ( ls_EntityFile ) then
+            Result := fs_getSoftDir + fs_EraseFirstDirectory ( Result );
+            if FileExists ( Result ) then
               Begin
                 case abo_BuildOrder of
                   boMenus :
                     Begin
-                      lb_CreateNavigation := False;
                       if  ( pos ( CST_LEON_SYSTEM_ROOT, lNode.NodeName ) > 0 )
                        then
                          Begin
-                           lb_CreateNavigation := True;
                            if not assigned ( gxdo_MenuXML ) Then
                              gxdo_RootXML := TALXMLDocument.Create(Application);
-                           if fb_LoadXMLFile ( gxdo_RootXML, ls_EntityFile ) then
+                           if fb_LoadXMLFile ( gxdo_RootXML, Result ) then
                              p_LoadEntitites ( gxdo_RootXML );
                          End;
                       if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode.NodeName ) > 0 )
                        then
                          Begin
-                           lb_CreateNavigation := True;
-                           lb_Login := fb_NavigationTree ( ls_EntityFile );
+                           ab_Navigation:=True;
+                           ab_Login := fb_NavigationTree ( Result );
                          End;
-                       if not ( lb_Login )
-                       and lb_CreateNavigation
-                       and assigned ( gxdo_MenuXML )
-                       and assigned ( gxdo_RootXML ) then
-                         p_CreeAppliFromNode ( ls_entityFile );
                      End;
                   boConnect :
                     Begin
@@ -1789,7 +1788,7 @@ Begin
                        Begin
                          if lxdo_FichierXML = nil then
                            lxdo_FichierXML := TALXMLDocument.Create(Application);
-                          if fb_LoadXMLFile ( lxdo_FichierXML, ls_EntityFile )
+                          if fb_LoadXMLFile ( lxdo_FichierXML, Result )
                            then
                              p_LoadData ( lxdo_FichierXML.Node );
                        End;
@@ -1799,7 +1798,7 @@ Begin
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
-        p_BuildFromXML ( Level + 1, lNode, abo_BuildOrder );
+        Result := fs_BuildFromXML ( Level + 1, lNode, abo_BuildOrder, ab_Navigation, ab_Login );
       End;
    lxdo_FichierXML.Free;
 End;
@@ -1905,12 +1904,15 @@ End;
 // amif_Init : ini file
 /////////////////////////////////////////////////////////////////////////
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
+var lb_navigation : Boolean ;
 Begin
   Result := False;
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
   if not assigned ( amif_Init ) then
-    amif_Init := TIniFile.Create(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI);
+    if FileExists(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+      Then amif_Init := TIniFile.Create(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+      Else p_InitIniProjectFile;
   if assigned ( amif_Init ) Then
     Begin
       gs_ProjectFile := amif_Init.ReadString(INISEC_PAR,CST_INI_PROJECT_FILE,'');
@@ -1934,7 +1936,8 @@ Begin
 
           if fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
             Begin
-             p_BuildFromXML ( 0, gxdo_FichierXML.Node, boConnect) ;
+              lb_navigation:=False;
+              fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boConnect, lb_navigation, lb_navigation ) ;
             End;
 
         End;
@@ -1968,6 +1971,8 @@ End;
 // Résultat : il y a un fichier projet.
 ////////////////////////////////////////////////////////////////////////////////
 function fb_ReadXMLEntitites () : Boolean;
+var lb_navigation, lb_Login : Boolean ;
+    ls_entityFile : String ;
 Begin
   Result := gs_ProjectFile <> '';
   gxdo_RootXML.Free;
@@ -1976,7 +1981,12 @@ Begin
   gxdo_MenuXML    := nil;
   if result Then
     Begin
-      p_BuildFromXML ( 0, gxdo_FichierXML.Node, boMenus ) ;
+      lb_navigation:=False;
+      lb_Login     :=False;
+      ls_entityFile := fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boMenus, lb_navigation, lb_Login ) ;
+      if lb_navigation
+      and not lb_Login Then
+       p_CreeAppliFromNode ( ls_entityFile );
     End;
 End;
 
