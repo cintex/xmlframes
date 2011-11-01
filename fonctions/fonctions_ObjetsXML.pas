@@ -1749,7 +1749,7 @@ Begin
 //            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
             Result := lNode.Attributes [ CST_LEON_DUMMY ];
             {$IFDEF WINDOWS}
-            Result := fs_RemplaceChar ( ls_EntityFile, '/', '\' );
+            Result := fs_RemplaceChar ( Result, '/', '\' );
             {$ENDIF}
             // Pas besoin du chemin complet
             if abo_BuildOrder = boMenus then
