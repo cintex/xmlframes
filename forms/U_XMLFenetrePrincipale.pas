@@ -11,7 +11,7 @@
 
 unit U_XMLFenetrePrincipale;
 
-{$I ..\Compilers.inc}
+{$I ..\DLCompilers.inc}
 {$I ..\extends.inc}
 
 
@@ -225,6 +225,7 @@ uses
   fonctions_xml,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
+  fonctions_system,
   fonctions_proprietes, fonctions_languages ;
 
 
@@ -269,8 +270,8 @@ begin
   p_LibStb ( br_statusbar );
 
   // Initialisation des variables
-  gs_computer      := f_IniFWReadComputerName;
-  gs_sessionuser   := f_IniFWReadUtilisateurSession;
+  gs_computer      := fs_getComputerName;
+  gs_sessionuser   := fs_GetUserSession;
 
   // Initialisation du composant de fabrication dynamique de fonctions
   p_initialisationBoutons(Self, mu_langue, scb_volet, mu_voletexplore,
@@ -816,4 +817,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+

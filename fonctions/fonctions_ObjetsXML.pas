@@ -3,7 +3,7 @@ unit fonctions_ObjetsXML;
 interface
 
 {$I ..\extends.inc}
-{$I ..\Compilers.inc}
+{$I ..\DLCompilers.inc}
 
 {$IFDEF FPC}
 {$mode Delphi}

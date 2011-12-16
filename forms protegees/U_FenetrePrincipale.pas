@@ -11,7 +11,7 @@
 
 unit U_FenetrePrincipale;
 
-{$I ..\Compilers.inc}
+{$I ..\DLCompilers.inc}
 {$I ..\extends.inc}
 
 

@@ -2,7 +2,7 @@
 
 
 {$I ..\extends.inc}
-{$I ..\Compilers.inc}
+{$I ..\DLCompilers.inc}
 
 interface
 {$IFDEF FPC}
