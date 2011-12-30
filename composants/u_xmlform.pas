@@ -590,7 +590,7 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + as_ClassRelation + '2', Self, alLeft );
           p_setLeftToPanel ( ButtonRecord );
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonCancel := TFWAbort.Create ( Self );
+          ButtonCancel := TFWCancel.Create ( Self );
           ButtonCancel.Parent := lpan_PanelActions;
           ButtonCancel.Name := CST_COMPONENTS_ABORT_BEGIN + as_ClassRelation;
           ButtonCancel.Align := alLeft ;
