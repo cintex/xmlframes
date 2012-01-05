@@ -18,8 +18,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="9" Release="4" Build="2"/>
-    <Files Count="11">
+    <Files Count="9">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
@@ -45,25 +44,17 @@
         <UnitName Value="u_languagevars"/>
       </Item6>
       <Item7>
-        <Filename Value="forms/u_multidonnees.lfm"/>
-        <Type Value="LFM"/>
-      </Item7>
-      <Item8>
-        <Filename Value="forms/u_multidonnees.lrs"/>
-        <Type Value="LRS"/>
-      </Item8>
-      <Item9>
         <Filename Value="forms/u_multidonnees.pas"/>
         <UnitName Value="u_multidonnees"/>
-      </Item9>
-      <Item10>
+      </Item7>
+      <Item8>
         <Filename Value="fonctions/fonctions_leon_format.pas"/>
         <UnitName Value="fonctions_leon_format"/>
-      </Item10>
-      <Item11>
+      </Item8>
+      <Item9>
         <Filename Value="composants/u_xmlfillcombobutton.pas"/>
         <UnitName Value="u_xmlfillcombobutton"/>
-      </Item11>
+      </Item9>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

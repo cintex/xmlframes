@@ -7,8 +7,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 unit fonctions_autocomponents;
 
-{$I ..\extends.inc}
 {$I ..\DLCompilers.inc}
+{$I ..\extends.inc}
 
 interface
 {$IFDEF FPC}

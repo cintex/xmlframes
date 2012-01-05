@@ -1,8 +1,8 @@
 ﻿unit u_xmlform;
 
 
-{$I ..\extends.inc}
 {$I ..\DLCompilers.inc}
+{$I ..\extends.inc}
 
 interface
 {$IFDEF FPC}
