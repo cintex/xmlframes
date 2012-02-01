@@ -111,11 +111,7 @@ end;
 procedure parseString(format: string);
 var
   astart: integer;
-  n: integer;
   aend: integer;
-  offset: integer;
-  j: integer;
-  i: integer;
   firstInterval: integer;
   beginBySep: boolean;
   size: integer;
@@ -561,7 +557,6 @@ end;
 
 function isEmpty(const content: string): boolean;
 var
-  length: integer;
   i: integer;
 begin
   i := 0;
@@ -713,7 +708,6 @@ end;
 procedure setIntValue(var content: string; const aInterval: TArrayIntervals; const aSeparator : TArrayStrings; const aFirstIseparator : Boolean;
   const amin, amax, Value: integer);
 var
-  n: integer;
   i: integer;
   str: string;
   max: integer;
@@ -727,7 +721,7 @@ begin
     if (length(str) < max) then
     begin
       i := 0;
-      while (i < n) do
+      while (i < max) do
       begin
         str := EMPTY_NUMBER + str;
         Inc(i);
@@ -752,7 +746,7 @@ end;
 
 function getMinimum(const aInterval: TArrayIntervals): integer;
 var
-  i, j: integer;
+  i : integer;
   Resultat, tmp: string;
   newchaine: string;
 begin
@@ -776,6 +770,7 @@ end;
 function getMaxCharCount(const aInterval : TArrayIntervals;const aSeparator :TArrayStrings;const aFirstIsSeparator : Boolean): integer;
 var i : Integer ;
 Begin
+  i := 0;
   while i  <= high ( aInterval ) do
     Begin
       Break;
@@ -785,10 +780,24 @@ end;
 
 function getMaximum(const aInterval: TArrayIntervals): integer;
 var
-  i: integer;
-  tmp: string;
+  i, j: integer;
+  Resultat, tmp: string;
+  newchaine: string;
 begin
-
+  Resultat := '';
+  for i := 0 to length(aInterval) do
+    with aInterval[i] do
+    begin
+      //Just creating the max word length
+      newchaine := IntToStr(endOffset);
+      tmp := IntToStr(startOffset);
+      if length(tmp) = length(newchaine) then
+        newchaine := IntToStr(endOffset)
+      else
+        newchaine := fs_RepeteChar(EMPTY_NUMBER, length(newchaine));
+      Resultat += newchaine;
+    end;
+  Result := StrToInt(Resultat);
 end;
 
 {$IFDEF VERSIONS}
