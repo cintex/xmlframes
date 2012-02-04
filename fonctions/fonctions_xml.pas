@@ -19,6 +19,7 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_LEON_DUMMY = 'DUMMY' ;
       CST_LEON_PROJECT = 'PROJECT' ;
+      CST_LEON_ROOT_ACTION = 'rootAction' ;
       CST_LEON_CLASS = 'CLASS' ;
       CST_LEON_BOOL_FALSE = 'false' ;
       CST_LEON_BOOL_TRUE  = 'true' ;
@@ -163,6 +164,7 @@ function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileX
 var gs_ProjectFile  : String;
     gs_RootEntities : String ;
     gNod_DashBoard  : TALXMLNode = nil;
+    gNod_RootAction : TALXMLNode = nil;
     gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
     gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
     gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create

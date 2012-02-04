@@ -21,6 +21,10 @@ msgstr ""
 msgid "Pas de formulaire répertorié pour "
 msgstr ""
 
+#: u_languagevars.gs_notimplemented
+msgid "Pas d'implémentation. Participez au projet XML Frames..."
+msgstr ""
+
 #: u_languagevars.gs_rootform
 msgid "Fenêtre principale"
 msgstr ""

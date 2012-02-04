@@ -93,6 +93,7 @@ var
       gBmp_DefaultPicture     : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
       gBmp_DefaultAcces       : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
       gWin_ParentContainer    : TScrollingWinControl  ;   // Volet d'accès
+      gs_RootAction           : String;
       gIco_DefaultPicture     : TIcon        ;   // Ico apparaissant si il n'y a pas d'image
       gi_TailleUnPanel        ,                  // Taille d'un panel de dxbutton
       gi_FinCompteurImages    : Integer      ;   // Un seul imagelist des menus donc efface après la dernière image
@@ -143,7 +144,7 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const abmp_Picture        ,
                                   abmp_DefaultPicture : TBitmap     ;
                             const ab_AjouteEvenement   : Boolean   );
-function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
+procedure p_NavigationTree ( const as_EntityFile : String );
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 function fi_FindActionFile ( const afile : String ):Longint ;
 function fi_FindAction ( const aClep : String ):Longint ;
@@ -1537,7 +1538,7 @@ End;
 // ano_Parent  : Parent node
 // ai_LastCFonction : Last compound function
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadDashBoard ( const ano_Node : TALXMLNode );
+procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
 var li_i, li_j  : LongInt ;
     lNode : TALXMLNode ;
 
@@ -1546,13 +1547,17 @@ Begin
     for li_i := 0 to ano_Node.ChildNodes.Count - 1 do
       Begin
         lNode := ano_Node.ChildNodes [ li_i ];
-        if lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD then
+        if  ( lnode.Attributes [ CST_LEON_ID ] =  gs_RootAction )
+        or  ( lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD ) then
           Begin
-            gnod_DashBoard := lnode;
-            if gnod_DashBoard.HasChildNodes Then
-              for li_j := 0 to gnod_DashBoard.ChildNodes.Count -1 do
-                if gnod_DashBoard.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS Then
-                  p_LoadDashBoard ( gnod_DashBoard.ChildNodes [ li_j ] );
+            if ( lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD ) Then
+              gnod_DashBoard := lnode
+             else
+              gNod_RootAction := lNode;
+            if lnode.HasChildNodes Then
+              for li_j := 0 to lnode.ChildNodes.Count -1 do
+                if lnode.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS Then
+                  p_LoadRootAction ( lnode.ChildNodes [ li_j ] );
             Continue;
           End;
         p_LoadNodesEntities ( lNode, nil, -1 );
@@ -1603,7 +1608,7 @@ End;
 procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
 
 Begin
-  p_LoadDashBoard ( axdo_FichierXML.node );
+  p_LoadRootAction ( axdo_FichierXML.node );
 End;
 
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
@@ -1725,7 +1730,7 @@ End;
 // aNode : recursive node
 // abo_BuildOrder : entities to load
 /////////////////////////////////////////////////////////////////////////
-function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode; const abo_BuildOrder : TBuildOrder ; var ab_Navigation, ab_Login : Boolean ):String;
+function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode; const abo_BuildOrder : TBuildOrder ):String;
 var li_i : Integer ;
     lNode : TALXMLNode ;
     lxdo_FichierXML : TALXMLDocument;
@@ -1738,9 +1743,11 @@ Begin
 //        if (  lNode.IsTextElement ) then
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
+        // connects before build
         if ( lNode.NodeName = CST_LEON_PROJECT )
         and ( abo_BuildOrder = boConnect ) Then
           Begin
+            gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
             p_LoadData ( lNode );
           end;
         if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
@@ -1778,8 +1785,7 @@ Begin
                       if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode.NodeName ) > 0 )
                        then
                          Begin
-                           ab_Navigation:=True;
-                           ab_Login := fb_NavigationTree ( Result );
+                           p_NavigationTree ( Result );
                          End;
                      End;
                   boConnect :
@@ -1798,7 +1804,7 @@ Begin
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
-        Result := fs_BuildFromXML ( Level + 1, lNode, abo_BuildOrder, ab_Navigation, ab_Login );
+        Result := fs_BuildFromXML ( Level + 1, lNode, abo_BuildOrder );
       End;
    lxdo_FichierXML.Free;
 End;
@@ -1832,31 +1838,27 @@ End;
 // Loading navigation and login
 // as_EntityFile : navigation tree file
 /////////////////////////////////////////////////////////////////////////
-function fb_NavigationTree ( const as_EntityFile : String ):Boolean;
+procedure p_NavigationTree ( const as_EntityFile : String );
 var
     li_i, li_j : Longint;
     lnod_Node : TALXMLNode ;
 Begin
  if not assigned ( gxdo_MenuXML ) Then
    gxdo_MenuXML := TALXMLDocument.Create(Application);
- Result := False;
  if fb_LoadXMLFile ( gxdo_MenuXML, as_EntityFile ) then
    Begin
      for li_i := 0 to gxdo_MenuXML.ChildNodes.Count -1  do
        Begin
          lnod_Node := gxdo_MenuXML.ChildNodes [li_i];
          if  ( lnod_Node.NodeName = CST_LEON_ACTION )
-         and lnod_Node.HasAttribute(CST_LEON_TEMPLATE)
-         and ( lnod_Node.Attributes[CST_LEON_TEMPLATE] = CST_LEON_TEMPLATE_LOGIN )
+         and ( lnod_Node.Attributes[CST_LEON_ID] = gs_RootAction )
           Then
            Begin
+             gNod_RootAction:=lnod_Node;
              if  lnod_Node.HasChildNodes Then
              for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
                if ( lnod_Node.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS ) Then
-                 p_LoadDashBoard(lnod_Node.ChildNodes [ li_j ]);
-             gf_Users := TF_XMLForm.Create ( Application );
-             (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML, gxb_Ident, gMen_MenuIdent, gIma_ImagesMenus, gBmp_DefaultAcces, gi_FinCompteurImages );
-             Result := True;
+                 p_LoadRootAction(lnod_Node.ChildNodes [ li_j ]);
            end;
        end;
    end;
@@ -1904,7 +1906,6 @@ End;
 // amif_Init : ini file
 /////////////////////////////////////////////////////////////////////////
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
-var lb_navigation : Boolean ;
 Begin
   Result := False;
   gs_Language := 'en';
@@ -1936,8 +1937,8 @@ Begin
 
           if fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
             Begin
-              lb_navigation:=False;
-              fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boConnect, lb_navigation, lb_navigation ) ;
+              fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boConnect ) ;
+
             End;
 
         End;
@@ -1971,8 +1972,7 @@ End;
 // Résultat : il y a un fichier projet.
 ////////////////////////////////////////////////////////////////////////////////
 function fb_ReadXMLEntitites () : Boolean;
-var lb_navigation, lb_Login : Boolean ;
-    ls_entityFile : String ;
+var ls_entityFile : String ;
 Begin
   Result := gs_ProjectFile <> '';
   gxdo_RootXML.Free;
@@ -1981,11 +1981,20 @@ Begin
   gxdo_MenuXML    := nil;
   if result Then
     Begin
-      lb_navigation:=False;
-      lb_Login     :=False;
-      ls_entityFile := fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boMenus, lb_navigation, lb_Login ) ;
-      if lb_navigation
-      and not lb_Login Then
+      ls_entityFile := fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boMenus ) ;
+      if  assigned ( gNod_RootAction )
+      and ( gNod_RootAction <> gNod_DashBoard ) Then
+       Begin
+         if gNod_RootAction.Attributes[CST_LEON_TEMPLATE]=CST_LEON_TEMPLATE_LOGIN Then
+          Begin
+           gf_Users := TF_XMLForm.Create ( Application );
+           (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML, gxb_Ident, gMen_MenuIdent, gIma_ImagesMenus, gBmp_DefaultAcces, gi_FinCompteurImages );
+           Exit;
+          end
+         Else
+          ShowMessage(Gs_NotImplemented);
+       end
+      Else
        p_CreeAppliFromNode ( ls_entityFile );
     End;
 End;

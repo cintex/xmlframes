@@ -60,11 +60,11 @@
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="1" Y="64"/>
-        <UsageCount Value="180"/>
+        <UsageCount Value="181"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -73,7 +73,7 @@
         <UnitName Value="U_ConstMessage"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="180"/>
+        <UsageCount Value="181"/>
       </Unit1>
       <Unit2>
         <Filename Value="../XMLFrames/composants/u_formxml.pas"/>
@@ -1240,10 +1240,11 @@
       <Unit146>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1885"/>
-        <CursorPos X="1" Y="1917"/>
+        <TopLine Value="1532"/>
+        <CursorPos X="75" Y="1550"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit146>
@@ -1261,7 +1262,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="596"/>
         <CursorPos X="58" Y="603"/>
@@ -1282,10 +1283,10 @@
       <Unit150>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="165"/>
-        <CursorPos X="65" Y="180"/>
+        <TopLine Value="145"/>
+        <CursorPos X="20" Y="167"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit150>
@@ -1369,6 +1370,7 @@
         <TopLine Value="4054"/>
         <CursorPos X="1" Y="4076"/>
         <UsageCount Value="15"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit159>
       <Unit160>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/control.inc"/>
@@ -1434,6 +1436,7 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit167>
       <Unit168>
         <Filename Value="../../../../Lazarus/composants/rxfpc/rxlookup.pas"/>
@@ -1574,7 +1577,7 @@
       <Unit186>
         <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
         <UnitName Value="fonctions_string"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="690"/>
         <CursorPos X="1" Y="715"/>
@@ -1626,6 +1629,7 @@
         <TopLine Value="1"/>
         <CursorPos X="12" Y="26"/>
         <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit192>
       <Unit193>
         <Filename Value="/usr/lib/lazarus/0.9.30/ide/lazarus.pp"/>
@@ -1653,6 +1657,7 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit195>
       <Unit196>
         <Filename Value="../../../Extended/forms/u_zconnection.pas"/>
@@ -1744,10 +1749,12 @@
       <Unit207>
         <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
         <UnitName Value="ALXmlDoc"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="126"/>
-        <CursorPos X="150" Y="126"/>
+        <TopLine Value="1883"/>
+        <CursorPos X="1" Y="1907"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit207>
       <Unit208>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/dbgrids.pas"/>
@@ -1832,7 +1839,7 @@
       <Unit218>
         <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
         <UnitName Value="fonctions_system"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="6"/>
@@ -1842,7 +1849,7 @@
       <Unit219>
         <Filename Value="../../../Extended/fonctions/fonctions_proprietes.pas"/>
         <UnitName Value="fonctions_proprietes"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="105"/>
         <CursorPos X="54" Y="128"/>
@@ -1852,135 +1859,134 @@
       <Unit220>
         <Filename Value="../../../Extended/composants/u_regframeworkcomponents.pas"/>
         <UnitName Value="u_regframeworkcomponents"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="10"/>
+        <CursorPos X="79" Y="22"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit220>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
-        <Caret Line="714" Column="1" TopLine="690"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1549" Column="1" TopLine="1527"/>
       </Position1>
       <Position2>
-        <Filename Value="../../../Extended/fonctions/fonctions_string.pas"/>
-        <Caret Line="715" Column="1" TopLine="690"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1550" Column="1" TopLine="1527"/>
       </Position2>
       <Position3>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="53" Column="1" TopLine="24"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1541" Column="17" TopLine="1527"/>
       </Position3>
       <Position4>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="54" Column="1" TopLine="24"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1560" Column="35" TopLine="1527"/>
       </Position4>
       <Position5>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="55" Column="1" TopLine="24"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1608" Column="24" TopLine="1575"/>
       </Position5>
       <Position6>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="56" Column="1" TopLine="24"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1806" Column="56" TopLine="1771"/>
       </Position6>
       <Position7>
-        <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
-        <Caret Line="62" Column="1" TopLine="24"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position7>
       <Position8>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1914" Column="1" TopLine="1885"/>
+        <Caret Line="679" Column="24" TopLine="643"/>
       </Position8>
       <Position9>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1916" Column="1" TopLine="1885"/>
+        <Caret Line="707" Column="33" TopLine="671"/>
       </Position9>
       <Position10>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1917" Column="1" TopLine="1885"/>
+        <Caret Line="709" Column="34" TopLine="673"/>
       </Position10>
       <Position11>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1918" Column="1" TopLine="1898"/>
+        <Caret Line="711" Column="30" TopLine="675"/>
       </Position11>
       <Position12>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1920" Column="1" TopLine="1898"/>
+        <Caret Line="898" Column="35" TopLine="862"/>
       </Position12>
       <Position13>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1872" Column="1" TopLine="1849"/>
+        <Caret Line="899" Column="24" TopLine="863"/>
       </Position13>
       <Position14>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1873" Column="1" TopLine="1849"/>
+        <Caret Line="956" Column="34" TopLine="920"/>
       </Position14>
       <Position15>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1875" Column="1" TopLine="1849"/>
+        <Caret Line="958" Column="30" TopLine="922"/>
       </Position15>
       <Position16>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1876" Column="1" TopLine="1849"/>
+        <Caret Line="1412" Column="17" TopLine="1376"/>
       </Position16>
       <Position17>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1863" Column="52" TopLine="1849"/>
+        <Caret Line="1554" Column="29" TopLine="1518"/>
       </Position17>
       <Position18>
-        <Filename Value="weo.pas"/>
-        <Caret Line="53" Column="1" TopLine="26"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1819" Column="34" TopLine="1783"/>
       </Position18>
       <Position19>
-        <Filename Value="weo.pas"/>
-        <Caret Line="64" Column="1" TopLine="26"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1986" Column="46" TopLine="1950"/>
       </Position19>
       <Position20>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1908" Column="1" TopLine="1885"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position20>
       <Position21>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1909" Column="1" TopLine="1885"/>
+        <Caret Line="1611" Column="13" TopLine="1568"/>
       </Position21>
       <Position22>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1910" Column="1" TopLine="1885"/>
+        <Caret Line="1788" Column="38" TopLine="1759"/>
       </Position22>
       <Position23>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1911" Column="1" TopLine="1885"/>
+        <Caret Line="1857" Column="40" TopLine="1836"/>
       </Position23>
       <Position24>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1912" Column="1" TopLine="1885"/>
+        <Caret Line="1854" Column="16" TopLine="1832"/>
       </Position24>
       <Position25>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1913" Column="1" TopLine="1885"/>
+        <Caret Line="1750" Column="1" TopLine="1728"/>
       </Position25>
       <Position26>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1914" Column="1" TopLine="1885"/>
+        <Caret Line="1996" Column="115" TopLine="1962"/>
       </Position26>
       <Position27>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1916" Column="1" TopLine="1885"/>
+        <Caret Line="1611" Column="1" TopLine="1589"/>
       </Position27>
       <Position28>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
-        <Caret Line="1917" Column="1" TopLine="1885"/>
+        <Caret Line="1554" Column="1" TopLine="1532"/>
       </Position28>
       <Position29>
-        <Filename Value="weo.pas"/>
-        <Caret Line="64" Column="1" TopLine="26"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1985" Column="1" TopLine="1963"/>
       </Position29>
       <Position30>
-        <Filename Value="../../../Extended/fonctions/fonctions_proprietes.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
+        <Caret Line="1750" Column="1" TopLine="1728"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1997,9 +2003,15 @@
     </Parsing>
     <CodeGeneration>
       <Optimizations>
-        <OptimizationLevel Value="0"/>
+        <OptimizationLevel Value="3"/>
       </Optimizations>
     </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <UseLineInfoUnit Value="False"/>
+      </Debugging>
+      <LinkSmart Value="True"/>
+    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>
