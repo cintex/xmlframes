@@ -121,6 +121,7 @@
 
 {$ifndef FPC}
   {$define DELPHI}
+  {$define WINDOWS}
 {$endif}
 
 {$ifdef Win32}

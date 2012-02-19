@@ -1,4 +1,4 @@
-﻿unit u_xmlform;
+unit u_xmlform;
 
 
 {$I ..\DLCompilers.inc}
@@ -44,7 +44,8 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.3 : Testing.'  + #13#10 +
+                                  BugsStory : '0.9.1.4 : UTF 8.'  + #13#10 +
+                                              '0.9.1.3 : Testing.'  + #13#10 +
                                               '0.9.1.2 : Forcing Not registered forms when searching form xml file.'  + #13#10 +
                                               '0.9.1.1 : Integrating TXMLFillCombo button.'  + #13#10 +
                                               '0.9.1.0 : Really integrating group view.'  + #13#10 +
@@ -54,7 +55,7 @@ const
                                               '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 3 );
+                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 4 );
 {$ENDIF}
 
 type

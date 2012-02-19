@@ -29,11 +29,11 @@
         <UnitName Value="fonctions_xml"/>
       </Item2>
       <Item3>
-        <Filename Value="forms/U_XMLFenetrePrincipale.pas"/>
+        <Filename Value="forms/u_xmlfenetreprincipale.pas"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
       </Item3>
       <Item4>
-        <Filename Value="fonctions/fonctions_ObjetsXML.pas"/>
+        <Filename Value="fonctions/fonctions_objetsxml.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
       </Item4>
       <Item5>
