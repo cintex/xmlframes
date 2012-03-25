@@ -184,6 +184,7 @@ type
 {$IFNDEF FPC}
     procedure WMHelp (var Message: TWMHelp); message WM_HELP;
 {$ENDIF}
+  protected
     procedure Doshow;override;
 
   public
@@ -817,4 +818,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+

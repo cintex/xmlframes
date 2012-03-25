@@ -61,7 +61,6 @@
       <EnableI18N Value="True"/>
       <OutDir Value="fonctions"/>
     </i18n>
-    <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="10">
       <Item1>
         <PackageName Value="ExpertSuperForm"/>
