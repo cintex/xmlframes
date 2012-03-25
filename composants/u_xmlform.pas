@@ -33,9 +33,9 @@ uses
   fonctions_version,
 {$ENDIF}
   u_framework_components, u_framework_dbcomponents,
-  u_multidonnees, JvXPButtons, Menus,
+  u_multidata, JvXPButtons, Menus,
   U_FormMainIni, fonctions_ObjetsXML,
-  Graphics, U_GroupView;
+  Graphics, u_multidonnees, U_GroupView;
 
 {$IFDEF VERSIONS}
 const
@@ -85,13 +85,13 @@ type
     ga_CsvDefs : Array of TFWCsvDef;
     FPageControlDetails : TPageControl ;
     FPanelDetails : TPanel ;
-    gr_Connection : TAConnection;
+    gr_Connection : TDSSource;
     function GetCounter( Index: Integer): TFWCounter;
     procedure SetCounter( Index: Integer; Value: TFWCounter);
     function GetCsvDef( Index: Integer): TFWCsvDef;
     function fli_GetHighCsvDefs: Longint ;
     procedure SetCsvDef( Index: Integer; Value: TFWCsvDef);
-    procedure p_setConnection ( const AValue : TAConnection );
+    procedure p_setConnection ( const AValue : TDSSource );
   public
     procedure AddCounter(const AFieldName : String; const AMinInt, AMaxInt : Int64; const AMinString, AMaxString : String );
     property Counters [Index: Integer] : TFWCounter read GetCounter write SetCounter ;
@@ -99,7 +99,7 @@ type
     property PageControlDetails  : TPageControl read FPageControlDetails write FPageControlDetails ;
     property HighCsvDefs : Longint read fli_GetHighCsvDefs ;
     property PanelDetails : TPanel  read FPanelDetails write FPanelDetails ;
-    property Connection : TAConnection read gr_Connection write p_setConnection;
+    property Connection : TDSSource read gr_Connection write p_setConnection;
   end;
 
   TFWXMLColumnClass = class of TFWXMLColumn;
@@ -144,7 +144,7 @@ type
                              const anod_Field: TALXMLNode;
                              const ai_FieldCounter, ai_counter: Longint ); virtual;
     function fdbc_CreateLookupCombo ( const awin_Parent: TWinControl;
-                                      const ai_Connection : Integer;
+                                      const ads_Connection : TDSSource;
                                       const as_Table, as_FieldsID,
                                             as_FieldsDisplay, as_Name : String;
                                       const alis_IdRelation : TList;
@@ -249,7 +249,7 @@ var gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 // return the XML file name from the table column name
 function fs_getFileNameOfTableColumn ( const afws_Source    : TFWXMLColumn ): String;
 begin
-  Result := afws_Source.Connection.s_dataURL + afws_Source.Table + CST_LEON_Data_Extension ;
+  Result := afws_Source.Connection.dataURL + afws_Source.Table + CST_LEON_Data_Extension ;
 end;
 
 
@@ -348,7 +348,7 @@ end;
 // procedure p_setConnection
 // Setting XML Column Form connection
 // AValue : The data module connection
-procedure TFWXMLColumn.p_setConnection(const AValue: TAConnection);
+procedure TFWXMLColumn.p_setConnection(const AValue: TDSSource);
 begin
   p_setMiniConnectionTo ( AValue, gr_Connection );
 end;
@@ -441,17 +441,18 @@ begin
 end;
 
 function TF_XMLForm.ffwc_CreateSource(const as_Class: String ; const av_Connection: Variant): TFWXMLColumn;
-var li_Connection : Integer;
+var lds_Connection : TDSSource;
 begin
   if av_Connection = Null Then
-       li_Connection:=fi_FindConnection( gs_Connection, True )
-  Else li_Connection:=fi_FindConnection( av_Connection, True );
-  with ga_Connections [ li_Connection ] do
+       lds_Connection:=DMModuleSources.fds_FindConnection( gs_Connection, True )
+  Else lds_Connection:=DMModuleSources.fds_FindConnection( av_Connection, True );
+  with lds_Connection do
     Begin
       Result := Sources.Add as TFWXMLColumn;
-      Result.Datasource := fds_CreateDataSourceAndTable ( as_Class, s_dataURL + IntToStr ( li_Connection ), IntToStr ( Sources.Count - 1 ), dtt_DatasetType, dat_QueryCopy, Self);
+      Result.gr_Connection := lds_Connection;
+      Result.Datasource := fds_CreateDataSourceAndTable ( as_Class, dataURL + IntToStr ( lds_Connection.Index ), IntToStr ( Sources.Count - 1 ), DatasetType, QueryCopy, Self);
       Result.Table := as_Class;
-      if dtt_DatasetType = dtCSV Then
+      if DatasetType = dtCSV Then
         Begin
           p_setComponentProperty ( Result.Datasource.dataset, 'Filename', fs_getFileNameOfTableColumn ( Result ));
         End;
@@ -738,7 +739,7 @@ End;
 // Create the lookup combo box from xml relation
 ///////////////////////////////////////////////////////////////////////////////////////////
 function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
-                                             const ai_Connection : Integer;
+                                             const ads_Connection : TDSSource;
                                              const as_Table, as_FieldsID,
                                                    as_FieldsDisplay, as_Name : String;
                                              const alis_IdRelation : TList;
@@ -764,10 +765,10 @@ Begin
       Else
        ls_Fields := as_FieldsID;
       if ls_Fields <> '' Then
-        {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+        {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, Self );
       if OneFieldToFill Then
         Begin
-         ( Result.Combo as TExtDBComboInsert).SearchSource := fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ga_Connections [ ai_Connection ], alis_IdRelation, Self );
+         ( Result.Combo as TExtDBComboInsert).SearchSource := fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, Self );
         end;
 
       if as_Name <> '' Then
@@ -797,6 +798,7 @@ var ldoc_XMlRelation : TALXMLDocument ;
     llis_idRelation, llis_DisplayRelation         : TList;
     la_FieldsBind : TRelationBind;
     li_i : Integer;
+    lds_Source : TDSSource;
     ls_FieldsID, ls_Name, ls_FieldsDisplay : String;
     lb_OneFieldToFill : boolean;
 
@@ -893,13 +895,13 @@ Begin
         /// getting other xml file info
         ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_ClassBind, ls_ClassLink, ls_Connection, llis_IdRelation, llis_DisplayRelation, lnod_CrossLinkRelation, lb_OneFieldToFill );
         ls_FieldsID := fs_GetStringFields  ( llis_IdRelation , '', True );
-        li_i := fi_FindConnection(ls_Connection, True );
+        lds_Source := DMModuleSources.fds_FindConnection(ls_Connection, True );
 
         if high ( la_FieldsBind ) < 0 Then
          // 1-N relationships
           Begin
             ls_FieldsDisplay := fs_GetStringFields  ( llis_DisplayRelation, '', True );
-            Result := fdbc_CreateLookupCombo ( awin_Parent, li_i, ls_ClassLink,
+            Result := fdbc_CreateLookupCombo ( awin_Parent, lds_Source, ls_ClassLink,
                                                ls_FieldsID, ls_FieldsDisplay,
                                                ls_Name,
                                                llis_idRelation,
@@ -1716,7 +1718,7 @@ var lnod_FieldProperties : TALXMLNode ;
             or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
               lb_IsLarge := True;
           End;
-      if afws_Source.gr_Connection.dtt_DatasetType = dtCSV then
+      if afws_Source.gr_Connection.DatasetType = dtCSV then
         Begin
           lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, lb_IsLarge, afd_FieldsDefs );
         End
@@ -1878,7 +1880,7 @@ var lstl_File : TStringList;
     ls_FileInside : String ;
     li_i : Longint;
 Begin
-  if  ( afws_Source.gr_Connection.dtt_DatasetType = dtCSV )
+  if  ( afws_Source.gr_Connection.DatasetType = dtCSV )
   and not FileExists ( fs_getFileNameOfTableColumn ( afws_Source ))
   and ( afd_FieldsDefs.count > 0 )
    Then
@@ -1977,7 +1979,7 @@ var li_i, li_j, li_NoField : LongInt ;
     lfd_FieldsDefs := nil;
     lfwc_Column :=ffwc_CreateSource ( as_Table, as_Connection );
     gs_connection := as_Connection;
-    if lfwc_Column.gr_Connection.dtt_DatasetType = dtCSV then
+    if lfwc_Column.gr_Connection.DatasetType = dtCSV then
       Begin
         lfd_FieldsDefs := fobj_GetcomponentObjectProperty ( lfwc_Column.Datasource.Dataset, 'FieldDefs' ) as TFieldDefs;
       End;

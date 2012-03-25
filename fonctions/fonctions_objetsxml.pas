@@ -42,7 +42,8 @@ uses Forms, JvXPBar, JvXPContainer,
   TntForms,TntStdCtrls, TntExtCtrls,
 {$ENDIF}
   DBCtrls, ALXmlDoc, IniFiles, Graphics,
-  u_multidonnees, fonctions_string;
+  u_multidonnees, fonctions_string,
+  u_multidata;
 
 const // Champs utilisés
       CST_INI_PROJECT_FILE = 'LY_PROJECT_FILE';
@@ -127,7 +128,7 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TAConnection; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
@@ -1628,8 +1629,8 @@ End;
 /////////////////////////////////////////////////////////////////////////
 procedure p_LoadData ( const axno_Node : TALXMLNode );
 var li_i : LongInt ;
-    li_Pos ,
-    li_connection : Integer;
+    li_Pos : LongInt ;
+    lds_connection : TDSSource;
     lNode : TALXMLNode ;
     ls_ConnectionClep : String;
 Begin
@@ -1643,76 +1644,74 @@ Begin
        Begin
         // Le module M_Donnees n'est pas encore chargé
         ls_ConnectionClep := lNode.Attributes [CST_LEON_ID];
-        li_connection:= fi_FindConnection(ls_ConnectionClep, False);
-        if li_connection > -1 Then
+        lds_connection:= DMModuleSources.fds_FindConnection(ls_ConnectionClep, False);
+        if assigned ( lds_connection ) Then
           Continue;
         if ( lNode.NodeName = CST_LEON_DATA_FILE ) Then
           Begin
-            M_Donnees.CreateConnection ( dtCSV, ls_ConnectionClep );
-            with ga_Connections [ high ( ga_Connections )] do
+            with DMModuleSources.CreateConnection ( dtCSV, ls_ConnectionClep ) do
               Begin
-                s_dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ])) +DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
+                dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ])) +DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
                 {$IFDEF WINDOWS}
-                s_dataURL := fs_RemplaceChar ( s_DataURL, '/', '\' );
+                dataURL := fs_RemplaceChar ( DataURL, '/', '\' );
                 {$ENDIF}
               end;
           end
          Else
           Begin
             {$IFDEF IBX}
-            if ( pos ( CST_LEON_DATA_FIREBIRD, s_DataDriver ) > 0 )
-              M_Donnees.CreateConnection ( dtIBX, ls_ConnectionClep )
+            if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 )
+              DMModuleSources.CreateConnection ( dtIBX, ls_ConnectionClep )
              Else
             {$ENDIF}
-            M_Donnees.CreateConnection ( {$IFDEF ZEOS}dtZEOS{$ELSE}{$IFDEF EADO}dtADO{$ELSE}dtCSV{$ENDIF}{$ENDIF}, ls_ConnectionClep );
-            with ga_Connections [ high ( ga_Connections )] do
+            with DMModuleSources.CreateConnection ( {$IFDEF ZEOS}dtZEOS{$ELSE}{$IFDEF EADO}dtADO{$ELSE}dtCSV{$ENDIF}{$ENDIF}, ls_ConnectionClep ) do
               Begin
-                s_dataURL := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ]);
-                li_Pos := pos ( '//', s_dataURL );
-                s_dataURL := copy ( s_DataURL , li_pos + 2, length ( s_DataURL ) - li_pos - 1 );
-                i_DataPort := 0;
-                li_Pos := pos ( ':', s_DataURL );
+                dataURL := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ]);
+                li_Pos := pos ( '//', DataURL );
+                DataURL := copy ( DataURL , li_pos + 2, length ( DataURL ) - li_pos - 1 );
+                DataPort := 0;
+                li_Pos := pos ( ':', DataURL );
                 // Récupération du port
                 if li_Pos > 0 Then
                   try
-                    if pos ( '/', s_DataURL ) > 0 Then
-                      i_DataPort    := StrToInt ( copy ( s_dataURL, li_Pos + 1, pos ( '/', s_dataURL ) - li_pos - 1 ))
+                    if pos ( '/', DataURL ) > 0 Then
+                      DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
                      Else
-                      i_DataPort    := StrToInt ( copy ( s_dataURL, li_Pos + 1, length ( s_dataURL ) - li_pos ));
+                      DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
                     // Finition de l'URL : Elle ne contient que l'adresse du serveur
-                    s_DataURL := copy ( s_DataURL , 1, li_Pos - 1 );
+                    DataURL := copy ( DataURL , 1, li_Pos - 1 );
                   Except
                   end;
-                if ( s_DataURL [ length ( s_DataURL )] = '/' ) Then
-                  s_DataURL := copy ( s_DataURL , 1, length ( s_DataURL ) - 1 );
-                s_DataUser := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_USER ]);
-                s_DataPassword :=fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_Password ]);
-                s_Database := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DATABASE ]);
-                s_DataDriver := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DRIVER ]);
+                if ( DataURL [ length ( DataURL )] = '/' ) Then
+                  DataURL := copy ( DataURL , 1, length ( DataURL ) - 1 );
+                DataUser := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_USER ]);
+                DataPassword :=fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_Password ]);
+                Database := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DATABASE ]);
+                DataDriver := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DRIVER ]);
                 {$IFDEF ZEOS}
-                case dtt_DatasetType of
+                case DatasetType of
                     dtZEOS : Begin
-                             p_setComponentProperty ( com_Connection, 'User', s_DataUser );
-                             p_setComponentProperty ( com_Connection, 'Password', s_DataPassword );
-                             p_setComponentProperty ( com_Connection, 'Hostname', s_DataURL );
-                             p_setComponentProperty ( com_Connection, 'Database', s_Database );
-                             if i_DataPort > 0 Then
-                               p_setComponentProperty ( com_Connection, 'Port', i_DataPort );
-                             if ( pos ( CST_LEON_DATA_MYSQL, s_DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( com_Connection, 'Protocol', CST_LEON_DRIVER_MYSQL )
-                             else if ( pos ( CST_LEON_DATA_FIREBIRD, s_DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( com_Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
-                             else if ( pos ( CST_LEON_DATA_SQLLITE, s_DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( com_Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
-                             else if ( pos ( CST_LEON_DATA_ORACLE, s_DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( com_Connection, 'Protocol', CST_LEON_DRIVER_ORACLE )
-                             else if ( pos ( CST_LEON_DATA_POSTGRES, s_DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( com_Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
+                             p_setComponentProperty ( Connection, 'User', DataUser );
+                             p_setComponentProperty ( Connection, 'Password', DataPassword );
+                             p_setComponentProperty ( Connection, 'Hostname', DataURL );
+                             p_setComponentProperty ( Connection, 'Database', Database );
+                             if DataPort > 0 Then
+                               p_setComponentProperty ( Connection, 'Port', DataPort );
+                             if ( pos ( CST_LEON_DATA_MYSQL, DataDriver ) > 0 ) Then
+                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_MYSQL )
+                             else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
+                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
+                             else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
+                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
+                             else if ( pos ( CST_LEON_DATA_ORACLE, DataDriver ) > 0 ) Then
+                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_ORACLE )
+                             else if ( pos ( CST_LEON_DATA_POSTGRES, DataDriver ) > 0 ) Then
+                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
                              try
-                               p_setComponentBoolProperty ( com_Connection, 'Connected', True );
+                               p_setComponentBoolProperty ( Connection, 'Connected', True );
                              except
                                on e: Exception do
-                                 ShowMessage ( 'Could not initiate connection on ' + s_DataDriver + ' and ' + s_DataURL +#13#10 + 'User : ' + s_DataUser +#13#10 + 'Base : ' + s_Database +#13#10 + e.Message   );
+                                 ShowMessage ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
                              end;
                            end;
                 End;
@@ -1907,6 +1906,8 @@ End;
 /////////////////////////////////////////////////////////////////////////
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 Begin
+  if DMModuleSources = nil Then
+    DMModuleSources := TDMModuleSources.Create ( Application );
   Result := False;
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
@@ -2265,15 +2266,15 @@ end;
 // ar_Connection : Connection of table
 // alis_NodeFields : Node of fields' nodes
 ////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TAConnection; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 begin
   with ar_Connection do
     Begin
-      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, dat_QueryCopy, acom_Owner );
-      case dtt_DatasetType of
+      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
+      case DatasetType of
         dtCSV  :
          Begin
-          p_setComponentProperty ( Result.Dataset, 'FileName', s_DataURL + as_Table + CST_LEON_Data_Extension );
+          p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table + CST_LEON_Data_Extension );
           p_setFieldDefs ( Result.Dataset, alis_NodeFields );
         end;
        else

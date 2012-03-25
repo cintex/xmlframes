@@ -26,7 +26,7 @@ uses
   fonctions_version,
 {$ENDIF}
   U_CustomFrameWork, u_framework_components,
-  u_multidonnees,U_GroupView ;
+  u_multidata,U_GroupView ;
 
 
 const CST_GRID_NAVIGATION_WIDTH         = 200 ;
