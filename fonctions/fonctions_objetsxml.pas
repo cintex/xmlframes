@@ -128,7 +128,6 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
@@ -229,7 +228,8 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      fonctions_images , fonctions_system , fonctions_init, U_XMLFenetrePrincipale,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents, strutils,
-     unite_variables, u_xmlform, u_languagevars, Imaging, fonctions_languages ;
+     unite_variables, u_xmlform, u_languagevars, Imaging, fonctions_languages,
+     fonctions_manbase ;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -2256,34 +2256,6 @@ Begin
       Result := Result + CST_COMBO_FIELD_SEPARATOR + fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID );
   listnodes.Free;
 end;
-
-////////////////////////////////////////////////////////////////////////////////
-// function fds_CreateDataSourceAndOpenedQuery
-// create datasource, dataset, setting and open it
-// as_Table      : Table name
-// as_Fields     : List of fields with comma
-// as_NameEnd    : End of components' names
-// ar_Connection : Connection of table
-// alis_NodeFields : Node of fields' nodes
-////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
-begin
-  with ar_Connection do
-    Begin
-      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
-      case DatasetType of
-        dtCSV  :
-         Begin
-          p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table + CST_LEON_Data_Extension );
-          p_setFieldDefs ( Result.Dataset, alis_NodeFields );
-        end;
-       else
-        p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
-      End;
-    end;
-  Result.Dataset.Open;
-end;
-
 // procedure p_setImageToMenuAndXPButton
 // Set the xpbutton and menu from prefix
 procedure p_setPrefixToMenuAndXPButton( const as_Prefix : String;

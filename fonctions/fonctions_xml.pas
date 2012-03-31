@@ -11,7 +11,7 @@ uses
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
-  ALXmlDoc,
+  ALXmlDoc, controls,
   Forms;
 
 const CST_LEON_File_Extension = '.xml';
@@ -185,6 +185,8 @@ function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute 
 function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode ;
 function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
+function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
+
 
 implementation
 
@@ -192,7 +194,10 @@ uses fonctions_init, u_multidonnees,
 {$IFNDEF FPC}
      Variants, StrUtils,
 {$ENDIF}
-     fonctions_string, Dialogs;
+     fonctions_string, Dialogs, U_ExtNumEdits,
+     fonctions_autocomponents, u_framework_components,
+     ExtCtrls, u_framework_dbcomponents,
+     DbCtrls;
 
 
 // function fs_LeonFilter
@@ -228,6 +233,59 @@ Begin
           End;
       End;
 End;
+
+
+/////////////////////////////////////////////////////////////////////////
+// function fwin_CreateAFieldComponent
+// Creating an edit component and setting properties
+// as_FieldType : XML field type string
+// acom_Owner : Form
+// ab_isLarge : Large or litte edit
+// ab_IsLocal : Local or data linked
+// ai_Counter : Field counter
+// returns an editing component
+//////////////////////////////////////////////////////////////////////////
+function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
+begin
+  Result := nil;
+  if as_FieldType = CST_LEON_FIELD_NUMBER then
+    Begin
+      if ab_IsLocal then
+        Begin
+         Result := TExtNumEdit.Create ( acom_Owner );
+         (Result as TExtNumEdit).Text:='';
+        end
+       else
+        Result := TExtDBNumEdit.Create ( acom_Owner );
+    End
+  else if as_FieldType = CST_LEON_FIELD_TEXT then
+    Begin
+      Result := fwin_CreateAEditComponent ( acom_Owner, ab_isLarge, ab_IsLocal );
+    End
+  else if as_FieldType = CST_LEON_FIELD_FILE then
+    Begin
+      if ab_IsLocal then
+        Result := TFWEdit.Create ( acom_Owner )
+       else
+        Result := TFWDBEdit.Create ( acom_Owner );
+    End
+  else if as_FieldType = CST_LEON_FIELD_DATE then
+    Begin
+      if ab_IsLocal then
+        Result := TFWDateEdit.Create ( acom_Owner )
+       Else
+        Result := TFWDBDateEdit.Create ( acom_Owner );
+    End
+  else if as_FieldType = CST_LEON_FIELD_CHOICE then
+    Begin
+      if ab_IsLocal then
+        Result := TRadioGroup.Create ( acom_Owner )
+       Else
+        Result := TDBRadioGroup.Create ( acom_Owner );
+    End;
+end;
+
+
 
 // procedure p_GetMarkFunction
 // Getting field marks

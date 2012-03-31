@@ -19,7 +19,7 @@
       </Other>
     </CompilerOptions>
     <Version Minor="9" Release="4" Build="6"/>
-    <Files Count="9">
+    <Files Count="7">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
@@ -37,25 +37,17 @@
         <UnitName Value="fonctions_ObjetsXML"/>
       </Item4>
       <Item5>
-        <Filename Value="fonctions/fonctions_autocomponents.pas"/>
-        <UnitName Value="fonctions_autocomponents"/>
-      </Item5>
-      <Item6>
         <Filename Value="fonctions/u_languagevars.pas"/>
         <UnitName Value="u_languagevars"/>
-      </Item6>
-      <Item7>
-        <Filename Value="forms/u_multidonnees.pas"/>
-        <UnitName Value="u_multidonnees"/>
-      </Item7>
-      <Item8>
+      </Item5>
+      <Item6>
         <Filename Value="fonctions/fonctions_leon_format.pas"/>
         <UnitName Value="fonctions_leon_format"/>
-      </Item8>
-      <Item9>
+      </Item6>
+      <Item7>
         <Filename Value="composants/u_xmlfillcombobutton.pas"/>
         <UnitName Value="u_xmlfillcombobutton"/>
-      </Item9>
+      </Item7>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
