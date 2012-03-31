@@ -19,7 +19,7 @@
       </Other>
     </CompilerOptions>
     <Version Minor="9" Release="4" Build="6"/>
-    <Files Count="7">
+    <Files Count="8">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
@@ -48,6 +48,10 @@
         <Filename Value="composants/u_xmlfillcombobutton.pas"/>
         <UnitName Value="u_xmlfillcombobutton"/>
       </Item7>
+      <Item8>
+        <Filename Value="fonctions/fonctions_autocomponents.pas"/>
+        <UnitName Value="fonctions_autocomponents"/>
+      </Item8>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

@@ -8,7 +8,8 @@ interface
 
 uses
     u_xmlform, fonctions_xml, U_XMLFenetrePrincipale, fonctions_ObjetsXML, 
-  u_languagevars, fonctions_leon_format, u_xmlfillcombobutton;
+  u_languagevars, fonctions_leon_format, u_xmlfillcombobutton, 
+  fonctions_autocomponents;
 
 implementation
 
