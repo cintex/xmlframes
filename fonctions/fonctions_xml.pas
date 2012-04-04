@@ -57,6 +57,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_DATA_SQLSERVER= '.mssql.' ;
       CST_LEON_DATA_ORACLE   = '.oracle.' ;
       CST_LEON_DATA_SQLLITE  = '.sqllite.' ;
+
       CST_LEON_DRIVER_MYSQL    = 'mysql-5' ;
       CST_LEON_DRIVER_FIREBIRD = 'firebird-2.1' ;
       CST_LEON_DRIVER_POSTGRES = 'postgresql-8' ;
