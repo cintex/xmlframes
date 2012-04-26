@@ -18,7 +18,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="9" Release="4" Build="7"/>
+    <Version Minor="9" Release="5"/>
     <Files Count="8">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>

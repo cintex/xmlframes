@@ -1660,7 +1660,7 @@ Begin
          Else
           Begin
             {$IFDEF IBX}
-            if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 )
+            if ( pos ( CST_LEON_DATA_FIREBIRD, lNode.Attributes [ CST_LEON_DATA_DRIVER ] ) > 0 ) then
               DMModuleSources.CreateConnection ( dtIBX, ls_ConnectionClep )
              Else
             {$ENDIF}

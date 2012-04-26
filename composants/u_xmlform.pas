@@ -44,7 +44,8 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.4 : UTF 8.'  + #13#10 +
+                                  BugsStory : '0.9.1.5 : centralizing on ManFrames.'  + #13#10 +
+                                              '0.9.1.4 : UTF 8.'  + #13#10 +
                                               '0.9.1.3 : Testing.'  + #13#10 +
                                               '0.9.1.2 : Forcing Not registered forms when searching form xml file.'  + #13#10 +
                                               '0.9.1.1 : Integrating TXMLFillCombo button.'  + #13#10 +
@@ -55,7 +56,7 @@ const
                                               '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 4 );
+                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 5 );
 {$ENDIF}
 
 type
@@ -145,7 +146,6 @@ type
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
-    function ffwc_SearchSource(const as_Class: String ): TFWXMLSource; virtual;
     function  CreateSources: TFWSources; override;
     function  fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ;
                                           const anod_Field : TALXMLNode ;
@@ -307,20 +307,6 @@ begin
 end;
 
 
-function TF_XMLForm.ffwc_SearchSource(const as_Class: String ): TFWXMLSource;
-var li_i : Integer;
-begin
-  Result := nil;
-  for li_i := 0 to Sources.Count - 1  do
-    Begin
-      if ( Sources [ li_i ].Table = as_Class ) Then
-       Begin
-         Result := Sources [ li_i ] as TFWXMLSource;
-         Break;
-       end;
-    end;
-end;
-
 // function fpan_GridNavigationComponents
 // Create a complete Grid navigation with Navigators returning the child created ScrollBox for the editing form
 // awin_Parent : The grid navigation and editing parent
@@ -373,38 +359,13 @@ function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
                                              const ai_FieldCounter, ai_Counter : Integer;
                                              const OneFieldToFill : Boolean )
                                              :TXMLFillCombo;
-var
-    ls_Fields : String;
 Begin
   Result :=  TXMLFillCombo.Create(Self);
   if OneFieldToFill
    Then Result.Combo := TExtDBComboInsert.Create ( Self )
    Else Result.Combo := TFWDBLookupCombo.Create ( Self );
   Result.FormRegisteredName:=as_Table;
-  with Result.Combo do
-    Begin
-      Width := 100;
-      if as_FieldsDisplay <> '' Then
-       Begin
-         ls_Fields := as_FieldsID + ',' + as_FieldsDisplay;
-         {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF}:= as_FieldsDisplay;
-       end
-      Else
-       ls_Fields := as_FieldsID;
-      if ls_Fields <> '' Then
-        {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}:= fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, Self );
-      if OneFieldToFill Then
-        Begin
-         ( Result.Combo as TExtDBComboInsert).SearchSource := fds_CreateDataSourceAndOpenedQuery ( as_Table, ls_Fields, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, Self );
-        end;
-
-      if as_Name <> '' Then
-        Begin
-         Hint:=fs_GetLabelCaption(as_Name);
-         ShowHint:=True;
-        end;
-      {$IFNDEF RXJVCOMBO}KeyField{$ELSE}LookupField{$ENDIF}:= as_FieldsID;
-    end;
+  p_SetComboProperties ( Result.Combo, Self, ads_Connection, as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter, OneFieldToFill );
 end;
 
 // function ffwc_getRelationComponent
@@ -1649,7 +1610,6 @@ var lpan_ParentPanel   : TWinControl;
     lpan_PanelActions,
     lpan_Panel : TPanel ;
     ldgv_GroupViewRight : TDBGroupView ;
-    lfwc_Column    : TFWXMLSource ;
     lcon_Control   : TControl;
 
     procedure p_setGroupmentfields ( const adgv_GroupView : TDBGroupView );
@@ -1808,8 +1768,7 @@ var lpan_ParentPanel   : TWinControl;
    end;
 
 begin
-  lfwc_Column := Sources [ ai_Counter ] as TFWXMLSource;
-  with lfwc_Column do
+  with afws_source do
     Begin
       lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), as_NameRelation );
       {$IFDEF FPC}
