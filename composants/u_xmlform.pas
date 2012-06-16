@@ -1879,8 +1879,8 @@ end;
 procedure TF_XMLForm.BeforeCreateFrameWork(Sender: TComponent);
 begin
   gfin_FormIni := TOnFormInfoIni.Create(Self);
-  gfin_FormIni.SauvePosForm    := True;
-  gfin_FormIni.SauvePosObjects := True;
+  gfin_FormIni.SavePosForm    := True;
+  gfin_FormIni.SavePosObjects := True;
   gfin_FormIni.Name := CST_COMPONENTS_FORMINI;
   gfin_FormIni.AutoUpdate := True;
   gfin_FormIni.AutoLoad   := False;
