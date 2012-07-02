@@ -2,14 +2,14 @@
   This source is only used to compile and install the package.
  }
 
-unit lazxmlframes; 
+unit lazxmlframes;
 
 interface
 
 uses
-    u_xmlform, fonctions_xml, U_XMLFenetrePrincipale, fonctions_ObjetsXML, 
+  u_xmlform, fonctions_xml, U_XMLFenetrePrincipale, fonctions_ObjetsXML, 
   u_languagevars, fonctions_leon_format, u_xmlfillcombobutton, 
-  fonctions_autocomponents;
+  fonctions_autocomponents, fonctions_print;
 
 implementation
 
