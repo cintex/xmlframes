@@ -63,41 +63,44 @@
       <OutDir Value="LANG"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="11">
+    <RequiredPkgs Count="12">
       <Item1>
-        <PackageName Value="lazextbuttons"/>
+        <PackageName Value="extreports"/>
       </Item1>
       <Item2>
-        <PackageName Value="ExpertSuperForm"/>
+        <PackageName Value="lazextbuttons"/>
       </Item2>
       <Item3>
-        <PackageName Value="LCL"/>
+        <PackageName Value="ExpertSuperForm"/>
       </Item3>
       <Item4>
-        <PackageName Value="JvXPBarLaz"/>
+        <PackageName Value="LCL"/>
       </Item4>
       <Item5>
-        <PackageName Value="xmldocument"/>
+        <PackageName Value="JvXPBarLaz"/>
       </Item5>
       <Item6>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="xmldocument"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="FCL"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item7>
       <Item8>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazmansoft"/>
       </Item8>
       <Item9>
-        <PackageName Value="lazextcomponents"/>
+        <PackageName Value="lazfonctions"/>
       </Item9>
       <Item10>
-        <PackageName Value="lazmanframes"/>
+        <PackageName Value="lazextcomponents"/>
       </Item10>
       <Item11>
-        <PackageName Value="rxnew"/>
+        <PackageName Value="lazmanframes"/>
       </Item11>
+      <Item12>
+        <PackageName Value="rxnew"/>
+      </Item12>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

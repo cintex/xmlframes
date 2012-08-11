@@ -25,6 +25,7 @@ uses
   fonctions_version,
 {$ENDIF}
   U_CustomFrameWork, u_framework_components,
+  u_buttons_defs,
   u_multidata,U_GroupView, ExtCtrls ;
 
 
@@ -48,6 +49,7 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_TABSHEET_BEGIN     = 'tbs_' ;
       CST_COMPONENTS_PAGECONTROL_BEGIN  = 'pco_' ;
       CST_COMPONENTS_NAVIGATOR_BEGIN    = 'nav_' ;
+      CST_COMPONENTS_BUTTON_BEGIN       = 'but_' ;
       CST_COMPONENTS_SPLITTER_BEGIN     = 'spl_' ;
       CST_COMPONENTS_GROUPVIEW_BEGIN    = 'grv_' ;
       CST_COMPONENTS_RECORD_BEGIN       = 'fwr_Record' ;
@@ -58,7 +60,9 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_OUTALL_BEGIN       = 'fwo_OutAll' ;
       CST_COMPONENTS_FORM_BEGIN         = 'f_' ;
 
-      CST_COMPONENTS_BUTTON_CLOSE       = 'fwc_Close' ;
+      CST_COMPONENTS_BUTTON_CLOSE       = 'Close' ;
+      CST_COMPONENTS_BUTTON_PRINT       = 'Print' ;
+
       CST_COMPONENTS_PANEL_MAIN         = 'pan_Main' ;
       CST_COMPONENTS_FORMINI            = 'gfin_FormIni';
 
@@ -92,6 +96,7 @@ const
 {$ENDIF}
 
 function fwin_CreateAEditComponent ( const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean ):TWinControl;
+function fpan_CreateAction ( const abut_Button : TFWXPButton ; const as_name : String ; const acom_Owner : TWinControl ; const apan_ActionPanel : TPanel ):TPanel;
 function fpan_CreateActionPanel ( const awin_Parent : TWinControl ; const acom_Owner : TWinControl ; var apan_ActionPanel : TPanel ):TPanel;
 function fgrb_CreateGroupBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TGroupBox;
 function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TPanel;
@@ -322,15 +327,31 @@ End;
 // apan_ActionPanel : Creating Action Panel to set
 // returns a main panel
 //////////////////////////////////////////////////////////////////////////
+function fpan_CreateAction ( const abut_Button : TFWXPButton ; const as_name : String ; const acom_Owner : TWinControl ; const apan_ActionPanel : TPanel ):TPanel;
+Begin
+  abut_Button.Parent := apan_ActionPanel;
+  abut_Button.Name := CST_COMPONENTS_BUTTON_BEGIN + as_name;
+  abut_Button.Align := alRight ;
+  Result := fpan_CreatePanel ( apan_ActionPanel, CST_COMPONENTS_PANEL_MAIN, acom_Owner, alRight );
+  Result.Width := 10;
+  Result.Name := CST_COMPONENTS_PANEL_BEGIN + as_name;;
+End;
+
+/////////////////////////////////////////////////////////////////////////
+// function fpan_CreateActionPanel
+// Creating an Action Panel and setting buttons properties
+// awin_Parent : Parent control
+// acom_Owner : Form
+// apan_ActionPanel : Creating Action Panel to set
+// returns a main panel
+//////////////////////////////////////////////////////////////////////////
 function fpan_CreateActionPanel ( const awin_Parent : TWinControl ; const acom_Owner : TWinControl ; var apan_ActionPanel : TPanel ):TPanel;
-var lbut_Button : TFwClose;
+var lbut_Button : TFWButton;
 Begin
   apan_ActionPanel := fpan_CreatePanel ( acom_Owner, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_ACTIONS, acom_Owner, alTop );
   lbut_Button := TFwClose.Create ( acom_Owner );
-  lbut_Button.Parent := apan_ActionPanel;
-  lbut_Button.Name := CST_COMPONENTS_BUTTON_CLOSE;
-  apan_ActionPanel.Height := lbut_Button.Height ;
-  lbut_Button.Align := alRight ;
+  fpan_CreateAction ( lbut_Button, CST_COMPONENTS_BUTTON_CLOSE, acom_Owner, apan_ActionPanel);
+  apan_ActionPanel.Height := lbut_Button.GlyphSize + 2 ;
   Result := fpan_CreatePanel ( acom_Owner, CST_COMPONENTS_PANEL_MAIN, acom_Owner, alClient );
 End;
 

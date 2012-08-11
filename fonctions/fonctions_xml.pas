@@ -133,6 +133,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_ACTION_VALUE = 'value' ;
       CST_LEON_ACTION_IDREF = 'idref' ;
       CST_LEON_ACTION_REF_DELETE = '_delete' ;
+      CST_LEON_ACTION_REF_PRINT = '_print' ;
       CST_LEON_ACTION_REF_ADD    = '_add' ;
       CST_LEON_ACTION_REF_SET    = '_set' ;
       CST_LEON_ACTION_REF_CLONE  = '_clone' ;

@@ -104,6 +104,7 @@ type
       var ACLoseAction: TCloseaction);
     procedure p_LoginCancelClick(AObject: TObject);
     procedure p_LoginOKClick(AObject: TObject);
+    procedure p_printGrid(Self: TObject);
     procedure p_setFunction ( const a_Value : TLeonFunction );
     procedure p_setNodeId(const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWXMLSource);
   protected
@@ -206,8 +207,10 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
      u_extdbgrid, fonctions_images,
      fonctions_Objets_Dynamiques,
-     fonctions_languages,
+     fonctions_languages, fonctions_reports,
+     u_buttons_defs,
      u_buttons_appli, unite_variables, StdCtrls;
+
 var  gb_LoginFormLoaded : Boolean = False;
      gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
@@ -1053,6 +1056,12 @@ Begin
 
 End;
 
+procedure TF_XMLForm.p_printGrid ( Self : TObject );
+Begin
+  if Sources.count >  0 Then
+   fb_CreateGridReport(Sources [ 0 ].Grid,caption,[]);
+end;
+
 // procedure p_SetFieldButtonsProperties
 // Setting the editing buttons
 // anod_Action : Action node for buttons
@@ -1060,6 +1069,7 @@ End;
 // awin_Parent : Parent component
 procedure TF_XMLForm.p_SetFieldButtonsProperties ( const anod_Action : TALXMLNode ; const ai_Counter : Longint );
 var ls_Action   : String ;
+    lbut_Button : TFWXPButton;
 begin
   with Sources [ ai_Counter ] do
     if  ( anod_Action.NodeName = CST_LEON_ACTION_REF )
@@ -1071,6 +1081,7 @@ begin
             NavEdit.VisibleButtons := NavEdit.VisibleButtons + [nbEPost,nbECancel];
             Exit;
           End;
+
         if ls_Action = CST_LEON_ACTION_REF_DELETE then
           Begin
             NavEdit.VisibleButtons := NavEdit.VisibleButtons + [nbEDelete];
@@ -1080,6 +1091,13 @@ begin
         or ( ls_Action = CST_LEON_ACTION_REF_CLONE ) then
           Begin
             NavEdit.VisibleButtons := NavEdit.VisibleButtons + [nbEInsert];
+            Exit;
+          End;
+        if ls_Action = CST_LEON_ACTION_REF_PRINT then
+          Begin
+            lbut_Button := TFWPrint.Create ( Self );
+            fpan_CreateAction ( lbut_Button, CST_COMPONENTS_BUTTON_PRINT, Self, FActionPanel );
+            lbut_Button.OnClick:=p_printGrid;
             Exit;
           End;
       End;
