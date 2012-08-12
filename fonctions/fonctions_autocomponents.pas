@@ -75,7 +75,6 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_RIGHT              = 'Right' ;
       CST_COMPONENTS_DBGRID             = 'Grid' ;
       CST_COMPONENTS_BUTTONS            = 'Buttons' ;
-      CST_COMPONENTS_MAIN               = 'Main' ;
       CST_COMPONENTS_CONTROLS           = 'Controls' ;
       CST_COMPONENTS_ACTIONS            = 'Actions' ;
 
@@ -332,7 +331,7 @@ Begin
   abut_Button.Parent := apan_ActionPanel;
   abut_Button.Name := CST_COMPONENTS_BUTTON_BEGIN + as_name;
   abut_Button.Align := alRight ;
-  Result := fpan_CreatePanel ( apan_ActionPanel, CST_COMPONENTS_PANEL_MAIN, acom_Owner, alRight );
+  Result := fpan_CreatePanel ( apan_ActionPanel, CST_COMPONENTS_PANEL_BEGIN + as_name, acom_Owner, alRight );
   Result.Width := 10;
   Result.Name := CST_COMPONENTS_PANEL_BEGIN + as_name;;
 End;
