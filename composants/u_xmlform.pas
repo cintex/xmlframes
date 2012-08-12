@@ -104,7 +104,7 @@ type
       var ACLoseAction: TCloseaction);
     procedure p_LoginCancelClick(AObject: TObject);
     procedure p_LoginOKClick(AObject: TObject);
-    procedure p_printGrid(Self: TObject);
+    procedure p_printGrid(AObject: TObject);
     procedure p_setFunction ( const a_Value : TLeonFunction );
     procedure p_setNodeId(const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWXMLSource);
   protected
@@ -1056,7 +1056,7 @@ Begin
 
 End;
 
-procedure TF_XMLForm.p_printGrid ( Self : TObject );
+procedure TF_XMLForm.p_printGrid ( AObject : TObject );
 Begin
   if Sources.count >  0 Then
    fb_CreateGridReport(Sources [ 0 ].Grid,caption,[]);

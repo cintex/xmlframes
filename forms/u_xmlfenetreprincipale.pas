@@ -33,7 +33,7 @@ uses
 {$ELSE}
   Windows, OleDB, JvComponent, StoHtmlHelp, JvScrollBox,
   ImgList,
-  JvExExtCtrls, JvSplitter, JvLED, U_ExtScrollBox,
+  JvExExtCtrls, JvSplitter, JvLED,
   StdActns, JvExForms, JvExControls, JvXPCore, Messages,
 {$ENDIF}
 {$IFDEF VERSIONS}
@@ -54,7 +54,7 @@ uses
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
   U_OnFormInfoIni, DBCtrls,
-  u_extmenutoolbar, u_extmenucustomize;
+  u_extmenutoolbar, u_extmenucustomize, menutbar, ToolWin;
 
 {$IFDEF VERSIONS}
 const

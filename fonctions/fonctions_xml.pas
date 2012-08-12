@@ -199,6 +199,7 @@ uses fonctions_init, u_multidonnees,
      fonctions_string, Dialogs, U_ExtNumEdits,
      fonctions_autocomponents, u_framework_components,
      ExtCtrls, u_framework_dbcomponents,
+     fonctions_system,
      DbCtrls;
 
 

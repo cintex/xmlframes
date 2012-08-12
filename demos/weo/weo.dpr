@@ -58,10 +58,8 @@ begin
 		gb_DicoKeyFormPresent  := True ;
 		gb_DicoUseFormField    := True ;
 		gb_DicoGroupementMontreCaption := False ;
-		Application.CreateForm(TM_Donnees, M_Donnees);
     if not fb_ReadIni ( gmif_MainFormIniInit ) Then
       ShowMessage ( 'XML file not initalized.' );
-
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
        // Il n'y a pas de menu donc rootentities est une fenêtre
   if not assigned ( gNod_DashBoard ) then
