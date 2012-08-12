@@ -1897,6 +1897,7 @@ end;
 procedure TF_XMLForm.BeforeCreateFrameWork(Sender: TComponent);
 begin
   gfin_FormIni := TOnFormInfoIni.Create(Self);
+  gfin_FormIni.SaveEdits   := [feTGrid,feTVirtualTrees,feTListView];
   gfin_FormIni.SaveForm    := [sfSameMonitor,sfSavePos,sfSaveSizes];
   gfin_FormIni.Name := CST_COMPONENTS_FORMINI;
   gfin_FormIni.Options := [loAutoUpdate,loFreeIni];
