@@ -35,6 +35,7 @@ uses
   u_framework_components, u_framework_dbcomponents,
   u_multidata, JvXPButtons, Menus,
   U_FormMainIni, fonctions_ObjetsXML,
+  u_man_reports_components,
   Graphics, u_multidonnees, U_GroupView;
 
 {$IFDEF VERSIONS}
@@ -95,6 +96,7 @@ type
     FActionPanel : TPanel;
     gr_Function : TLeonFunction ;
     gfwe_Password, gfwe_Login : TFWEdit;
+    gbtn_PrintButton : TFWPrintSources;
     function fpc_CreatePageControl(const awin_Parent: TWinControl;
       const as_Name: String; const apan_PanelOrigin: TWinControl): TPageControl;
     function fscb_CreateTabSheet(var apc_PageControl: TPageControl;
@@ -104,7 +106,6 @@ type
       var ACLoseAction: TCloseaction);
     procedure p_LoginCancelClick(AObject: TObject);
     procedure p_LoginOKClick(AObject: TObject);
-    procedure p_printGrid(AObject: TObject);
     procedure p_setFunction ( const a_Value : TLeonFunction );
     procedure p_setNodeId(const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWXMLSource);
   protected
@@ -269,7 +270,7 @@ Begin
      Exit ;
    end;
 
-  DataCloseMessage := True;
+  DBCloseMessage := True;
   gfwe_Password := nil;
   gfwe_Login    := nil;
 
@@ -323,7 +324,7 @@ var lpan_ParentPanel : TPanel ;
     lfwc_Column    : TFWXMLSource ;
     lcon_Control   : TControl ;
 begin
-  lfwc_Column := Sources [ ai_Counter ] as TFWXMLSource;
+  lfwc_Column := DBSources [ ai_Counter ] as TFWXMLSource;
   lpan_ParentPanel := fpan_CreatePanel ( awin_Parent, CST_COMPONENTS_PANEL_MAIN + as_Name + IntToStr(ai_counter), Self, alClient );
   lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   lpan_ParentPanel.ShowHint := True;
@@ -685,7 +686,7 @@ begin
           lfwc_Column := nil;
           Width  := 350;
           Height := 250 ;
-          // Creating Sources
+          // Creating DBSources
           if lnod_Node.HasChildNodes Then
           for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
             Begin
@@ -805,7 +806,7 @@ procedure TF_XMLForm.p_LoginOKClick( AObject : TObject );
 var lb_ok : Boolean;
 Begin
   if assigned ( gNod_DashBoard ) Then
-  with Sources [ 0 ] do
+  with DBSources [ 0 ] do
    if Datasource.DataSet.Active Then
     Begin
       // no user so can enter
@@ -1056,12 +1057,6 @@ Begin
 
 End;
 
-procedure TF_XMLForm.p_printGrid ( AObject : TObject );
-Begin
-  if Sources.count >  0 Then
-   fb_CreateGridReport(Sources [ 0 ].Grid,caption,[]);
-end;
-
 // procedure p_SetFieldButtonsProperties
 // Setting the editing buttons
 // anod_Action : Action node for buttons
@@ -1069,9 +1064,8 @@ end;
 // awin_Parent : Parent component
 procedure TF_XMLForm.p_SetFieldButtonsProperties ( const anod_Action : TALXMLNode ; const ai_Counter : Longint );
 var ls_Action   : String ;
-    lbut_Button : TFWXPButton;
 begin
-  with Sources [ ai_Counter ] do
+  with DBSources [ ai_Counter ] do
     if  ( anod_Action.NodeName = CST_LEON_ACTION_REF )
     and assigned ( NavEdit ) then
       Begin
@@ -1095,9 +1089,8 @@ begin
           End;
         if ls_Action = CST_LEON_ACTION_REF_PRINT then
           Begin
-            lbut_Button := TFWPrint.Create ( Self );
-            fpan_CreateAction ( lbut_Button, CST_COMPONENTS_BUTTON_PRINT, Self, FActionPanel );
-            lbut_Button.OnClick:=p_printGrid;
+            gbtn_PrintButton := TFWPrintSources.Create ( Self );
+            fpan_CreateAction ( gbtn_PrintButton, CST_COMPONENTS_BUTTON_PRINT, Self, FActionPanel );
             Exit;
           End;
       End;
@@ -1155,33 +1148,33 @@ var lnod_FieldProperties : TALXMLNode ;
               lb_IsLocal := True;
             End;
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_CREATE)
-           then lffd_ColumnFieldDef.ColCree  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
+           then lffd_ColumnFieldDef.ColCreate  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_UNIQUE)
            then lffd_ColumnFieldDef.ColUnique  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
           p_setNodeId ( anod_Field, lnod_FieldProperties, afws_Source );
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_hidden )
           and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
             Begin
-              lffd_ColumnFieldDef.AffiCol := -1;
-              lffd_ColumnFieldDef.AffiRech := -1;
+              lffd_ColumnFieldDef.ShowCol := -1;
+              lffd_ColumnFieldDef.ShowSearch := -1;
               Result := True;
               Exit;
             End;
-          lffd_ColumnFieldDef.AffiCol := ai_counter + 1;
+          lffd_ColumnFieldDef.ShowCol := ai_counter + 1;
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_optional)
           and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
             Begin
-              lffd_ColumnFieldDef.ColObl  := False;
-              lffd_ColumnFieldDef.AffiCol := -1;
+              lffd_ColumnFieldDef.ColMain  := False;
+              lffd_ColumnFieldDef.ShowCol := -1;
             End
            Else
-            lffd_ColumnFieldDef.ColObl := True;
+            lffd_ColumnFieldDef.ColMain := True;
           if ( lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_sort)
                and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
           or ( lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_find)
                and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
             Begin
-              lffd_ColumnFieldDef.AffiRech := ai_counter + 1;
+              lffd_ColumnFieldDef.ShowSearch := ai_counter + 1;
             End
         End;
 
@@ -1239,7 +1232,7 @@ var lnod_FieldProperties : TALXMLNode ;
                     for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
                       Begin
                         if anod_Field <> lnod_OriginalNode Then
-                          fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_FieldsNode.ChildNodes [ li_l ], li_FieldCounter, Sources.Count - 1,
+                          fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_FieldsNode.ChildNodes [ li_l ], li_FieldCounter, DBSources.Count - 1,
                                                                    lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                          else
                           fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
@@ -1249,7 +1242,7 @@ var lnod_FieldProperties : TALXMLNode ;
                  Else
                   // The parent parameter is a var : so do not want to change it in the function
                   if anod_Field <> lnod_OriginalNode Then
-                    fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ], li_FieldCounter, Sources.Count - 1,
+                    fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ], li_FieldCounter, DBSources.Count - 1,
                                                              lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
                    else
                     fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_k ], ai_FieldCounter, ai_Counter,
@@ -1284,10 +1277,10 @@ var lnod_FieldProperties : TALXMLNode ;
           lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
           with lffd_ColumnFieldDef do
             begin
-              NomTable    := as_Table;
+              TableName   := as_Table;
               NumTag      := ai_Fieldcounter + 1;
               FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
-              AffiRech    := -1;
+              ShowSearch  := -1;
             end;
         End
        else
@@ -1401,8 +1394,8 @@ begin
             Else
             Begin
               ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
-              if FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
-                Width := FMainPanel.Left + Sources [ 0 ].Grid.Width + Result.Left + Result.Width;
+              if FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
+                Width := FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width;
               gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
               if gi_LastFormFieldsHeight < Result.Top + Result.Height then
                 Begin
@@ -1473,16 +1466,16 @@ var li_i, li_j, li_NoField : LongInt ;
   Begin
     if not lb_FieldFound Then
       Begin
-        if ( Sources.Count = 1 ) Then
+        if ( DBSources.Count = 1 ) Then
             Begin
-              awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, Sources.Count - 1 );
+              awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, DBSources.Count - 1 );
               Hint := fs_GetLabelCaption ( as_Name );
               ShowHint := True;
             End
          else
           Begin
             awin_Parent := fscb_CreateTabSheet ( FPageControl, Self, FMainPanel, as_Name, as_Name );
-            awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name , Sources.Count - 1);
+            awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name , DBSources.Count - 1);
           End;
         lb_FieldFound := True;
       end;
@@ -1538,7 +1531,7 @@ begin
     gxml_SourceFile := TALXMLDocument.Create ( Self );
   ls_ProjectFile := fs_getProjectDir ( ) + as_XMLFile + CST_LEON_File_Extension;
   // For actions at the end of xml file
-  li_Counter := Sources.Count;
+  li_Counter := DBSources.Count;
   If ( FileExists ( ls_ProjectFile )) Then
    // reading the special XML form File
     try
@@ -1592,6 +1585,8 @@ begin
                   end;
               if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
                  p_SetFieldButtonsProperties ( lnod_Node, li_Counter );
+              if ( lnod_Node.NodeName = CST_LEON_NAME  ) Then
+                 lfwc_Column.Title := fs_GetLabelCaption ( lnod_Node.Attributes [ CST_LEON_VALUE ] );
             End;
         End;
     Except
@@ -1901,7 +1896,7 @@ begin
   gfin_FormIni.SaveForm    := [sfSameMonitor,sfSavePos,sfSaveSizes];
   gfin_FormIni.Name := CST_COMPONENTS_FORMINI;
   gfin_FormIni.Options := [loAutoUpdate,loFreeIni];
-  DataCloseMessage := True;
+  DBCloseMessage := True;
 end;
 
 /////////////////////////////////////////////////////////////////////////
