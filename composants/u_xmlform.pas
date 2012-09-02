@@ -28,7 +28,7 @@ uses
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
   U_ExtComboInsert,
-  fonctions_manbase,
+  fonctions_manbase, rxdbgrid,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -320,7 +320,7 @@ function TF_XMLForm.fpan_GridNavigationComponents ( const awin_Parent : TWinCont
 var lpan_ParentPanel : TPanel ;
     lpan_Panel : TPanel ;
     ldbn_Navigator : TExtDBNavigator ;
-    ldbg_Grid      : TExtDBGrid ;
+    ldbg_Grid      : TRxDBGrid;
     lfwc_Column    : TFWXMLSource ;
     lcon_Control   : TControl ;
 begin

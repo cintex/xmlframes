@@ -203,7 +203,7 @@ type
     procedure   p_ApresSauvegardeParamIni; override;
     procedure   p_editionTransfertVariable(as_nom,as_titre,as_chemin:String;ats_edition_nom_params,ats_edition_params,ats_edition_params_values: TStrings);
   published
-    procedure p_ConnectToData ();
+    procedure p_ConnectToData;
   end;
 
 var
