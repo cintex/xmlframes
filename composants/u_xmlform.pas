@@ -1204,12 +1204,12 @@ var lnod_FieldProperties : TALXMLNode ;
         li_FieldCounter := 0 ;
         with afws_Source.Linked.Add do
           Begin
-            Source:=lfwc_Column;
+            Source:=lfwc_Column.Index;
             LookupFields := ls_NodeId;
           end;
         with lfwc_Column.Linked.Add do
           Begin
-            Source:=afws_Source;
+            Source:=afws_Source.Index;
           end;
        end;
       if lnod_OriginalNode.HasChildNodes then
