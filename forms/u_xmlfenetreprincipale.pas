@@ -50,7 +50,7 @@ uses
   ExtCtrls, ActnList, Menus,
   JvXPContainer, ComCtrls, JvXPButtons,
   IniFiles, Dialogs, Printers,
-  JvXPBar, Forms,  U_FormMainIni, fonctions_init,
+  JvXPBar, Forms,  u_formmaindb, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   u_buttons_appli,
   U_OnFormInfoIni, DBCtrls,
@@ -76,7 +76,7 @@ type
 
   { TF_FenetrePrincipale }
 
-  TF_FenetrePrincipale = class(TF_FormMainIni)
+  TF_FenetrePrincipale = class(TF_FormMainDB)
     mu_apropos: TMenuItem;
     mu_MenuIni: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
     mu_MainMenu: {$IFDEF TNT}TTntMainMenu{$ELSE}TMainMenu{$ENDIF};
