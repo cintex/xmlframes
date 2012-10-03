@@ -1,4 +1,4 @@
-inherited F_FenetrePrincipale: TF_FenetrePrincipale
+object F_FenetrePrincipale: TF_FenetrePrincipale
   Left = 398
   Height = 645
   Top = 202
@@ -23,10 +23,12 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   KeyPreview = True
   Menu = mu_MainMenu
   OnActivate = F_FormMainIniActivate
+  OnCreate = FormCreate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
+  LCLVersion = '1.0.1.3'
   Visible = True
-  object im_appli: TImage[0]
+  object im_appli: TImage
     Left = 248
     Height = 49
     Top = 104
@@ -34,7 +36,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_acces: TImage[1]
+  object im_acces: TImage
     Left = 312
     Height = 32
     Top = 104
@@ -771,7 +773,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_about: TImage[2]
+  object im_about: TImage
     Left = 376
     Height = 49
     Top = 104
@@ -779,7 +781,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_led: TPCheck[3]
+  object im_led: TPCheck
     Left = 312
     Height = 19
     Top = 440
@@ -788,7 +790,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
     TabOrder = 0
   end
-  object br_statusbar: TStatusBar[4]
+  object br_statusbar: TStatusBar
     Left = 0
     Height = 21
     Top = 597
@@ -831,7 +833,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end>
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object tbar_outils: TToolBar[5]
+  object tbar_outils: TToolBar
     Left = 0
     Height = 50
     Hint = 'Cliquer sur un bouton pour accÃ©der Ã  une fonction'
@@ -969,14 +971,14 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 7
     end
   end
-  object spl_Volet: TSplitter[6]
+  object spl_Volet: TSplitter
     Left = 227
     Height = 547
     Top = 50
     Width = 5
     Visible = False
   end
-  object mtb_CustomizedMenu: TExtMenuToolBar[7]
+  object mtb_CustomizedMenu: TExtMenuToolBar
     Left = 0
     Height = 547
     Top = 50
@@ -996,7 +998,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Menu = mu_MenuIni
     OnClickCustomize = mtb_CustomizedMenuClickCustomize
   end
-  object tbar_volet: TPanel[8]
+  object tbar_volet: TPanel
     Left = 30
     Height = 547
     Top = 50
@@ -1027,7 +1029,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 0
     end
   end
-  object im_quit: TImage[9]
+  object im_quit: TImage
     Left = 432
     Height = 32
     Top = 104
@@ -1269,7 +1271,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_aide: TImage[10]
+  object im_aide: TImage
     Left = 488
     Height = 32
     Top = 104
@@ -2215,7 +2217,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_Liste: TImageList[11]
+  object im_Liste: TImageList
     BkColor = clForeground
     left = 256
     top = 216
@@ -2831,7 +2833,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       00FF000000FF000000FF000000FF
     }
   end
-  object mu_MainMenu: TMainMenu[12]
+  object mu_MainMenu: TMainMenu
     Images = im_Liste
     left = 256
     top = 268
@@ -2930,25 +2932,25 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
   end
-  object ActionList: TActionList[13]
+  object ActionList: TActionList
     Images = im_Liste
     left = 256
     top = 317
   end
-  object Timer: TTimer[14]
+  object Timer: TTimer
     Interval = 60000
     OnTimer = TimerTimer
     left = 256
     top = 367
   end
-  object SvgFormInfoIni: TOnFormInfoIni[15]
+  object SvgFormInfoIni: TOnFormInfoIni
     SaveForm = [sfSavePos, sfSaveSizes]
     OnIniLoad = SvgFormInfoIniIniLoad
     OnIniWrite = SvgFormInfoIniIniWrite
     left = 256
     top = 168
   end
-  object im_ListeDisabled: TImageList[16]
+  object im_ListeDisabled: TImageList
     BkColor = clForeground
     left = 388
     top = 216
@@ -3564,12 +3566,12 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       0000000000000000000000000000
     }
   end
-  object mu_MenuIni: TMainMenu[17]
+  object mu_MenuIni: TMainMenu
     Images = im_Liste
     left = 384
     top = 268
   end
-  object mc_Customize: TExtMenuCustomize[18]
+  object mc_Customize: TExtMenuCustomize
     AutoIni = False
     MenuIni = mu_MenuIni
     MainMenu = mu_MainMenu

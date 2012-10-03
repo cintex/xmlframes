@@ -146,6 +146,7 @@ type
     procedure pa_5Resize(Sender: TObject);
     procedure p_ChargeAide;
     procedure p_OnClickFonction(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure p_OnClickMenuLang(Sender:TObject);
     procedure p_SetLengthSB(ao_SP: TStatusPanel);
     procedure F_FormMainIniActivate(Sender: TObject);
@@ -226,7 +227,7 @@ uses
   fonctions_xml,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
-  fonctions_system,
+  fonctions_system, U_FormMainIni,
   fonctions_proprietes, fonctions_languages ;
 
 
@@ -423,6 +424,12 @@ end;
 procedure TF_FenetrePrincipale.p_OnClickFonction(Sender: TObject);
 begin
   p_ExecuteFonction(Sender);
+end;
+
+procedure TF_FenetrePrincipale.FormCreate(Sender: TObject);
+begin
+  AutoIni  :=True;
+  AutoIniDB:=False;
 end;
 
 {$IFNDEF FPC}
