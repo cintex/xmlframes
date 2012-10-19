@@ -61,7 +61,10 @@ begin
     gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
     if not fb_ReadIni ( gmif_MainFormIniInit ) Then
+     Begin
       ShowMessage ( 'XML file not initalized.' );
+      Application.Terminate;
+     end;
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
   finally
   end;

@@ -1,7 +1,7 @@
 object F_FenetrePrincipale: TF_FenetrePrincipale
-  Left = 398
+  Left = 684
   Height = 645
-  Top = 202
+  Top = 232
   Width = 884
   HelpContext = 1400
   HorzScrollBar.Page = 884
@@ -26,7 +26,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   OnCreate = FormCreate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  LCLVersion = '1.0.1.3'
+  LCLVersion = '1.0.2.0'
   Visible = True
   object im_appli: TImage
     Left = 248

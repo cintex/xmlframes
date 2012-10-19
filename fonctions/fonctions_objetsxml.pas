@@ -1012,50 +1012,7 @@ Begin
                      // affectation du libellé du menu
                      lMen_MenuEnCours.Caption := fs_getLabelCaption ( ls_MenuAction );
                      lMen_MenuEnCours.Hint    := lMen_MenuEnCours.Caption;
-                     //fb_AssignDBImage ( axdo_FichierXML.FieldByName ( CST_MENU_Bmp ), lMen_MenuEnCours.Bitmap, aBmp_DefaultPicture );
-      //               lMen_MenuEnCours.Bitmap  := aIma_ImagesMenus ;
-      //               lMen_MenuEnCours.ImageIndex := fi_AjouteBmpAImages ( lbmp_BitmapOrigine, lb_AjouteBitmap, aIma_ImagesMenus );
-                  // On remet le compteur des fonctions à 0
-      //               li_CompteurFonctions := 0 ;
                    End ;
-                 // Repositionnenement du menu
-{                 if ab_UtiliseSousMenu
-                 // Si un menu n'est pas null alors ajoute-t-on un sous menu ?
-                 and  (   ls_MenuClep <> '' )
-                 // Si on n'ajoute pas un sous menu alors le menu en cours n'est pas un sous menu
-                 and  (   axdo_FichierXML.FieldByName ( CST_SOUM_Clep ).Value = Null )
-                  Then lMen_MenuEnCours := lMen_Menu ;
-                 // ajoute un sous menu
-                 if ab_UtiliseSousMenu
-                 // Si un menu n'est pas null alors on ajoute un sous menu
-                 and (   lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ] <> Null )
-                 // Si un sous menu n'est pas null et différent alors on ajoute un sous menu
-                 and   (   lr_Function.Groupe <> ls_SMenu )
-//                 and (   axdo_FichierXML.FieldByName ( CST_SOUM_Clep ).Value <> Null )
-                    Then
-                     begin
-                   // Si une fonction dans l'enregistrement précédent affectation dans l'ancienne xpbar
-                       inc ( li_CompteurMenu ); // compteur de nom
-                       // Création des menus
-                       lMen_MenuEnCours := TMenuItem.Create ( aF_FormParent );
-
-                       //Gestion des raccourcis d'aide
-                       lMen_MenuEnCours.HelpContext := aMen_MenuVolet.HelpContext ;
-
-                       lMen_MenuEnCours.Bitmap.Handle := 0 ;
-                       // affectation du compteur de nom
-                       lMen_MenuEnCours.Name := CST_MENU_NOM_DEBUT + IntToStr ( li_CompteurMenu );
-                       // Menu Parent
-                       lMen_Menu.Add ( lMen_MenuEnCours );
-                       // affectation du libellé du sous menu
-                       lMen_MenuEnCours.Caption := ls_MenuLabel;
-                       lMen_MenuEnCours.Hint    := ls_MenuLabel ;
-                       fb_AssignDBImage ( axdo_FichierXML.FieldByName ( CST_SOUM_Bmp ), lMen_MenuEnCours.Bitmap, aBmp_DefaultPicture );
-                       ls_SMenu := axdo_FichierXML.FieldByName ( CST_SOUM_Clep ).AsString ;
-                  // On remet le compteur des fonctions à 0
-      //                 li_CompteurFonctions := 0 ;
-                     End ;
- }
       // Si il n'y a pas de menu
             if (  ls_MenuClep    = '' )
              then
@@ -1063,34 +1020,7 @@ Begin
 
                   // Le Menu où on ajoute les fonctions devient le menu Ouvrir
                 lMen_MenuEnCours := aMen_MenuParent ;
-              End
-             else // Si c'est une fonction ayant au moins un menu
-              Begin
-               // Création d'un menu ou d'une fonction xp bouton
-//                SetLength ( gT_TableauMenus, High ( gT_TableauMenus ) + 2 );
-//                gT_TableauMenus [ high ( gT_TableauMenus )].Image := nil ;
-{              // Alors utilisation dans le tableau des menus pour les xp boutons
-                if  assigned ( lMen_MenuEnCours.Bitmap )
-                and ( lMen_MenuEnCours.Bitmap.Handle <> 0 )
-                and ( aIma_ImagesTempo.Width  = lMen_MenuEnCours.Bitmap.Width  )
-                and ( aIma_ImagesTempo.Height = lMen_MenuEnCours.Bitmap.Height )
-                 Then
-                  Begin
-                    gT_TableauMenus [ High ( gT_TableauMenus )].Image := TIcon.Create ;
-                    gT_TableauMenus [ High ( gT_TableauMenus )].Image.Handle := 0 ;
-                    aIma_ImagesTempo.AddMasked ( lMen_MenuEnCours.Bitmap, lMen_MenuEnCours.Bitmap.TransparentColor );
-                    aIma_ImagesTempo.GetBitmap ( aIma_ImagesTempo.Count - 1, lMen_MenuEnCours.Bitmap );
-                    p_BitmapVersIco ( lMen_MenuEnCours.Bitmap, gT_TableauMenus [ High ( gT_TableauMenus )].Image );
-                  End
-                 Else}
-//                  gT_TableauMenus [ High ( gT_TableauMenus )].Image := nil ;
-//                gT_TableauMenus [ High ( gT_TableauMenus )].Menu := ls_MenuClep ;
-{                if ab_UtiliseSousMenu
-                and ( axdo_FichierXML.FieldByName ( CST_MENU_Clep ).Value <> Null )
-                 Then
-                  gT_TableauMenus [ High ( gT_TableauMenus )].SousMenu := axdo_FichierXML.FieldByName ( CST_SOUM_Clep ).AsString ;
- }//               gT_TableauMenus [ High ( gT_TableauMenus )].Fonction   := ls_MenuClep ;
-              End ;
+              End;
             // A chaque fonction création d'une action dans la bar XP
             if    assigned ( lMen_MenuEnCours )
             and ( ls_MenuClep <> '' )
@@ -2279,6 +2209,7 @@ end;
 
 
 initialization
+  GS_SUBDIR_IMAGES_SOFT := DirectorySeparator+'images'+DirectorySeparator;
 {$IFDEF VERSIONS}
   p_ConcatVersion ( gVer_fonctions_Objets_XML );
 {$ENDIF}
