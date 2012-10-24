@@ -1862,7 +1862,7 @@ Begin
           {$IFDEF WINDOWS}
           gs_ProjectFile := fs_RemplaceChar ( gs_ProjectFile, '/', '\' );
           {$ENDIF}
-          gs_ProjectFile := fs_EraseNameSoft ( gs_ProjectFile );
+          gs_ProjectFile := fs_EraseNameSoft ( gs_NomApp, gs_ProjectFile );
           gchar_DecimalSeparator := ',' ;
           DecimalSeparator := gchar_DecimalSeparator ;
 //          Showmessage ( fs_getSoftDir + gs_ProjectFile );

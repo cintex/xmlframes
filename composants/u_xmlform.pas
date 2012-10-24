@@ -210,7 +210,9 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_Objets_Dynamiques,
      fonctions_languages, fonctions_reports,
      u_buttons_defs,
-     u_buttons_appli, unite_variables, StdCtrls;
+     fonctions_forms,
+     u_buttons_appli,
+     unite_variables, StdCtrls;
 
 var  gb_LoginFormLoaded : Boolean = False;
      gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
@@ -2027,11 +2029,7 @@ begin
      // Initialisation de l'ouverture de fiche
       lfs_newFormStyle := alf_Function.Mode ;
       if not lb_Unload Then
-        Begin
-          if  ( Application.MainForm is TF_FormMainIni )
-            Then
-              ( Application.MainForm as TF_FormMainIni ).fb_setNewFormStyle( Result, lfs_newFormStyle, ab_Ajuster)
-        End
+        fb_setNewFormStyle( Result, lfs_newFormStyle, ab_Ajuster)
       else
         Result.Free ;
     End ;

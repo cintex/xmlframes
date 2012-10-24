@@ -228,7 +228,9 @@ uses
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
   fonctions_system, U_FormMainIni,
-  fonctions_proprietes, fonctions_languages ;
+  fonctions_forms,
+  fonctions_proprietes,
+  fonctions_languages ;
 
 
 ////////////////////////////////////////////////////////////////////////////////
