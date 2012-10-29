@@ -1578,78 +1578,66 @@ Begin
         lds_connection:= DMModuleSources.fds_FindConnection(ls_ConnectionClep, False);
         if assigned ( lds_connection ) Then
           Continue;
-        if ( lNode.NodeName = CST_LEON_DATA_FILE ) Then
+        with DMModuleSources.CreateConnection ( ls_ConnectionClep ) do
           Begin
-            with DMModuleSources.CreateConnection ( dtCSV, ls_ConnectionClep ) do
-              Begin
-                dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ])) +DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
-                {$IFDEF WINDOWS}
-                dataURL := fs_RemplaceChar ( DataURL, '/', '\' );
-                {$ENDIF}
-              end;
-          end
-         Else
-          Begin
-            {$IFDEF IBX}
-            if ( pos ( CST_LEON_DATA_FIREBIRD, lNode.Attributes [ CST_LEON_DATA_DRIVER ] ) > 0 ) then
-              DMModuleSources.CreateConnection ( dtIBX, ls_ConnectionClep )
-             Else
-            {$ENDIF}
-            with DMModuleSources.CreateConnection ( {$IFDEF ZEOS}dtZEOS{$ELSE}{$IFDEF EADO}dtADO{$ELSE}dtCSV{$ENDIF}{$ENDIF}, ls_ConnectionClep ) do
-              Begin
-                dataURL := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ]);
-                li_Pos := pos ( '//', DataURL );
-                DataURL := copy ( DataURL , li_pos + 2, length ( DataURL ) - li_pos - 1 );
-                DataPort := 0;
-                li_Pos := pos ( ':', DataURL );
-                // Récupération du port
-                if li_Pos > 0 Then
+            case DatasetType of
+              dtCSV : if ( lNode.NodeName = CST_LEON_DATA_FILE ) Then
+                       Begin
+                        dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ])) +DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
+                        {$IFDEF WINDOWS}
+                        dataURL := fs_RemplaceChar ( DataURL, '/', '\' );
+                        {$ENDIF}
+                       End;
+              else
+               Begin
+                 dataURL := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ]);
+                 li_Pos := pos ( '//', DataURL );
+                 DataURL := copy ( DataURL , li_pos + 2, length ( DataURL ) - li_pos - 1 );
+                 DataPort := 0;
+                 li_Pos := pos ( ':', DataURL );
+                 // Récupération du port
+                 if li_Pos > 0 Then
+                   try
+                     if pos ( '/', DataURL ) > 0 Then
+                       DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
+                      Else
+                       DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
+                     // Finition de l'URL : Elle ne contient que l'adresse du serveur
+                     DataURL := copy ( DataURL , 1, li_Pos - 1 );
+                   Except
+                   end;
+                 if ( DataURL [ length ( DataURL )] = '/' ) Then
+                   DataURL := copy ( DataURL , 1, length ( DataURL ) - 1 );
+                 DataUser := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_USER ]);
+                 DataPassword :=fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_Password ]);
+                 Database := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DATABASE ]);
+                 DataDriver := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DRIVER ]);
+                  p_setComponentProperty ( Connection, 'User', DataUser );
+                  p_setComponentProperty ( Connection, 'Password', DataPassword );
+                  p_setComponentProperty ( Connection, 'Hostname', DataURL );
+                  p_setComponentProperty ( Connection, 'Database', Database );
+                  if DataPort > 0 Then
+                    p_setComponentProperty ( Connection, 'Port', DataPort );
+                  if ( pos ( CST_LEON_DATA_MYSQL, DataDriver ) > 0 ) Then
+                    p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_MYSQL )
+                  else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
+                    p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
+                  else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
+                    p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
+                  else if ( pos ( CST_LEON_DATA_ORACLE, DataDriver ) > 0 ) Then
+                    p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_ORACLE )
+                  else if ( pos ( CST_LEON_DATA_POSTGRES, DataDriver ) > 0 ) Then
+                    p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
                   try
-                    if pos ( '/', DataURL ) > 0 Then
-                      DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
-                     Else
-                      DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
-                    // Finition de l'URL : Elle ne contient que l'adresse du serveur
-                    DataURL := copy ( DataURL , 1, li_Pos - 1 );
-                  Except
+                    p_setComponentBoolProperty ( Connection, 'Connected', True );
+                  except
+                    on e: Exception do
+                      ShowMessage ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
                   end;
-                if ( DataURL [ length ( DataURL )] = '/' ) Then
-                  DataURL := copy ( DataURL , 1, length ( DataURL ) - 1 );
-                DataUser := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_USER ]);
-                DataPassword :=fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_Password ]);
-                Database := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DATABASE ]);
-                DataDriver := fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_DRIVER ]);
-                {$IFDEF ZEOS}
-                case DatasetType of
-                    dtZEOS : Begin
-                             p_setComponentProperty ( Connection, 'User', DataUser );
-                             p_setComponentProperty ( Connection, 'Password', DataPassword );
-                             p_setComponentProperty ( Connection, 'Hostname', DataURL );
-                             p_setComponentProperty ( Connection, 'Database', Database );
-                             if DataPort > 0 Then
-                               p_setComponentProperty ( Connection, 'Port', DataPort );
-                             if ( pos ( CST_LEON_DATA_MYSQL, DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_MYSQL )
-                             else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
-                             else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
-                             else if ( pos ( CST_LEON_DATA_ORACLE, DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_ORACLE )
-                             else if ( pos ( CST_LEON_DATA_POSTGRES, DataDriver ) > 0 ) Then
-                               p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
-                             try
-                               p_setComponentBoolProperty ( Connection, 'Connected', True );
-                             except
-                               on e: Exception do
-                                 ShowMessage ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
-                             end;
-                           end;
-                End;
-                {$ENDIF}
-              end;
-          end;
-       End;
+               end;
+            end;
+         End;
+       end;
     End;
 End;
 

@@ -25,9 +25,6 @@ unit U_XMLFenetrePrincipale;
 interface
 
 uses
-{$IFDEF ZEOS}
-  ZConnection,
-{$ENDIF}
 {$IFDEF FPC}
    LCLIntf, LCLType, SQLDB, PCheck,
 {$ELSE}

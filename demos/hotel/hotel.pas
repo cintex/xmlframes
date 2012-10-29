@@ -4,7 +4,7 @@ program hotel;
 
 uses
   Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
-  LCLType, lazextcomponents, lazfonctions,
+  LCLType, lazextcomponents, lazfonctions, fonctions_zeos,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
 
@@ -51,12 +51,14 @@ begin
 	F_SplashForm.Update; // Force la fiche à se dessiner complètement
 
       	try
-		gb_DicoKeyFormPresent  := True ;
-		gb_DicoUseFormField    := True ;
-		gb_DicoGroupementMontreCaption := False ;
-		Application.CreateForm(TM_Donnees, M_Donnees);
+                gb_DicoKeyFormPresent  := True ;
+                gb_DicoUseFormField    := True ;
+                gb_DicoGroupementMontreCaption := False ;
                 if not fb_ReadIni ( gmif_MainFormIniInit ) Then
+                 Begin
                   ShowMessage ( 'XML file not initalized.' );
+                  Application.Terminate;
+                 end;
 		Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
         finally
 	end;
