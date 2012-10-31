@@ -21,7 +21,6 @@ uses
   SysUtils,ComCtrls, TypInfo, Variants,
   U_FormMainIni, u_framework_dbcomponents,
   fonctions_manbase, StdCtrls, u_extdbgrid,
-  rxdbgrid,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -103,7 +102,7 @@ function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name
 function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TScrollBox;
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
-function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TRxDBGrid;
+function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
 function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const as_Name : String;
                                const acom_Owner : TComponent ;
@@ -356,6 +355,7 @@ Begin
 End;
 
 
+
 /////////////////////////////////////////////////////////////////////////
 // function fdbg_CreateGrid
 // Creating a DB Grid and setting properties
@@ -366,9 +366,9 @@ End;
 // aal_Align : Align property to set
 // returns a DB Grid
 //////////////////////////////////////////////////////////////////////////
-function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TRxDBGrid;
+function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
 Begin
-  Result := TRxDBGrid.create ( acom_Owner );
+  Result := TExtDBGrid.create ( acom_Owner );
   Result.parent := awin_Parent;
   Result.Name := as_Name;
   Result.Align := alClient ;
@@ -378,6 +378,7 @@ Begin
     End;
 
 End;
+
 
 
 {$IFDEF VERSIONS}

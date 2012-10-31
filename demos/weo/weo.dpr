@@ -14,7 +14,8 @@ uses
   fonctions_string,
   fonctions_xml,
   fonctions_system,
-  Dialogs;
+  Dialogs,
+  fonctions_ado in '..\..\..\ManFrames\fonctions\fonctions_ado.pas';
 
 {$R WindowsXP.res}
 

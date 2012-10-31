@@ -187,7 +187,6 @@ type
 
   public
     procedure p_AccesstoSoft; virtual;
-    function f_IniGetConfigFile( {$IFNDEF CSV}acco_Conn: TComponent;{$ENDIF} as_NomConnexion: string): TIniFile; override;
     { Déclarations publiques }
     // Procédures qui sont appelées automatiquement pour l'initialisation et la sauvegarde
     Constructor Create(AOwner: TComponent); override;
@@ -764,14 +763,6 @@ begin
     Result := fb_Fermeture ( Self ) and Result
 end;
 
-//////////////////////////////////////////////////////////////////////////
-// fonction virtuelle : f_IniGetConfigFile
-// Description : lecture du fichier INI et des fichiers XML
-//////////////////////////////////////////////////////////////////////////
-function TF_FenetrePrincipale.f_IniGetConfigFile({$IFNDEF CSV}acco_Conn: TComponent;{$ENDIF} as_NomConnexion: string): TIniFile;
-Begin
-  Result := inherited f_IniGetConfigFile({$IFNDEF CSV}acco_Conn,{$ENDIF} as_NomConnexion);
-End;
 //////////////////////////////////////////////////////////////////////////
 // Procédure virtuelle : p_WriteDescendantIni
 // Description : écriture de l'ini dans U_FenetrePrincipale à partir de U_FormMainIni

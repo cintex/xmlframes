@@ -28,14 +28,17 @@ uses
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
   U_ExtComboInsert,
-  fonctions_manbase, rxdbgrid,
+  fonctions_manbase,
+{$IFDEF RX}
+  rxdbgrid,
+{$ENDIF}
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
   u_framework_components, u_framework_dbcomponents,
   u_multidata, JvXPButtons, Menus,
   U_FormMainIni, fonctions_ObjetsXML,
-  u_man_reports_components,
+  u_man_reports_components, DBGrids,
   Graphics, u_multidonnees, U_GroupView;
 
 {$IFDEF VERSIONS}
@@ -322,7 +325,7 @@ function TF_XMLForm.fpan_GridNavigationComponents ( const awin_Parent : TWinCont
 var lpan_ParentPanel : TPanel ;
     lpan_Panel : TPanel ;
     ldbn_Navigator : TExtDBNavigator ;
-    ldbg_Grid      : TRxDBGrid;
+    ldbg_Grid      : TCustomDBGrid;
     lfwc_Column    : TFWXMLSource ;
     lcon_Control   : TControl ;
 begin
