@@ -1307,7 +1307,7 @@ var lnod_FieldProperties : TALXMLNode ;
             or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
               lb_IsLarge := True;
           End;
-      if afws_Source.Connection.DatasetType = dtCSV then
+      if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
         Begin
           lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, lb_IsLarge, afd_FieldsDefs );
         End
@@ -1525,7 +1525,7 @@ var li_i, li_j, li_NoField : LongInt ;
     lfd_FieldsDefs := nil;
     lfwc_Column := TFWXMLSource ( ffws_CreateSource ( as_Table, as_Connection ));
     ConnectionName := as_Connection;
-    if lfwc_Column.Connection.DatasetType = dtCSV then
+    if lfwc_Column.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
       Begin
         lfd_FieldsDefs := fobj_GetcomponentObjectProperty ( lfwc_Column.Datasource.Dataset, 'FieldDefs' ) as TFieldDefs;
       End;

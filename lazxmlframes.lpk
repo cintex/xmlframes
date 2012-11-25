@@ -20,83 +20,78 @@
       </Other>
     </CompilerOptions>
     <Version Major="1" Build="4"/>
-    <Files Count="8">
+    <Files Count="6">
       <Item1>
         <Filename Value="composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
       </Item1>
       <Item2>
-        <Filename Value="fonctions/fonctions_xml.pas"/>
-        <UnitName Value="fonctions_xml"/>
-      </Item2>
-      <Item3>
         <Filename Value="forms/u_xmlfenetreprincipale.pas"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
-      </Item3>
-      <Item4>
+      </Item2>
+      <Item3>
         <Filename Value="fonctions/fonctions_objetsxml.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
-      </Item4>
-      <Item5>
-        <Filename Value="fonctions/u_languagevars.pas"/>
-        <UnitName Value="u_languagevars"/>
-      </Item5>
-      <Item6>
+      </Item3>
+      <Item4>
         <Filename Value="fonctions/fonctions_leon_format.pas"/>
         <UnitName Value="fonctions_leon_format"/>
-      </Item6>
-      <Item7>
+      </Item4>
+      <Item5>
         <Filename Value="composants/u_xmlfillcombobutton.pas"/>
         <UnitName Value="u_xmlfillcombobutton"/>
-      </Item7>
-      <Item8>
+      </Item5>
+      <Item6>
         <Filename Value="fonctions/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
-      </Item8>
+      </Item6>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="LANG"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="12">
+    <RequiredPkgs Count="13">
       <Item1>
-        <PackageName Value="extreports"/>
+        <PackageName Value="lazxmlservice"/>
       </Item1>
       <Item2>
-        <PackageName Value="lazextbuttons"/>
+        <PackageName Value="extreports"/>
       </Item2>
       <Item3>
-        <PackageName Value="ExpertSuperForm"/>
+        <PackageName Value="lazextbuttons"/>
       </Item3>
       <Item4>
-        <PackageName Value="LCL"/>
+        <PackageName Value="ExpertSuperForm"/>
       </Item4>
       <Item5>
-        <PackageName Value="JvXPBarLaz"/>
+        <PackageName Value="LCL"/>
       </Item5>
       <Item6>
-        <PackageName Value="xmldocument"/>
+        <PackageName Value="JvXPBarLaz"/>
       </Item6>
       <Item7>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="xmldocument"/>
       </Item7>
       <Item8>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="FCL"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item8>
       <Item9>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazmansoft"/>
       </Item9>
       <Item10>
-        <PackageName Value="lazextcomponents"/>
+        <PackageName Value="lazfonctions"/>
       </Item10>
       <Item11>
-        <PackageName Value="lazmanframes"/>
+        <PackageName Value="lazextcomponents"/>
       </Item11>
       <Item12>
-        <PackageName Value="rxnew"/>
+        <PackageName Value="lazmanframes"/>
       </Item12>
+      <Item13>
+        <PackageName Value="rxnew"/>
+      </Item13>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>
