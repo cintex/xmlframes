@@ -226,6 +226,7 @@ uses
   fonctions_system, U_FormMainIni,
   fonctions_forms,
   fonctions_proprietes,
+  fonctions_service,
   fonctions_languages ;
 
 
@@ -259,7 +260,7 @@ begin
   {$ENDIF}
   {$ENDIF}
 
-  gs_DefaultUser := gmif_MainFormIniInit.Readstring ( INISEC_PAR, INISEC_UTI, '' );
+  gs_DefaultUser := FMainIni.Readstring ( INISEC_PAR, INISEC_UTI, '' );
 
   SvgFormInfoIni.LaFormCreate ( Self );
   // Lecture des infos des composants du fichier INI

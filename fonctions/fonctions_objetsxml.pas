@@ -46,10 +46,8 @@ uses Forms, JvXPBar, JvXPContainer,
   fonctions_system,
   u_multidata;
 
-const // Champs utilisés
-      CST_INI_PROJECT_FILE = 'LY_PROJECT_FILE';
-      CST_INI_LANGUAGE = 'LY_LANGUAGE';
 {$IFDEF VERSIONS}
+const
   gver_fonctions_Objets_XML : T_Version = (Component : 'Gestion des objets dynamiques XML' ;
                                            FileUnit : 'fonctions_ObjetsXML' ;
               			           Owner : 'Matthieu Giroux' ;
@@ -69,7 +67,6 @@ const // Champs utilisés
 {$ENDIF}
 type
       TActionTemplate          = (atmultiPageTable,atLogin);
-      TBuildOrder              = (boConnect,boMenus);
       TLeonFunctionID          = String ;
       TLeonFunctions           = Array of TLeonFunctionID;
       TStringArray             = Array Of String;
@@ -95,7 +92,6 @@ var
       gBmp_DefaultPicture     : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
       gBmp_DefaultAcces       : TBitmap        = nil;   // Bmp apparaissant si il n'y a pas d'image
       gWin_ParentContainer    : TScrollingWinControl  ;   // Volet d'accès
-      gs_RootAction           : String;
       gIco_DefaultPicture     : TIcon        ;   // Ico apparaissant si il n'y a pas d'image
       gi_TailleUnPanel        ,                  // Taille d'un panel de dxbutton
       gi_FinCompteurImages    : Integer      ;   // Un seul imagelist des menus donc efface après la dernière image
@@ -114,20 +110,15 @@ var
       ResInstance             : THandle      ;
       gchar_DecimalSeparator  : Char ;
       ga_Functions : Array of TLeonFunction;
-      gs_Language : String;
 
-const CST_DIR_LANGUAGE = 'properties'+ DirectorySeparator;
-      CST_DIR_LANGUAGE_LAZARUS = 'LangFiles'+ DirectorySeparator;
-      CST_SUBFILE_LANGUAGE =  'strings_';
-var
-      CST_FILE_LANGUAGES : String =  'languages';
 
 procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
-function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
+function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const afd_FieldsDefs : TFieldDefs ; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
@@ -146,7 +137,6 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                                   abmp_DefaultPicture : TBitmap     ;
                             const ab_AjouteEvenement   : Boolean   );
 procedure p_NavigationTree ( const as_EntityFile : String );
-function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 function fi_FindActionFile ( const afile : String ):Longint ;
 function fi_FindAction ( const aClep : String ):Longint ;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
@@ -230,7 +220,7 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents, strutils,
      unite_variables, u_xmlform, u_languagevars, Imaging, fonctions_languages,
-     fonctions_manbase, fonctions_service ;
+     fonctions_manbase, fonctions_service;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -250,6 +240,7 @@ Begin
       End;
 
 End;
+
 
 procedure p_RegisterSomeLanguages;
 var ls_Dir, ls_lang, ls_Language : String ;
@@ -1549,7 +1540,7 @@ End;
 // aNode : recursive node
 // abo_BuildOrder : entities to load
 /////////////////////////////////////////////////////////////////////////
-function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode; const abo_BuildOrder : TBuildOrder ):String;
+function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ):String;
 var li_i : Integer ;
     lNode : TALXMLNode ;
     lxdo_FichierXML : TALXMLDocument;
@@ -1563,12 +1554,6 @@ Begin
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
         // connects before build
-        if ( lNode.NodeName = CST_LEON_PROJECT )
-        and ( abo_BuildOrder = boConnect ) Then
-          Begin
-            gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
-            p_LoadData ( lNode );
-          end;
         if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
@@ -1578,52 +1563,33 @@ Begin
             Result := fs_RemplaceChar ( Result, '/', '\' );
             {$ENDIF}
             // Pas besoin du chemin complet
-            if abo_BuildOrder = boMenus then
+            gs_RootEntities := fs_WithoutFirstDirectory ( fs_WithoutFirstDirectory ( Result ));
+            if pos ( '.', gs_RootEntities ) > 0 then
               Begin
-                gs_RootEntities := fs_EraseFirstDirectory ( fs_EraseFirstDirectory ( Result ));
-                if pos ( '.', gs_RootEntities ) > 0 then
-                  Begin
-                    gs_RootEntities := copy ( gs_RootEntities, 1, pos ( '.', gs_RootEntities ) - 1 );
-                  End;
+                gs_RootEntities := copy ( gs_RootEntities, 1, pos ( '.', gs_RootEntities ) - 1 );
               End;
 
-            Result := fs_getSoftDir + fs_EraseFirstDirectory ( Result );
+            Result := fs_getSoftDir + fs_WithoutFirstDirectory ( Result );
             if FileExists ( Result ) then
-              Begin
-                case abo_BuildOrder of
-                  boMenus :
-                    Begin
-                      if  ( pos ( CST_LEON_SYSTEM_ROOT, lNode.NodeName ) > 0 )
-                       then
-                         Begin
-                           if not assigned ( gxdo_MenuXML ) Then
-                             gxdo_RootXML := TALXMLDocument.Create(Application);
-                           if fb_LoadXMLFile ( gxdo_RootXML, Result ) then
-                             p_LoadEntitites ( gxdo_RootXML );
-                         End;
-                      if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode.NodeName ) > 0 )
-                       then
-                         Begin
-                           p_NavigationTree ( Result );
-                         End;
-                     End;
-                  boConnect :
-                    Begin
-                      if  ( pos ( CST_LEON_SYSTEM_LOCATION, lNode.NodeName ) > 0 ) Then
-                       Begin
-                         if lxdo_FichierXML = nil then
-                           lxdo_FichierXML := TALXMLDocument.Create(Application);
-                          if fb_LoadXMLFile ( lxdo_FichierXML, Result )
-                           then
-                             p_LoadData ( lxdo_FichierXML.Node );
-                       End;
-                    End;
-                 end;
-              End;
+             Begin
+              if  ( pos ( CST_LEON_SYSTEM_ROOT, lNode.NodeName ) > 0 )
+                 then
+                   Begin
+                     if not assigned ( gxdo_MenuXML ) Then
+                       gxdo_RootXML := TALXMLDocument.Create(Application);
+                     if fb_LoadXMLFile ( gxdo_RootXML, Result ) then
+                       p_LoadEntitites ( gxdo_RootXML );
+                   End;
+                if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode.NodeName ) > 0 )
+                 then
+                   Begin
+                     p_NavigationTree ( Result );
+                   End;
+             end;
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
-        Result := fs_BuildFromXML ( Level + 1, lNode, abo_BuildOrder );
+        Result := fs_BuildMenuFromXML ( Level + 1, lNode );
       End;
    lxdo_FichierXML.Free;
 End;
@@ -1684,108 +1650,28 @@ Begin
 End;
 
 /////////////////////////////////////////////////////////////////////////
-// procedure p_InitIniProjectFile
-// loading ini : if no ini lazarus file creating a line and saving
-/////////////////////////////////////////////////////////////////////////
-procedure p_InitIniProjectFile;
-var lstl_FichierIni : TSTringList ;
-Begin
-  if ( gs_ProjectFile = '' ) then
-    Begin
-      lstl_FichierIni := TStringList.Create ;
-      if not FileExists(fs_getSoftDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
-        Begin
-          ShowMessage ( 'No ini file LEONARDI project !' );
-          Application.Terminate;
-          Exit;
-        end;
-      try
-        lstl_FichierIni.LoadFromFile( fs_getSoftDir + fs_GetNameSoft + CST_EXTENSION_INI);
-        if ( pos ( INISEC_PAR, lstl_FichierIni [ 0 ] ) <= 0 ) Then
-          Begin
-            lstl_FichierIni.Insert(0,'['+INISEC_PAR+']');
-            lstl_FichierIni.SaveToFile(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI );
-            lstl_FichierIni.Free;
-            Showmessage ( 'New INI in '+ fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI + '.'+#13#10+#13#10 +
-                          'Restart.');
-            Application.Terminate;
-            Exit;
-          End;
-      Except
-        lstl_FichierIni.Free;
-      End;
-    End;
-End;
-
-/////////////////////////////////////////////////////////////////////////
 // function fb_ReadIni
-// reading ini and creating project
+// reading ini, creating and building project
 // Lecture du fichier INI
 // Résultat : il y a un fichier projet.
 // amif_Init : ini file
 /////////////////////////////////////////////////////////////////////////
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 Begin
-  if DMModuleSources = nil Then
-    DMModuleSources := TDMModuleSources.Create ( Application );
-  Result := False;
-  gs_Language := 'en';
-  gs_NomApp := fs_GetNameSoft;
-  if not assigned ( amif_Init ) then
-    if FileExists(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
-      Then amif_Init := TIniFile.Create(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
-      Else p_InitIniProjectFile;
-  if assigned ( amif_Init ) Then
+  if fb_CreateProject ( amif_Init, Application )
+  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
     Begin
-      gs_ProjectFile := amif_Init.ReadString(INISEC_PAR,CST_INI_PROJECT_FILE,'');
-      gs_Language    := amif_Init.ReadString(INISEC_PAR,CST_INI_LANGUAGE,'en');
-      fb_ReadLanguage ( gs_Language );
-
-      p_InitIniProjectFile;
-
-      if not assigned ( gxdo_FichierXML ) then
-        gxdo_FichierXML := TALXMLDocument.Create ( Application );
-      Result := gs_ProjectFile <> '';
-      if result Then
-        Begin
-          {$IFDEF WINDOWS}
-          gs_ProjectFile := fs_RemplaceChar ( gs_ProjectFile, '/', '\' );
-          {$ENDIF}
-          gs_ProjectFile := fs_EraseNameSoft ( gs_NomApp, gs_ProjectFile );
-          gchar_DecimalSeparator := ',' ;
-          DecimalSeparator := gchar_DecimalSeparator ;
-//          Showmessage ( fs_getSoftDir + gs_ProjectFile );
-
-          if fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
-            Begin
-              fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boConnect ) ;
-
-            End;
-
-        End;
-  End;
-End;
-////////////////////////////////////////////////////////////////////////////////
-// Fonction fb_ReadLanguage
-// Lecture du fichier de langue leonardi
-// reading leonardi language file
-// as_little_lang : language on two chars
-////////////////////////////////////////////////////////////////////////////////
-function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
-Begin
-  Result := False;
-  if  fb_LoadProperties (  fs_getSoftDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + gs_NomApp,  as_little_lang ) then
-    Begin
-      if assigned ( gmif_MainFormIniInit ) then
-        Begin
-          gmif_MainFormIniInit.WriteString(INISEC_PAR,CST_INI_LANGUAGE,as_little_lang);
-          fb_iniWriteFile( gmif_MainFormIniInit, False );
-        End;
+      Result := True;
       // La fenêtre n'est peut-être pas encore complètement créée
       fb_CreeLeMenu;
-      Result := True;
+      gchar_DecimalSeparator := ',' ;
+      DecimalSeparator := gchar_DecimalSeparator ;
+      fs_BuildFromXML ( 0, gxdo_FichierXML.Node, Application ) ;
+      fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ) ;
+
     End
-  else fb_LoadProperties ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + GS_EXT_LANGUAGES );
+   Else
+    Result := False;
 End;
 ////////////////////////////////////////////////////////////////////////////////
 // function fb_ReadXMLEntitites
@@ -1802,7 +1688,7 @@ Begin
   gxdo_MenuXML    := nil;
   if result Then
     Begin
-      ls_entityFile := fs_BuildFromXML ( 0, gxdo_FichierXML.Node, boMenus ) ;
+      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ) ;
       if  assigned ( gNod_RootAction )
       and ( gNod_RootAction <> gNod_DashBoard ) Then
        Begin
@@ -1953,21 +1839,35 @@ end;
 // afd_FieldsDefs : CSV definitions to add definition
 // result a field definition
 ////////////////////////////////////////////////////////////////////////////////
-function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const ab_isLarge : Boolean ; const afd_FieldsDefs : TFieldDefs ):TFieldDef;
+function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const afd_FieldsDefs : TFieldDefs ; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False):TFieldDef;
 var lft_FieldType : TFieldType;
+    lb_isLarge : Boolean ;
+    li_k : Integer;
+    lnod_FieldProperties : TALXMLNode;
 begin
   Result := nil;
 
   if assigned ( afd_FieldsDefs ) then
     Begin
       lft_FieldType := ftString;
+      if ab_SearchLarge
+      and anod_Field.HasChildNodes then
+        for li_k := 0 to anod_Field.ChildNodes.Count -1 do
+          Begin
+            lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
+            if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
+            or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
+              lb_IsLarge := True;
+          end
+        Else
+         lb_isLarge:=ab_IsLarge;
       if anod_Field.NodeName = CST_LEON_FIELD_NUMBER then
         Begin
           lft_FieldType := ftCurrency;
         End
       else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
         Begin
-          if ab_isLarge Then
+          if lb_isLarge Then
             Begin
               lft_FieldType := ftBlob;
             End
@@ -1992,6 +1892,7 @@ begin
           lft_FieldType := ftInteger;
         End;
 
+ //    ShowMessage(anod_Field.Attributes [ CST_LEON_ID ]);
      afd_FieldsDefs.Add ( anod_Field.Attributes [ CST_LEON_ID ], lft_FieldType, 0 );
      Result := afd_FieldsDefs [ afd_FieldsDefs.Count - 1];
     End;
@@ -2009,11 +1910,12 @@ procedure p_setFieldDefs ( const adat_Dataset : TDataset ; const alis_NodeFields
 var lfds_FieldDefs : TFieldDefs;
     li_i : Integer ;
 begin
-  lfds_FieldDefs := fobj_getComponentObjectProperty(adat_Dataset,'FieldDefs') as TFieldDefs;
+  lfds_FieldDefs := fobj_getComponentObjectProperty(adat_Dataset,CST_COMPONENTS_FIELDDEFS) as TFieldDefs;
   for li_i := 0 to  alis_NodeFields.count - 1 do
     Begin
-       ffd_CreateFieldDef ( TALXMLNode ( alis_NodeFields [ li_i ] ), False, lfds_FieldDefs );
+       ffd_CreateFieldDef ( TALXMLNode ( alis_NodeFields [ li_i ] ), lfds_FieldDefs, True );
     End;
+//  p_SetComponentObjectProperty(adat_Dataset,CST_COMPONENTS_FIELDDEFS,lfds_FieldDefs);
 End;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2025,19 +1927,24 @@ End;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_AddOne : Boolean ):String;
 var
     li_i, li_j : Integer ;
+    lb_IsLarge : Boolean;
+    lnode  : TALXMLNode;
 Begin
   Result := as_Empty;
   li_j := 0;
   for li_i := 0 to  alis_NodeFields.count - 1 do
-    if li_j = 0 Then
-      Begin
-        Result := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
-        inc ( li_j );
-        if ab_AddOne Then
-          Break;
-      end
-     Else
-      Result := Result + ',' + fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_ID );
+    Begin
+      lnode := TALXMLNode ( alis_NodeFields [ li_i ]);
+      if li_j = 0 Then
+        Begin
+          Result := fs_GetNodeAttribute( lnode, CST_LEON_ID );
+          inc ( li_j );
+          if ab_AddOne Then
+            Break;
+        end
+       Else
+        Result := Result + ',' + fs_GetNodeAttribute( lnode, CST_LEON_ID );
+    end;
 end;
 ////////////////////////////////////////////////////////////////////////////////
 // function fs_GetIDFields
@@ -2094,6 +2001,35 @@ Begin
   lbmp_Bitmap.Dormant;
 {$ENDIF}
   lbmp_Bitmap.free;
+end;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// function fds_CreateDataSourceAndOpenedQuery
+// create datasource, dataset, setting and open it
+// as_Table      : Table name
+// as_Fields     : List of fields with comma
+// as_NameEnd    : End of components' names
+// ar_Connection : Connection of table
+// alis_NodeFields : Node of fields' nodes
+////////////////////////////////////////////////////////////////////////////////
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+begin
+  with ar_Connection do
+    Begin
+      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
+        if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]  Then
+         Begin
+           if DatasetType = dtCSV Then
+             p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
+           p_setFieldDefs ( Result.Dataset, alis_NodeFields );
+           if DatasetType = dtDBNet Then
+             p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
+         end
+        else
+        p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
+    end;
+  Result.Dataset.Open;
 end;
 
 

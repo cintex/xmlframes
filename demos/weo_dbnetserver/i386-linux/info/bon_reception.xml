@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="bon_reception" behavior='weo.behavior.Bon_reception_behavior'>
+	<C_BIND value="bon_reception" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_BON_RECEPTION"/>
+	<PREFIX value="bl"/>
+	<FIELDS>
+		<NUMBER id="bon_reception_id">
+			<NAME value="NAME_BON_RECEPTION_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<CHOICE id="bon_reception_facturable">
+			<NAME value="NAME_BON_RECEPTION_FACTURABLE"/>
+			<F_MARKS create='true' set='true' private='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="bon_reception_facturable.oui" name="OUI" value="0" default='true'/>
+				<OPTION id="bon_reception_facturable.non" name="NON" value="1"/>
+			</OPTIONS>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</CHOICE>
+		<RELATION id="bon_reception_affaire">
+			<NAME value="NAME_AFFAIRE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' sort='true' filter='true' find='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="affaire"/>
+		</RELATION>
+		<NUMBER id="bon_reception_numero">
+			<NAME value="NAME_BON_RECEPTION_NUMERO"/>
+			<F_MARKS name='true' unique='true' private='true' consult='false' main='true' create="false" hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<DATE id="bon_reception_date_creation">
+			<NAME value="NAME_BON_RECEPTION_DATE_CREATION"/>
+			<F_MARKS create='true' private='true' main='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="bon_reception_commande">
+			<NAME value="NAME_BON_RECEPTION_COMMANDE"/>
+			<F_MARKS create='true' optional='true' private='true' main='true'/>
+			<CLASSES idrefs="cmd_achat"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<RELATION id="bon_reception_fournisseur">
+			<NAME value="NAME_BON_RECEPTION_FOURNISSEUR"/>
+			<F_MARKS create='true' set='true' private='true' main='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="tiers"/>
+		</RELATION>
+		<TEXT id="bon_reception_adresse" multiple='true'>
+			<NAME value="NAME_BON_RECEPTION_ADRESSE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="bon_reception_description" multiple='true'>
+			<NAME value="NAME_CMD_ACHAT_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<RELATION id="bon_reception_relation_lignes" multiple='true' type='COMPOSITION'>
+			<REVERSE reverseRelation="ligne_br_br"/>
+			<NAME value="NAME_BON_RECEPTION_RELATION_LIGNES"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' local='true'/>
+			<CLASSES idrefs="ligne_bon_reception"/>
+		</RELATION>
+		<RELATION id="bon_reception_facture" multiple="true">
+			<NAME value="NAME_BON_RECEPTION_FACTURE"/>
+			<F_MARKS optional='true' private='true' setConsult='true' main='true'/>
+			<CLASSES idrefs="facture"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<RELATION id="bon_reception_tva">
+			<NAME value="NAME_CMD_ACHAT_TVA"/>
+			<F_MARKS create='true' set='true' private='true' sort='true' filter='true' find='true' optional='true' needPost='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="tva"/>
+		</RELATION>
+	</FIELDS>
+	<SORT id="bon_reception_sort">
+		<NAME value="NAME_BON_RECEPTION_SORT"/>
+		<SORT_CRITERIA idref="bon_reception_numero" increasing='false'/>
+	</SORT>
+	<ACTIONS> 
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION id="generate_facture_from_br" controller="weo.behavior.Action_generate_facture_from_brBehavior">
+			<NAME value="NAME_RECEIVE_FACTURE"/>
+			<PREFIX value="facture"/>
+			<MIN value='1'/>
+			<A_MARKS tool='true'/>
+		</ACTION>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="routeFromBon_de_ReceptionToLignes_de_Bon_de_Reception" target="ligne_bon_reception">
+			<STEP target="ligne_bon_reception" idrefs="ligne_br_br"/>
+		</ROUTE>
+		<!--ROUTE id="routeFromBon_de_ReceptionToProduits" target="produits">
+			<STEP target="produits" idrefs="produit_id"/>
+		</ROUTE>
+		<ROUTE id="routeFromBon_de_ReceptionToFamilles" target="familles">
+			<STEP target="familles" idrefs="famille_id"/>
+		</ROUTE-->
+	</ROUTES>
+</CLASS>

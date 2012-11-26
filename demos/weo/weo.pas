@@ -7,7 +7,7 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
+  Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents, lazfonctions,
   SysUtils, fonctions_zeos,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
@@ -60,7 +60,7 @@ begin
     gb_DicoKeyFormPresent  := True ;
     gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
-    if not fb_ReadIni ( gmif_MainFormIniInit ) Then
+    if not fb_ReadIni ( FMainIni ) Then
      Begin
       ShowMessage ( 'XML file not initalized.' );
       Application.Terminate;

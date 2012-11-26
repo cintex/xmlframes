@@ -77,6 +77,8 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_BUTTONS            = 'Buttons' ;
       CST_COMPONENTS_CONTROLS           = 'Controls' ;
       CST_COMPONENTS_ACTIONS            = 'Actions' ;
+      CST_COMPONENTS_FIELDDEFS          = 'FieldDefs' ;
+
 
 var  gi_FontHeight : Integer = 24 ;
 

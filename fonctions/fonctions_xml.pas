@@ -15,7 +15,6 @@ uses
   Forms;
 
 const CST_LEON_File_Extension = '.xml';
-      CST_LEON_Data_Extension = '.res';
 
       CST_LEON_DUMMY = 'DUMMY' ;
       CST_LEON_PROJECT = 'PROJECT' ;
@@ -199,7 +198,7 @@ uses fonctions_init, u_multidonnees,
      fonctions_string, Dialogs, U_ExtNumEdits,
      fonctions_autocomponents, u_framework_components,
      ExtCtrls, u_framework_dbcomponents,
-     fonctions_system,
+     fonctions_system, fonctions_manbase,
      DbCtrls;
 
 
@@ -458,6 +457,7 @@ End;
 
 
 initialization
+  GS_Data_Extension := '.res';
 {$IFDEF VERSIONS}
   p_ConcatVersion ( gVer_fonctions_XML );
 {$ENDIF}
