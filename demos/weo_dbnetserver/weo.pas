@@ -8,7 +8,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Forms, Interfaces, Dialogs,
-  SysUtils, fonctions_dbnet,
+  SysUtils, fonctions_dbnetserver,
   fonctions_service,
   fonctions_init,
   u_multidonnees;

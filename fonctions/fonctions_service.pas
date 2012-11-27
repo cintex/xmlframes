@@ -1,6 +1,12 @@
 unit fonctions_service;
 
-{$mode objfpc}{$H+}
+{$I ..\DLCompilers.inc}
+{$I ..\extends.inc}
+
+{$IFDEF FPC}
+{$mode Delphi}
+{$ENDIF}
+
 
 interface
 
@@ -45,6 +51,7 @@ implementation
 
 uses u_multidata, u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
+     fonctions_dbcomponents,
      DB,fonctions_system,fonctions_languages;
 
 /////////////////////////////////////////////////////////////////////////
@@ -297,6 +304,7 @@ procedure p_LoadData ( const axno_Node : TALXMLNode );
 var li_i : LongInt ;
     li_Pos : LongInt ;
     lds_connection : TDSSource;
+    LConnection : TComponent;
     lNode : TALXMLNode ;
     ls_ConnectionClep : String;
 Begin
@@ -326,14 +334,14 @@ Begin
                        End;
               {$IFDEF DBNET}
               dtDBNet : Begin
-                         if Assigned(gmif_MainFormIniInit)
+                         if Assigned(FMainIni)
                            Then Begin
-                                  DataPort     := gmif_MainFormIniInit.ReadInteger( INISEC_PAR, 'Port', 8080 );
-                                  DataUser     := gmif_MainFormIniInit.ReadString ( INISEC_PAR, CST_LEON_DATA_USER, '' );
-                                  DataPassword := gmif_MainFormIniInit.ReadString ( INISEC_PAR, CST_LEON_DATA_password, '' );
-                                  DataURL      := gmif_MainFormIniInit.ReadString ( INISEC_PAR, CST_LEON_DATA_URL, '' );
-                                  DataSecure   := gmif_MainFormIniInit.ReadBool   ( INISEC_PAR, 'Secure', False );
-                                End;
+                                  DataPort     := FMainIni.ReadInteger( INISEC_PAR, 'Port', 8080 );
+                                  DataUser     := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_USER, '' );
+                                  DataPassword := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_password, '' );
+                                  DataURL      := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_URL, '' );
+                                  DataSecure   := FMainIni.ReadBool   ( INISEC_PAR, 'Secure', False );
+                                End
                            else DataPort := 8080;
                          p_setComponentProperty ( Connection, 'Port', DataPort );
                          if DataUser <> '' Then
@@ -343,11 +351,16 @@ Begin
                             p_setComponentProperty ( Connection, 'UserName', DataUser );
                             p_SetComponentBoolProperty( Connection, 'WithSSL', DataSecure );
                            End;
+                         p_setComponentBoolProperty ( Connection, 'Active', True );
+                         LConnection := Connection;
                          if QueryCopy = nil Then
-                           Begin
-                             lds_connection := DMModuleSources.Connections.add;
-                             Connection := fobj_getComponentObjectProperty(Connection,CST_DBPROPERTY_ZEOSDB) as TComponent;
+                           try
+                             lds_connection := DMModuleSources.Sources.add;
+                             Connection := fobj_getComponentObjectProperty(LConnection,CST_DBPROPERTY_ZEOSDB) as TComponent;
                              p_LoadConnection ( lNode , lds_connection );
+                           Except
+                             on E:Exception do
+                               writeln ( e.ToString );
                            End;
                        End;
               {$ENDIF}

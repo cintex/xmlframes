@@ -43,7 +43,7 @@ uses Forms, JvXPBar, JvXPContainer,
 {$ENDIF}
   DBCtrls, ALXmlDoc, IniFiles, Graphics,
   u_multidonnees, fonctions_string,
-  fonctions_system,
+  fonctions_system, u_customframework,
   u_multidata;
 
 {$IFDEF VERSIONS}
@@ -66,6 +66,7 @@ const
 
 {$ENDIF}
 type
+
       TActionTemplate          = (atmultiPageTable,atLogin);
       TLeonFunctionID          = String ;
       TLeonFunctions           = Array of TLeonFunctionID;
@@ -116,7 +117,9 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
+procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource; const ach_FieldDelimiter : Char );
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const afd_FieldsDefs : TFieldDefs ; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
@@ -138,6 +141,7 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const ab_AjouteEvenement   : Boolean   );
 procedure p_NavigationTree ( const as_EntityFile : String );
 function fi_FindActionFile ( const afile : String ):Longint ;
+procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent; const ach_FieldDelimiter : Char );
 function fi_FindAction ( const aClep : String ):Longint ;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
@@ -239,6 +243,36 @@ Begin
         Exit;
       End;
 
+End;
+
+procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent ; const ach_FieldDelimiter : Char );
+var  li_k, li_l, li_m, li_n : Longint;
+    lnod_NodeClass, lnod_Fields,
+    lnod_Field, lnod_mark      : TALXMLNode ;
+    lxdoc_Document : TALXMLDocument;
+Begin
+  lxdoc_Document := nil;
+  If fb_OpenClass ( as_class, acom_owner, lxdoc_Document ) Then
+   // reading the special XML form File
+      for li_k := 0 to lxdoc_Document.ChildNodes.Count -1 do
+        Begin
+          lnod_NodeClass := lxdoc_Document.ChildNodes [ li_k ];
+          if ( lnod_NodeClass.NodeName = CST_LEON_CLASS  )
+          or ( lnod_NodeClass.NodeName = CST_LEON_STRUCT ) then
+              for li_l := 0 to lnod_NodeClass.ChildNodes.Count -1 do
+                Begin
+                  lnod_Fields := lnod_NodeClass.ChildNodes [ li_l ];
+                  if lnod_Fields.NodeName = CST_LEON_FIELDS Then
+                   for li_m := 0 to lnod_Fields.ChildNodes.Count -1 do
+                     Begin
+                       lnod_Field := lnod_Fields.ChildNodes [ li_m ];
+                       if lnod_Field.HasChildNodes Then
+                        for li_n := 0 to lnod_Field.ChildNodes.Count -1 do
+                          if ( lnod_Field.ChildNodes [ li_n ].NodeName = CST_LEON_FIELD_F_MARKS  ) then
+                           p_setNodeId ( lnod_Field, lnod_Field.ChildNodes [ li_n ], afws_Source, ach_FieldDelimiter );
+                     end;
+                end;
+        end;
 End;
 
 
@@ -1849,52 +1883,58 @@ begin
 
   if assigned ( afd_FieldsDefs ) then
     Begin
-      lft_FieldType := ftString;
-      if ab_SearchLarge
-      and anod_Field.HasChildNodes then
-        for li_k := 0 to anod_Field.ChildNodes.Count -1 do
-          Begin
-            lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-            if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-            or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-              lb_IsLarge := True;
-          end
-        Else
-         lb_isLarge:=ab_IsLarge;
-      if anod_Field.NodeName = CST_LEON_FIELD_NUMBER then
+      li_k := afd_FieldsDefs.IndexOf(anod_Field.Attributes [ CST_LEON_ID ]);
+      if li_k <> -1
+       Then Result := afd_FieldsDefs [ li_k ]
+       Else
         Begin
-          lft_FieldType := ftCurrency;
-        End
-      else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
-        Begin
-          if lb_isLarge Then
+          lft_FieldType := ftString;
+          if ab_SearchLarge
+          and anod_Field.HasChildNodes then
+            for li_k := 0 to anod_Field.ChildNodes.Count -1 do
+              Begin
+                lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
+                if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
+                or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
+                  lb_IsLarge := True;
+              end
+            Else
+             lb_isLarge:=ab_IsLarge;
+          if anod_Field.NodeName = CST_LEON_FIELD_NUMBER then
             Begin
-              lft_FieldType := ftBlob;
+              lft_FieldType := ftCurrency;
             End
-           Else
+          else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
+            Begin
+              if lb_isLarge Then
+                Begin
+                  lft_FieldType := ftBlob;
+                End
+               Else
+                Begin
+                  lft_FieldType := ftString;
+                End
+            End
+          else if anod_Field.NodeName = CST_LEON_FIELD_FILE then
             Begin
               lft_FieldType := ftString;
             End
-        End
-      else if anod_Field.NodeName = CST_LEON_FIELD_FILE then
-        Begin
-          lft_FieldType := ftString;
-        End
-      else if anod_Field.NodeName = CST_LEON_RELATION then
-        Begin
-        End
-      else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
-        Begin
-          lft_FieldType := ftDate;
-        End
-      else if anod_Field.NodeName = CST_LEON_FIELD_CHOICE then
-        Begin
-          lft_FieldType := ftInteger;
-        End;
+          else if anod_Field.NodeName = CST_LEON_RELATION then
+            Begin
+            End
+          else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
+            Begin
+              lft_FieldType := ftDate;
+            End
+          else if anod_Field.NodeName = CST_LEON_FIELD_CHOICE then
+            Begin
+              lft_FieldType := ftInteger;
+            End;
 
- //    ShowMessage(anod_Field.Attributes [ CST_LEON_ID ]);
-     afd_FieldsDefs.Add ( anod_Field.Attributes [ CST_LEON_ID ], lft_FieldType, 0 );
-     Result := afd_FieldsDefs [ afd_FieldsDefs.Count - 1];
+   //    ShowMessage(anod_Field.Attributes [ CST_LEON_ID ]);
+          afd_FieldsDefs.Add ( anod_Field.Attributes [ CST_LEON_ID ], lft_FieldType, 0 );
+          Result := afd_FieldsDefs [ afd_FieldsDefs.Count - 1];
+       End;
     End;
 end;
 
@@ -1912,10 +1952,7 @@ var lfds_FieldDefs : TFieldDefs;
 begin
   lfds_FieldDefs := fobj_getComponentObjectProperty(adat_Dataset,CST_COMPONENTS_FIELDDEFS) as TFieldDefs;
   for li_i := 0 to  alis_NodeFields.count - 1 do
-    Begin
-       ffd_CreateFieldDef ( TALXMLNode ( alis_NodeFields [ li_i ] ), lfds_FieldDefs, True );
-    End;
-//  p_SetComponentObjectProperty(adat_Dataset,CST_COMPONENTS_FIELDDEFS,lfds_FieldDefs);
+    ffd_CreateFieldDef ( TALXMLNode ( alis_NodeFields [ li_i ] ), lfds_FieldDefs, True );
 End;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2013,25 +2050,63 @@ end;
 // ar_Connection : Connection of table
 // alis_NodeFields : Node of fields' nodes
 ////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 begin
   with ar_Connection do
     Begin
       Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
-        if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]  Then
+      if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
+       Then
          Begin
            if DatasetType = dtCSV Then
              p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
+           p_setFieldDefs ( Result.Dataset, alis_IdFields );
            p_setFieldDefs ( Result.Dataset, alis_NodeFields );
            if DatasetType = dtDBNet Then
              p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
          end
         else
         p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
+      Result.Dataset.Open;
     end;
-  Result.Dataset.Open;
 end;
 
+
+procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource ; const ach_FieldDelimiter : Char );
+Begin
+  if anod_FieldIsId.HasAttribute ( CST_LEON_ID)
+  and not ( anod_FieldIsId.Attributes [ CST_LEON_ID ] = CST_LEON_BOOL_FALSE )  then
+    Begin
+      if afws_Source.Key  = '' then
+        afws_Source.Key := anod_FieldId.Attributes [CST_LEON_ID]
+       else
+        afws_Source.Key := afws_Source.Key + ach_FieldDelimiter + anod_FieldId.Attributes [CST_LEON_ID];
+    End;
+end;
+
+
+
+function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
+var ls_ProjectFile : String ;
+begin
+  Result := False;
+  if not assigned ( axml_SourceFile ) Then
+    axml_SourceFile := TALXMLDocument.Create ( acom_owner );
+  ls_ProjectFile := fs_getProjectDir ( ) + as_XMLClass + CST_LEON_File_Extension;
+  // For actions at the end of xml file
+  If ( FileExists ( ls_ProjectFile )) Then
+   // reading the special XML form File
+    try
+      if fb_LoadXMLFile ( axml_SourceFile, ls_ProjectFile ) Then
+         Result := True;
+    Except
+      On E: Exception do
+        Begin
+          ShowMessage ( 'Erreur opening XML Class File : ' + E.Message );
+        End;
+    End ;
+
+end;
 
 initialization
   GS_SUBDIR_IMAGES_SOFT := DirectorySeparator+'images'+DirectorySeparator;
