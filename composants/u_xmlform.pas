@@ -376,8 +376,8 @@ Begin
   Result.FormRegisteredName:=as_Table;
 
   p_SetComboProperties ( Result.Combo, Self, ads_Connection,
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, as_FieldsDisplay, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self ),
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, as_FieldsDisplay, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self ),
+                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self ),
+                         fds_CreateDataSourceAndOpenedQuery ( as_Table, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self ),
                          as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter, OneFieldToFill );
 end;
 
@@ -685,7 +685,7 @@ begin
                    {$IFDEF DBNET}
                      If ( lfwc_Column.Connection.DatasetType = dtDBNet ) Then
                       Begin
-                       p_SetComponentBoolProperty(lfwc_Column.Connection.QueryCopy, 'GetFields', True );
+//                       p_SetComponentBoolProperty(lfwc_Column.Connection.QueryCopy, 'GetFields', True );
                        p_FindAndSetSourceKey(lnod_NodeChild.Attributes [ CST_LEON_IDREF ],lfwc_Column, Self, FieldDelimiter);
                       end;
                    {$ENDIF}
@@ -1273,13 +1273,7 @@ var lnod_FieldProperties : TALXMLNode ;
     var li_k : LongInt ;
     Begin
       Result := False;
-      if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-        Begin
-          lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
-        End
-       Else
-        lfd_FieldDef := nil ;
-
+      lfd_FieldDef := nil ;
       if ( anod_Field.NodeName = CST_LEON_ARRAY )
       or ( anod_Field.NodeName = CST_LEON_STRUCT )
        Then
@@ -1291,6 +1285,10 @@ var lnod_FieldProperties : TALXMLNode ;
         end;
       if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
         Begin
+          if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
+            Begin
+              lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
+            End;
           lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
           with lffd_ColumnFieldDef do
             begin
@@ -1797,7 +1795,7 @@ begin
   //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   //      lpan_ParentPanel.ShowHint := True;
         Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + as_ClassRelation + CST_COMPONENTS_LEFT, Self, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, as_fieldsDisplay, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self );
+        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self );
         Result.Width := CST_GROUPVIEW_WIDTH;
         p_setGroupmentfields ( Result );
         p_AddGroupView ( Result );

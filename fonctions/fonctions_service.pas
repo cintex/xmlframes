@@ -52,6 +52,9 @@ implementation
 uses u_multidata, u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
      fonctions_dbcomponents,
+     {$IFDEF WINDOWS}
+     fonctions_string,
+     {$ENDIF}
      DB,fonctions_system,fonctions_languages;
 
 /////////////////////////////////////////////////////////////////////////

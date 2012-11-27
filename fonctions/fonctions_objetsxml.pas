@@ -119,7 +119,7 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const aiml_Images : TImageList );
 function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
 procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource; const ach_FieldDelimiter : Char );
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 function ffd_CreateFieldDef ( const anod_Field : TALXMLNode ; const afd_FieldsDefs : TFieldDefs ; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False):TFieldDef;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
@@ -139,6 +139,7 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const abmp_Picture        ,
                                   abmp_DefaultPicture : TBitmap     ;
                             const ab_AjouteEvenement   : Boolean   );
+function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
 procedure p_NavigationTree ( const as_EntityFile : String );
 function fi_FindActionFile ( const afile : String ):Longint ;
 procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent; const ach_FieldDelimiter : Char );
@@ -2040,6 +2041,31 @@ Begin
   lbmp_Bitmap.free;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// function fs_GetIdAttribute
+// get id or idref attribute of node
+// anode : a node with id or idref
+// Result : ID or IDREF Attribute
+////////////////////////////////////////////////////////////////////////////////
+function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
+Begin
+  if anode.HasAttribute(CST_LEON_ID)
+   Then Result := anode.Attributes[CST_LEON_ID]
+   Else Result := anode.Attributes[CST_LEON_IDREF]
+end;
+
+procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
+var li_i : Integer;
+    lnode : TALXMLNode;
+Begin
+  for li_i := 0 to alis_NodeFields.Count - 1 do
+    Begin
+      lnode := TALXMLNode (alis_NodeFields [li_i]^);
+      if as_Fields = '*'
+       Then as_Fields := fs_GetIdAttribute ( lnode )
+       Else AppendStr(as_Fields, ','+ fs_GetIdAttribute ( lnode ));
+   End;
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // function fds_CreateDataSourceAndOpenedQuery
@@ -2050,7 +2076,8 @@ end;
 // ar_Connection : Connection of table
 // alis_NodeFields : Node of fields' nodes
 ////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_Fields, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent): TDatasource;
+var ls_Fields : String ;
 begin
   with ar_Connection do
     Begin
@@ -2060,13 +2087,16 @@ begin
          Begin
            if DatasetType = dtCSV Then
              p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
-           p_setFieldDefs ( Result.Dataset, alis_IdFields );
            p_setFieldDefs ( Result.Dataset, alis_NodeFields );
+           p_setFieldDefs ( Result.Dataset, alis_IdFields );
+           ls_Fields := '*';
+           p_AddFieldsToString ( ls_Fields, alis_NodeFields );
+           p_AddFieldsToString ( ls_Fields, alis_IdFields   );
            if DatasetType = dtDBNet Then
-             p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
+             p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
          end
         else
-        p_SetSQLQuery(Result.Dataset, 'SELECT '+as_Fields + ' FROM ' + as_Table );
+        p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
       Result.Dataset.Open;
     end;
 end;
