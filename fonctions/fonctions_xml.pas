@@ -83,6 +83,8 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_OPTION_VALUE   = 'value' ;
 
       CST_LEON_FIELD_NUMBER   = 'NUMBER' ;
+      CST_LEON_FIELD_TYPE     = 'type' ;
+      CST_LEON_FIELD_DOUBLE   = 'DOUBLE' ;
       CST_LEON_FIELD_DATE     = 'DATE' ;
       CST_LEON_FIELD_TEXT     = 'TEXT' ;
       CST_LEON_FIELD_CHOICE   = 'CHOICE' ;
@@ -100,6 +102,7 @@ const CST_LEON_File_Extension = '.xml';
 
 
       CST_LEON_FIELD_F_MARKS  = 'F_MARKS' ;
+      CST_LEON_FIELD_F_BIND   = 'F_BIND' ;
       CST_LEON_FIELD_LOCAL    = 'local' ;
       CST_LEON_FIELD_CREATE   = 'create' ;
       CST_LEON_FIELD_UNIQUE   = 'unique' ;
@@ -187,6 +190,7 @@ function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode 
 function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
 function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
+function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
 
 
 implementation
@@ -200,6 +204,20 @@ uses fonctions_init, u_multidonnees,
      ExtCtrls, u_framework_dbcomponents,
      fonctions_system, fonctions_manbase,
      DbCtrls;
+
+////////////////////////////////////////////////////////////////////////////////
+// function fs_GetIdAttribute
+// get id or idref attribute of node
+// anode : a node with id or idref
+// Result : ID or IDREF Attribute
+////////////////////////////////////////////////////////////////////////////////
+function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
+Begin
+  if anode.HasAttribute(CST_LEON_ID)
+   Then Result := anode.Attributes[CST_LEON_FIELD_ID]
+   Else Result := anode.Attributes[CST_LEON_IDREF]
+end;
+
 
 
 // function fs_LeonFilter
@@ -227,7 +245,7 @@ Begin
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
           Begin
             if lnod_FieldProperties.HasAttribute ( as_MarkSearched )
-            and not ( lnod_FieldProperties.Attributes [ as_MarkSearched ] = CST_LEON_BOOL_FALSE )  then
+            and ( lnod_FieldProperties.Attributes [ as_MarkSearched ] <> CST_LEON_BOOL_FALSE )  then
               Begin
                 aano_IdNOdes.Add ( anod_Field );
               End;

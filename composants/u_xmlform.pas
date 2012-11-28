@@ -1109,9 +1109,16 @@ begin
             NavEdit.VisibleButtons := NavEdit.VisibleButtons + [nbEInsert];
             Exit;
           End;
-        if ls_Action = CST_LEON_ACTION_REF_PRINT then
+        if  ( ls_Action = CST_LEON_ACTION_REF_PRINT )
+        and ( DBSources.count > 0 )
+         then
           Begin
             gbtn_PrintButton := TFWPrintSources.Create ( Self );
+            with gbtn_PrintButton do
+              Begin
+                Width := 90;
+                Left := Left - Width;
+              end;
             fpan_CreateAction ( gbtn_PrintButton, CST_COMPONENTS_BUTTON_PRINT, Self, FActionPanel );
             Exit;
           End;
@@ -1153,10 +1160,16 @@ var lnod_FieldProperties : TALXMLNode ;
       if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
         Begin
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_local )
-          and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_local ] = CST_LEON_BOOL_FALSE )  then
+          and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
             Begin
               lb_IsLocal := True;
+              lffd_ColumnFieldDef.ColSelect:=False;
             End;
+          if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
+            Begin
+              lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
+            End;
+
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_CREATE)
            then lffd_ColumnFieldDef.ColCreate  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_UNIQUE)
@@ -1190,6 +1203,19 @@ var lnod_FieldProperties : TALXMLNode ;
 
     end;
 
+    procedure p_SetFieldSelect;
+    Begin
+      if not lb_IsLocal Then
+       Begin
+         lffd_ColumnFieldDef.ColSelect:=True;
+         if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
+          Begin
+            lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
+          End;
+
+       end;
+    end;
+
     // procedure p_CreateArrayStructComponents
     // Creating groupbox with controls
     procedure p_CreateArrayStructComponents ;
@@ -1206,6 +1232,7 @@ var lnod_FieldProperties : TALXMLNode ;
       Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
       lb_IsLocal := False;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
+
       if anod_Field <> lnod_OriginalNode Then
        Begin
         ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
@@ -1263,6 +1290,7 @@ var lnod_FieldProperties : TALXMLNode ;
           end;
       p_setFieldComponentTop ( Result, ab_Column );
       p_setComponentLeft  ( Result, ab_Column );
+      p_SetFieldSelect;
 
     end;
 
@@ -1274,6 +1302,7 @@ var lnod_FieldProperties : TALXMLNode ;
     Begin
       Result := False;
       lfd_FieldDef := nil ;
+      lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
       if ( anod_Field.NodeName = CST_LEON_ARRAY )
       or ( anod_Field.NodeName = CST_LEON_STRUCT )
        Then
@@ -1285,22 +1314,17 @@ var lnod_FieldProperties : TALXMLNode ;
         end;
       if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
         Begin
-          if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-            Begin
-              lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
-            End;
-          lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
           with lffd_ColumnFieldDef do
             begin
               TableName   := as_Table;
               NumTag      := ai_Fieldcounter + 1;
               FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
               ShowSearch  := -1;
+              ColSelect:=False;
             end;
         End
        else
          Begin
-    //      lffd_ColumnFieldDef := nil;
           Exit;
          End;
 
@@ -1312,11 +1336,17 @@ var lnod_FieldProperties : TALXMLNode ;
           Begin
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
             if fb_getFieldOptions Then
-              Exit;
+             Begin
+               p_SetFieldSelect;
+               Exit;
+             end;
+
             if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
             or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
               lb_IsLarge := True;
           End;
+
+      p_SetFieldSelect;
 
       awin_Control := fwin_CreateFieldComponent ( afws_Source, awin_Parent, anod_Field, lb_IsLarge, lb_IsLocal, ai_FieldCounter, ai_counter );
 
@@ -1377,7 +1407,8 @@ begin
 
   // Initing fb_CreateComponents
   lxfc_ButtonCombo := nil;
-
+   if anod_Field.Attributes[CST_LEON_FIELD_id] = 'cmd_achat_total' Then
+     ShowMessage('pas ok');
   // Placing the created control
   if fb_CreateComponents ( Result )  Then
     if assigned ( Result ) Then

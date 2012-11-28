@@ -139,7 +139,6 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const abmp_Picture        ,
                                   abmp_DefaultPicture : TBitmap     ;
                             const ab_AjouteEvenement   : Boolean   );
-function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
 procedure p_NavigationTree ( const as_EntityFile : String );
 function fi_FindActionFile ( const afile : String ):Longint ;
 procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent; const ach_FieldDelimiter : Char );
@@ -1890,21 +1889,30 @@ begin
        Else
         Begin
           lft_FieldType := ftString;
-          if ab_SearchLarge
-          and anod_Field.HasChildNodes then
-            for li_k := 0 to anod_Field.ChildNodes.Count -1 do
-              Begin
-                lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-                if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-                or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-                  lb_IsLarge := True;
-              end
+          if ab_SearchLarge then
+             Begin
+               lb_isLarge := False;
+               if anod_Field.HasChildNodes then
+               for li_k := 0 to anod_Field.ChildNodes.Count -1 do
+                Begin
+                  lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
+                  if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
+                  or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
+                   Begin
+                    lb_IsLarge := True;
+                    Break;
+                   end;
+                end;
+              End
             Else
              lb_isLarge:=ab_IsLarge;
-          if anod_Field.NodeName = CST_LEON_FIELD_NUMBER then
-            Begin
-              lft_FieldType := ftCurrency;
-            End
+          if ( anod_Field.NodeName = CST_LEON_FIELD_NUMBER ) then
+           begin
+             if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
+             and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
+              Then lft_FieldType := ftCurrency
+              Else lft_FieldType := ftInteger;
+           end
           else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
             Begin
               if lb_isLarge Then
@@ -1975,13 +1983,13 @@ Begin
       lnode := TALXMLNode ( alis_NodeFields [ li_i ]);
       if li_j = 0 Then
         Begin
-          Result := fs_GetNodeAttribute( lnode, CST_LEON_ID );
+          Result := fs_GetIdAttribute( lnode );
           inc ( li_j );
           if ab_AddOne Then
             Break;
         end
        Else
-        Result := Result + ',' + fs_GetNodeAttribute( lnode, CST_LEON_ID );
+        Result := Result + ',' + fs_GetIdAttribute( lnode );
     end;
 end;
 ////////////////////////////////////////////////////////////////////////////////
@@ -2041,30 +2049,27 @@ Begin
   lbmp_Bitmap.free;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-// function fs_GetIdAttribute
-// get id or idref attribute of node
-// anode : a node with id or idref
-// Result : ID or IDREF Attribute
-////////////////////////////////////////////////////////////////////////////////
-function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
-Begin
-  if anode.HasAttribute(CST_LEON_ID)
-   Then Result := anode.Attributes[CST_LEON_ID]
-   Else Result := anode.Attributes[CST_LEON_IDREF]
-end;
-
 procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
-var li_i : Integer;
+var li_i, li_k : Integer;
+    lb_Found : Boolean;
     lnode : TALXMLNode;
 Begin
-  for li_i := 0 to alis_NodeFields.Count - 1 do
-    Begin
-      lnode := TALXMLNode (alis_NodeFields [li_i]^);
-      if as_Fields = '*'
-       Then as_Fields := fs_GetIdAttribute ( lnode )
-       Else AppendStr(as_Fields, ','+ fs_GetIdAttribute ( lnode ));
-   End;
+  if assigned ( alis_NodeFields ) Then
+    for li_i := 0 to alis_NodeFields.Count - 1 do
+      Begin
+        lnode := TALXMLNode (alis_NodeFields [li_i]);
+        lb_Found := False;
+        for li_k := 0 to lnode.ChildNodes.Count - 1 do
+          with lnode.ChildNodes [ li_k ] do
+           if  ( NodeName = CST_LEON_FIELD_F_MARKS )
+           and   HasAttribute(CST_LEON_FIELD_LOCAL )
+           and ( Attributes[CST_LEON_FIELD_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
+             Exit;
+        if as_Fields = '*'
+         Then as_Fields := fs_GetIdAttribute ( lnode )
+         Else AppendStr(as_Fields, ','+ fs_GetIdAttribute ( lnode ));
+
+     End;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2082,6 +2087,9 @@ begin
   with ar_Connection do
     Begin
       Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
+      ls_Fields := '*';
+      p_AddFieldsToString ( ls_Fields, alis_NodeFields );
+      p_AddFieldsToString ( ls_Fields, alis_IdFields   );
       if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
        Then
          Begin
@@ -2089,9 +2097,6 @@ begin
              p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
            p_setFieldDefs ( Result.Dataset, alis_NodeFields );
            p_setFieldDefs ( Result.Dataset, alis_IdFields );
-           ls_Fields := '*';
-           p_AddFieldsToString ( ls_Fields, alis_NodeFields );
-           p_AddFieldsToString ( ls_Fields, alis_IdFields   );
            if DatasetType = dtDBNet Then
              p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
          end
