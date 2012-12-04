@@ -1910,7 +1910,7 @@ begin
            begin
              if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
              and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
-              Then lft_FieldType := ftCurrency
+              Then lft_FieldType := ftFloat
               Else lft_FieldType := ftInteger;
            end
           else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
