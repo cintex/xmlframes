@@ -58,12 +58,12 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="298">
+    <Units Count="299">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="13"/>
         <CursorPos X="22" Y="65"/>
@@ -1282,7 +1282,7 @@
       <Unit150>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="158"/>
         <CursorPos X="58" Y="158"/>
@@ -1365,7 +1365,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3626"/>
         <CursorPos X="47" Y="3665"/>
@@ -1692,7 +1692,7 @@
       <Unit200>
         <Filename Value="../../../Extended/composants/u_extdbnavigator.pas"/>
         <UnitName Value="U_ExtDBNavigator"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="425"/>
         <CursorPos X="1" Y="430"/>
@@ -2048,7 +2048,7 @@
       <Unit243>
         <Filename Value="../../../ManFrames/forms/u_multidonnees.pas"/>
         <UnitName Value="u_multidonnees"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="161" Y="64"/>
@@ -2334,7 +2334,7 @@
       <Unit278>
         <Filename Value="../../../ManFrames/fonctions/fonctions_extdb.pas"/>
         <UnitName Value="fonctions_extdb"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="16"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -2461,7 +2461,7 @@
       <Unit292>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="130"/>
         <CursorPos X="46" Y="138"/>
@@ -2478,7 +2478,7 @@
       <Unit294>
         <Filename Value="../../../Extended/composants/U_GroupView.pas"/>
         <UnitName Value="U_GroupView"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3906"/>
         <CursorPos X="39" Y="3954"/>
@@ -2496,7 +2496,6 @@
       <Unit296>
         <Filename Value="../../../Extended/composants/u_formadapt.pas"/>
         <UnitName Value="U_FormAdapt"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="50"/>
@@ -2507,13 +2506,24 @@
       <Unit297>
         <Filename Value="../../../Extended/fonctions/fonctions_scaledpi.pas"/>
         <UnitName Value="fonctions_scaledpi"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="18"/>
         <CursorPos X="1" Y="43"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit297>
+      <Unit298>
+        <Filename Value="../../../../Blaise Pascal/No.23/Keyboard laz/KeyBoard.lpr"/>
+        <UnitName Value="Keyboard"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit298>
     </Units>
     <JumpHistory Count="29" HistoryIndex="28">
       <Position1>

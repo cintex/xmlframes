@@ -55,7 +55,10 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      {$IFDEF WINDOWS}
      fonctions_string,
      {$ENDIF}
-     DB,fonctions_system,fonctions_languages;
+     DB,fonctions_system,
+     unite_variables,
+     Dialogs,
+     fonctions_languages;
 
 /////////////////////////////////////////////////////////////////////////
 // procedure p_InitIniProjectFile
@@ -132,7 +135,9 @@ Begin
                  lxdo_FichierXML := TALXMLDocument.Create(AApplication);
                 if fb_LoadXMLFile ( lxdo_FichierXML, Result )
                  then
+                  Begin
                    p_LoadData ( lxdo_FichierXML.Node );
+                  end;
              End;
           End;
 //         else
@@ -288,7 +293,9 @@ Begin
      else if ( pos ( CST_LEON_DATA_POSTGRES, DataDriver ) > 0 ) Then
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
      try
-       p_setComponentBoolProperty ( Connection, 'Connected', True );
+       p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
+       if not fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then
+         Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
      except
        on e: Exception do
          Raise EDatabaseError.Create ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
@@ -306,8 +313,7 @@ end;
 procedure p_LoadData ( const axno_Node : TALXMLNode );
 var li_i : LongInt ;
     li_Pos : LongInt ;
-    lds_connection : TDSSource;
-    LConnection : TComponent;
+    lds_connection,lds_connection2 : TDSSource;
     lNode : TALXMLNode ;
     ls_ConnectionClep : String;
 Begin
@@ -342,28 +348,30 @@ Begin
                                   DataPort     := FMainIni.ReadInteger( INISEC_PAR, 'Port', 8080 );
                                   DataUser     := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_USER, '' );
                                   DataPassword := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_password, '' );
-                                  DataURL      := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_URL, '' );
+                                  DataURL      := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_URL, '127.0.0.1' );
                                   DataSecure   := FMainIni.ReadBool   ( INISEC_PAR, 'Secure', False );
                                 End
                            else DataPort := 8080;
                          p_setComponentProperty ( Connection, 'Port', DataPort );
+                         p_setComponentProperty ( Connection, 'Host', DataURL );
                          if DataUser <> '' Then
                            Begin
-                            p_setComponentProperty ( Connection, 'Host', DataURL );
                             p_setComponentProperty ( Connection, 'Password', DataPassword );
                             p_setComponentProperty ( Connection, 'UserName', DataUser );
                             p_SetComponentBoolProperty( Connection, 'WithSSL', DataSecure );
                            End;
-                         p_setComponentBoolProperty ( Connection, 'Active', True );
-                         LConnection := Connection;
+                         p_setComponentBoolProperty ( Connection, 'LoginPrompt', False );
                          if QueryCopy = nil Then
                            try
-                             lds_connection := DMModuleSources.Sources.add;
-                             Connection := fobj_getComponentObjectProperty(LConnection,CST_DBPROPERTY_ZEOSDB) as TComponent;
-                             p_LoadConnection ( lNode , lds_connection );
+                             lds_connection2 := DMModuleSources.Sources.add;
+                             lds_connection2.Connection := fobj_getComponentObjectProperty(Connection,CST_DBPROPERTY_ZEOSDB) as TComponent;
+                             p_LoadConnection ( lNode , lds_connection2 );
+                             p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_Active, True );
+                             if not fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_Active)
+                                Then writeln ( 'Connection not active.')
                            Except
                              on E:Exception do
-                               writeln ( e.ToString );
+                               writeln ( 'Error : ' + e.ToString );
                            End;
                        End;
               {$ENDIF}

@@ -63,14 +63,6 @@
 
 	<!-- Locations -->
 	&LOCATION;
-	<L_SQL id="weo_db"
-			url="jdbc:mysql://localhost/"
-			driver="com.mysql.jdbc.Driver"
-			user="demo"
-			password="vraduser"
-			dbName="weo"
-			valueSep="&#010;"/>
-	<!-- Classes declarations -->
 	&bon_livraison;
 	&cmd_achat;
 	&cmd_achat_lignes;
