@@ -1,4 +1,4 @@
-unit fonctions_service;
+﻿unit fonctions_service;
 
 {$I ..\DLCompilers.inc}
 {$I ..\extends.inc}
@@ -16,6 +16,7 @@ uses
   fonctions_version,
   {$ENDIF}
   SysUtils, ALXmlDoc,
+  fonctions_system,
   IniFiles;
 
 const // Champs utilisés
@@ -55,7 +56,7 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      {$IFDEF WINDOWS}
      fonctions_string,
      {$ENDIF}
-     DB,fonctions_system,
+     DB,
      unite_variables,
      Dialogs,
      fonctions_languages;

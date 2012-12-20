@@ -13,9 +13,11 @@ uses
   fonctions_ObjetsXML,
   fonctions_string,
   fonctions_xml,
+  fonctions_init,
+  fonctions_forms,
+  fonctions_zeos,
   fonctions_system,
-  Dialogs,
-  fonctions_ado in '..\..\..\ManFrames\fonctions\fonctions_ado.pas';
+  Dialogs;
 
 {$R WindowsXP.res}
 
@@ -59,7 +61,7 @@ begin
 		gb_DicoKeyFormPresent  := True ;
 		gb_DicoUseFormField    := True ;
 		gb_DicoGroupementMontreCaption := False ;
-    if not fb_ReadIni ( gmif_MainFormIniInit ) Then
+    if not fb_ReadIni ( FMainIni ) Then
       ShowMessage ( 'XML file not initalized.' );
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
        // Il n'y a pas de menu donc rootentities est une fenêtre

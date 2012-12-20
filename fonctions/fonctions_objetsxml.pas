@@ -1,4 +1,4 @@
-unit fonctions_ObjetsXML;
+﻿unit fonctions_ObjetsXML;
 
 interface
 
@@ -2097,8 +2097,10 @@ begin
              p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
            p_setFieldDefs ( Result.Dataset, alis_NodeFields );
            p_setFieldDefs ( Result.Dataset, alis_IdFields );
+           {$IFDEF DBNET}
            if DatasetType = dtDBNet Then
              p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
+           {$ENDIF}
          end
         else
         p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
