@@ -1326,7 +1326,6 @@
         <TopLine Value="522"/>
         <CursorPos X="87" Y="560"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit154>
       <Unit155>
         <Filename Value="../../composants/u_xmlform.pas"/>
@@ -1345,7 +1344,6 @@
         <TopLine Value="244"/>
         <CursorPos X="1" Y="267"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit156>
       <Unit157>
         <Filename Value="../../../Extended/composants/u_onforminfoini.pas"/>
@@ -1375,7 +1373,6 @@
         <CursorPos X="47" Y="3665"/>
         <UsageCount Value="31"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit159>
       <Unit160>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/control.inc"/>
@@ -1441,7 +1438,6 @@
         <TopLine Value="265"/>
         <CursorPos X="1" Y="294"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit167>
       <Unit168>
         <Filename Value="../../../../Lazarus/composants/rxfpc/rxlookup.pas"/>
@@ -1615,7 +1611,6 @@
         <TopLine Value="194"/>
         <CursorPos X="118" Y="223"/>
         <UsageCount Value="14"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit190>
       <Unit191>
         <Filename Value="../../../../Lazarus/composants/lclextensions/delphicompat.pas"/>
@@ -1632,7 +1627,6 @@
         <TopLine Value="1"/>
         <CursorPos X="12" Y="26"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit192>
       <Unit193>
         <Filename Value="/usr/lib/lazarus/0.9.30/ide/lazarus.pp"/>
@@ -1660,7 +1654,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit195>
       <Unit196>
         <Filename Value="../../../Extended/forms/u_zconnection.pas"/>
@@ -1787,7 +1780,6 @@
         <TopLine Value="934"/>
         <CursorPos X="46" Y="933"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit210>
       <Unit211>
         <Filename Value="../../../Extended/extends.inc"/>
@@ -1803,7 +1795,6 @@
         <TopLine Value="1"/>
         <CursorPos X="6" Y="1"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit212>
       <Unit213>
         <Filename Value="../../../Extended/fonctions/fonctions_version.pas"/>
@@ -1918,7 +1909,6 @@
         <CursorPos X="3" Y="40"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit226>
       <Unit227>
         <Filename Value="../../../Extended/composants/u_extdbimage.pas"/>
@@ -1945,7 +1935,6 @@
         <CursorPos X="3" Y="144"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit229>
       <Unit230>
         <Filename Value="../../forms/u_multidonnees.pas"/>
@@ -1978,7 +1967,6 @@
         <TopLine Value="18"/>
         <CursorPos X="56" Y="49"/>
         <UsageCount Value="13"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit233>
       <Unit234>
         <Filename Value="../../../Extended/fonctions/fonctions_showversion.pas"/>
@@ -2003,7 +1991,6 @@
         <TopLine Value="48"/>
         <CursorPos X="81" Y="92"/>
         <UsageCount Value="17"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit236>
       <Unit237>
         <Filename Value="../../../ManFrames/extends.inc"/>
@@ -2011,7 +1998,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit237>
       <Unit238>
         <Filename Value="../../../ManFrames/fonctions/fonctions_autocomponents.pas"/>
@@ -2020,7 +2006,6 @@
         <TopLine Value="1"/>
         <CursorPos X="36" Y="28"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit238>
       <Unit239>
         <Filename Value="../../../Extended/fonctions/fonctions_languages.pas"/>
@@ -2037,7 +2022,6 @@
         <TopLine Value="55"/>
         <CursorPos X="1" Y="76"/>
         <UsageCount Value="13"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit240>
       <Unit241>
         <Filename Value="../../../ManFrames/composants/u_formdico.pas"/>
@@ -2046,7 +2030,6 @@
         <TopLine Value="59"/>
         <CursorPos X="14" Y="80"/>
         <UsageCount Value="13"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit241>
       <Unit242>
         <Filename Value="../../../ManFrames/composants/u_propform.pas"/>
@@ -2055,7 +2038,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="85"/>
         <UsageCount Value="20"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit242>
       <Unit243>
         <Filename Value="../../../ManFrames/forms/u_multidonnees.pas"/>
@@ -2077,7 +2059,6 @@
         <CursorPos X="45" Y="32"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit244>
       <Unit245>
         <Filename Value="../../../ManFrames/composants/U_RegisterIni.pas"/>
@@ -2086,7 +2067,6 @@
         <TopLine Value="281"/>
         <CursorPos X="137" Y="304"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit245>
       <Unit246>
         <Filename Value="../../../Extended/composants/U_RegisterAppIni.pas"/>
@@ -2103,7 +2083,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="11"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit247>
       <Unit248>
         <Filename Value="../../../../Lazarus/composants/jvXP/JvXPCore.pas"/>
@@ -2298,7 +2277,6 @@
         <TopLine Value="1"/>
         <CursorPos X="55" Y="52"/>
         <UsageCount Value="12"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit271>
       <Unit272>
         <Filename Value="../../../ManFrames/composants/u_formmaindb.pas"/>
@@ -2310,7 +2288,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="12"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit272>
       <Unit273>
         <Filename Value="/usr/share/lazarus/1.0.2/lcl/include/customform.inc"/>
@@ -2356,7 +2333,6 @@
         <CursorPos X="97" Y="35"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit278>
       <Unit279>
         <Filename Value="../../../ManFrames/fonctions/fonctions_zeos.pas"/>
@@ -2365,7 +2341,6 @@
         <TopLine Value="14"/>
         <CursorPos X="30" Y="45"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit279>
       <Unit280>
         <Filename Value="../../../ManFrames/fonctions/fonctions_sqldb.pas"/>
@@ -2374,7 +2349,6 @@
         <TopLine Value="7"/>
         <CursorPos X="1" Y="36"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit280>
       <Unit281>
         <Filename Value="../../../ManFrames/fonctions/fonctions_ado.pas"/>
@@ -2383,7 +2357,6 @@
         <TopLine Value="7"/>
         <CursorPos X="1" Y="14"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit281>
       <Unit282>
         <Filename Value="../../../ManFrames/fonctions/fonctions_dbexpress.pas"/>
@@ -2392,7 +2365,6 @@
         <TopLine Value="7"/>
         <CursorPos X="133" Y="1"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit282>
       <Unit283>
         <Filename Value="../../../ManFrames/forms/u_connection.pas"/>
@@ -2433,7 +2405,6 @@
         <CursorPos X="65" Y="155"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit286>
       <Unit287>
         <Filename Value="../../../ManFrames/fonctions/fonctions_ibx.pas"/>
@@ -2442,7 +2413,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="44"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit287>
       <Unit288>
         <Filename Value="../../../Extended/fonctions/fonctions_erreurs.pas"/>
