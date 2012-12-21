@@ -51,6 +51,8 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_NAVIGATOR_BEGIN    = 'nav_' ;
       CST_COMPONENTS_BUTTON_BEGIN       = 'but_' ;
       CST_COMPONENTS_SPLITTER_BEGIN     = 'spl_' ;
+      CST_COMPONENTS_FILLCOMBO_BEGIN    = 'fcb_' ;
+      CST_COMPONENTS_COMBO_BEGIN        = 'cbx_' ;
       CST_COMPONENTS_GROUPVIEW_BEGIN    = 'grv_' ;
       CST_COMPONENTS_RECORD_BEGIN       = 'fwr_Record' ;
       CST_COMPONENTS_ABORT_BEGIN        = 'fwa_Abort' ;
@@ -77,7 +79,6 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_BUTTONS            = 'Buttons' ;
       CST_COMPONENTS_CONTROLS           = 'Controls' ;
       CST_COMPONENTS_ACTIONS            = 'Actions' ;
-      CST_COMPONENTS_FIELDDEFS          = 'FieldDefs' ;
 
 
 var  gi_FontHeight : Integer = 24 ;

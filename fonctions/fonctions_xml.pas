@@ -172,7 +172,6 @@ var gs_ProjectFile  : String;
     gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
     gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
     gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gch_SeparatorCSV: Char = '|';
     gs_entities     : String  = 'rootEntities' ;
     gs_Encoding     : String = 'ISO-8859-1';
 

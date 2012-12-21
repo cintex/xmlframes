@@ -113,7 +113,6 @@ type
     gxml_SourceFile : TALXMLDocument ;
     procedure p_ScruteComposantsFiche (); override;
     procedure p_setChoiceComponent(const argr_Control: TDBRadioGroup); virtual;
-    procedure p_CreateCsvFile(const afd_FieldsDefs: TFieldDefs; const afws_Source : TFWXMLSource ); virtual;
     procedure p_setControl ( const as_BeginName : String ;
                              const awin_Control: TWinControl;
                              const awin_Parent: TWinControl;
@@ -159,10 +158,10 @@ type
                                           const ai_FieldCounter, ai_counter : Longint ):TWinControl;
     function  fwin_CreateFieldComponentAndProperties(const as_Table :String; const anod_Field: TALXMLNode;
                                                   var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ; var  awin_Parent, awin_Last : TWinControl ;
-                                                  var ab_Column : Boolean ; const afws_Source : TFWXMLSource ; const afd_FieldsDefs : TFieldDefs ):TWinControl; virtual;
+                                                  var ab_Column : Boolean ; const afws_Source : TFWXMLSource ):TWinControl; virtual;
     function fpan_GridNavigationComponents(const awin_Parent: TWinControl; const as_Name : String ;
       const ai_Counter: Integer): TScrollBox; virtual;
-    function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl; const afd_FieldDef : TFieldDef ;
+    function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl;
       const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
     procedure p_SetFieldButtonsProperties(const anod_Action : TALXMLNode;
       const ai_Counter: Integer); virtual;
@@ -371,14 +370,16 @@ function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
 Begin
   Result :=  TXMLFillCombo.Create(Self);
   if OneFieldToFill
-   Then Result.Combo := TExtDBComboInsert.Create ( Self )
+   Then
+     Begin
+      Result.Combo := TExtDBComboInsert.Create ( Self );
+      p_SetComponentObjectProperty(Result.Combo,CST_PROPERTY_SEARCHSOURCE, fds_CreateDataSourceAndOpenedQuery ( as_Table, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, DBSources.Add));
+     end
    Else Result.Combo := TFWDBLookupCombo.Create ( Self );
   Result.FormRegisteredName:=as_Table;
-
   p_SetComboProperties ( Result.Combo, Self, ads_Connection,
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self ),
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self ),
-                         as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter, OneFieldToFill );
+                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, nil ),
+                         as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter );
 end;
 
 // function ffwc_getRelationComponent
@@ -979,7 +980,7 @@ End;
 // ab_Column : Segund editing column
 // afcf_ColumnField : Field Form column definitions
 
-function TF_XMLForm.flab_setFieldComponentProperties ( const anod_Field : TALXMLNode ; const awin_Control, awin_Parent : TWinControl; const afd_FieldDef : TFieldDef ; const ai_Counter : Longint ; const ab_Column : Boolean ; const afcf_ColumnField : TFWFieldColumn ): TFWLabel;
+function TF_XMLForm.flab_setFieldComponentProperties ( const anod_Field : TALXMLNode ; const awin_Control, awin_Parent : TWinControl; const ai_Counter : Longint ; const ab_Column : Boolean ; const afcf_ColumnField : TFWFieldColumn ): TFWLabel;
 var li_i : LongInt ;
     ldo_Temp : Double ;
     lnod_FieldProperties : TALXMLNode ;
@@ -1027,6 +1028,7 @@ Begin
                 ldo_Temp := lnod_FieldProperties.Attributes [ CST_LEON_VALUE ];
                 p_setComponentProperty ( awin_Control, 'MaxLength', ldo_Temp);
                 awin_Control.Width := CST_XML_FIELDS_CHARLENGTH * StrToInt ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
+                afcf_ColumnField.FieldSize:=Trunc(ldo_Temp);
               Except
               end
             else if ( awin_Control is TExtNumEdit ) then
@@ -1041,9 +1043,7 @@ Begin
               Except
               end;
             try
-              if assigned ( afd_FieldDef )
-              and ( afd_FieldDef.DataType = ftBlob ) then
-                afd_FieldDef.Size := Trunc ( ldo_Temp );
+              afcf_ColumnField.FieldSize := Trunc ( ldo_Temp );
             Except
             end;
             DecimalSeparator := gchar_DecimalSeparator ;
@@ -1141,11 +1141,10 @@ end;
 // ab_Column : Second editing column
 // afws_Source : XML form Column
 // afd_FieldsDefs : Field Definitions
-function TF_XMLForm.fwin_CreateFieldComponentAndProperties (const as_Table :String; const anod_Field: TALXMLNode; var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; var awin_Parent, awin_Last : TWinControl ; var ab_Column : Boolean ; const afws_Source : TFWXMLSource ; const afd_FieldsDefs : TFieldDefs ):TWinControl;
+function TF_XMLForm.fwin_CreateFieldComponentAndProperties (const as_Table :String; const anod_Field: TALXMLNode; var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; var awin_Parent, awin_Last : TWinControl ; var ab_Column : Boolean ; const afws_Source : TFWXMLSource  ):TWinControl;
 var lnod_FieldProperties : TALXMLNode ;
     llab_Label  : TFWLabel;
     lb_IsLarge, lb_IsLocal  : Boolean;
-    lfd_FieldDef : TFieldDef;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lwin_Last : TWinControl;
     lnod_OriginalNode : TALXmlNode;
@@ -1167,7 +1166,7 @@ var lnod_FieldProperties : TALXMLNode ;
             End;
           if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
             Begin
-              lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
+              lffd_ColumnFieldDef.FieldType := fft_GetFieldType ( anod_Field, False, lb_IsLarge );
             End;
 
           if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_CREATE)
@@ -1210,7 +1209,7 @@ var lnod_FieldProperties : TALXMLNode ;
          lffd_ColumnFieldDef.ColSelect:=True;
          if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
           Begin
-            lfd_FieldDef := ffd_CreateFieldDef ( anod_Field, afd_FieldsDefs, False, lb_IsLarge );
+            lffd_ColumnFieldDef.FieldType := fft_getFieldType ( anod_Field, False, lb_IsLarge );
           End;
 
        end;
@@ -1226,7 +1225,6 @@ var lnod_FieldProperties : TALXMLNode ;
         lnod_FieldsNode : TALXmlNode;
         ls_Table : String ;
         lfwc_Column : TFWXMLSource ;
-        lfd_FieldsDefs : TFieldDefs ;
     begin
       ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
       Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
@@ -1237,7 +1235,6 @@ var lnod_FieldProperties : TALXMLNode ;
        Begin
         ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
         lfwc_Column  := TFWXMLSource ( ffws_CreateSource(ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION] ));
-        lfd_FieldsDefs := fobj_GetcomponentObjectProperty ( lfwc_Column.Datasource.Dataset, CST_COMPONENTS_FIELDDEFS ) as TFieldDefs;
         li_FieldCounter := 0 ;
         with afws_Source.Linked.Add do
           Begin
@@ -1270,20 +1267,20 @@ var lnod_FieldProperties : TALXMLNode ;
                       Begin
                         if anod_Field <> lnod_OriginalNode Then
                           fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_FieldsNode.ChildNodes [ li_l ], li_FieldCounter, DBSources.Count - 1,
-                                                                   lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
+                                                                   lwin_Parent, lwin_Last, lb_column, lfwc_Column )
                          else
                           fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ], ai_FieldCounter, ai_Counter,
-                                                                   lwin_Parent, lwin_Last, ab_column, afws_Source, afd_FieldsDefs );
+                                                                   lwin_Parent, lwin_Last, ab_column, afws_Source );
                       end;
                   end
                  Else
                   // The parent parameter is a var : so do not want to change it in the function
                   if anod_Field <> lnod_OriginalNode Then
                     fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ], li_FieldCounter, DBSources.Count - 1,
-                                                             lwin_Parent, lwin_Last, lb_column, lfwc_Column, lfd_FieldsDefs )
+                                                             lwin_Parent, lwin_Last, lb_column, lfwc_Column )
                    else
                     fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_k ], ai_FieldCounter, ai_Counter,
-                                                             lwin_Parent, lwin_Last, ab_column, afws_Source, afd_FieldsDefs );
+                                                             lwin_Parent, lwin_Last, ab_column, afws_Source );
                 inc ( li_FieldCounter );
                 lb_IsLocal:=True;
               end;
@@ -1301,7 +1298,6 @@ var lnod_FieldProperties : TALXMLNode ;
     var li_k : LongInt ;
     Begin
       Result := False;
-      lfd_FieldDef := nil ;
       lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
       if ( anod_Field.NodeName = CST_LEON_ARRAY )
       or ( anod_Field.NodeName = CST_LEON_STRUCT )
@@ -1372,7 +1368,7 @@ var lnod_FieldProperties : TALXMLNode ;
 
       p_setFieldComponentData ( awin_Control, afws_Source, lffd_ColumnFieldDef, lb_IsLocal );
 
-      llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, lfd_FieldDef, ai_Counter, ab_Column, lffd_ColumnFieldDef );
+      llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, ai_Counter, ab_Column, lffd_ColumnFieldDef );
 
       if assigned ( llab_Label ) Then
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
@@ -1407,8 +1403,6 @@ begin
 
   // Initing fb_CreateComponents
   lxfc_ButtonCombo := nil;
-   if anod_Field.Attributes[CST_LEON_FIELD_id] = 'cmd_achat_total' Then
-     ShowMessage('pas ok');
   // Placing the created control
   if fb_CreateComponents ( Result )  Then
     if assigned ( Result ) Then
@@ -1452,37 +1446,6 @@ begin
     end;
 end;
 
-// procedure p_CreateCsvFile
-// Creating CSV file
-// afd_FieldsDefs : field definition
-//  afws_Source   : Column definition
-procedure TF_XMLForm.p_CreateCsvFile ( const afd_FieldsDefs : TFieldDefs ; const afws_Source : TFWXMLSource );
-var lstl_File : TStringList;
-    ls_FileInside : String ;
-    li_i : Longint;
-Begin
-  if  ( afws_Source.Connection.DatasetType = dtCSV )
-  and not FileExists ( fs_getFileNameOfTableColumn ( afws_Source ))
-  and ( afd_FieldsDefs.count > 0 )
-   Then
-    Begin
-      lstl_File := TStringList.create ;
-      try
-        ls_FileInside := '' ;
-        for li_i := 0 to afd_FieldsDefs.count -1 do
-          Begin
-            if li_i = 0 then
-              ls_FileInside := afd_FieldsDefs [ li_i ].Name
-             else
-              ls_FileInside := ls_FileInside + gch_SeparatorCSV + afd_FieldsDefs [ li_i ].Name
-          End;
-        lstl_File.text := ls_FileInside ;
-        lstl_File.SaveToFile ( fs_getFileNameOfTableColumn ( afws_Source ));
-      finally
-        lstl_File.free;
-      end;
-    End;
-End;
 
 // procedure p_CreateFormComponents
 // Create a form from XML File
@@ -1495,7 +1458,6 @@ var li_i, li_j, li_NoField : LongInt ;
     lnod_Node : TALXMLNode ;
     lb_Column, lb_FieldFound, lb_Table : Boolean ;
     lfwc_Column : TFWXMLSource ;
-    lfd_FieldsDefs : TFieldDefs ;
     lwin_Last : TWinControl;
     li_Counter : Integer;
   // child procedure p_CreateParentAndFieldsComponent
@@ -1520,9 +1482,9 @@ var li_i, li_j, li_NoField : LongInt ;
       end;
     lwin_Last := nil;
     if lnod_Node.Attributes [ CST_LEON_ID ] = Null then
-      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs )
+      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column )
      else
-      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column, lfd_FieldsDefs );
+      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column );
     inc ( li_NoField );
 
   end;
@@ -1540,7 +1502,6 @@ var li_i, li_j, li_NoField : LongInt ;
           Begin
             p_CreateParentAndFieldsComponent ( anod_ANode.ChildNodes [ li_k ] );
           End;
-       p_CreateCsvFile ( lfd_FieldsDefs, lfwc_Column );
       End;
     if  ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
         Begin
@@ -1556,13 +1517,8 @@ var li_i, li_j, li_NoField : LongInt ;
   // as_Connection : Connection name
   procedure p_CreateXMLColumn ( const as_Table, as_Connection : String );
   Begin
-    lfd_FieldsDefs := nil;
     lfwc_Column := TFWXMLSource ( ffws_CreateSource ( as_Table, as_Connection ));
     ConnectionName := as_Connection;
-    if lfwc_Column.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-      Begin
-        lfd_FieldsDefs := fobj_GetcomponentObjectProperty ( lfwc_Column.Datasource.Dataset, CST_COMPONENTS_FIELDDEFS ) as TFieldDefs;
-      End;
   end;
 
 begin
@@ -1826,7 +1782,7 @@ begin
   //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   //      lpan_ParentPanel.ShowHint := True;
         Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + as_ClassRelation + CST_COMPONENTS_LEFT, Self, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self );
+        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, DBSources.Add );
         Result.Width := CST_GROUPVIEW_WIDTH;
         p_setGroupmentfields ( Result );
         p_AddGroupView ( Result );
