@@ -378,7 +378,7 @@ Begin
    Else Result.Combo := TFWDBLookupCombo.Create ( Self );
   Result.FormRegisteredName:=as_Table;
   p_SetComboProperties ( Result.Combo, Self, ads_Connection,
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, nil ),
+                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, DBSources.Add ),
                          as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter );
 end;
 
@@ -2004,7 +2004,9 @@ begin
     Except
     End ;
   {$IFDEF FPC}
-   lico_Icon.FreeImage;
+  if lico_Icon.Handle <> 0 Then
+    lico_Icon.ReleaseHandle;
+  lico_Icon.Handle := 0;
   {$ENDIF}
    lico_Icon.Free;
   {$IFDEF DELPHI}
