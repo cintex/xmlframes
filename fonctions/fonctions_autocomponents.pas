@@ -20,12 +20,12 @@ uses
   U_ExtDBNavigator, Buttons, Forms, DBCtrls,
   SysUtils,ComCtrls, TypInfo, Variants,
   U_FormMainIni, u_framework_dbcomponents,
-  fonctions_manbase, StdCtrls, u_extdbgrid,
+  fonctions_manbase, StdCtrls,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
   U_CustomFrameWork, u_framework_components,
-  u_buttons_defs,
+  u_buttons_defs, u_extdbgrid,
   u_multidata,U_GroupView, ExtCtrls ;
 
 

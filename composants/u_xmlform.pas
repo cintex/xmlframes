@@ -277,7 +277,6 @@ Begin
   DBCloseMessage := True;
   gfwe_Password := nil;
   gfwe_Login    := nil;
-
 end;
 
 
