@@ -2114,7 +2114,7 @@ begin
          end
         else
         p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
-//      Result.DataSet.Open;
+      Result.DataSet.Open;
     end;
 end;
 

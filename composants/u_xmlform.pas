@@ -377,7 +377,7 @@ Begin
    Else Result.Combo := TFWDBLookupCombo.Create ( Self );
   Result.FormRegisteredName:=as_Table;
   p_SetComboProperties ( Result.Combo, Self, ads_Connection,
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, DBSources.Add ),
+                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, nil ),
                          as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter );
 end;
 
