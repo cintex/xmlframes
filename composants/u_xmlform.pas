@@ -1,4 +1,4 @@
-unit u_xmlform;
+﻿unit u_xmlform;
 
 
 {$I ..\DLCompilers.inc}
@@ -178,9 +178,7 @@ type
                                  const ach_DebutLettrage, ach_FinLettrage : Char ;
                                  const ali_Debut, ali_LimiteRecherche : Int64 ): Boolean; override;
 
-    {$IFDEF FPC}
     procedure DoShow; override;
-    {$ENDIF}
     { Déclarations publiques }
     procedure p_setLogin ( const axml_Login : TALXMLDocument;
                            const axb_ident : TJvXPButton ;
@@ -567,8 +565,8 @@ begin
 end;
 procedure TF_XMLForm.p_setControl  ( const as_BeginName : String ; const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint );
 begin
-  awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
   awin_Control.Parent := awin_Parent ;
+  awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
   awin_Control.Tag := ai_FieldCounter + 1;
 End;
 
@@ -828,7 +826,6 @@ begin
    p_LoginOKClick (Self );
 end;
 
-{$IFDEF FPC}
 procedure TF_XMLForm.Doshow;
 var li_i : Integer;
     lcom_Component : TComponent;
@@ -837,10 +834,9 @@ begin
   for li_i := 0 to ComponentCount - 1 do
     Begin
       lcom_Component := Components [ li_i ];
-      {$IFDEF FPC}
-      if lcom_Component is TJvXPButton Then
+      if lcom_Component is TFWButton Then
        Begin
-        (lcom_Component as TJvXPButton).Loaded;
+        (lcom_Component as TFWButton).Loaded;
         Continue;
        end;
       if lcom_Component is TDBGroupView Then
@@ -848,7 +844,6 @@ begin
          (lcom_Component as TDBGroupView).Loaded;
          Continue;
        end;
-      {$ENDIF}
       if ( lcom_Component is TExtDBNumEdit )
       and (( lcom_Component as TExtDBNumEdit ).Field is TIntegerField )   then
         Begin
@@ -858,7 +853,6 @@ begin
     end;
   inherited;
 end;
-{$ENDIF}
 
 // procedure p_CloseLoginAction
 // Login close event
@@ -1117,6 +1111,7 @@ begin
               Begin
                 Width := 90;
                 Left := Left - Width;
+                Caption := gs_print;
               end;
             fpan_CreateAction ( gbtn_PrintButton, CST_COMPONENTS_BUTTON_PRINT, Self, FActionPanel );
             Exit;
@@ -1659,9 +1654,9 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + as_ClassRelation + '1', Self, alLeft );
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonRecord := TFWRecord.Create ( Self );
+          ButtonRecord.Parent := lpan_PanelActions;
           lpan_PanelActions.Height := ButtonRecord.Height;
           ButtonRecord.Name := CST_COMPONENTS_RECORD_BEGIN + as_ClassRelation;
-          ButtonRecord.Parent := lpan_PanelActions;
           ButtonRecord.Align := alLeft ;
           p_setLeftFromPanel ( ButtonRecord );
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + as_ClassRelation + '2', Self, alLeft );
@@ -1685,37 +1680,37 @@ var lpan_ParentPanel   : TWinControl;
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '1', Self, alTop );
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonIn := TFWInSelect.Create ( Self );
+          ButtonIn.Parent := lpan_PanelActions;
           ButtonIn.Name := CST_COMPONENTS_IN_BEGIN + as_ClassRelation;
           ( ButtonIn as TFWGroupButtonMoving ).Caption := '' ;
           lpan_PanelActions.Width := ButtonIn.Width;
-          ButtonIn.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonIn );
           ButtonIn.Align := alTop ;
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '2', Self, alTop );
           p_setTopToPanel ( ButtonIn );
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonOut := TFWOutSelect.Create ( Self );
+          ButtonOut.Parent := lpan_PanelActions;
           ButtonOut.Name := CST_COMPONENTS_OUT_BEGIN + as_ClassRelation;
           ( ButtonOut as TFWGroupButtonMoving ).Caption := '' ;
-          ButtonOut.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonOut );
           ButtonOut.Align := alTop ;
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '3', Self, alTop );
           p_setTopToPanel ( ButtonOut );
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonTotalIn := TFWInAll.Create ( Self );
+          ButtonTotalIn.Parent := lpan_PanelActions;
           ButtonTotalIn.Name := CST_COMPONENTS_INALL_BEGIN + as_ClassRelation;
           ( ButtonTotalIn as TFWGroupButtonMoving ).Caption := '' ;
-          ButtonTotalIn.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonTotalIn );
           ButtonTotalIn.Align := alTop ;
           lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '4', Self, alTop );
           p_setTopToPanel ( ButtonTotalIn );
           lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
           ButtonTotalOut := TFWOutAll.Create ( Self );
+          ButtonTotalOut.Parent := lpan_PanelActions;
           ButtonTotalOut.Name := CST_COMPONENTS_OUTALL_BEGIN + as_ClassRelation;
           ( ButtonTotalOut as TFWGroupButtonMoving ).Caption := '' ;
-          ButtonTotalOut.Parent := lpan_PanelActions;
           p_setTopFromPanel ( ButtonTotalOut );
           ButtonTotalOut.Align := alTop ;
         end;
@@ -1845,9 +1840,9 @@ function TF_XMLForm.fpc_CreatePageControl (const awin_Parent : TWinControl ; con
 var ltbs_Tabsheet : TTabSheet ;
 begin
   Result := TPageControl.Create ( Self );
+  Result.Parent := awin_Parent;
   Result.Name := CST_COMPONENTS_PAGECONTROL_BEGIN + as_Name;
   // Le parent du pagecontrol
-  Result.Parent := awin_Parent;
   gi_MainFieldsHeight := gi_LastFormFieldsHeight;
   Result.Align := alClient;
   ltbs_Tabsheet := TTabSheet.Create ( Self );

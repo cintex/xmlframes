@@ -1,4 +1,4 @@
-unit u_languagevars;
+﻿unit u_languagevars;
 
 interface
 
@@ -10,6 +10,7 @@ resourcestring
    Gs_EmptyFunctionName    = 'Cette action LEONARDI a un nom vide : ' ;
    Gs_RootForm             = 'Fenêtre principale' ;
    Gs_DetailsSheet         = 'Détails' ;
+   Gs_Print                = 'Imprimer' ;
    Gs_NotImplemented       = 'Pas d''implémentation. Participez au projet XML Frames...' ;
 
 implementation
