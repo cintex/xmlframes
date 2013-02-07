@@ -15,7 +15,7 @@ uses
   {$IFDEF VERSIONS}
   fonctions_version,
   {$ENDIF}
-  SysUtils, XMLRead, DOM,
+  SysUtils, ALXmlDoc,
   fonctions_system,
   IniFiles;
 
@@ -37,11 +37,11 @@ const // Champs utilisés
 {$ENDIF}
 
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ): Boolean;
-procedure p_LoadData ( const axno_Node : TDOMNode );
+procedure p_LoadData ( const axno_Node : TALXMLNode );
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
 function fb_CreateProject ( var amif_Init : TIniFile; const AApplication : TComponent ) : Boolean;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
-function fs_BuildFromXML ( Level : Integer ; const aNode : TStringList ; const AApplication : TComponent ):String;
+function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode ; const AApplication : TComponent ):String;
 
 var
     gs_Language : String;
@@ -58,7 +58,6 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      {$ENDIF}
      DB,
      unite_variables,
-     strutils,
      Dialogs,
      fonctions_languages;
 
@@ -101,47 +100,50 @@ End;
 // aNode : recursive node
 // abo_BuildOrder : entities to load
 /////////////////////////////////////////////////////////////////////////
-function fs_BuildFromXML ( Level : Integer ; const aNode : TStringList ; const AApplication : TComponent ):String;
-var li_i, li_pos : Integer ;
-    lNode : String ;
-    lxdo_FichierXML : TXMLDocument;
+function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode ; const AApplication : TComponent ):String;
+var li_i : Integer ;
+    lNode : TALXMLNode ;
+    lxdo_FichierXML : TALXMLDocument;
 Begin
    lxdo_FichierXML := nil ;
-     for li_i := 0 to aNode.Count - 1 do
+   if ( aNode.HasChildNodes ) then
+     for li_i := 0 to aNode.ChildNodes.Count - 1 do
       Begin
-        lNode := aNode [ li_i ];
+        lNode := aNode.ChildNodes [ li_i ];
 //        if (  lNode.IsTextElement ) then
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
         // connects before build
-        if pos ( CST_LEON_PROJECT, lNode ) > 0 Then
+        if ( lNode.NodeName = CST_LEON_PROJECT ) Then
           Begin
-            li_pos := pos ( CST_LEON_ROOT_ACTION, lnode ) + length ( CST_LEON_ROOT_ACTION );
-            gs_RootAction := Copy(lNode,li_pos,posex('"',lNode,li_pos)-li_pos);
+            gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
+            p_LoadData ( lNode );
           end;
-        if ( Pos ( CST_LEON_ENTITY, lNode ) = 0  )
-        and ( Pos ( CST_LEON_DUMMY, lNode ) > 0  ) then
+        if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
+        and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
-//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes.GetNamedItem ( 'DUMMY' ]);
-            li_pos := pos ( CST_LEON_DUMMY, lnode ) + length ( CST_LEON_DUMMY );
-            Result := Copy(lNode,li_pos,posex('"',lNode,li_pos)-li_pos);
+//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
+            Result := lNode.Attributes [ CST_LEON_DUMMY ];
             {$IFDEF WINDOWS}
             Result := fs_RemplaceChar ( Result, '/', '\' );
             {$ENDIF}
 
             Result := fs_getSoftDir + fs_WithoutFirstDirectory ( Result );
             if FileExists ( Result )
-            and  ( Pos ( CST_LEON_SYSTEM_LOCATION, lNode ) > 0  ) Then
+            and  ( pos ( CST_LEON_SYSTEM_LOCATION, lNode.NodeName ) > 0 ) Then
              Begin
+               if lxdo_FichierXML = nil then
+                 lxdo_FichierXML := TALXMLDocument.Create(AApplication);
                 if fb_LoadXMLFile ( lxdo_FichierXML, Result )
                  then
                   Begin
-                   p_LoadData ( lxdo_FichierXML.DocumentElement.FirstChild );
+                   p_LoadData ( lxdo_FichierXML.Node );
                   end;
              End;
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
+        Result := fs_BuildFromXML ( Level + 1, lNode, AApplication );
       End;
    lxdo_FichierXML.Free;
 End;
@@ -157,10 +159,10 @@ End;
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ) : Boolean;
 Begin
   if fb_CreateProject ( amif_Init, AApplication )
-  and fb_LoadFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
+  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
     Begin
       Result := True;
-      fs_BuildFromXML ( 0, gxdo_FichierXML, AApplication ) ;
+      fs_BuildFromXML ( 0, gxdo_FichierXML.Node, AApplication ) ;
     End
    Else
     Result := False;
@@ -217,6 +219,8 @@ Begin
 
       p_InitIniProjectFile;
 
+      if not assigned ( gxdo_FichierXML ) then
+        gxdo_FichierXML := TALXMLDocument.Create ( AApplication );
       Result := gs_ProjectFile <> '';
       if result Then
         Begin
@@ -246,12 +250,12 @@ Begin
    else Result := as_Value;
 End;
 
-procedure p_LoadConnection ( const aNode : TDOMNode ; const ads_connection : TDSSource );
+procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource );
 var li_Pos : LongInt ;
 Begin
   with ads_connection do
    Begin
-    DataURL := fs_getIniOrNotIniValue ( aNode.Attributes.GetNamedItem ( CST_LEON_DATA_URL ).ToString);
+    DataURL := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_URL ]);
     li_Pos := pos ( '//', DataURL );
     DataURL := copy ( DataURL , li_pos + 2, length ( DataURL ) - li_pos - 1 );
     DataPort := 0;
@@ -269,10 +273,10 @@ Begin
       end;
     if ( DataURL [ length ( DataURL )] = '/' ) Then
       DataURL := copy ( DataURL , 1, length ( DataURL ) - 1 );
-    DataUser := fs_getIniOrNotIniValue ( aNode.Attributes.GetNamedItem ( CST_LEON_DATA_USER ).ToString);
-    DataPassword :=fs_getIniOrNotIniValue ( aNode.Attributes.GetNamedItem ( CST_LEON_DATA_Password ).ToString);
-    Database := fs_getIniOrNotIniValue ( aNode.Attributes.GetNamedItem ( CST_LEON_DATA_DATABASE ).ToString);
-    DataDriver := fs_getIniOrNotIniValue ( aNode.Attributes.GetNamedItem ( CST_LEON_DATA_DRIVER ).ToString);
+    DataUser := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_USER ]);
+    DataPassword :=fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_Password ]);
+    Database := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DATABASE ]);
+    DataDriver := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DRIVER ]);
      p_setComponentProperty ( Connection, 'User', DataUser );
      p_setComponentProperty ( Connection, 'Password', DataPassword );
      p_setComponentProperty ( Connection, 'Hostname', DataURL );
@@ -307,11 +311,11 @@ end;
 // Charge le lien de données
 // axno_Node : xml data document
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadData ( const axno_Node : TDOMNode );
+procedure p_LoadData ( const axno_Node : TALXMLNode );
 var li_i : LongInt ;
     li_Pos : LongInt ;
     lds_connection,lds_connection2 : TDSSource;
-    lNode : TDOMNode ;
+    lNode : TALXMLNode ;
     ls_ConnectionClep : String;
 Begin
   for li_i := 0 to axno_Node.ChildNodes.Count - 1 do
@@ -319,11 +323,11 @@ Begin
       lNode := axno_Node.ChildNodes [ li_i ];
       if (   ( lNode.NodeName = CST_LEON_DATA_FILE )
           or ( lNode.NodeName = CST_LEON_DATA_SQL  ))
-      and ( lNode.Attributes.GetNamedItem (CST_LEON_ID) <> nil )
+      and lNode.HasAttribute(CST_LEON_ID)
       then
        Begin
         // Le module M_Donnees n'est pas encore chargé
-        ls_ConnectionClep := lNode.Attributes.GetNamedItem (CST_LEON_ID).ToString;
+        ls_ConnectionClep := lNode.Attributes [CST_LEON_ID];
         lds_connection:= DMModuleSources.fds_FindConnection(ls_ConnectionClep, False);
         if assigned ( lds_connection ) Then
           Continue;
@@ -333,7 +337,7 @@ Begin
             case DatasetType of
               dtCSV : if ( lNode.NodeName = CST_LEON_DATA_FILE ) Then
                        Begin
-                        dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes.GetNamedItem ( CST_LEON_DATA_URL ).ToString)) +DirectorySeparator + lNode.Attributes.GetNamedItem ( CST_LEON_ID ).ToString + '#';
+                        dataURL := fs_LeonFilter ( fs_getIniOrNotIniValue ( lNode.Attributes [ CST_LEON_DATA_URL ])) +DirectorySeparator + lNode.Attributes [ CST_LEON_ID ] + '#';
                         {$IFDEF WINDOWS}
                         dataURL := fs_RemplaceChar ( DataURL, '/', '\' );
                         {$ENDIF}

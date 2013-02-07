@@ -41,7 +41,7 @@ uses Forms, JvXPBar, JvXPContainer,
 {$IFDEF TNT}
   TntForms,TntStdCtrls, TntExtCtrls,
 {$ENDIF}
-  DBCtrls, XMLRead, DOM, IniFiles, Graphics,
+  DBCtrls, ALXmlDoc, IniFiles, Graphics,
   u_multidonnees, fonctions_string,
   fonctions_system, u_customframework,
   u_multidata;
@@ -117,15 +117,15 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
-function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TXMLDocument ):Boolean;
-procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TDOMNode;  const afws_Source : TFWSource; const ach_FieldDelimiter : Char );
+function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
+procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource; const ach_FieldDelimiter : Char );
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
-function fft_getFieldType ( const anod_Field : TDOMNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
+function fft_getFieldType ( const anod_Field : TALXMLNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
-                                    var anod_NodeCrossLink : TDOMNode ; var ab_OnFieldToFill : Boolean ): TXMLDocument ;
+                                    var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
 function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
 procedure p_CreateRootEntititiesForm;
 procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
@@ -181,7 +181,7 @@ procedure  p_DetruitTout ( const ab_DetruitMenu : Boolean ) ;
 function  fi_CreeSommaire (         const aF_FormMain             : TCustomForm  ;
                         			      const aF_FormParent           : TCustomForm  ;
                                     const as_SommaireEnCours      : String       ;
-                                    const axdo_FichierXML         : TXMLDocument;
+                                    const axdo_FichierXML         : TALXMLDocument;
                                     const aIco_DefaultPicture     : TIcon        ;
                                     const aBar_ToolBarParent      : TExtToolbar   ;
                                     const aSep_ToolBarSepareDebut : TExtToolbarSep;
@@ -248,8 +248,8 @@ End;
 procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent ; const ach_FieldDelimiter : Char );
 var  li_k, li_l, li_m, li_n : Longint;
     lnod_NodeClass, lnod_Fields,
-    lnod_Field, lnod_mark      : TDOMNode ;
-    lxdoc_Document : TXMLDocument;
+    lnod_Field, lnod_mark      : TALXMLNode ;
+    lxdoc_Document : TALXMLDocument;
 Begin
   lxdoc_Document := nil;
   If fb_OpenClass ( as_class, acom_owner, lxdoc_Document ) Then
@@ -574,7 +574,7 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     ls_MenuClep2        : String;
     ls_MenuLabel        : WideString ;// Sous Menu en cours
 //    lbmp_BitmapOrigine  : TBitmap ;  // bitmap en cours
-    lNode, lNodeChild   : TDOMNode ;
+    lNode, lNodeChild   : TALXMLNode ;
     lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
     li_TopXPBar         : Integer ;
     aIma_ImagesTempo    : TImageList ;
@@ -744,8 +744,8 @@ Begin
              lNodeChild := lNode.ChildNodes [ li_j ];
       //      ShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
             // Les sous-menus et menus doivent avoir des noms
-            if  (   ( lNodeChild.Attributes.GetNamedItem ( CST_LEON_ID ) = nil ) // Ou alors pas de sous menu on crée la fonction
-               and  ( lNodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_IDREF ) = nil)) // Ou alors pas de sous menu on crée la fonction
+            if  (  not ( lNodeChild.HasAttribute ( CST_LEON_ID )) // Ou alors pas de sous menu on crée la fonction
+               and not ( lNodeChild.HasAttribute ( CST_LEON_ACTION_IDREF ))) // Ou alors pas de sous menu on crée la fonction
             or  (     ( lNodeChild.NodeName <> CST_LEON_ACTION )
                  and  ( lNodeChild.NodeName <> CST_LEON_ACTION_REF )
                  and  ( lNodeChild.NodeName <> CST_LEON_COMPOUND_ACTION ))
@@ -758,10 +758,10 @@ Begin
             Result := True ;
             ls_MenuClep2 := ls_MenuClep;
             lr_FunctionOld := lr_Function;
-            if lNodeChild.Attributes.GetNamedItem (CST_LEON_ACTION_IDREF) <> nil then
-              ls_MenuClep := lNodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_IDREF ).ToString
+            if lNodeChild.HasAttribute(CST_LEON_ACTION_IDREF) then
+              ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ]
              Else
-              ls_MenuClep := lNodeChild.Attributes.GetNamedItem ( CST_LEON_ID ).ToString;
+              ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ID ];
             lr_Function.Name   := '' ;
             lr_Function.Groupe  := '' ;
             lr_Function.Value  := '' ;
@@ -912,7 +912,7 @@ var //lMen_Menu           ,
     ls_FonctionMode     ,          // Mode de Fonction en cours
     ls_FonctionNom      : string ; // Nom de la Fonction en cours}
     lbmp_BitmapOrigine  : TBitmap ;  // bitmap en cours
-    lNode, lNodeChild : TDOMNode ;
+    lNode, lNodeChild : TALXMLNode ;
 
     lb_AjouteBitmap     , // Utilise-t-on un bitmap
 //    lb_boutonsMenu    ,  // A-t-on ajouté les boutons d'accès au menu
@@ -991,18 +991,18 @@ Begin
            lNodeChild := lnode.ChildNodes [ li_j ];
       //      ShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
             // Les sous-menus et menus doivent avoir des noms
-            if  (  ( lNodeChild.Attributes.GetNamedItem ( CST_LEON_ID ) = nil ) // Ou alors pas de sous menu on crée la fonction
-               and ( lNodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_IDREF ) = nil)) // Ou alors pas de sous menu on crée la fonction
+            if  (  not ( lNodeChild.HasAttribute ( CST_LEON_ID )) // Ou alors pas de sous menu on crée la fonction
+               and not ( lNodeChild.HasAttribute ( CST_LEON_ACTION_IDREF ))) // Ou alors pas de sous menu on crée la fonction
             or  (     ( lNodeChild.NodeName <> CST_LEON_ACTION )
                  and  ( lNodeChild.NodeName <> CST_LEON_ACTION_REF ))
               Then
                // Enregistrement sans donnée valide on va au suivant
                 Continue ;
            Result := True ;
-            if lNodeChild.Attributes.GetNamedItem (CST_LEON_ACTION_IDREF) <> nil then
-              ls_MenuClep := lNodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_IDREF ).ToString
+            if lNodeChild.HasAttribute(CST_LEON_ACTION_IDREF) then
+              ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ]
              Else
-              ls_MenuClep := lNodeChild.Attributes.GetNamedItem ( CST_LEON_ID ).ToString;
+              ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ID ];
             // SI le menu existe et si il est différent création d'un menu
               if  ( ls_MenuClep   <> '' )
                Then
@@ -1120,7 +1120,7 @@ End ;
 function  fi_CreeSommaire (         const aF_FormMain             : TCustomForm  ;
                         			      const aF_FormParent           : TCustomForm  ;
                         			      const as_SommaireEnCours      : String       ;
-                                    const axdo_FichierXML         : TXMLDocument    ;
+                                    const axdo_FichierXML         : TALXMLDocument    ;
                         			      const aIco_DefaultPicture     : TIcon        ;
                         			      const aBar_ToolBarParent      : TExtToolbar   ;
                         			      const aSep_ToolBarSepareDebut : TExtToolbarSep;
@@ -1391,30 +1391,30 @@ End ;
 // ano_Parent  : Parent node
 // ai_LastCFonction : Last compound function
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadNodesEntities ( const ano_Node,ano_Parent : TDOMNode ; ai_LastCFonction  : Longint );
+procedure p_LoadNodesEntities ( const ano_Node,ano_Parent : TALXMLNode ; ai_LastCFonction  : Longint );
 var li_j  : LongInt ;
-    lNodeChild : TDOMNode ;
+    lNodeChild : TALXMLNode ;
     ls_Mode,
     lParam1,lParam2,lParam3,lPrefix: String;
     procedure p_SetAttributeValues;
       Begin
         if lnodeChild.NodeName = CST_LEON_ACTION_PREFIX then
-          lPrefix :=  lnodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_VALUE ).ToString;
+          lPrefix :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ];
         if lnodeChild.NodeName = CST_LEON_ACTION_NAME then
-          lParam1 :=  lnodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_VALUE ).ToString
+          lParam1 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ]
          else
           if lnodeChild.NodeName = CST_LEON_ACTION_GROUP then
-            lParam2 :=  lnodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_VALUE ).ToString
+            lParam2 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ]
           else
             if ( lnodeChild.NodeName = CST_LEON_PARAMETER )
-            and ( lnodeChild.Attributes.GetNamedItem ( CST_LEON_PARAMETER_NAME ).ToString= CST_LEON_ACTION_CLASSINFO ) then
-              lParam3 :=  lnodeChild.Attributes.GetNamedItem ( CST_LEON_ACTION_IDREF ).ToString;
+            and ( lnodeChild.Attributes [ CST_LEON_PARAMETER_NAME ]= CST_LEON_ACTION_CLASSINFO ) then
+              lParam3 :=  lnodeChild.Attributes [ CST_LEON_ACTION_IDREF ];
       end;
 
     procedure p_setCompoundFunction ( const as_idName : String );
     Begin
       SetLength ( ga_Functions [ ai_LastCFonction ].Functions, high ( ga_Functions [ ai_LastCFonction ].Functions ) + 2 );
-      ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := ano_Node.Attributes.GetNamedItem ( as_idName ).ToString;
+      ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := ano_Node.Attributes [ as_idName ];
     end;
 
 Begin
@@ -1427,10 +1427,10 @@ Begin
       lParam3 := '' ;
       lPrefix := '' ;
 
-//          ShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes.GetNamedItem ( CST_LEON_ID ] );
+//          ShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
 
 //          Showmessage ( ano_Node.XML );
-//          if ano_Node.Attributes.GetNamedItem ( CST_LEON_TEMPLATE ) then
+//          if ano_Node.HasAttribute ( CST_LEON_TEMPLATE ) then
 //              ShowMessage ( ano_Node.XML );
 
       // On ajoute la fonction complémentaire
@@ -1445,7 +1445,7 @@ Begin
        SetLength ( ga_Functions, high ( ga_Functions ) + 2 );
        with ga_Functions [ high ( ga_Functions )] do
          Begin
-           Clep := ano_Node.Attributes.GetNamedItem ( CST_LEON_ID ).ToString;
+           Clep := ano_Node.Attributes [ CST_LEON_ID ];
            Groupe := lParam2;
            Name   := lParam1;
            AFile  := lParam3;
@@ -1454,7 +1454,7 @@ Begin
              Begin
                ShowMessage (  Gs_EmptyFunctionName +  Clep );
              End;   }
-           if ano_Node.Attributes.GetNamedItem ( CST_LEON_ACTION_TEMPLATE ).ToString = CST_LEON_TEMPLATE_MULTIPAGETABLE then
+           if ano_Node.Attributes [ CST_LEON_ACTION_TEMPLATE ] = CST_LEON_TEMPLATE_MULTIPAGETABLE then
              Template := atMultiPageTable ;
            finalize ( Functions );
            if ls_Mode =' '
@@ -1497,19 +1497,19 @@ End;
 // ano_Parent  : Parent node
 // ai_LastCFonction : Last compound function
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadRootAction ( const ano_Node : TDOMNode );
+procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
 var li_i, li_j  : LongInt ;
-    lNode : TDOMNode ;
+    lNode : TALXMLNode ;
 
 Begin
   if ano_Node.HasChildNodes Then
     for li_i := 0 to ano_Node.ChildNodes.Count - 1 do
       Begin
         lNode := ano_Node.ChildNodes [ li_i ];
-        if  ( lnode.Attributes.GetNamedItem ( CST_LEON_ID ).ToString =  gs_RootAction )
-        or  ( lnode.Attributes.GetNamedItem ( CST_LEON_TEMPLATE ).ToString =  CST_LEON_TEMPLATE_DASHBOARD ) then
+        if  ( lnode.Attributes [ CST_LEON_ID ] =  gs_RootAction )
+        or  ( lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD ) then
           Begin
-            if ( lnode.Attributes.GetNamedItem ( CST_LEON_TEMPLATE ).ToString =  CST_LEON_TEMPLATE_DASHBOARD ) Then
+            if ( lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD ) Then
               gnod_DashBoard := lnode
              else
               gNod_RootAction := lNode;
@@ -1564,10 +1564,10 @@ End;
 // Calling a recursive procedure loading entities from XML Document
 // axdo_FichierXML : XML entities file
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadEntitites ( const axdo_FichierXML : TXMLDocument );
+procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
 
 Begin
-  p_LoadRootAction ( axdo_FichierXML.DocumentElement.FirstChild );
+  p_LoadRootAction ( axdo_FichierXML.node );
 End;
 /////////////////////////////////////////////////////////////////////////
 // procedure p_BuildFromXML
@@ -1576,25 +1576,25 @@ End;
 // aNode : recursive node
 // abo_BuildOrder : entities to load
 /////////////////////////////////////////////////////////////////////////
-function fs_BuildMenuFromXML ( Level : Integer ; const aFile : TStringList ):String;
-var li_i , li_pos : Integer ;
-    lNode : String ;
-    lxdo_FichierXML : TXMLDocument;
+function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ):String;
+var li_i : Integer ;
+    lNode : TALXMLNode ;
+    lxdo_FichierXML : TALXMLDocument;
 Begin
    lxdo_FichierXML := nil ;
-     for li_i := 0 to aFile.Count - 1 do
+   if ( aNode.HasChildNodes ) then
+     for li_i := 0 to aNode.ChildNodes.Count - 1 do
       Begin
-        lNode := aFile [ li_i ];
+        lNode := aNode.ChildNodes [ li_i ];
 //        if (  lNode.IsTextElement ) then
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
         // connects before build
-        if ( pos ( CST_LEON_ENTITY, lNode ) > 0  )
-        and (  pos ( CST_LEON_DUMMY, lNode ) = 0 ) then
+        if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
+        and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
-//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes.GetNamedItem ( 'DUMMY' ]);
-            li_pos:=pos ( '''', lNode ) + 1;
-            Result := copy ( lNode, li_pos, PosEx('''',lnode,li_pos) - li_pos );
+//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
+            Result := lNode.Attributes [ CST_LEON_DUMMY ];
             {$IFDEF WINDOWS}
             Result := fs_RemplaceChar ( Result, '/', '\' );
             {$ENDIF}
@@ -1608,13 +1608,15 @@ Begin
             Result := fs_getSoftDir + fs_WithoutFirstDirectory ( Result );
             if FileExists ( Result ) then
              Begin
-              if  ( pos ( CST_LEON_SYSTEM_ROOT, lNode ) > 0 )
+              if  ( pos ( CST_LEON_SYSTEM_ROOT, lNode.NodeName ) > 0 )
                  then
                    Begin
+                     if not assigned ( gxdo_MenuXML ) Then
+                       gxdo_RootXML := TALXMLDocument.Create(Application);
                      if fb_LoadXMLFile ( gxdo_RootXML, Result ) then
                        p_LoadEntitites ( gxdo_RootXML );
                    End;
-                if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode ) > 0 )
+                if  ( pos ( CST_LEON_SYSTEM_NAVIGATION, lNode.NodeName ) > 0 )
                  then
                    Begin
                      p_NavigationTree ( Result );
@@ -1623,6 +1625,7 @@ Begin
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
+        Result := fs_BuildMenuFromXML ( Level + 1, lNode );
       End;
    lxdo_FichierXML.Free;
 End;
@@ -1659,15 +1662,17 @@ End;
 procedure p_NavigationTree ( const as_EntityFile : String );
 var
     li_i, li_j : Longint;
-    lnod_Node : TDOMNode ;
+    lnod_Node : TALXMLNode ;
 Begin
+ if not assigned ( gxdo_MenuXML ) Then
+   gxdo_MenuXML := TALXMLDocument.Create(Application);
  if fb_LoadXMLFile ( gxdo_MenuXML, as_EntityFile ) then
    Begin
      for li_i := 0 to gxdo_MenuXML.ChildNodes.Count -1  do
        Begin
          lnod_Node := gxdo_MenuXML.ChildNodes [li_i];
          if  ( lnod_Node.NodeName = CST_LEON_ACTION )
-         and ( lnod_Node.Attributes.GetNamedItem (CST_LEON_ID).ToString = gs_RootAction )
+         and ( lnod_Node.Attributes[CST_LEON_ID] = gs_RootAction )
           Then
            Begin
              gNod_RootAction:=lnod_Node;
@@ -1688,18 +1693,17 @@ End;
 // amif_Init : ini file
 /////////////////////////////////////////////////////////////////////////
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
-
 Begin
   if fb_CreateProject ( amif_Init, Application )
-  and fb_LoadFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
+  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
     Begin
       Result := True;
       // La fenêtre n'est peut-être pas encore complètement créée
       fb_CreeLeMenu;
       gchar_DecimalSeparator := ',' ;
       DecimalSeparator := gchar_DecimalSeparator ;
-      fs_BuildFromXML ( 0, gxdo_FichierXML, Application ) ;
-      fs_BuildMenuFromXML ( 0, gxdo_FichierXML ) ;
+      fs_BuildFromXML ( 0, gxdo_FichierXML.Node, Application ) ;
+      fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ) ;
 
     End
    Else
@@ -1720,11 +1724,11 @@ Begin
   gxdo_MenuXML    := nil;
   if result Then
     Begin
-      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML ) ;
+      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ) ;
       if  assigned ( gNod_RootAction )
       and ( gNod_RootAction <> gNod_DashBoard ) Then
        Begin
-         if gNod_RootAction.Attributes.GetNamedItem (CST_LEON_TEMPLATE).ToString=CST_LEON_TEMPLATE_LOGIN Then
+         if gNod_RootAction.Attributes[CST_LEON_TEMPLATE]=CST_LEON_TEMPLATE_LOGIN Then
           Begin
            gf_Users := TF_XMLForm.Create ( Application );
            (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML, gxb_Ident, gMen_MenuIdent, gIma_ImagesMenus, gBmp_DefaultAcces, gi_FinCompteurImages );
@@ -1809,14 +1813,14 @@ End ;
 ////////////////////////////////////////////////////////////////////////////////
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
-                                    var anod_NodeCrossLink : TDOMNode ; var ab_OnFieldToFill : Boolean ): TXMLDocument ;
+                                    var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
 var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties,
-    lnod_Node : TDOMNode;
+    lnod_Node : TALXMLNode;
     ls_ProjectFile : String;
     li_CountFields : Integer;
 begin
-  Result := nil;
+  Result := TALXMLDocument.Create ( Application );
   ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
   li_CountFields := 0 ;
   If ( FileExists ( ls_ProjectFile )) Then
@@ -1836,8 +1840,8 @@ begin
                       lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
                       if lnod_ClassProperties.NodeName = CST_LEON_CLASS_BIND Then
                         Begin
-                          as_Table := lnod_ClassProperties.Attributes.GetNamedItem ( CST_LEON_VALUE ).ToString;
-                          as_connection:= lnod_ClassProperties.Attributes.GetNamedItem ( CST_LEON_LOCATION ).ToString;
+                          as_Table := lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                          as_connection:= lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ];
                         end;
                       if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
                         Begin
@@ -1871,10 +1875,10 @@ end;
 // afd_FieldsDefs : CSV definitions to add definition
 // result a field definition
 ////////////////////////////////////////////////////////////////////////////////
-function fft_getFieldType ( const anod_Field : TDOMNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
+function fft_getFieldType ( const anod_Field : TALXMLNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
 var lb_isLarge : Boolean ;
     li_k : Integer;
-    lnod_FieldProperties : TDOMNode;
+    lnod_FieldProperties : TALXMLNode;
 begin
   Result := ftString;
   if ab_SearchLarge then
@@ -1896,8 +1900,8 @@ begin
      lb_isLarge:=ab_IsLarge;
   if ( anod_Field.NodeName = CST_LEON_FIELD_NUMBER ) then
    begin
-     if  ( anod_Field.Attributes.GetNamedItem (CST_LEON_FIELD_TYPE) <> nil )
-     and ( anod_Field.Attributes.GetNamedItem ( CST_LEON_FIELD_TYPE ).ToString = CST_LEON_FIELD_DOUBLE )
+     if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
+     and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
       Then Result := ftFloat
       Else Result := ftInteger;
    end
@@ -1944,18 +1948,18 @@ var li_i, li_j : Integer ;
 begin
   for li_i := 0 to  alis_NodeFields.count - 1 do
    Begin
-     with TDOMNode ( alis_NodeFields [ li_i ] ) do
+     with TALXMLNode ( alis_NodeFields [ li_i ] ) do
      Begin
-      if Attributes.GetNamedItem (CST_LEON_ID) <> Nil
-       Then ls_FieldName:= Attributes.GetNamedItem (CST_LEON_ID).ToString
-       Else ls_FieldName:= Attributes.GetNamedItem (CST_LEON_IDREF).ToString;
+      if Attributes[CST_LEON_ID] <> Null
+       Then ls_FieldName:= Attributes[CST_LEON_ID]
+       Else ls_FieldName:= Attributes[CST_LEON_IDREF];
       li_j := afws_Source.FieldsDefs.indexOf(ls_FieldName);
       if li_j = -1
        Then
         Exit;
       with afws_Source.FieldsDefs.Add do
        Begin
-        FieldType := fft_getFieldType ( TDOMNode ( alis_NodeFields [ li_i ] ), True );
+        FieldType := fft_getFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ), True );
         FieldName:=ls_FieldName;
        end;
      end;
@@ -1972,13 +1976,13 @@ function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : 
 var
     li_i, li_j : Integer ;
     lb_IsLarge : Boolean;
-    lnode  : TDOMNode;
+    lnode  : TALXMLNode;
 Begin
   Result := as_Empty;
   li_j := 0;
   for li_i := 0 to  alis_NodeFields.count - 1 do
     Begin
-      lnode := TDOMNode ( alis_NodeFields [ li_i ]);
+      lnode := TALXMLNode ( alis_NodeFields [ li_i ]);
       if li_j = 0 Then
         Begin
           Result := fs_GetIdAttribute( lnode );
@@ -2004,7 +2008,7 @@ Begin
   for li_i := 0 to  alis_NodeFields.count - 1 do
     Begin
       SetLength(Result, high ( Result ) + 2);
-      Result [high ( Result )] := fs_GetNodeAttribute( TDOMNode ( alis_NodeFields [ li_i ] ), CST_LEON_NAME );
+      Result [high ( Result )] := fs_GetNodeAttribute( TALXMLNode ( alis_NodeFields [ li_i ] ), CST_LEON_NAME );
     end
 end;
 
@@ -2022,9 +2026,9 @@ Begin
   Result := as_Empty;
   for li_i := 0 to  listnodes.count - 1 do
     if li_i = 0 Then
-      Result := fs_GetNodeAttribute( TDOMNode ( listnodes [ li_i ] ), CST_LEON_ID )
+      Result := fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID )
      Else
-      Result := Result + CST_COMBO_FIELD_SEPARATOR + fs_GetNodeAttribute( TDOMNode ( listnodes [ li_i ] ), CST_LEON_ID );
+      Result := Result + CST_COMBO_FIELD_SEPARATOR + fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID );
   listnodes.Free;
 end;
 // procedure p_setImageToMenuAndXPButton
@@ -2050,18 +2054,18 @@ end;
 procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
 var li_i, li_k : Integer;
     lb_Found : Boolean;
-    lnode : TDOMNode;
+    lnode : TALXMLNode;
 Begin
   if assigned ( alis_NodeFields ) Then
     for li_i := 0 to alis_NodeFields.Count - 1 do
       Begin
-        lnode := TDOMNode (alis_NodeFields [li_i]);
+        lnode := TALXMLNode (alis_NodeFields [li_i]);
         lb_Found := False;
         for li_k := 0 to lnode.ChildNodes.Count - 1 do
           with lnode.ChildNodes [ li_k ] do
            if  ( NodeName = CST_LEON_FIELD_F_MARKS )
-           and  ( Attributes.GetNamedItem (CST_LEON_FIELD_LOCAL ) <> nil )
-           and ( Attributes.GetNamedItem (CST_LEON_FIELD_LOCAL ).ToString <> CST_LEON_BOOL_FALSE ) Then
+           and   HasAttribute(CST_LEON_FIELD_LOCAL )
+           and ( Attributes[CST_LEON_FIELD_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
              Exit;
         if as_Fields = '*'
          Then as_Fields := fs_GetIdAttribute ( lnode )
@@ -2115,31 +2119,33 @@ begin
 end;
 
 
-procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TDOMNode;  const afws_Source : TFWSource ; const ach_FieldDelimiter : Char );
+procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource ; const ach_FieldDelimiter : Char );
 Begin
-  if ( anod_FieldIsId.Attributes.GetNamedItem ( CST_LEON_ID ) <> nil )
-  and not ( anod_FieldIsId.Attributes.GetNamedItem ( CST_LEON_ID ).ToString = CST_LEON_BOOL_FALSE )  then
+  if anod_FieldIsId.HasAttribute ( CST_LEON_ID)
+  and not ( anod_FieldIsId.Attributes [ CST_LEON_ID ] = CST_LEON_BOOL_FALSE )  then
      with afws_Source do
     Begin
-      if afws_Source.FieldsDefs.indexOf(anod_FieldId.Attributes.GetNamedItem (CST_LEON_ID).ToString) = -1 Then
+      if afws_Source.FieldsDefs.indexOf(anod_FieldId.Attributes [CST_LEON_ID]) = -1 Then
         with afws_Source.FieldsDefs.Add do
          Begin
           FieldType := fft_getFieldType ( anod_FieldId, True );
-          FieldName := anod_FieldId.Attributes.GetNamedItem (CST_LEON_ID).ToString;
+          FieldName := anod_FieldId.Attributes [CST_LEON_ID];
          end;
       if Key  = '' then
-        Key := anod_FieldId.Attributes.GetNamedItem (CST_LEON_ID).ToString
+        Key := anod_FieldId.Attributes [CST_LEON_ID]
        else
-        Key := Key + ach_FieldDelimiter + anod_FieldId.Attributes.GetNamedItem (CST_LEON_ID).ToString;
+        Key := Key + ach_FieldDelimiter + anod_FieldId.Attributes [CST_LEON_ID];
     End;
 end;
 
 
 
-function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TXMLDocument ):Boolean;
+function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
 var ls_ProjectFile : String ;
 begin
   Result := False;
+  if not assigned ( axml_SourceFile ) Then
+    axml_SourceFile := TALXMLDocument.Create ( acom_owner );
   ls_ProjectFile := fs_getProjectDir ( ) + as_XMLClass + CST_LEON_File_Extension;
   // For actions at the end of xml file
   If ( FileExists ( ls_ProjectFile )) Then
