@@ -51,7 +51,7 @@
       <OutDir Value="LANG"/>
       <EnableI18NForLFM Value="True"/>
     </i18n>
-    <RequiredPkgs Count="13">
+    <RequiredPkgs Count="12">
       <Item1>
         <PackageName Value="lazxmlservice"/>
       </Item1>
@@ -71,27 +71,24 @@
         <PackageName Value="JvXPBarLaz"/>
       </Item6>
       <Item7>
-        <PackageName Value="xmldocument"/>
-      </Item7>
-      <Item8>
         <PackageName Value="FCL"/>
         <MinVersion Major="1" Valid="True"/>
+      </Item7>
+      <Item8>
+        <PackageName Value="lazmansoft"/>
       </Item8>
       <Item9>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="lazfonctions"/>
       </Item9>
       <Item10>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazextcomponents"/>
       </Item10>
       <Item11>
-        <PackageName Value="lazextcomponents"/>
+        <PackageName Value="lazmanframes"/>
       </Item11>
       <Item12>
-        <PackageName Value="lazmanframes"/>
-      </Item12>
-      <Item13>
         <PackageName Value="rxnew"/>
-      </Item13>
+      </Item12>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

@@ -11,14 +11,14 @@ uses
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
-  ALXmlDoc, controls,
+  XMLRead, DOM, controls,
   Forms;
 
 const CST_LEON_File_Extension = '.xml';
 
       CST_LEON_DUMMY = 'DUMMY' ;
-      CST_LEON_PROJECT = 'PROJECT' ;
-      CST_LEON_ROOT_ACTION = 'rootAction' ;
+      CST_LEON_PROJECT = '<PROJECT' ;
+      CST_LEON_ROOT_ACTION = 'rootAction="' ;
       CST_LEON_CLASS = 'CLASS' ;
       CST_LEON_BOOL_FALSE = 'false' ;
       CST_LEON_BOOL_TRUE  = 'true' ;
@@ -142,7 +142,7 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_LEON_COMPOUND_ACTION = 'COMPOUND_ACTION' ;
       CST_LEON_ACTIONS = 'ACTIONS' ;
-      CST_LEON_ENTITY = '!ENTITY ';
+      CST_LEON_ENTITY = '<!ENTITY ';
 
       CST_XMLFRAMES_ROOT_FORM_CLEP = 'rootentitie' ;
 
@@ -162,16 +162,21 @@ const CST_LEON_File_Extension = '.xml';
               			                 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 2 );
 
 {$ENDIF}
-function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileXML : String ): Boolean;
+
+type   TExtXMLTextReader = class  ( TXMLTextReader )
+       End;
+
+function fb_LoadXMLFile ( var axdo_FichierXML : TXMLDocument; const as_FileXML : String ): Boolean;
+function fb_LoadFile    ( var axdo_Fichier    : TStringList ; const as_File : String ): Boolean;
 
 // XML parameters
 var gs_ProjectFile  : String;
     gs_RootEntities : String ;
-    gNod_DashBoard  : TALXMLNode = nil;
-    gNod_RootAction : TALXMLNode = nil;
-    gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+    gNod_DashBoard  : TDOMNode = nil;
+    gNod_RootAction : TDOMNode = nil;
+    gxdo_FichierXML : TStringList = nil;// Lecture de Document XML   initialisé  au create
+    gxdo_MenuXML    : TXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+    gxdo_RootXML    : TXMLDocument = nil;// Lecture de Document XML   initialisé  au create
     gs_entities     : String  = 'rootEntities' ;
     gs_Encoding     : String = 'ISO-8859-1';
 
@@ -181,15 +186,15 @@ function fs_getSoftFiles : String;
 function fs_getImagesDir : String;
 function fs_getProjectDir : String;
 function fs_LeonFilter ( const AString : String ): String;
-procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
-procedure p_CountMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean;  var ai_Count : Integer );
-function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
-function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute : String ) : String ;
-function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode ;
-function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
+procedure p_GetMarkFunction(const anod_Field :TDOMNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
+procedure p_CountMarkFunction(const anod_Field :TDOMNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean;  var ai_Count : Integer );
+function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TDOMNode ): Boolean ;
+function fs_GetNodeAttribute( const anod_Node : TDOMNode ; const as_Attribute : String ) : String ;
+function fnod_GetClassFromRelation( const anod_Node : TDOMNode ) : TDOMNode ;
+function fnod_GetNodeFromTemplate( const anod_Node : TDOMNode ) : TDOMNode ;
 
 function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
-function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
+function fs_GetIdAttribute ( const anode : TDOMNode ) : String;
 
 
 implementation
@@ -210,11 +215,11 @@ uses fonctions_init, u_multidonnees,
 // anode : a node with id or idref
 // Result : ID or IDREF Attribute
 ////////////////////////////////////////////////////////////////////////////////
-function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
+function fs_GetIdAttribute ( const anode : TDOMNode ) : String;
 Begin
-  if anode.HasAttribute(CST_LEON_ID)
-   Then Result := anode.Attributes[CST_LEON_FIELD_ID]
-   Else Result := anode.Attributes[CST_LEON_IDREF]
+  if anode.Attributes.GetNamedItem(CST_LEON_ID) <> nil
+   Then Result := anode.Attributes.GetNamedItem(CST_LEON_FIELD_ID).ToString
+   Else Result := anode.Attributes.GetNamedItem(CST_LEON_IDREF).ToString
 end;
 
 
@@ -233,8 +238,8 @@ End;
 // anod_Field : Node Field
 // as_MarkSearched : Mark searched
 // aano_IdNodes : List to add scruted field node
-procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
-var lnod_FieldProperties : TALXMLNode ;
+procedure p_GetMarkFunction(const anod_Field :TDOMNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
+var lnod_FieldProperties : TDOMNode ;
     li_i : Integer ;
 Begin
   if anod_Field.HasChildNodes then
@@ -243,8 +248,8 @@ Begin
         lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
           Begin
-            if lnod_FieldProperties.HasAttribute ( as_MarkSearched )
-            and ( lnod_FieldProperties.Attributes [ as_MarkSearched ] <> CST_LEON_BOOL_FALSE )  then
+            if  ( lnod_FieldProperties.Attributes.GetNamedItem( as_MarkSearched ) <> nil )
+            and ( lnod_FieldProperties.Attributes.GetNamedItem ( as_MarkSearched ).ToString <> CST_LEON_BOOL_FALSE )  then
               Begin
                 aano_IdNOdes.Add ( anod_Field );
               End;
@@ -311,8 +316,8 @@ end;
 // anod_Field : Node Field
 // as_MarkSearched : Mark searched
 // aano_IdNodes : List to add scruted field node
-procedure p_CountMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean; var ai_Count : Integer );
-var lnod_FieldProperties : TALXMLNode ;
+procedure p_CountMarkFunction(const anod_Field :TDOMNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean; var ai_Count : Integer );
+var lnod_FieldProperties : TDOMNode ;
     li_i : Integer ;
 Begin
   if anod_Field.HasChildNodes then
@@ -321,11 +326,11 @@ Begin
         lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
           Begin
-            if  (         lnod_FieldProperties.HasAttribute ( as_MarkSearched )
-                   and (( not ( lnod_FieldProperties.Attributes [ as_MarkSearched ] = CST_LEON_BOOL_FALSE )
+            if  (        ( lnod_FieldProperties.Attributes.GetNamedItem( as_MarkSearched ) <> nil )
+                   and (( not ( lnod_FieldProperties.Attributes.GetNamedItem ( as_MarkSearched ).ToString = CST_LEON_BOOL_FALSE )
                    and ab_IsTrue ))
-                or ( ( not lnod_FieldProperties.HasAttribute ( as_MarkSearched )
-                       or ( lnod_FieldProperties.Attributes [ as_MarkSearched ] = CST_LEON_BOOL_FALSE ))
+                or ( ((  lnod_FieldProperties.Attributes.GetNamedItem( as_MarkSearched ) = nil )
+                       or ( lnod_FieldProperties.Attributes.GetNamedItem ( as_MarkSearched ).ToString = CST_LEON_BOOL_FALSE ))
                       and not ab_IsTrue )) Then
                 inc ( ai_Count );
             Break;
@@ -338,8 +343,8 @@ End;
 // as_ParentClass : Orginal class name
 // anod_FieldProperties : Node field properties
 
-function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
-var lnod_ClassesProperties : TALXMLNode ;
+function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TDOMNode ): Boolean ;
+var lnod_ClassesProperties : TDOMNode ;
     li_j : Integer;
 Begin
   Result := False;
@@ -351,7 +356,7 @@ Begin
       if lnod_ClassesProperties.NodeName = CST_LEON_CLASS_REF  then
         Begin
           if ( as_ParentCLass = '' )
-          or ( anod_FieldProperties.Attributes [ CST_LEON_IDREF ] = as_ParentCLass ) Then
+          or ( anod_FieldProperties.Attributes.GetNamedItem ( CST_LEON_IDREF ).ToString = as_ParentCLass ) Then
             Begin
               Result := True;
             end;
@@ -359,7 +364,7 @@ Begin
     End
   else if ( anod_FieldProperties.NodeName = CST_LEON_CLASS )
   and    (   ( as_ParentCLass = '' )
-          or ( anod_FieldProperties.Attributes [ CST_LEON_IDREF ] = as_ParentCLass )) Then
+          or ( anod_FieldProperties.Attributes.GetNamedItem ( CST_LEON_IDREF ).ToString = as_ParentCLass )) Then
     Begin
       Result := True;
     end;
@@ -369,10 +374,10 @@ End;
 // getting attribute of node
 // anod_Node : A node
 // as_Attribute : An attribute
-function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute : String ) : String ;
+function fs_GetNodeAttribute( const anod_Node : TDOMNode ; const as_Attribute : String ) : String ;
 begin
-  if anod_Node.HasAttribute ( as_Attribute ) then
-    Result := anod_Node.Attributes [ as_Attribute ]
+  if anod_Node.Attributes.GetNamedItem( as_Attribute ) <> nil then
+    Result := anod_Node.Attributes.GetNamedItem ( as_Attribute ).ToString
    Else
     Result := '';
 end;
@@ -380,9 +385,9 @@ end;
 // function fnod_GetClassFromRelation
 // getting class from XML Node
 // anod_Node : Node containing class node
-function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode ;
+function fnod_GetClassFromRelation( const anod_Node : TDOMNode ) : TDOMNode ;
 var li_i : Integer ;
-    lnod_Node : TALXMLNode;
+    lnod_Node : TDOMNode;
 begin
 
   Result := nil;
@@ -398,20 +403,20 @@ end;
 // function fnod_GetNodeFromIdRef
 // getting node from idref attributes of node
 // anod_Node : Node containing or not containing idref
-function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
+function fnod_GetNodeFromTemplate( const anod_Node : TDOMNode ) : TDOMNode ;
 var li_i : Integer ;
-    lnod_Node : TALXMLNode;
+    lnod_Node : TDOMNode;
     ls_Template : String;
 begin
 
   Result := anod_Node;
-  if ( anod_Node.Attributes [ CST_LEON_TEMPLATE ] <> Null ) Then
+  if ( anod_Node.Attributes.GetNamedItem ( CST_LEON_TEMPLATE ) <> Nil ) Then
     Begin
-      ls_Template := anod_Node.Attributes [ CST_LEON_TEMPLATE ];
+      ls_Template := anod_Node.Attributes.GetNamedItem ( CST_LEON_TEMPLATE ).ToString;
       for li_i := 0 to gxdo_RootXML.ChildNodes.Count -1 do
         Begin
           lnod_Node := gxdo_RootXML.ChildNodes [ li_i ];
-          if ( lnod_Node.Attributes[CST_LEON_ID] = ls_Template ) Then
+          if ( lnod_Node.Attributes.GetNamedItem(CST_LEON_ID).ToString = ls_Template ) Then
             Begin
               Result := lnod_Node;
               Break;
@@ -453,23 +458,37 @@ End;
 // Loading XML File
 // axdo_FichierXML : XML document loading
 // as_FileXML : XML File Path to set
-function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileXML : String ): Boolean;
-  function fb_LoadXML (): Boolean;
-    Begin
-      if not FileExists ( as_FileXML ) Then
-        Begin
-          ShowMessage ( 'File Not Found : ' + as_FileXML );
-          Result := False;
-          Exit;
-        end;
-      try
-       axdo_FichierXML.LoadFromFile ( as_FileXML );
-      Except
-      End;
-      Result := axdo_FichierXML.Active;
-    End;
+function fb_LoadXMLFile ( var axdo_FichierXML : TXMLDocument; const as_FileXML : String ): Boolean;
 Begin
-  Result := fb_LoadXML ();
+  if not FileExists ( as_FileXML ) Then
+    Begin
+      ShowMessage ( 'File Not Found : ' + as_FileXML );
+      Result := False;
+      Exit;
+    end;
+  try
+   ReadXMLFile(axdo_FichierXML, as_FileXML );
+   Result := True;
+  Except
+    Result := False;
+  End;
+End;
+
+
+// function fb_LoadXMLFile
+// Loading XML File
+// axdo_FichierXML : XML document loading
+// as_FileXML : XML File Path to set
+function fb_LoadFile    ( var axdo_Fichier    : TStringList ; const as_File : String ): Boolean;
+Begin
+  if axdo_Fichier = nil Then
+    axdo_Fichier := TStringList.Create;
+  try
+    axdo_Fichier.LoadFromFile(as_File);
+    Result := True;
+  except
+    Result := False;
+  end;
 End;
 
 

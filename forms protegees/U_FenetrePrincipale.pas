@@ -49,7 +49,7 @@ uses
   Controls, Graphics, Classes, SysUtils, StrUtils,
   ExtCtrls, ActnList, Menus, Messages,
   JvXPContainer, ComCtrls, JvXPButtons,
-  IniFiles, Dialogs, Printers, ALXmlDoc,
+  IniFiles, Dialogs, Printers, xmlutils,
   JvXPBar, Forms,  U_FormMainIni, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML, fonctions_images,
   u_buttons_appli, fonctions_string,
