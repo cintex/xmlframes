@@ -932,7 +932,7 @@ var li_Size : Integer;
 Begin
   with argr_Control do
     begin
-      Height:= Items.Count  * gi_FontHeight + flin_getComponentProperty ( argr_Control, 'BorderWidth' )  * 2 ;
+      Height:= Items.Count  * gi_FontHeight + fli_getComponentProperty ( argr_Control, 'BorderWidth' )  * 2 ;
     end;
 end;
 

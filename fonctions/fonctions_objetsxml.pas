@@ -1642,7 +1642,7 @@ Begin
      SetLength( ga_Functions, high ( ga_Functions ) +2  );
      with ( ga_Functions [ high ( ga_Functions ) ] ) do
        Begin
-         Clep  := fs_ExtractFileNameOnly ( as_EntityFile );
+         Clep  := fs_ExtractFileNameOnlyWithoutExt ( as_EntityFile );
          AFile := Clep;
          Name  := fs_GetNameSoft;
          Mode  := fsMDIChild;

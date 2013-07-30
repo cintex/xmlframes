@@ -493,7 +493,6 @@ begin
   Screen.Cursor := crSQLWait;
   p_FreeChildForms;
   p_DetruitTout ( True );
-  if not gb_FirstAcces then p_SauveIni; // On libère le fichier INI sauf à la 1ère ouverture
   gi_NbSeparateurs := 3; // Le nombre initial de séparateur dans la barre d'outils
   F_FormMainIniResize(Self);
   pa_2.Refresh;
