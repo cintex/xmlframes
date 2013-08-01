@@ -31,7 +31,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="8">
+    <RequiredPackages Count="7">
       <Item1>
         <PackageName Value="lazregzeos"/>
       </Item1>
@@ -49,21 +49,18 @@
         <PackageName Value="lazmanframes"/>
       </Item5>
       <Item6>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazextcomponents"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazextcomponents"/>
-      </Item7>
-      <Item8>
         <PackageName Value="LCL"/>
-      </Item8>
+      </Item7>
     </RequiredPackages>
     <Units Count="326">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="48"/>
         <CursorPos X="1" Y="54"/>
@@ -1242,7 +1239,7 @@
       <Unit146>
         <Filename Value="../../fonctions/fonctions_objetsxml.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1581"/>
         <CursorPos X="1" Y="1614"/>
@@ -1263,13 +1260,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="468"/>
         <CursorPos X="1" Y="493"/>
         <UsageCount Value="27"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit148>
       <Unit149>
         <Filename Value="../../../Extended/composants/u_formmainini.pas"/>
@@ -1285,7 +1282,7 @@
       <Unit150>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="425"/>
         <CursorPos X="61" Y="464"/>
@@ -1332,6 +1329,7 @@
       <Unit155>
         <Filename Value="../../composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="327"/>
@@ -1766,12 +1764,10 @@
       <Unit209>
         <Filename Value="../../../Extended/fonctions/fonctions_images.pas"/>
         <UnitName Value="fonctions_images"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="137"/>
         <CursorPos X="43" Y="151"/>
         <UsageCount Value="17"/>
-        <Loaded Value="True"/>
       </Unit209>
       <Unit210>
         <Filename Value="../../../manframes/fonctions/fonctions_Objets_Dynamiques.pas"/>
@@ -1841,22 +1837,18 @@
       <Unit218>
         <Filename Value="../../../Extended/fonctions/fonctions_system.pas"/>
         <UnitName Value="fonctions_system"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="73" Y="90"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit218>
       <Unit219>
         <Filename Value="../../../Extended/fonctions/fonctions_proprietes.pas"/>
         <UnitName Value="fonctions_proprietes"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="92"/>
         <CursorPos X="111" Y="124"/>
         <UsageCount Value="18"/>
-        <Loaded Value="True"/>
       </Unit219>
       <Unit220>
         <Filename Value="../../../Extended/composants/u_regframeworkcomponents.pas"/>
@@ -1990,7 +1982,7 @@
       <Unit236>
         <Filename Value="../../../ManFrames/fonctions/fonctions_manbase.pas"/>
         <UnitName Value="fonctions_manbase"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="176"/>
         <CursorPos X="1" Y="212"/>
@@ -2115,7 +2107,7 @@
       <Unit251>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
         <UnitName Value="ZPlainLoader"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="161"/>
         <CursorPos X="1" Y="189"/>
@@ -2449,7 +2441,7 @@
       <Unit292>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="109"/>
         <CursorPos X="1" Y="136"/>
@@ -2688,35 +2680,29 @@
       <Unit323>
         <Filename Value="../../../Extended/composants/u_regreports_components.pas"/>
         <UnitName Value="u_regreports_components"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="86" Y="41"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit323>
       <Unit324>
         <Filename Value="/usr/share/fpcsrc/2.6.0/packages/fcl-xml/src/xmlread.pp"/>
         <UnitName Value="XMLRead"/>
-        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3820"/>
         <CursorPos X="11" Y="3848"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit324>
       <Unit325>
         <Filename Value="../../../AncestroComponents/objects/u_objet_graph_TPlotList.pas"/>
         <UnitName Value="u_objet_graph_TPlotList"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="104"/>
         <CursorPos X="78" Y="134"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit325>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="27" HistoryIndex="26">
       <Position1>
         <Filename Value="../../fonctions/fonctions_objetsxml.pas"/>
         <Caret Line="1614" Column="1" TopLine="1581"/>
@@ -2738,105 +2724,93 @@
         <Caret Line="464" Column="61" TopLine="430"/>
       </Position5>
       <Position6>
-        <Filename Value="/usr/share/fpcsrc/2.6.0/packages/fcl-xml/src/xmlread.pp"/>
-        <Caret Line="3874" Column="3" TopLine="3870"/>
-      </Position6>
-      <Position7>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
         <Caret Line="145" Column="1" TopLine="106"/>
-      </Position7>
-      <Position8>
+      </Position6>
+      <Position7>
         <Filename Value="../../fonctions/fonctions_objetsxml.pas"/>
         <Caret Line="1597" Column="1" TopLine="1581"/>
+      </Position7>
+      <Position8>
+        <Filename Value="../../fonctions/fonctions_service.pas"/>
+        <Caret Line="145" Column="1" TopLine="106"/>
       </Position8>
       <Position9>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
-        <Caret Line="145" Column="1" TopLine="106"/>
+        <Caret Line="26" Column="155" TopLine="1"/>
       </Position9>
       <Position10>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
-        <Caret Line="26" Column="155" TopLine="1"/>
+        <Caret Line="136" Column="1" TopLine="109"/>
       </Position10>
       <Position11>
-        <Filename Value="../../fonctions/fonctions_service.pas"/>
-        <Caret Line="136" Column="1" TopLine="109"/>
+        <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
+        <Caret Line="180" Column="52" TopLine="142"/>
       </Position11>
       <Position12>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="180" Column="52" TopLine="142"/>
+        <Caret Line="70" Column="15" TopLine="42"/>
       </Position12>
       <Position13>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="70" Column="15" TopLine="42"/>
+        <Caret Line="84" Column="75" TopLine="42"/>
       </Position13>
       <Position14>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="84" Column="75" TopLine="42"/>
+        <Caret Line="111" Column="23" TopLine="63"/>
       </Position14>
       <Position15>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="111" Column="23" TopLine="63"/>
+        <Caret Line="107" Column="42" TopLine="79"/>
       </Position15>
       <Position16>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="107" Column="42" TopLine="79"/>
+        <Caret Line="68" Column="24" TopLine="60"/>
       </Position16>
       <Position17>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="68" Column="24" TopLine="60"/>
+        <Caret Line="101" Column="24" TopLine="60"/>
       </Position17>
       <Position18>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="101" Column="24" TopLine="60"/>
+        <Caret Line="107" Column="34" TopLine="60"/>
       </Position18>
       <Position19>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="107" Column="34" TopLine="60"/>
+        <Caret Line="121" Column="33" TopLine="73"/>
       </Position19>
       <Position20>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="121" Column="33" TopLine="73"/>
+        <Caret Line="132" Column="31" TopLine="84"/>
       </Position20>
       <Position21>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="132" Column="31" TopLine="84"/>
+        <Caret Line="140" Column="32" TopLine="92"/>
       </Position21>
       <Position22>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="140" Column="32" TopLine="92"/>
+        <Caret Line="150" Column="31" TopLine="102"/>
       </Position22>
       <Position23>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="150" Column="31" TopLine="102"/>
+        <Caret Line="196" Column="32" TopLine="148"/>
       </Position23>
       <Position24>
-        <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
-        <Caret Line="196" Column="32" TopLine="148"/>
-      </Position24>
-      <Position25>
-        <Filename Value="../../../AncestroComponents/objects/u_objet_graph_TPlotList.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position25>
-      <Position26>
-        <Filename Value="../../../AncestroComponents/objects/u_objet_graph_TPlotList.pas"/>
-        <Caret Line="134" Column="78" TopLine="104"/>
-      </Position26>
-      <Position27>
         <Filename Value="../../forms/u_xmlfenetreprincipale.pas"/>
         <Caret Line="493" Column="1" TopLine="465"/>
-      </Position27>
-      <Position28>
+      </Position24>
+      <Position25>
         <Filename Value="../../forms/u_xmlfenetreprincipale.pas"/>
         <Caret Line="495" Column="26" TopLine="468"/>
-      </Position28>
-      <Position29>
+      </Position25>
+      <Position26>
         <Filename Value="../../../ZEOSDBO/src/plain/ZPlainLoader.pas"/>
         <Caret Line="189" Column="1" TopLine="161"/>
-      </Position29>
-      <Position30>
+      </Position26>
+      <Position27>
         <Filename Value="../../fonctions/fonctions_objetsxml.pas"/>
         <Caret Line="1614" Column="1" TopLine="1581"/>
-      </Position30>
+      </Position27>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

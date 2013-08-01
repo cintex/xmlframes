@@ -31,7 +31,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="8">
+    <RequiredPackages Count="7">
       <Item1>
         <PackageName Value="lazregdbnet"/>
       </Item1>
@@ -49,21 +49,18 @@
         <PackageName Value="lazmanframes"/>
       </Item5>
       <Item6>
-        <PackageName Value="lazfonctions"/>
+        <PackageName Value="lazextcomponents"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazextcomponents"/>
-      </Item7>
-      <Item8>
         <PackageName Value="LCL"/>
-      </Item8>
+      </Item7>
     </RequiredPackages>
     <Units Count="307">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="70" Y="28"/>
@@ -1282,7 +1279,7 @@
       <Unit150>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="147"/>
         <CursorPos X="1" Y="175"/>
@@ -1366,7 +1363,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2512"/>
         <CursorPos X="96" Y="2534"/>
@@ -1723,12 +1720,10 @@
       <Unit204>
         <Filename Value="../../../Extended/fonctions/fonctions_dbcomponents.pas"/>
         <UnitName Value="fonctions_dbcomponents"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="73"/>
         <CursorPos X="32" Y="112"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
       </Unit204>
       <Unit205>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/grids.pas"/>
@@ -1741,7 +1736,7 @@
       <Unit206>
         <Filename Value="../../fonctions/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="77" Y="8"/>
@@ -1847,12 +1842,10 @@
       <Unit219>
         <Filename Value="../../../Extended/fonctions/fonctions_proprietes.pas"/>
         <UnitName Value="fonctions_proprietes"/>
-        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="75"/>
         <CursorPos X="1" Y="121"/>
         <UsageCount Value="17"/>
-        <Loaded Value="True"/>
       </Unit219>
       <Unit220>
         <Filename Value="../../../Extended/composants/u_regframeworkcomponents.pas"/>
@@ -2429,12 +2422,10 @@
       <Unit289>
         <Filename Value="../../../Extended/fonctions/fonctions_db.pas"/>
         <UnitName Value="fonctions_db"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="667"/>
         <CursorPos X="1" Y="695"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit289>
       <Unit290>
         <Filename Value="../../../Alcinoe/source/ALFcnString.pas"/>
@@ -2455,7 +2446,7 @@
       <Unit292>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/OnLineQuery.pas"/>
         <UnitName Value="OnLineQuery"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="814"/>
         <CursorPos X="1" Y="841"/>
@@ -2473,7 +2464,7 @@
       <Unit294>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
         <UnitName Value="ClientProc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="353"/>
         <CursorPos X="1" Y="381"/>
@@ -2483,12 +2474,10 @@
       <Unit295>
         <Filename Value="/usr/share/fpcsrc/2.6.0/packages/fcl-db/src/base/db.pas"/>
         <UnitName Value="db"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="80"/>
         <CursorPos X="17" Y="110"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit295>
       <Unit296>
         <Filename Value="/usr/share/fpcsrc/2.6.0/packages/fcl-db/src/base/dataset.inc"/>
@@ -2562,7 +2551,7 @@
       <Unit305>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="307"/>
         <CursorPos X="1" Y="330"/>
@@ -2575,7 +2564,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ClientUnit"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="71" Y="39"/>

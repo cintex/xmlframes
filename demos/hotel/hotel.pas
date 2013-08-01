@@ -4,7 +4,7 @@ program hotel;
 
 uses
   Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
-  LCLType, lazextcomponents, lazfonctions, fonctions_zeos,
+  LCLType, lazextcomponents, fonctions_zeos,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
 

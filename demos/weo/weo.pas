@@ -8,7 +8,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
-  LCLType, lazextcomponents, lazfonctions,
+  LCLType, lazextcomponents,
   SysUtils, fonctions_zeos,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
