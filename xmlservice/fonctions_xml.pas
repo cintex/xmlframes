@@ -153,11 +153,11 @@ const CST_LEON_File_Extension = '.xml';
                                      FileUnit : 'fonctions_xml' ;
               			                 Owner : 'Matthieu Giroux' ;
               			                 Comment : 'Gestion des fichiers XML.' + #13#10 +
-                                                           'Il ne doit pas y avoir de lien vers les objets à créer.' ;
+                                                           'Il ne doit pas y avoir de lien vers les objets Ã  crÃ©er.' ;
               			                 BugsStory :  'Version 0.9.0.2 : centralising searching on xml nodes.' + #13#10 +
                                                               'Version 0.9.0.1 : Images Directory.' + #13#10 +
                                                               'Version 0.9.0.0 : Unit functionnal.' + #13#10 +
-                                                              'Version 0.1.0.0 : Création de l''unité.';
+                                                              'Version 0.1.0.0 : CrÃ©ation de l''unitÃ©.';
               			                 UnitType : 1 ;
               			                 Major : 0 ; Minor : 9 ; Release : 0 ; Build : 2 );
 
@@ -169,9 +169,9 @@ var gs_ProjectFile  : String;
     gs_RootEntities : String ;
     gNod_DashBoard  : TALXMLNode = nil;
     gNod_RootAction : TALXMLNode = nil;
-    gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+    gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisÃ©  au create
+    gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisÃ©  au create
+    gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisÃ©  au create
     gs_entities     : String  = 'rootEntities' ;
     gs_Encoding     : String = 'ISO-8859-1';
 

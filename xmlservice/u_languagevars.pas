@@ -1,4 +1,4 @@
-﻿unit u_languagevars;
+unit u_languagevars;
 
 interface
 

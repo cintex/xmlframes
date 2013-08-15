@@ -1,4 +1,4 @@
-﻿unit fonctions_service;
+unit fonctions_service;
 
 {$I ..\DLCompilers.inc}
 {$I ..\extends.inc}

@@ -60,7 +60,8 @@
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="7"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="70" Y="28"/>
@@ -1239,12 +1240,10 @@
       <Unit146>
         <Filename Value="../../fonctions/fonctions_objetsxml.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2092"/>
         <CursorPos X="24" Y="2122"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit146>
       <Unit147>
         <Filename Value="../../../Extended/fonctions/fonctions_init.pas"/>
@@ -1279,12 +1278,10 @@
       <Unit150>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="147"/>
         <CursorPos X="1" Y="175"/>
         <UsageCount Value="26"/>
-        <Loaded Value="True"/>
       </Unit150>
       <Unit151>
         <Filename Value="../../../ManFrames/forms/U_FenetrePrincipale.pas"/>
@@ -1325,12 +1322,10 @@
       <Unit155>
         <Filename Value="../../composants/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="651"/>
         <CursorPos X="45" Y="689"/>
         <UsageCount Value="43"/>
-        <Loaded Value="True"/>
       </Unit155>
       <Unit156>
         <Filename Value="../../../manframes/fonctions/fonctions_FenetrePrincipale.pas"/>
@@ -1362,13 +1357,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_customframework"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2512"/>
         <CursorPos X="96" Y="2534"/>
         <UsageCount Value="36"/>
-        <Loaded Value="True"/>
       </Unit159>
       <Unit160>
         <Filename Value="/usr/lib/lazarus/0.9.30/lcl/include/control.inc"/>
@@ -1736,12 +1728,10 @@
       <Unit206>
         <Filename Value="../../fonctions/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="77" Y="8"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
       </Unit206>
       <Unit207>
         <Filename Value="../../../Alcinoe/source/ALXmlDoc.pas"/>
@@ -1981,12 +1971,10 @@
       <Unit236>
         <Filename Value="../../../ManFrames/fonctions/fonctions_manbase.pas"/>
         <UnitName Value="fonctions_manbase"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="116"/>
         <CursorPos X="25" Y="144"/>
         <UsageCount Value="21"/>
-        <Loaded Value="True"/>
       </Unit236>
       <Unit237>
         <Filename Value="../../../ManFrames/extends.inc"/>
@@ -2446,7 +2434,7 @@
       <Unit292>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/OnLineQuery.pas"/>
         <UnitName Value="OnLineQuery"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="814"/>
         <CursorPos X="1" Y="841"/>
@@ -2457,14 +2445,14 @@
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/MemDataBase.pas"/>
         <UnitName Value="MemDataBase"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1052"/>
-        <CursorPos X="1" Y="1082"/>
+        <TopLine Value="859"/>
+        <CursorPos X="79" Y="859"/>
         <UsageCount Value="12"/>
       </Unit293>
       <Unit294>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
         <UnitName Value="ClientProc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="353"/>
         <CursorPos X="1" Y="381"/>
@@ -2551,12 +2539,10 @@
       <Unit305>
         <Filename Value="../../fonctions/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="307"/>
         <CursorPos X="1" Y="330"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit305>
       <Unit306>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/lazdemo/ClientUnit.pas"/>
@@ -2564,16 +2550,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ClientUnit"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="71" Y="39"/>
+        <CursorPos X="45" Y="15"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit306>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
         <Caret Line="363" Column="1" TopLine="328"/>
@@ -2690,10 +2674,6 @@
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/OnLineQuery.pas"/>
         <Caret Line="841" Column="1" TopLine="814"/>
       </Position29>
-      <Position30>
-        <Filename Value="../../../ManFrames/composants/u_customframework.pas"/>
-        <Caret Line="2130" Column="1" TopLine="2095"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

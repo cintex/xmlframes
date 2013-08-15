@@ -5,7 +5,8 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <OtherUnitFiles Value="fonctions"/>
+        <IncludeFiles Value="xmlservice"/>
+        <OtherUnitFiles Value="xmlservice"/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Other>
@@ -16,19 +17,23 @@
       </Other>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="3">
+    <Files Count="4">
       <Item1>
-        <Filename Value="fonctions/fonctions_service.pas"/>
+        <Filename Value="xmlservice/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
       </Item1>
       <Item2>
-        <Filename Value="fonctions/u_languagevars.pas"/>
+        <Filename Value="xmlservice/u_languagevars.pas"/>
         <UnitName Value="u_languagevars"/>
       </Item2>
       <Item3>
-        <Filename Value="fonctions/fonctions_xml.pas"/>
+        <Filename Value="xmlservice/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
       </Item3>
+      <Item4>
+        <Filename Value="xmlservice/fonctions_autocomponents.pas"/>
+        <UnitName Value="fonctions_autocomponents"/>
+      </Item4>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">

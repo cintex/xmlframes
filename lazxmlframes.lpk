@@ -6,8 +6,8 @@
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
-        <IncludeFiles Value="composants;forms"/>
-        <OtherUnitFiles Value="composants;classes;Servers;forms;fonctions"/>
+        <IncludeFiles Value="xmlframes"/>
+        <OtherUnitFiles Value="xmlframes"/>
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -20,31 +20,27 @@
       </Other>
     </CompilerOptions>
     <Version Major="1" Minor="1" Release="2" Build="1"/>
-    <Files Count="6">
+    <Files Count="5">
       <Item1>
-        <Filename Value="composants/u_xmlform.pas"/>
+        <Filename Value="xmlframes/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
       </Item1>
       <Item2>
-        <Filename Value="forms/u_xmlfenetreprincipale.pas"/>
+        <Filename Value="xmlframes/u_xmlfenetreprincipale.pas"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
       </Item2>
       <Item3>
-        <Filename Value="fonctions/fonctions_objetsxml.pas"/>
+        <Filename Value="xmlframes/fonctions_objetsxml.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
       </Item3>
       <Item4>
-        <Filename Value="fonctions/fonctions_leon_format.pas"/>
+        <Filename Value="xmlframes/fonctions_leon_format.pas"/>
         <UnitName Value="fonctions_leon_format"/>
       </Item4>
       <Item5>
-        <Filename Value="composants/u_xmlfillcombobutton.pas"/>
+        <Filename Value="xmlframes/u_xmlfillcombobutton.pas"/>
         <UnitName Value="u_xmlfillcombobutton"/>
       </Item5>
-      <Item6>
-        <Filename Value="fonctions/fonctions_autocomponents.pas"/>
-        <UnitName Value="fonctions_autocomponents"/>
-      </Item6>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

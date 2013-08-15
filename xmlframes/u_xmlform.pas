@@ -1,4 +1,4 @@
-﻿unit u_xmlform;
+unit u_xmlform;
 
 
 {$I ..\DLCompilers.inc}

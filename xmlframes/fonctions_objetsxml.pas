@@ -1,4 +1,4 @@
-﻿unit fonctions_ObjetsXML;
+unit fonctions_ObjetsXML;
 
 interface
 

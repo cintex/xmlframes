@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Nom Unité :  fonctions_autocomponents
-//	Description :	Création automatisée de composants, sans gestion XML
-//	Créée par Matthieu GIROUX liberlog.fr en 2010
+//	Nom UnitÃ© :  fonctions_autocomponents
+//	Description :	CrÃ©ation automatisÃ©e de composants, sans gestion XML
+//	CrÃ©Ã©e par Matthieu GIROUX liberlog.fr en 2010
 //
 ////////////////////////////////////////////////////////////////////////////////
 unit fonctions_autocomponents;
@@ -91,7 +91,7 @@ const
               			                 Comment : 'Dynamic components creating for XML Form, with no XML variables.';
               			                 BugsStory :  'Version 1.1.0.1 : Testing.' + #13#10 +
                                                               'Version 1.1.0.0 : Creating components and setting them from parameters.' + #13#10 +
-                                                              'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
+                                                              'Version 1.0.0.0 : CrÃ©ation de l''unitÃ© Ã  partir de fonctions_objets_dynamiques.';
               			                 UnitType : 1 ;
               			                 Major : 1 ; Minor : 1 ; Release : 0 ; Build : 1 );
 

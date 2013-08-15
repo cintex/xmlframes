@@ -55,12 +55,11 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="185">
+    <Units Count="186">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="hotel"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
@@ -1510,7 +1509,7 @@
       </Unit181>
       <Unit182>
         <Filename Value="hotel.lpi"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -1532,15 +1531,26 @@
       <Unit184>
         <Filename Value="../weo/weo.pas"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="1" Y="60"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit184>
+      <Unit185>
+        <Filename Value="../../../Extended/core/fonctions_forms.pas"/>
+        <UnitName Value="fonctions_forms"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="3" Y="22"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit185>
     </Units>
-    <JumpHistory Count="5" HistoryIndex="4">
+    <JumpHistory Count="6" HistoryIndex="5">
       <Position1>
         <Filename Value="../../../Imaging/Source/ImagingJpeg.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
@@ -1561,6 +1571,10 @@
         <Filename Value="hotel.pas"/>
         <Caret Line="25" Column="71" TopLine="8"/>
       </Position5>
+      <Position6>
+        <Filename Value="../../../Extended/core/fonctions_forms.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position6>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
