@@ -4,5 +4,7 @@
     <Transaction>2010/05/18 13:01:36.143.pas,C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\Unit1.pas=C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\fonctions\u_languagevars.pas</Transaction>
     <Transaction>2010/05/18 13:05:59.334.pas,C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\composants\u_formxml.pas=C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\composants\u_xmlform.pas</Transaction>
     <Transaction>2010/05/20 07:12:18.425.pas,C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\Unit1.pas=C:\Users\Matthieu\Documents\Lazarus Delphi\XMLFrames\fonctions\fonctions_autocomponents.pas</Transaction>
+    <Transaction>2013/08/15 10:09:43.853.pas,C:\Matthieu\Programmation\Lazarus-Delphi\XMLFrames\xmlservice\fonctions_leonardi.pas=</Transaction>
+    <Transaction>2013/08/15 10:09:57.952.pas,C:\Matthieu\Programmation\Lazarus-Delphi\XMLFrames\xmlframes\fonctions_leon_format.pas=</Transaction>
   </Transactions>
 </BorlandProject>

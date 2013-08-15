@@ -57,7 +57,6 @@ requires
   JvSystemD10R,
   JvStdCtrlsD10R,
   JvCoreD10R,
-  Fonctions,
   PCK_ALCINOE,
   ExtComponents,
   ManSoft,
@@ -84,14 +83,13 @@ requires
   dmenutoolbar;
 
 contains
-  U_ASQLBuilder in 'composants\U_ASQLBuilder.pas',
-  u_xmlform in 'composants\u_xmlform.pas',
-  fonctions_xml in 'fonctions\fonctions_xml.pas',
-  fonctions_ObjetsXML in 'fonctions\fonctions_ObjetsXML.pas',
-  U_XMLFenetrePrincipale in 'forms\U_XMLFenetrePrincipale.pas',
-  u_languagevars in 'fonctions\u_languagevars.pas',
-  fonctions_autocomponents in 'fonctions\fonctions_autocomponents.pas',
-  u_multidonnees in 'forms\u_multidonnees.pas',
-  u_xmlfillcombobutton in 'composants\u_xmlfillcombobutton.pas';
+  fonctions_autocomponents in 'xmlservice\fonctions_autocomponents.pas',
+  fonctions_service in 'xmlservice\fonctions_service.pas',
+  fonctions_xml in 'xmlservice\fonctions_xml.pas',
+  u_languagevars in 'xmlservice\u_languagevars.pas',
+  fonctions_objetsxml in 'xmlframes\fonctions_objetsxml.pas',
+  u_xmlfenetreprincipale in 'xmlframes\u_xmlfenetreprincipale.pas',
+  u_xmlfillcombobutton in 'xmlframes\u_xmlfillcombobutton.pas',
+  u_xmlform in 'xmlframes\u_xmlform.pas';
 
 end.
