@@ -422,7 +422,7 @@ end;
 function TF_FenetrePrincipale.fb_Fermeture : Boolean ;
 begin
   Result := False ;
-  if MessageDlg ( GS_FERMER_APPLICATION, mtConfirmation, [ mbYes, mbNo ], 0 ) = mrYes Then
+  if MyMessageDlg ( GS_FERMER_APPLICATION, mtConfirmation, [ mbYes, mbNo ], 0 ) = mrYes Then
     Begin
       Result := True ;
       // Sauvegarde de la position des fenêtres filles
@@ -516,7 +516,7 @@ begin
   //gConnector  := Connector  ;
 {$ENDIF}
   if lb_MsgDeconnexion
-  and ( MessageDlg ( GS_DECONNECTER, mtConfirmation, [ mbYes, mbNo ], 0 ) = mrNo ) Then
+  and ( MyMessageDlg ( GS_DECONNECTER, mtConfirmation, [ mbYes, mbNo ], 0 ) = mrNo ) Then
     Exit ;
   // (Ré)initialisation de l'application
   Screen.Cursor := crSQLWait;
@@ -554,7 +554,7 @@ begin
 
   except
     Screen.Cursor := Self.Cursor;
-    MessageDlg( GS_PB_CONNEXION, mtWarning, [mbOk], 0);
+    MyMessageDlg( GS_PB_CONNEXION, mtWarning, [mbOk], 0);
     p_SetLedColor ( False );
     br_statusbar.Panels[2].Text := GS_LBL_PB;
     p_SetLengthSB(br_statusbar.Panels[2]);
@@ -596,9 +596,9 @@ begin
 
     except
       if gi_niveau_priv < CST_ADMIN Then
-        MessageDlg( GS_PB_CONNEXION, mtError, [mbOk], 0)
+        MyMessageDlg( GS_PB_CONNEXION, mtError, [mbOk], 0)
       Else
-        MessageDlg( GS_PB_CONNEXION + #13#10 + #13#10 + GS_ADMINISTRATION_SEULEMENT, mtError, [mbOk], 0);
+        MyMessageDlg( GS_PB_CONNEXION + #13#10 + #13#10 + GS_ADMINISTRATION_SEULEMENT, mtError, [mbOk], 0);
 
       p_SetLedColor ( False );
       br_statusbar.Panels[2].Text  := GS_LBL_PB;
