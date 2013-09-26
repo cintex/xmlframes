@@ -221,7 +221,7 @@ uses
   TntWindows,
 {$ENDIF}
   fonctions_xml,
-  u_form_msg,
+  fonctions_dialogs,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
   fonctions_system, U_FormMainIni,
@@ -811,8 +811,8 @@ begin
     ChangeLanguage( iIndex );
     fb_ReadLanguage ( {$IFDEF TNT}GetLanguageCode ( LangManager.LanguageID ){$ELSE}ga_SoftwareLanguages [ iIndex ].LittleLang{$ENDIF});
 end;
-initialization
 {$IFDEF VERSIONS}
+initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
