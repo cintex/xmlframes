@@ -19,7 +19,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Major="1" Minor="2" Release="1"/>
+    <Version Major="1" Minor="2" Release="1" Build="1"/>
     <Files Count="5">
       <Item1>
         <Filename Value="xmlframes/u_xmlform.pas"/>
