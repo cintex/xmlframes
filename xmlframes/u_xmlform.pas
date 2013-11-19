@@ -1306,7 +1306,7 @@ var lnod_FieldProperties : TALXMLNode ;
         Begin
           with lffd_ColumnFieldDef do
             begin
-              TableName   := as_Table;
+              IsSourceTable := afws_Source.Table = as_Table;
               NumTag      := ai_Fieldcounter + 1;
               FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
               ShowSearch  := -1;

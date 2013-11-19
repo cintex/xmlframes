@@ -9,9 +9,9 @@ uses
   {$ENDIF}{$ENDIF}
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents,
-  SysUtils, fonctions_zeos,
+  SysUtils, fonctions_zeos, UniqueInstance,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
-  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
+  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz, uniqueinstance_package;
 
 {$IFNDEF FPC}
 {$R *.res}
@@ -20,6 +20,9 @@ var
   gc_classname: Array[0..255] of char;
   gi_result: integer;
 
+{$ELSE}
+var
+  Unique : TUniqueInstance;
 {$ENDIF}
 
 
@@ -39,17 +42,16 @@ begin
   gi_result := FindWindow(gc_classname, 'GENERIQUE');
 
   if gi_result <> 0 then   // Une instance existante trouvée
-	  begin
-		  ShowWindow(gi_result, SW_RESTORE);
-		  SetForegroundWindow(gi_result);
-		  Application.Terminate;
-		  Exit;
-	  end
-  else  // Première création
+    begin
+      ShowWindow(gi_result, SW_RESTORE);
+      SetForegroundWindow(gi_result);
+      Application.Terminate;
+      Exit;
+    end;
+  {$ELSE}
+  Unique := TUniqueInstance ( Application );
+  Unique.Identifier:=Application.ExeName;
   {$ENDIF}
-	  begin
-
-	  end;
   F_SplashForm := TF_SplashForm.Create(nil);
   F_SplashForm.Label1.Caption := 'GENERIC' ;
   F_SplashForm.Label1.Width   := F_SplashForm.Width ;
