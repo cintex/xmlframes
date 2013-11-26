@@ -7,8 +7,8 @@ unit lazxmlframes;
 interface
 
 uses
-  u_xmlform, U_XMLFenetrePrincipale, fonctions_ObjetsXML, 
-  fonctions_leon_format, u_xmlfillcombobutton;
+  u_xmlform, U_XMLFenetrePrincipale, fonctions_xmlform, fonctions_leon_format, 
+  u_xmlfillcombobutton;
 
 implementation
 

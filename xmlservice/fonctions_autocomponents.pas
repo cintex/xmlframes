@@ -382,8 +382,6 @@ Begin
 
 End;
 
-
-
 {$IFDEF VERSIONS}
 initialization
   p_ConcatVersion ( gVer_fonctions_autocomponents );

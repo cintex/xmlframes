@@ -30,8 +30,8 @@
         <UnitName Value="U_XMLFenetrePrincipale"/>
       </Item2>
       <Item3>
-        <Filename Value="xmlframes/fonctions_objetsxml.pas"/>
-        <UnitName Value="fonctions_ObjetsXML"/>
+        <Filename Value="xmlframes/fonctions_xmlform.pas"/>
+        <UnitName Value="fonctions_xmlform"/>
       </Item3>
       <Item4>
         <Filename Value="xmlframes/fonctions_leon_format.pas"/>

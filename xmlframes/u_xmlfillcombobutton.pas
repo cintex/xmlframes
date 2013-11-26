@@ -37,7 +37,7 @@ type
 
 implementation
 
-uses u_xmlform;
+uses fonctions_xmlform;
 
 { TExtFillCombo }
 

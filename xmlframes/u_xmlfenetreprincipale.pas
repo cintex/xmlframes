@@ -222,6 +222,8 @@ uses
 {$ENDIF}
   fonctions_xml,
   fonctions_dialogs,
+  u_xmlform,
+  fonctions_xmlform,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
   fonctions_system, U_FormMainIni,
@@ -816,4 +818,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+

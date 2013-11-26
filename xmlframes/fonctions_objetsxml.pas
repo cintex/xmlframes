@@ -13,20 +13,23 @@ interface
 
 Créée par Matthieu Giroux le 01-2004
 
+Pas de XMLForm SVP
+
 Fonctionnalités :
 
 Création de la barre d'accès
 Création du menu d'accès
 Création du volet d'accès
 
-Utilisation des fonctions
-Administration
+English
+
+No XMLForm please
 
 }
 
 uses Forms, JvXPBar, JvXPContainer,
 {$IFDEF FPC}
-   LCLIntf, LCLType, ComCtrls,
+   LCLIntf, LCLType,
 {$ELSE}
    Windows, ToolWin,
 {$ENDIF}
@@ -35,16 +38,16 @@ uses Forms, JvXPBar, JvXPContainer,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
-{$IFDEF DELPHI_9_UP}
-  WideStrings ,
-{$ENDIF}
+
 {$IFDEF TNT}
   TntForms,TntStdCtrls, TntExtCtrls,
 {$ENDIF}
-  DBCtrls, ALXmlDoc, IniFiles, Graphics,
-  u_multidonnees, fonctions_string,
-  fonctions_system, u_customframework,
-  u_multidata;
+  ALXmlDoc, IniFiles, Graphics,
+  u_multidonnees,
+  u_multidata,
+  fonctions_string,
+  fonctions_manbase,
+  fonctions_system;
 
 {$IFDEF VERSIONS}
 const
@@ -52,7 +55,8 @@ const
                                            FileUnit : 'fonctions_ObjetsXML' ;
               			           Owner : 'Matthieu Giroux' ;
               			           Comment : 'Gestion des données des objets dynamiques de la Fenêtre principale.' + #13#10 + 'Il comprend une création de menus' ;
-              			           BugsStory : 'Version 1.0.1.1 : Centralising getting Properties into fonctions_languages.'  + #13#10 +
+              			           BugsStory : 'Version 1.0.2.0 : Centralising setting Properties on TFWTable.'  + #13#10 +
+                                                       'Version 1.0.1.1 : Centralising getting Properties into fonctions_languages.'  + #13#10 +
                                                        'Version 1.0.1.0 : Integrating TXMLFillCombo button.'  + #13#10 +
                                                        'Version 1.0.0.6 : Images on menu items.' + #13#10 +
                                                        'Version 1.0.0.5 : No ExtToolbar.' + #13#10 +
@@ -62,7 +66,7 @@ const
                                                        'Version 1.0.0.1 : No ExtToolbar on LAZARUS.' + #13#10 +
                                                        'Version 1.0.0.0 : Création de l''unité à partir de fonctions_objets_dynamiques.';
               			           UnitType : 1 ;
-              			           Major : 1 ; Minor : 0 ; Release : 1 ; Build : 1 );
+              			           Major : 1 ; Minor : 0 ; Release : 2 ; Build : 0 );
 
 {$ENDIF}
 type
@@ -118,15 +122,17 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
 function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
-procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource; const ach_FieldDelimiter : Char );
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
-procedure p_CreeAppliFromNode ( const as_EntityFile : String );
+function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer; const ab_IsLocal : Boolean ):Boolean;
+procedure p_SetFieldSelect ( const afws_Source : TFWTable ; const anod_Field : TALXMLNode; const affd_ColumnFieldDef : TFWFieldColumn ; const ab_IsLocal, ab_IsLarge : Boolean );
+function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char ; const ai_counter : Integer ): Boolean;
+function fb_CreeAppliFromNode ( const as_EntityFile : String ):boolean;
 function fft_getFieldType ( const anod_Field : TALXMLNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
                                     var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
 function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
+function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ):String;
 procedure p_CreateRootEntititiesForm;
 procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const adx_WinXpBar        : TJvXpBar ;
@@ -141,7 +147,7 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const ab_AjouteEvenement   : Boolean   );
 procedure p_NavigationTree ( const as_EntityFile : String );
 function fi_FindActionFile ( const afile : String ):Longint ;
-procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent; const ach_FieldDelimiter : Char );
+procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWTable ; const acom_owner : TComponent; const ach_FieldDelimiter : Char );
 function fi_FindAction ( const aClep : String ):Longint ;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
@@ -172,8 +178,6 @@ procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}
 
 
 procedure  p_DetruitLeSommaire ;
-
-function fb_ReadXMLEntitites () : Boolean;
 
 procedure  p_DetruitTout ( const ab_DetruitMenu : Boolean ) ;
 
@@ -213,7 +217,6 @@ function fb_CreeMenu (              const aF_FormParent           : TForm       
                                     var   ab_UtiliseSousMenu      : Boolean      ): Boolean ;
 function fb_CreeLeMenu : Boolean ;
 
-procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
 procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
 procedure p_RegisterSomeLanguages;
 
@@ -223,8 +226,9 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents, strutils,
-     unite_variables, u_xmlform, u_languagevars, Imaging, fonctions_languages,
-     fonctions_manbase, fonctions_service;
+     unite_variables, u_languagevars, Imaging, fonctions_languages,
+     fonctions_xmlform,
+     fonctions_service;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -245,7 +249,7 @@ Begin
 
 End;
 
-procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWSource ; const acom_owner : TComponent ; const ach_FieldDelimiter : Char );
+procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWTable ; const acom_owner : TComponent ; const ach_FieldDelimiter : Char );
 var  li_k, li_l, li_m, li_n : Longint;
     lnod_NodeClass, lnod_Fields,
     lnod_Field, lnod_mark      : TALXMLNode ;
@@ -389,31 +393,6 @@ Begin
   p_RecuperePetitBitmap ( abmp_Bitmap );
   Result := abmp_Bitmap.Handle <> 0;
 end;
-
-/////////////////////////////////////////////////////////////////////////
-// procedure p_ExecuteFonction
-// procedure to put on Event p_OnClickFonction on main form
-// procedure à mettre dans l'évènement p_OnClickFonction de la form principale
-// aobj_Sender : L'objet cliqué pour exécuter sa fonction
-// aobj_Sender : Form event
-/////////////////////////////////////////////////////////////////////////
-procedure p_ExecuteFonction ( aobj_Sender                  : TObject            );
-var ls_FonctionClep: String ;
-    ls_NomObjet        : String ;
-begin
-  ls_NomObjet := '' ;
-  // Si la propriété nom est valable et existe
-  if      IsPublishedProp ( aObj_Sender   , 'Name' )
-   Then
-    ls_NomObjet := getPropValue ( aobj_Sender, 'Name' ) ;
-
-  if ( ls_NomObjet <> '' ) then
-    Begin
-      ls_FonctionClep := copy (ls_NomObjet, 1, length ( ls_NomObjet ) - 1 );
-      fxf_ExecuteFonction ( ls_FonctionClep, True );
-    End;
-  // Se place sur la fonction
-End ;
 
 /////////////////////////////////////////////////////////////////////////
 // procedure p_DetruitMenu
@@ -1556,7 +1535,6 @@ Begin
      lMen_MenuRoot.Caption := Gs_RootForm;
      lMen_MenuRoot.Hint    := lMen_MenuRoot.Caption;
    End;
-   p_ExecuteFonction ( lMen_MenuRoot );
 End;
 
 /////////////////////////////////////////////////////////////////////////
@@ -1634,8 +1612,9 @@ End;
 // procedure p_CreeAppliFromNode
 // creating root login if no dashboard
 // as_EntityFile : xml file login
+// Result : Exécution de la derinère fonction
 /////////////////////////////////////////////////////////////////////////
-procedure p_CreeAppliFromNode ( const as_EntityFile : String );
+function fb_CreeAppliFromNode ( const as_EntityFile : String ):Boolean;
 Begin
  if not assigned ( gNod_DashBoard ) then
    Begin
@@ -1647,7 +1626,6 @@ Begin
          Name  := fs_GetNameSoft;
          Mode  := fsMDIChild;
        end;
-     fxf_ExecuteNoFonction(high ( ga_Functions ), True);
    End
  Else
   fb_CreeLeMenu ( );
@@ -1709,38 +1687,7 @@ Begin
    Else
     Result := False;
 End;
-////////////////////////////////////////////////////////////////////////////////
-// function fb_ReadXMLEntitites
-// destroying and Loading prject xml files
-// Résultat : il y a un fichier projet.
-////////////////////////////////////////////////////////////////////////////////
-function fb_ReadXMLEntitites () : Boolean;
-var ls_entityFile : String ;
-Begin
-  Result := gs_ProjectFile <> '';
-  gxdo_RootXML.Free;
-  gxdo_MenuXML   .Free;
-  gxdo_RootXML := nil;
-  gxdo_MenuXML    := nil;
-  if result Then
-    Begin
-      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ) ;
-      if  assigned ( gNod_RootAction )
-      and ( gNod_RootAction <> gNod_DashBoard ) Then
-       Begin
-         if gNod_RootAction.Attributes[CST_LEON_TEMPLATE]=CST_LEON_TEMPLATE_LOGIN Then
-          Begin
-           gf_Users := TF_XMLForm.Create ( Application );
-           (gf_Users as TF_XMLForm).p_setLogin(gxdo_MenuXML, gxb_Ident, gMen_MenuIdent, gIma_ImagesMenus, gBmp_DefaultAcces, gi_FinCompteurImages );
-           Exit;
-          end
-         Else
-          ShowMessage(Gs_NotImplemented);
-       end
-      Else
-       p_CreeAppliFromNode ( ls_entityFile );
-    End;
-End;
+
 
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
 var li_i: Integer ;
@@ -1942,7 +1889,7 @@ end;
 // alis_NodeFields : node of field nodes
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure p_setFieldDefs ( const afws_Source : TFWSource ; const alis_NodeFields : TList );
+procedure p_setFieldDefs ( const afws_Source : TFWTable ; const alis_NodeFields : TList );
 var li_i, li_j : Integer ;
     ls_FieldName : String;
 begin
@@ -2074,69 +2021,6 @@ Begin
      End;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-// function fds_CreateDataSourceAndOpenedQuery
-// create datasource, dataset, setting and open it
-// as_Table      : Table name
-// as_Fields     : List of fields with comma
-// as_NameEnd    : End of components' names
-// ar_Connection : Connection of table
-// alis_NodeFields : Node of fields' nodes
-////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
-var ls_Fields : String ;
-begin
-  with ar_Connection do
-    Begin
-      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
-      ls_Fields := '*';
-      p_AddFieldsToString ( ls_Fields, alis_IdFields   );
-      if assigned ( afws_SourceAdded ) Then
-         with afws_SourceAdded do
-           Begin
-            Datasource:=Result;
-            Key   := ls_Fields;
-            Table := as_Table;
-            p_setFieldDefs ( afws_SourceAdded, alis_IdFields );
-           end;
-      p_AddFieldsToString ( ls_Fields, alis_NodeFields );
-      if assigned ( afws_SourceAdded ) Then
-        p_setFieldDefs ( afws_SourceAdded, alis_NodeFields );
-      if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
-       Then
-         Begin
-           if DatasetType = dtCSV Then
-             p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
-           {$IFDEF DBNET}
-           if DatasetType = dtDBNet Then
-             p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
-           {$ENDIF}
-         end
-        else
-        p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_Fields + ' FROM ' + as_Table );
-      Result.DataSet.Open;
-    end;
-end;
-
-
-procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWSource ; const ach_FieldDelimiter : Char );
-Begin
-  if anod_FieldIsId.HasAttribute ( CST_LEON_ID)
-  and not ( anod_FieldIsId.Attributes [ CST_LEON_ID ] = CST_LEON_BOOL_FALSE )  then
-     with afws_Source do
-    Begin
-      if afws_Source.FieldsDefs.indexOf(anod_FieldId.Attributes [CST_LEON_ID]) = -1 Then
-        with afws_Source.FieldsDefs.Add do
-         Begin
-          FieldType := fft_getFieldType ( anod_FieldId, True );
-          FieldName := anod_FieldId.Attributes [CST_LEON_ID];
-         end;
-      if Key  = '' then
-        Key := anod_FieldId.Attributes [CST_LEON_ID]
-       else
-        Key := Key + ach_FieldDelimiter + anod_FieldId.Attributes [CST_LEON_ID];
-    End;
-end;
 
 
 
@@ -2161,6 +2045,89 @@ begin
     End ;
 
 end;
+
+
+function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer; const ab_IsLocal : Boolean ):Boolean;
+Begin
+  Result := anod_Field.Attributes [ CST_LEON_ID ] <> Null;
+  if result Then
+    with affd_ColumnFieldDef do
+      begin
+        IsSourceTable := ab_IsSourceTable;
+        NumTag      := ai_Fieldcounter + 1;
+        FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
+        ShowSearch  := -1;
+        ColSelect:=False;
+      end;
+end;
+
+// Function fb_getFieldOptions
+// setting some data properties
+// Result : quitting
+function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char; const ai_counter : Integer ): Boolean;
+begin
+  Result := False;
+  with anod_FieldProperties do
+  if NodeName = CST_LEON_FIELD_F_MARKS then
+    Begin
+      if HasAttribute ( CST_LEON_FIELD_local )
+      and ( Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
+        Begin
+          ab_IsLocal := True;
+          affd_ColumnFieldDef.ColSelect:=False;
+        End;
+      if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
+        Begin
+          affd_ColumnFieldDef.FieldType := fft_GetFieldType ( anod_Field, False, ab_IsLarge );
+        End;
+
+      if HasAttribute ( CST_LEON_FIELD_CREATE)
+       then affd_ColumnFieldDef.ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
+      if HasAttribute ( CST_LEON_FIELD_UNIQUE)
+       then affd_ColumnFieldDef.ColUnique  := Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
+      p_setNodeId ( anod_Field, anod_FieldProperties, afws_Source, ach_FieldDelimiter );
+      if HasAttribute ( CST_LEON_FIELD_hidden )
+      and not ( Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
+        Begin
+          affd_ColumnFieldDef.ShowCol := -1;
+          affd_ColumnFieldDef.ShowSearch := -1;
+          Result := True;
+          Exit;
+        End;
+      affd_ColumnFieldDef.ShowCol := ai_counter + 1;
+      if HasAttribute ( CST_LEON_FIELD_optional)
+      and not ( Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
+        Begin
+          affd_ColumnFieldDef.ColMain  := False;
+          affd_ColumnFieldDef.ShowCol := -1;
+        End
+       Else
+        affd_ColumnFieldDef.ColMain := True;
+      if ( HasAttribute ( CST_LEON_FIELD_sort)
+           and ( Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
+      or ( HasAttribute ( CST_LEON_FIELD_find)
+           and ( Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
+        Begin
+          affd_ColumnFieldDef.ShowSearch := ai_counter + 1;
+        End
+    End;
+
+end;
+
+procedure p_SetFieldSelect ( const afws_Source : TFWTable ; const anod_Field : TALXMLNode; const affd_ColumnFieldDef : TFWFieldColumn ; const ab_IsLocal, ab_IsLarge : Boolean );
+Begin
+  if not ab_IsLocal Then
+   Begin
+     affd_ColumnFieldDef.ColSelect:=True;
+     if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
+      Begin
+        affd_ColumnFieldDef.FieldType := fft_getFieldType ( anod_Field, False, ab_IsLarge );
+      End;
+
+   end;
+end;
+
+
 
 initialization
   GS_SUBDIR_IMAGES_SOFT := DirectorySeparator+'images'+DirectorySeparator;

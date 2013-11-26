@@ -173,7 +173,7 @@ type
     procedure KeyUp(var Key: Word; Shift: TShiftState); override;
   public
     function fb_InsereCompteur ( const adat_Dataset : TDataset ;
-                                 const aslt_Cle : TStringlist ;
+                                 const aff_Cle : TFWFieldColumns ;
                                  const as_ChampCompteur, as_Table, as_PremierLettrage : String ;
                                  const ach_DebutLettrage, ach_FinLettrage : Char ;
                                  const ali_Debut, ali_LimiteRecherche : Int64 ): Boolean; override;
@@ -197,11 +197,6 @@ type
     property PageControl : TPageControl read FPageControl write FPageControl;
   end;
 
-function fxf_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-function fxf_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-
 
 implementation
 
@@ -212,7 +207,7 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_languages, fonctions_reports,
      u_buttons_defs,
      fonctions_forms,
-     u_buttons_appli,
+     u_buttons_appli, fonctions_xmlform,
      unite_variables, StdCtrls;
 
 var  gb_LoginFormLoaded : Boolean = False;
@@ -621,7 +616,7 @@ begin
 end;
 
 function TF_XMLForm.fb_InsereCompteur(const adat_Dataset: TDataset;
-  const aslt_Cle: TStringlist; const as_ChampCompteur, as_Table,
+  const aff_Cle: TFWFieldColumns; const as_ChampCompteur, as_Table,
   as_PremierLettrage: String; const ach_DebutLettrage, ach_FinLettrage: Char;
   const ali_Debut, ali_LimiteRecherche: Int64): Boolean;
 begin
@@ -1144,70 +1139,6 @@ var lnod_FieldProperties : TALXMLNode ;
     lnod_OriginalNode : TALXmlNode;
     lxfc_ButtonCombo : TXMLFillCombo;
 
-    // Function fb_getFieldOptions
-    // setting some data properties
-    // Result : quitting
-    function fb_getFieldOptions: Boolean;
-    begin
-      Result := False;
-      if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
-        Begin
-          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_local )
-          and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
-            Begin
-              lb_IsLocal := True;
-              lffd_ColumnFieldDef.ColSelect:=False;
-            End;
-          if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-            Begin
-              lffd_ColumnFieldDef.FieldType := fft_GetFieldType ( anod_Field, False, lb_IsLarge );
-            End;
-
-          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_CREATE)
-           then lffd_ColumnFieldDef.ColCreate  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
-          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_UNIQUE)
-           then lffd_ColumnFieldDef.ColUnique  := lnod_FieldProperties.Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
-          p_setNodeId ( anod_Field, lnod_FieldProperties, afws_Source, FieldDelimiter );
-          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_hidden )
-          and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
-            Begin
-              lffd_ColumnFieldDef.ShowCol := -1;
-              lffd_ColumnFieldDef.ShowSearch := -1;
-              Result := True;
-              Exit;
-            End;
-          lffd_ColumnFieldDef.ShowCol := ai_counter + 1;
-          if lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_optional)
-          and not ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
-            Begin
-              lffd_ColumnFieldDef.ColMain  := False;
-              lffd_ColumnFieldDef.ShowCol := -1;
-            End
-           Else
-            lffd_ColumnFieldDef.ColMain := True;
-          if ( lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_sort)
-               and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
-          or ( lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_find)
-               and ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
-            Begin
-              lffd_ColumnFieldDef.ShowSearch := ai_counter + 1;
-            End
-        End;
-
-    end;
-
-    procedure p_SetFieldSelect;
-    Begin
-      if not lb_IsLocal Then
-       Begin
-         lffd_ColumnFieldDef.ColSelect:=True;
-         if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
-          Begin
-            lffd_ColumnFieldDef.FieldType := fft_getFieldType ( anod_Field, False, lb_IsLarge );
-          End;
-
-       end;
-    end;
 
     // procedure p_CreateArrayStructComponents
     // Creating groupbox with controls
@@ -1281,7 +1212,7 @@ var lnod_FieldProperties : TALXMLNode ;
           end;
       p_setFieldComponentTop ( Result, ab_Column );
       p_setComponentLeft  ( Result, ab_Column );
-      p_SetFieldSelect;
+      p_SetFieldSelect ( afws_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
 
     end;
 
@@ -1302,21 +1233,9 @@ var lnod_FieldProperties : TALXMLNode ;
           Result := True;
           Exit;
         end;
-      if ( anod_Field.Attributes [ CST_LEON_ID ] <> Null ) then
-        Begin
-          with lffd_ColumnFieldDef do
-            begin
-              IsSourceTable := afws_Source.Table = as_Table;
-              NumTag      := ai_Fieldcounter + 1;
-              FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
-              ShowSearch  := -1;
-              ColSelect:=False;
-            end;
-        End
-       else
-         Begin
-          Exit;
-         End;
+      if not fb_createFieldID ( afws_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter, lb_IsLocal )
+       Then
+        Exit;
 
       lb_IsLocal := False;
 
@@ -1325,9 +1244,9 @@ var lnod_FieldProperties : TALXMLNode ;
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-            if fb_getFieldOptions Then
+            if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lb_IsLarge, lffd_ColumnFieldDef, lb_IsLocal, FieldDelimiter, ai_Counter ) Then
              Begin
-               p_SetFieldSelect;
+               p_SetFieldSelect ( afws_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
                Exit;
              end;
 
@@ -1336,7 +1255,7 @@ var lnod_FieldProperties : TALXMLNode ;
               lb_IsLarge := True;
           End;
 
-      p_SetFieldSelect;
+      p_SetFieldSelect ( afws_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
 
       awin_Control := fwin_CreateFieldComponent ( afws_Source, awin_Parent, anod_Field, lb_IsLarge, lb_IsLocal, ai_FieldCounter, ai_counter );
 
@@ -1738,7 +1657,7 @@ var lpan_ParentPanel   : TWinControl;
      with adgv_GroupView do
        Begin
          FieldDelimiter    := ',';
-         DataKeyOwner      := afws_source.Key;
+         DataKeyOwner      := afws_source.GetKeyString;
          DataKeyUnit       := as_fieldsId;
          DataFieldsDisplay := as_fieldsDisplay;
          DataTableGroup    := as_ClassBind;
@@ -1884,142 +1803,6 @@ begin
   gfin_FormIni.Options := [loAutoUpdate,loFreeIni];
   DBCloseMessage := True;
 end;
-
-/////////////////////////////////////////////////////////////////////////
-// function fxf_ExecuteFonction
-// Execute a funtion with key as_Fonction
-// Fonction qui exécute une fonction à partir d'une clé de fonction
-// as_Fonction : la clé de la fonction
-// as_Fonction : the key of function
-// ab_Ajuster  : Adjust the form of function
-/////////////////////////////////////////////////////////////////////////
-function fxf_ExecuteFonction ( const as_Fonction                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-begin
-  // Recherche dans ce qui a été chargé par les fichiers XML
-  Result := fxf_ExecuteNoFonction ( fi_findAction ( as_Fonction ), ab_ajuster);
-End ;
-
-/////////////////////////////////////////////////////////////////////////
-// function fxf_ExecuteFonction
-// Execute a funtion with key as_Fonction
-// Fonction qui exécute une fonction à partir d'une clé de fonction
-// as_Fonction : la clé de la fonction
-// as_Fonction : the key of function
-// ab_Ajuster  : Adjust the form of function
-/////////////////////////////////////////////////////////////////////////
-function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-var llf_Function      : TLeonFunction;
-begin
-  // Recherche dans ce qui a été chargé par les fichiers XML
-  Result := fxf_ExecuteNoFonction ( fi_findActionFile ( as_FonctionFile ), ab_ajuster);
-
-  // Form not found in registered forms, but can exists in files.
-  if Result = nil Then
-    Begin
-      llf_Function.Clep  := as_FonctionFile;
-      llf_Function.AFile := as_FonctionFile;
-      llf_Function.Name  := CST_LEON_NAME_BEGIN + UpperCase(as_FonctionFile);
-      Result :=  fxf_ExecuteAFonction ( llf_Function, ab_Ajuster );
-    end;
-End ;
-
-
-
-/////////////////////////////////////////////////////////////////////////
-// function fxf_ExecuteNoFonction
-// Execute a function number
-// Fonction qui exécute une fonction à partir d'une clé de fonction
-// as_Fonction : The number of function
-// ab_Ajuster  : Adjust the form of function
-/////////////////////////////////////////////////////////////////////////
-function fxf_ExecuteNoFonction ( const ai_Fonction                  : LongInt    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-var llf_Function      : TLeonFunction;
-begin
-  Result := nil;
-  // Recherche dans ce qui a été chargé par les fichiers XML
-  if ai_Fonction < 0 then
-    Exit;
-  //Trouvé
-  // Fichier XML de la fonction
-  llf_Function := ga_functions [ ai_Fonction ];
-  Result := fxf_ExecuteAFonction ( llf_Function, ab_Ajuster );
-End ;
-
-/////////////////////////////////////////////////////////////////////////
-// function fxf_ExecuteAFonction
-// Execute a function record
-// Fonction qui exécute une fonction à partir d'un enregistrement fonction
-// as_Fonction : The number of function
-// ab_Ajuster  : Adjust the form of function
-/////////////////////////////////////////////////////////////////////////
-function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
-var lb_Unload        : Boolean ;
-    li_i : Longint;
-    lfs_newFormStyle : TFormStyle ;
-    lico_icon : TIcon ;
-    lbmp_Bitmap : TBitmap ;
-begin
-  Result := nil;
-  // La fiche peut être déjà créée
-  for li_i := 0 to Application.ComponentCount -1 do
-    if ( Application.Components [ li_i ] is TF_XMLForm )
-    and (( Application.Components [ li_i ] as TF_XMLForm ).Fonction.Clep = alf_Function.Clep ) Then
-      Result := Application.Components [ li_i ] as TF_XMLForm ;
-  // Se place sur la bonne fonction
-  if not assigned ( Result ) Then
-    Begin
-      Result := TF_XMLForm.create ( Application );
-      Result.Fonction := alf_Function;
-    End;
-
-  lbmp_Bitmap := TBitmap.Create;
-  fb_getImageToBitmap(alf_Function.Prefix,lbmp_Bitmap);
-  lico_Icon := TIcon.Create;
-  p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
-// Assigne l'icône si existe
-  If not lico_Icon.Empty
-   Then
-    try
-      Result.Icon.Modified := False ;
-      Result.Icon.PaletteModified := False ;
-      if Result.Icon.Handle <> 0 Then
-        Begin
-          Result.Icon.ReleaseHandle ;
-          Result.Icon.CleanupInstance ;
-        End ;
-      Result.Icon.Handle := 0 ;
-      Result.Icon.width  := 16 ;
-      Result.Icon.Height := 16 ;
-      Result.Icon.Assign ( lico_Icon );
-      Result.Icon.Modified := True ;
-      Result.Icon.PaletteModified := True ;
-
-      Result.Invalidate ;
-    Except
-    End ;
-  {$IFDEF FPC}
-  if lico_Icon.Handle <> 0 Then
-    lico_Icon.ReleaseHandle;
-  lico_Icon.Handle := 0;
-  {$ENDIF}
-   lico_Icon.Free;
-  {$IFDEF DELPHI}
-   lbmp_Bitmap.Dormant ;
-  {$ENDIF}
-   lbmp_Bitmap.FreeImage;
-   lbmp_Bitmap.Free;
-    // Paramètres d'affichage
-  if  ab_Ajuster then
-    Begin
-      lb_Unload := fb_getComponentBoolProperty ( Result, 'DataUnload' );
-     // Initialisation de l'ouverture de fiche
-      lfs_newFormStyle := alf_Function.Mode ;
-      if not lb_Unload Then
-        fb_setNewFormStyle( Result, lfs_newFormStyle, ab_Ajuster)
-      else
-        Result.Free ;
-    End ;
-End ;
 
 
 
