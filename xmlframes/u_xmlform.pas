@@ -48,7 +48,8 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.5 : centralizing on ManFrames.'  + #13#10 +
+                                  BugsStory : '0.9.1.6 : Adapting to ManFrames and auto create sql.'  + #13#10 +
+                                              '0.9.1.5 : centralizing on ManFrames.'  + #13#10 +
                                               '0.9.1.4 : UTF 8.'  + #13#10 +
                                               '0.9.1.3 : Testing.'  + #13#10 +
                                               '0.9.1.2 : Forcing Not registered forms when searching form xml file.'  + #13#10 +
@@ -60,7 +61,7 @@ const
                                               '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 5 );
+                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 6 );
 {$ENDIF}
 
 type
