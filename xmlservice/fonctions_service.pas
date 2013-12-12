@@ -35,6 +35,21 @@ const // Champs utilisés
               			           Major : 0 ; Minor : 9 ; Release : 0 ; Build : 0 );
 
 {$ENDIF}
+type
+  TActionTemplate          = (atmultiPageTable,atLogin);
+  TLeonFunctionID          = String ;
+  TLeonFunctions           = Array of TLeonFunctionID;
+  TLeonFunction            = Record
+                                  Clep     : String ;
+                                  Groupe   : String ;
+                                  AFile    : String ;
+                                  Value    : String ;
+                                  Name     : String ;
+                                  Prefix   : String;
+                                  Template : TActionTemplate ;
+                                  Mode     : Byte ;
+                                  Functions : TLeonFunctions;
+                             end;
 
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ): Boolean;
 procedure p_LoadData ( const axno_Node : TALXMLNode );
@@ -47,6 +62,7 @@ var
     gs_Language : String;
     CST_FILE_LANGUAGES : String =  'languages';
     gs_RootAction           : String;
+    ga_Functions : Array of TLeonFunction;
 
 implementation
 
@@ -56,8 +72,12 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      {$IFDEF WINDOWS}
      fonctions_string,
      {$ENDIF}
+     {$IFDEF FPC}
+     LazFileUtils,
+     {$ENDIF}
      DB,
      unite_variables,
+     fonctions_manbase,
      Dialogs,
      fonctions_languages;
 
@@ -250,6 +270,23 @@ Begin
    else Result := as_Value;
 End;
 
+function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ):Boolean;
+var li_i : Integer;
+    afwt_Source : TFWTable;
+Begin
+  Result := False;
+  afwt_Source := TFWTable.Create(nil);
+  try
+    for li_i := 0 to high ( ga_Functions ) do
+     with ga_Functions [li_i] do
+       Begin
+
+       end;
+  finally
+    afwt_Source.Destroy;
+  end;
+End;
+
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource );
 var li_Pos : LongInt ;
 Begin
@@ -286,7 +323,19 @@ Begin
      if ( pos ( CST_LEON_DATA_MYSQL, DataDriver ) > 0 ) Then
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_MYSQL )
      else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
+      Begin
+        if ( pos ( '.', DataBase ) = 1 )
+        or ( pos ( {$IFDEF WINDOWS}':', DataBase ) = 2{$ELSE}DirectorySeparator, DataBase ) = 1{$ENDIF} )
+         Then
+          Begin
+           DataBase:=fs_GetCorrectPath (DataBase);
+           if ( pos ( '.', DataBase ) = 1 ) Then
+            DataBase := StringReplace(DataBase,'.',fs_getSoftDir,[]);
+           if not FileExistsUTF8(DataBase) Then
+          end;
+       p_setComponentProperty ( Connection, 'DatabaseName', Database );
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
+      end
      else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
      else if ( pos ( CST_LEON_DATA_ORACLE, DataDriver ) > 0 ) Then
@@ -313,7 +362,6 @@ end;
 /////////////////////////////////////////////////////////////////////////
 procedure p_LoadData ( const axno_Node : TALXMLNode );
 var li_i : LongInt ;
-    li_Pos : LongInt ;
     lds_connection,lds_connection2 : TDSSource;
     lNode : TALXMLNode ;
     ls_ConnectionClep : String;

@@ -42,6 +42,7 @@ uses Forms, JvXPBar, JvXPContainer,
   u_multidonnees, fonctions_string,
   fonctions_manbase, u_xmlform,
   fonctions_ObjetsXML,
+  fonctions_service,
   fonctions_system, u_customframework,
   u_multidata;
 
@@ -78,7 +79,7 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents, strutils,
      unite_variables, u_languagevars, Imaging, fonctions_languages,
-     fonctions_service,fonctions_forms;
+     fonctions_forms;
 
 ////////////////////////////////////////////////////////////////////////////////
 // function fb_ReadXMLEntitites
@@ -750,7 +751,7 @@ begin
     Begin
       lb_Unload := fb_getComponentBoolProperty ( Result, 'DataUnload' );
      // Initialisation de l'ouverture de fiche
-      lfs_newFormStyle := alf_Function.Mode ;
+      lfs_newFormStyle := TFormStyle(alf_Function.Mode) ;
       if not lb_Unload Then
         fb_setNewFormStyle( Result, lfs_newFormStyle, ab_Ajuster)
       else

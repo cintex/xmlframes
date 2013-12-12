@@ -30,16 +30,16 @@
         <UnitName Value="U_XMLFenetrePrincipale"/>
       </Item2>
       <Item3>
-        <Filename Value="xmlframes/fonctions_xmlform.pas"/>
-        <UnitName Value="fonctions_xmlform"/>
-      </Item3>
-      <Item4>
         <Filename Value="xmlframes/fonctions_leon_format.pas"/>
         <UnitName Value="fonctions_leon_format"/>
-      </Item4>
-      <Item5>
+      </Item3>
+      <Item4>
         <Filename Value="xmlframes/u_xmlfillcombobutton.pas"/>
         <UnitName Value="u_xmlfillcombobutton"/>
+      </Item4>
+      <Item5>
+        <Filename Value="xmlframes/fonctions_xmlform.pas"/>
+        <UnitName Value="fonctions_xmlform"/>
       </Item5>
     </Files>
     <i18n>

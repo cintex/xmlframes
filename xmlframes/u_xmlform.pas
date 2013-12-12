@@ -28,6 +28,7 @@ uses
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
   U_ExtComboInsert,
+  fonctions_service,
   fonctions_manbase,
 {$IFDEF RX}
   rxdbgrid,

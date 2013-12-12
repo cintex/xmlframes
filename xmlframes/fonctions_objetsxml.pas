@@ -46,6 +46,7 @@ uses Forms, JvXPBar, JvXPContainer,
   u_multidonnees,
   u_multidata,
   fonctions_string,
+  fonctions_service,
   fonctions_manbase,
   fonctions_system;
 
@@ -71,21 +72,7 @@ const
 {$ENDIF}
 type
 
-      TActionTemplate          = (atmultiPageTable,atLogin);
-      TLeonFunctionID          = String ;
-      TLeonFunctions           = Array of TLeonFunctionID;
       TStringArray             = Array Of String;
-      TLeonFunction            = Record
-                                        Clep     : String ;
-                                        Groupe   : String ;
-                                        AFile    : String ;
-                                        Value    : String ;
-                                        Name     : String ;
-                                        Prefix   : String;
-                                        Template : TActionTemplate ;
-                                        Mode     : TFormStyle ;
-                                        Functions : TLeonFunctions;
-                                   end;
       TLeonField                  = Record
                                         FieldName : String ;
                                         Name      : String ;
@@ -114,7 +101,6 @@ var
       gf_Users                : TCustomForm=nil;
       ResInstance             : THandle      ;
       gchar_DecimalSeparator  : Char ;
-      ga_Functions : Array of TLeonFunction;
 
 
 procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
@@ -227,8 +213,7 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents, strutils,
      unite_variables, u_languagevars, Imaging, fonctions_languages,
-     fonctions_xmlform,
-     fonctions_service;
+     fonctions_xmlform;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -1437,10 +1422,10 @@ Begin
              Template := atMultiPageTable ;
            finalize ( Functions );
            if ls_Mode =' '
-             Then Mode := fsStayOnTop
+             Then Mode := Byte(fsStayOnTop)
              Else if ls_Mode = ' '
-               Then Mode := fsNormal
-               Else Mode := fsMDIChild ;
+               Then Mode := Byte(fsNormal)
+               Else Mode := Byte(fsMDIChild);
          End;
 
        if  ( ano_Parent <> nil )
@@ -1518,7 +1503,7 @@ Begin
      Afile := gs_RootEntities;
      Clep  := CST_XMLFRAMES_ROOT_FORM_CLEP ;
      Name := Gs_RootForm;
-     Mode := fsMDIChild ;
+     Mode := Byte(fsMDIChild);
      Template := atmultiPageTable;
      
        // Création des menus
@@ -1624,7 +1609,7 @@ Begin
          Clep  := fs_ExtractFileNameOnlyWithoutExt ( as_EntityFile );
          AFile := Clep;
          Name  := fs_GetNameSoft;
-         Mode  := fsMDIChild;
+         Mode  := Byte(fsMDIChild);
        end;
    End
  Else

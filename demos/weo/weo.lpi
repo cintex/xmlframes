@@ -63,10 +63,13 @@
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="21" Y="51"/>
+        <TopLine Value="40"/>
+        <CursorPos X="50" Y="24"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="U_ConstMessage.pas"/>
@@ -2858,7 +2861,7 @@
       <Unit347>
         <Filename Value="../../../Extended/extcomp/u_dblistview.pas"/>
         <UnitName Value="U_DBListView"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="246"/>
         <CursorPos X="14" Y="272"/>
@@ -2909,7 +2912,6 @@
       <Unit353>
         <Filename Value="../../../ManFrames/manbase/u_multidata.pas"/>
         <UnitName Value="u_multidata"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -2994,7 +2996,6 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
         <UseHeaptrc Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
@@ -3008,7 +3009,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="8">
+    <BreakPoints Count="9">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsGlobal"/>
@@ -3065,6 +3066,13 @@
         <Source Value="../../composants/u_xmlform.pas"/>
         <Line Value="1776"/>
       </Item8>
+      <Item9>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="weo.pas"/>
+        <Line Value="65"/>
+      </Item9>
     </BreakPoints>
     <Exceptions Count="3">
       <Item1>
