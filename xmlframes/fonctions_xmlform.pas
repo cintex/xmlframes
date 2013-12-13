@@ -96,7 +96,7 @@ Begin
   gxdo_MenuXML    := nil;
   if result Then
     Begin
-      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ,TOnExecuteProjectNode ( p_onProjectNode ) ) ;
+      ls_entityFile := fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node ,TOnExecuteProjectNode ( p_onProjectNode ) ) ;
       if  assigned ( gNod_RootAction )
       and ( gNod_RootAction <> gNod_DashBoard ) Then
        Begin
@@ -113,6 +113,9 @@ Begin
        p_CreeAppliFromNode ( '' );
     End;
 End;
+
+
+
 
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 Begin

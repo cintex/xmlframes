@@ -62,9 +62,8 @@ function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode ; const AA
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
 procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
 procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
-function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ;
+function fs_BuildTreeFromXML ( Level : Integer ; const aNode : TALXMLNode ;
                                const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
-
 var
     gs_Language : String;
     CST_FILE_LANGUAGES : String =  'languages';
@@ -105,7 +104,7 @@ End;
 // aNode : recursive node
 // abo_BuildOrder : entities to load
 /////////////////////////////////////////////////////////////////////////
-function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ;
+function fs_BuildTreeFromXML ( Level : Integer ; const aNode : TALXMLNode ;
                                const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
 var li_i : Integer ;
     lNode : TALXMLNode ;
@@ -141,7 +140,7 @@ Begin
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
-        Result := fs_BuildMenuFromXML ( Level + 1, lNode, aopn_OnProjectNode );
+        Result := fs_BuildTreeFromXML ( Level + 1, lNode, aopn_OnProjectNode );
       End;
    lxdo_FichierXML.Free;
 End;
@@ -493,12 +492,30 @@ Begin
    else Result := as_Value;
 End;
 
+procedure p_onProjectInitNode ( const as_FileName : String ; const ANode : TALXMLNode );
+Begin
+  if  ( pos ( CST_LEON_SYSTEM_ROOT, aNode.NodeName ) > 0 )
+   then
+     Begin
+       if not assigned ( gxdo_MenuXML ) Then
+         gxdo_RootXML := TALXMLDocument.Create(nil);
+       try
+         if fb_LoadXMLFile ( gxdo_RootXML, as_FileName ) then
+           p_LoadEntitites ( gxdo_RootXML );
+
+       finally
+         FreeAndNil(gxdo_RootXML);
+       end;
+     End;
+End;
+
 function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ):Boolean;
 var li_i : Integer;
     afwt_Source : TFWTable;
     ACollection : TCollection;
 Begin
   Result := False;
+  fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
   ACollection := TCollection.Create(TFWTable);
   try
     for li_i := 0 to high ( ga_Functions ) do

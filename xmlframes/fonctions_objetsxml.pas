@@ -107,7 +107,6 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
-function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
 function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer; const ab_IsLocal : Boolean ):Boolean;
 procedure p_SetFieldSelect ( const afws_Source : TFWTable ; const anod_Field : TALXMLNode; const affd_ColumnFieldDef : TFWFieldColumn ; const ab_IsLocal, ab_IsLarge : Boolean );
 function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char ; const ai_counter : Integer ): Boolean;
@@ -1473,7 +1472,7 @@ Begin
       gchar_DecimalSeparator := ',' ;
       DecimalSeparator := gchar_DecimalSeparator ;
       fs_BuildFromXML ( 0, gxdo_FichierXML.Node, Application ) ;
-      fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectNode) ) ;
+      fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectNode) ) ;
 
     End
    Else
@@ -1811,31 +1810,6 @@ Begin
          Else AppendStr(as_Fields, ','+ fs_GetIdAttribute ( lnode ));
 
      End;
-end;
-
-
-
-
-function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
-var ls_ProjectFile : String ;
-begin
-  Result := False;
-  if not assigned ( axml_SourceFile ) Then
-    axml_SourceFile := TALXMLDocument.Create ( acom_owner );
-  ls_ProjectFile := fs_getProjectDir ( ) + as_XMLClass + CST_LEON_File_Extension;
-  // For actions at the end of xml file
-  If ( FileExists ( ls_ProjectFile )) Then
-   // reading the special XML form File
-    try
-      if fb_LoadXMLFile ( axml_SourceFile, ls_ProjectFile ) Then
-         Result := True;
-    Except
-      On E: Exception do
-        Begin
-          ShowMessage ( 'Erreur opening XML Class File : ' + E.Message );
-        End;
-    End ;
-
 end;
 
 

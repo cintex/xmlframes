@@ -15,6 +15,11 @@ uses
   DB,
   fonctions_manbase,
   Forms;
+type
+  TOnExecuteNode = procedure ( const ANode : TALXMLNode );
+  TOnExecuteFieldNode = procedure ( const ANode : TALXMLNode ;
+                                    var ab_FieldFound, ab_column : Boolean ;
+                                    var   ai_Fieldcounter, ai_counter : Integer );
 
 const CST_LEON_File_Extension = '.xml';
 
@@ -209,7 +214,11 @@ function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,ano
                               const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn;
                               var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char;
                               const ai_counter : Integer ): Boolean;
-
+procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass, as_Name : String ;
+                               const acom_owner : TComponent; const awin_Parent : TWinControl;
+                               var   axml_SourceFile : TALXMLDocument ;
+                               const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
+                               const ae_onClassNameNode : TOnExecuteNode );
 
 implementation
 
@@ -316,8 +325,8 @@ Begin
 end;
 
 // function fb_OpenClass
-// load xml class file in memory
-// send true if loaded
+// Opens a class file from class name
+// Returns true if ok
 function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ;
                         var axml_SourceFile : TALXMLDocument ):Boolean;
 var ls_ProjectFile : String ;
@@ -340,6 +349,101 @@ begin
     End ;
 
 end;
+
+
+// procedure p_CreateFormComponents
+// Create a form from XML File
+// as_XMLFile : XML File
+// as_Name : Name of form
+// awin_Parent : Parent component
+// ai_Counter : The column counter for other XML File
+procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass, as_Name : String ;
+                               const acom_owner : TComponent; const awin_Parent : TWinControl;
+                               var   axml_SourceFile : TALXMLDocument ;
+                               const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
+                               const ae_onClassNameNode : TOnExecuteNode );
+var li_i, li_j, li_NoField : LongInt ;
+    lnod_Node : TALXMLNode ;
+    lb_Column, lb_FieldFound, lb_Table : Boolean ;
+    lfwc_Column : TFWTable ;
+    li_Counter : Integer;
+  // procedure p_CreateXMLColumn
+  // Creates the XML form column
+  // as_Table : Table name
+  // as_Connection : Connection name
+  procedure p_CreateXMLColumn ( const as_Table, as_Connection : String );
+  Begin
+    lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner );
+  end;
+
+begin
+  // For actions at the end of xml file
+  li_Counter := ADBSources.Count;
+  If fb_OpenClass ( as_XMLClass, acom_owner, axml_SourceFile ) Then
+   // reading the special XML form File
+    try
+      li_NoField := 0;
+      lb_FieldFound := False;
+      for li_i := 0 to axml_SourceFile.ChildNodes.Count -1 do
+        Begin
+          lnod_Node := axml_SourceFile.ChildNodes [ li_i ];
+          if ( lnod_Node.NodeName = CST_LEON_CLASS  )
+          or ( lnod_Node.NodeName = CST_LEON_STRUCT ) then
+            Begin
+              if not lb_FieldFound Then
+                Begin
+                  lb_Table:=False;
+                  for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
+                    Begin
+                      if lnod_Node.ChildNodes [ li_j ].NodeName = CST_LEON_CLASS_BIND Then
+                       with lnod_Node.ChildNodes [ li_j ] do
+                        Begin
+                          p_CreateXMLColumn (Attributes [ CST_LEON_VALUE ], Attributes [ CST_LEON_LOCATION ]);
+                          lb_Table := True;
+                          Break;
+                        end;
+                    end;
+                  if not lb_Table Then
+                    p_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], '' );
+                end;
+              for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
+                Begin
+                  if Assigned(ae_OnFieldNode) Then
+                   ae_OnFieldNode ( lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter);
+
+                End;
+            End;
+          if ( lnod_Node.NodeName = CST_LEON_FIELD_NUMBER   )
+          or ( lnod_Node.NodeName = CST_LEON_FIELD_DATE     )
+          or ( lnod_Node.NodeName = CST_LEON_RELATION       )
+          or ( lnod_Node.NodeName = CST_LEON_FIELD_TEXT     )
+          or ( lnod_Node.NodeName = CST_LEON_FIELD_CHOICE   )
+          or ( lnod_Node.NodeName = CST_LEON_FIELD_FILE     )
+            Then
+              Begin
+{                    if not lb_FieldFound Then
+                  Begin
+                    p_CreateXMLColumn ( lnod_Node );
+                  end;
+                p_CreateFieldComponent ( lnod_Node );
+                lb_FieldFound := True;               }
+              end;
+          if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
+            if Assigned(ae_onActionNode) Then
+             ae_onActionNode ( lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter );
+          if ( lnod_Node.NodeName = CST_LEON_NAME  ) Then
+            if Assigned(ae_onClassNameNode) Then
+             ae_onClassNameNode ( lnod_Node );
+        End;
+    Except
+      On E: Exception do
+        Begin
+          ShowMessage ( 'Erreur : ' + E.Message );
+        End;
+    End ;
+
+end;
+
 
 // procedure p_setNodeId
 // set TFWTable key

@@ -83,9 +83,15 @@ type
  { TFWSources }
  {Collection of FWXMLColumn}
 
+  { TFWXMLColumns }
+
   TFWXMLColumns = class(TFWSources)
+  private
+    function GetColumn(AIndex: Integer): TFWXMLSource;
+    procedure SetColumn(AIndex: Integer; AValue: TFWXMLSource);
   public
     function Add: TFWXMLSource;
+    property Items[AIndex: Integer]: TFWXMLSource read GetColumn write SetColumn; default;
   end;
 
   { TF_XMLForm }
@@ -111,6 +117,7 @@ type
     procedure p_LoginCancelClick(AObject: TObject);
     procedure p_LoginOKClick(AObject: TObject);
     procedure p_setFunction ( const a_Value : TLeonFunction );
+    function  ffx_getSources : TFWXMLColumns;
   protected
     gxml_SourceFile : TALXMLDocument ;
     procedure p_ScruteComposantsFiche (); override;
@@ -161,8 +168,6 @@ type
     function  fwin_CreateFieldComponentAndProperties(const as_Table :String; const anod_Field: TALXMLNode;
                                                   var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ; var  awin_Parent, awin_Last : TWinControl ;
                                                   var ab_Column : Boolean ; const afws_Source : TFWXMLSource ):TWinControl; virtual;
-    function fpan_GridNavigationComponents(const awin_Parent: TWinControl; const as_Name : String ;
-      const ai_Counter: Integer): TScrollBox; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl;
       const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
     procedure p_SetFieldButtonsProperties(const anod_Action : TALXMLNode;
@@ -173,6 +178,8 @@ type
     procedure DoClose ( var CloseAction : TCloseAction ); override;
     function fb_ChargeDonnees : Boolean; override;
     procedure KeyUp(var Key: Word; Shift: TShiftState); override;
+    function fpan_GridNavigationComponents(const awin_Parent: TWinControl; const as_Name : String ;
+      const ai_Counter: Integer): TScrollBox; virtual;
   public
     function fb_InsereCompteur ( const adat_Dataset : TDataset ;
                                  const aff_Cle : TFWFieldColumns ;
@@ -193,6 +200,7 @@ type
     procedure p_CreateFormComponents ( const as_XMLClass, as_Name : String ;  awin_Parent : TWinControl ) ; virtual;
     constructor Create ( AOwner : TComponent ); override;
     property Fonction : TLeonFunction read gr_Function write p_setfunction;
+    property DBSOurces : TFWXMLColumns read ffx_getSources;
   published
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
     property MainPanel   : TPanel read FMainPanel write FMainPanel;
@@ -215,14 +223,100 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
 var  gb_LoginFormLoaded : Boolean = False;
      gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
+    // XML Creating
+    gxf_BuildedForm : TF_XMLForm=nil;
+    gwin_Parent : TWinControl;
+
 
 // functions and procédures not methods
+
+procedure p_OnColumnNameNode ( const anod_ANode : TALXMLNode );
+Begin
+  with gxf_BuildedForm,DBSources do
+   DBSources [ Count - 1 ].Title := fs_GetLabelCaption ( anod_ANode.Attributes [ CST_LEON_VALUE ] );
+End;
+// child procedure p_CreateParentAndFieldsComponent
+// Creates the navigation grid and fields components
+// anod_ANode : current node
+procedure p_CreateParentAndFieldsComponent ( const anod_ANode : TALXMLNode ;
+                                             var ab_FieldFound, ab_column : Boolean ;
+                                             var   ai_Fieldcounter, ai_counter : Integer );
+var lwin_Last : TWinControl;
+Begin
+  with gxf_BuildedForm,Fonction do
+   Begin
+    if not ab_FieldFound Then
+      Begin
+        if ( DBSources.Count = 1 ) Then
+            Begin
+              gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name, DBSources.Count - 1 );
+              Hint := fs_GetLabelCaption ( Name );
+              ShowHint := True;
+            End
+         else
+          Begin
+            gwin_Parent := fscb_CreateTabSheet ( FPageControl, gxf_BuildedForm, FMainPanel, Name, Name );
+            gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , DBSources.Count - 1);
+          End;
+        ab_FieldFound := True;
+      end;
+    lwin_Last := nil;
+    if anod_ANode.Attributes [ CST_LEON_ID ] = Null then
+      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, ai_Fieldcounter, ai_Counter, gwin_Parent,
+                                              lwin_Last, ab_Column, DBSources [ DBSources.count - 1 ] )
+     else
+      fwin_CreateFieldComponentAndProperties ( anod_ANode.Attributes [ CST_LEON_ID ], anod_ANode, ai_Fieldcounter,
+                                               ai_Counter, gwin_Parent, lwin_Last, ab_Column,
+                                               DBSources [ DBSources.count - 1 ]);
+    inc ( ai_Fieldcounter );
+   end;
+
+end;
+
+// procedure p_CreateFieldsButtonsComponents
+// Creates the Fields and buttons
+// anod_ANode : current node
+procedure p_OnFieldsButtonsComponents ( const anod_ANode : TALXMLNode ;
+                                        var ab_FieldFound, ab_column : Boolean ;
+                                        var   ai_Fieldcounter, ai_counter : Integer );
+
+var li_k : Longint;
+Begin
+  if  ( anod_ANode.NodeName = CST_LEON_FIELDS ) then
+    Begin
+      ab_Column := False ;
+      for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
+        Begin
+          p_CreateParentAndFieldsComponent ( anod_ANode.ChildNodes [ li_k ], ab_FieldFound, ab_column, ai_Fieldcounter, ai_counter );
+        End;
+    End;
+  if  ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
+    with gxf_BuildedForm do
+      Begin
+        for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
+          Begin
+            p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], ai_Counter );
+          End;
+      End;
+End;
 
 
 { TFWXMLSource }
 
 
 
+function TFWXMLColumns.GetColumn(AIndex: Integer): TFWXMLSource;
+begin
+  Result := Items[AIndex] as TFWXMLSource;
+end;
+
+procedure TFWXMLColumns.SetColumn(AIndex: Integer; AValue: TFWXMLSource
+  );
+begin
+  if  ( AIndex > -1 )
+  and ( AIndex < Count ) Then
+    Items[AIndex].Assign(AValue);
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // function Add
@@ -629,12 +723,10 @@ end;
 // procedure p_setLogin
 // Special Login model
 // axml_Login : XML Document of login form
-procedure TF_XMLForm.p_setLogin ( const axml_Login: TALXMLDocument;
-                                  const axb_ident : TJvXPButton ;
-                                  const amen_MenuIdent : TMenuItem ;
-                                  const aiml_Images : TImageList ;
-                                  const abmp_DefaultImage : Graphics.TBitmap ;
-                                  var ai_CountImages : Longint );
+procedure TF_XMLForm.p_setLogin(const axml_Login: TALXMLDocument;
+  const axb_ident: TJvXPButton; const amen_MenuIdent: TMenuItem;
+  const aiml_Images: TImageList; const abmp_DefaultImage: TBitmap;
+  var ai_CountImages: Longint);
 var
     li_i, li_j, li_Counter : Longint;
     lnod_Node, lnod_NodeChild : TALXMLNode ;
@@ -676,7 +768,7 @@ begin
                     else
                      ls_location := '';
 
-                   lfwc_Column := TFWXMLSource ( ffws_CreateSource ( lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location ));
+                   lfwc_Column := TFWXMLSource ( ffws_CreateSource ( DBSOurces, ConnectionName, lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location, Self ));
                    {$IFDEF DBNET}
                      If ( lfwc_Column.Connection.DatasetType = dtDBNet ) Then
                       Begin
@@ -920,6 +1012,11 @@ begin
  end;
 end;
 
+function TF_XMLForm.ffx_getSources: TFWXMLColumns;
+begin
+  Result := DBSOurces as TFWXMLColumns;
+end;
+
 // procedure p_setChoiceComponent
 // After having read child node from choice node setting the height of choice node
 // argr_Control : Choice component
@@ -970,7 +1067,10 @@ End;
 // ab_Column : Segund editing column
 // afcf_ColumnField : Field Form column definitions
 
-function TF_XMLForm.flab_setFieldComponentProperties ( const anod_Field : TALXMLNode ; const awin_Control, awin_Parent : TWinControl; const ai_Counter : Longint ; const ab_Column : Boolean ; const afcf_ColumnField : TFWFieldColumn ): TFWLabel;
+function TF_XMLForm.flab_setFieldComponentProperties(
+  const anod_Field: TALXMLNode; const awin_Control, awin_Parent: TWinControl;
+  const ai_Counter: Integer; const ab_Column: Boolean;
+  const afcf_ColumnField: TFWFieldColumn): TFWLabel;
 var li_i : LongInt ;
     ldo_Temp : Double ;
     lnod_FieldProperties : TALXMLNode ;
@@ -1074,7 +1174,8 @@ End;
 // anod_Action : Action node for buttons
 // ai_Counter : column counter
 // awin_Parent : Parent component
-procedure TF_XMLForm.p_SetFieldButtonsProperties ( const anod_Action : TALXMLNode ; const ai_Counter : Longint );
+procedure TF_XMLForm.p_SetFieldButtonsProperties(const anod_Action: TALXMLNode;
+  const ai_Counter: Integer);
 var ls_Action   : String ;
 begin
   with DBSources [ ai_Counter ] do
@@ -1161,7 +1262,7 @@ var lnod_FieldProperties : TALXMLNode ;
       if anod_Field <> lnod_OriginalNode Then
        Begin
         ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
-        lfwc_Column  := TFWXMLSource ( ffws_CreateSource(ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION] ));
+        lfwc_Column  := TFWXMLSource ( ffws_CreateSource( DBSOurces, ConnectionName, ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], Self ));
         li_FieldCounter := 0 ;
         with afws_Source.Linked.Add do
           Begin
@@ -1375,131 +1476,10 @@ var li_i, li_j, li_NoField : LongInt ;
     lfwc_Column : TFWXMLSource ;
     lwin_Last : TWinControl;
     li_Counter : Integer;
-  // child procedure p_CreateParentAndFieldsComponent
-  // Creates the navigation grid and fields components
-  // anod_ANode : current node
-  procedure p_CreateParentAndFieldsComponent ( const anod_ANode : TALXMLNode );
-  Begin
-    if not lb_FieldFound Then
-      Begin
-        if ( DBSources.Count = 1 ) Then
-            Begin
-              awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name, DBSources.Count - 1 );
-              Hint := fs_GetLabelCaption ( as_Name );
-              ShowHint := True;
-            End
-         else
-          Begin
-            awin_Parent := fscb_CreateTabSheet ( FPageControl, Self, FMainPanel, as_Name, as_Name );
-            awin_Parent := fpan_GridNavigationComponents ( awin_Parent, as_Name , DBSources.Count - 1);
-          End;
-        lb_FieldFound := True;
-      end;
-    lwin_Last := nil;
-    if lnod_Node.Attributes [ CST_LEON_ID ] = Null then
-      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column )
-     else
-      fwin_CreateFieldComponentAndProperties ( lnod_Node.Attributes [ CST_LEON_ID ], anod_ANode, li_NoField, li_Counter, awin_Parent, lwin_Last, lb_Column, lfwc_Column );
-    inc ( li_NoField );
-
-  end;
-
-  // procedure p_CreateFieldsButtonsComponents
-  // Creates the Fields and buttons
-  // anod_ANode : current node
-  procedure p_CreateFieldsButtonsComponents ( const anod_ANode : TALXMLNode );
-  var li_k : Longint;
-  Begin
-    if  ( anod_ANode.NodeName = CST_LEON_FIELDS ) then
-      Begin
-        lb_Column := False ;
-        for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
-          Begin
-            p_CreateParentAndFieldsComponent ( anod_ANode.ChildNodes [ li_k ] );
-          End;
-      End;
-    if  ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
-        Begin
-          for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
-            Begin
-              p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], li_Counter );
-            End;
-        End;
-  End;
-  // procedure p_CreateXMLColumn
-  // Creates the XML form column
-  // as_Table : Table name
-  // as_Connection : Connection name
-  procedure p_CreateXMLColumn ( const as_Table, as_Connection : String );
-  Begin
-    lfwc_Column := TFWXMLSource ( ffws_CreateSource ( as_Table, as_Connection ));
-    ConnectionName := as_Connection;
-  end;
-
 begin
   // For actions at the end of xml file
-  li_Counter := DBSources.Count;
-  If fb_OpenClass ( as_XMLClass, Self, gxml_SourceFile ) Then
-   // reading the special XML form File
-    try
-      gi_LastFormFieldsHeight := 0;
-      li_NoField := 0;
-      lb_FieldFound := False;
-      for li_i := 0 to gxml_SourceFile.ChildNodes.Count -1 do
-        Begin
-          lnod_Node := gxml_SourceFile.ChildNodes [ li_i ];
-          if ( lnod_Node.NodeName = CST_LEON_CLASS  )
-          or ( lnod_Node.NodeName = CST_LEON_STRUCT ) then
-            Begin
-              if not lb_FieldFound Then
-                Begin
-                  lb_Table:=False;
-                  for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
-                    Begin
-                      if lnod_Node.ChildNodes [ li_j ].NodeName = CST_LEON_CLASS_BIND Then
-                       with lnod_Node.ChildNodes [ li_j ] do
-                        Begin
-                          p_CreateXMLColumn (Attributes [ CST_LEON_VALUE ], Attributes [ CST_LEON_LOCATION ]);
-                          lb_Table := True;
-                          Break;
-                        end;
-                    end;
-                  if not lb_Table Then
-                    p_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], '' );
-                end;
-              for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
-                Begin
-                  p_CreateFieldsButtonsComponents ( lnod_Node.ChildNodes [ li_j ]);
-
-                End;
-            End;
-          if ( lnod_Node.NodeName = CST_LEON_FIELD_NUMBER   )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_DATE     )
-          or ( lnod_Node.NodeName = CST_LEON_RELATION       )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_TEXT     )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_CHOICE   )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_FILE     )
-            Then
-              Begin
-{                    if not lb_FieldFound Then
-                  Begin
-                    p_CreateXMLColumn ( lnod_Node );
-                  end;
-                p_CreateFieldComponent ( lnod_Node );
-                lb_FieldFound := True;               }
-              end;
-          if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
-             p_SetFieldButtonsProperties ( lnod_Node, li_Counter );
-          if ( lnod_Node.NodeName = CST_LEON_NAME  ) Then
-             lfwc_Column.Title := fs_GetLabelCaption ( lnod_Node.Attributes [ CST_LEON_VALUE ] );
-        End;
-    Except
-      On E: Exception do
-        Begin
-          ShowMessage ( 'Erreur : ' + E.Message );
-        End;
-    End ;
-
+   gi_LastFormFieldsHeight := 0;
+   p_CreateColumns;
 end;
 
 // function fdbg_GroupViewComponents
