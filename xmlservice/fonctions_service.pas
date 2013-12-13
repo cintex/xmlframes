@@ -17,6 +17,7 @@ uses
   {$ENDIF}
   SysUtils, ALXmlDoc,
   fonctions_system,
+  Controls,
   IniFiles;
 
 const // Champs utilisés
@@ -29,13 +30,14 @@ const // Champs utilisés
   gver_fonctions_service : T_Version = (Component : 'XML Service Unit' ;
                                            FileUnit : 'fonctions_service' ;
               			           Owner : 'Matthieu Giroux' ;
-              			           Comment : 'Centralizing service.' ;
+              			           Comment : 'Centralizing service. No XML Form functions in this unit.'+#10 ;
               			           BugsStory : 'Version 0.9.0.0 : Centralized unit.';
               			           UnitType : 1 ;
               			           Major : 0 ; Minor : 9 ; Release : 0 ; Build : 0 );
 
 {$ENDIF}
 type
+  TOnExecuteProjectNode = procedure ( const as_FileName : String; const ANode : TALXMLNode );
   TActionTemplate          = (atmultiPageTable,atLogin);
   TLeonFunctionID          = String ;
   TLeonFunctions           = Array of TLeonFunctionID;
@@ -57,6 +59,11 @@ function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
 function fb_CreateProject ( var amif_Init : TIniFile; const AApplication : TComponent ) : Boolean;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode ; const AApplication : TComponent ):String;
+procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
+procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
+procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
+function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ;
+                               const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
 
 var
     gs_Language : String;
@@ -80,7 +87,64 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      fonctions_manbase,
      Dialogs,
      fonctions_languages;
+/////////////////////////////////////////////////////////////////////////
+// procedure p_LoadEntitites
+// Calling a recursive procedure loading entities from XML Document
+// axdo_FichierXML : XML entities file
+/////////////////////////////////////////////////////////////////////////
+procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
 
+Begin
+  p_LoadRootAction ( axdo_FichierXML.node );
+End;
+
+/////////////////////////////////////////////////////////////////////////
+// procedure p_BuildFromXML
+// recursive loading entities menu and data
+// Level : recursive level
+// aNode : recursive node
+// abo_BuildOrder : entities to load
+/////////////////////////////////////////////////////////////////////////
+function fs_BuildMenuFromXML ( Level : Integer ; const aNode : TALXMLNode ;
+                               const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
+var li_i : Integer ;
+    lNode : TALXMLNode ;
+    lxdo_FichierXML : TALXMLDocument;
+Begin
+   lxdo_FichierXML := nil ;
+   if ( aNode.HasChildNodes ) then
+     for li_i := 0 to aNode.ChildNodes.Count - 1 do
+      Begin
+        lNode := aNode.ChildNodes [ li_i ];
+//        if (  lNode.IsTextElement ) then
+//          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
+//         else
+        // connects before build
+        if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
+        and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
+          Begin
+//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
+            Result := lNode.Attributes [ CST_LEON_DUMMY ];
+            {$IFDEF WINDOWS}
+            Result := fs_RemplaceChar ( Result, '/', '\' );
+            {$ENDIF}
+            // Pas besoin du chemin complet
+            gs_RootEntities := fs_WithoutFirstDirectory ( fs_WithoutFirstDirectory ( Result ));
+            if pos ( '.', gs_RootEntities ) > 0 then
+              Begin
+                gs_RootEntities := copy ( gs_RootEntities, 1, pos ( '.', gs_RootEntities ) - 1 );
+              End;
+
+            Result := fs_getSoftDir + fs_WithoutFirstDirectory ( Result );
+            if FileExists ( Result ) then
+               aopn_OnProjectNode ( Result, lNode );
+          End;
+//         else
+//          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
+        Result := fs_BuildMenuFromXML ( Level + 1, lNode, aopn_OnProjectNode );
+      End;
+   lxdo_FichierXML.Free;
+End;
 /////////////////////////////////////////////////////////////////////////
 // procedure p_InitIniProjectFile
 // loading ini : if no ini lazarus file creating a line and saving
@@ -255,7 +319,166 @@ Begin
   End;
 End;
 
+procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
+var li_i: Integer ;
+Begin
+  with ar_Source do
+    Begin
+      ar_Destination.Clep     := clep;
+      ar_Destination.Name     := Name;
+      ar_Destination.Mode     := Mode;
+      ar_Destination.Groupe   := Groupe ;
+      ar_Destination.AFile    := AFile  ;
+      ar_Destination.Template := Template  ;
+      ar_Destination.Value    := Value  ;
+      finalize ( ar_Destination.Functions );
+      setLength ( ar_Destination.Functions, high ( Functions ) + 1 );
+      for li_i := 0 to high ( Functions ) do
+        ar_Destination.Functions [ li_i ] := Functions [ li_i ];
+    End;
 
+End;
+
+
+/////////////////////////////////////////////////////////////////////////
+// procedure p_LoadNodesEntities
+// Searching some dashboard nodes in xml tree view
+// ano_Node : A node
+// ano_Parent  : Parent node
+// ai_LastCFonction : Last compound function
+/////////////////////////////////////////////////////////////////////////
+procedure p_LoadNodesEntities ( const ano_Node,ano_Parent : TALXMLNode ; ai_LastCFonction  : Longint );
+var li_j  : LongInt ;
+    lNodeChild : TALXMLNode ;
+    ls_Mode,
+    lParam1,lParam2,lParam3,lPrefix: String;
+    procedure p_SetAttributeValues;
+      Begin
+        if lnodeChild.NodeName = CST_LEON_ACTION_PREFIX then
+          lPrefix :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ];
+        if lnodeChild.NodeName = CST_LEON_ACTION_NAME then
+          lParam1 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ]
+         else
+          if lnodeChild.NodeName = CST_LEON_ACTION_GROUP then
+            lParam2 :=  lnodeChild.Attributes [ CST_LEON_ACTION_VALUE ]
+          else
+            if ( lnodeChild.NodeName = CST_LEON_PARAMETER )
+            and ( lnodeChild.Attributes [ CST_LEON_PARAMETER_NAME ]= CST_LEON_ACTION_CLASSINFO ) then
+              lParam3 :=  lnodeChild.Attributes [ CST_LEON_ACTION_IDREF ];
+      end;
+
+    procedure p_setCompoundFunction ( const as_idName : String );
+    Begin
+      SetLength ( ga_Functions [ ai_LastCFonction ].Functions, high ( ga_Functions [ ai_LastCFonction ].Functions ) + 2 );
+      ga_Functions [ ai_LastCFonction ].Functions [ high ( ga_Functions [ ai_LastCFonction ].Functions )] := ano_Node.Attributes [ as_idName ];
+    end;
+
+Begin
+  if ( ano_Node.NodeName = CST_LEON_ACTION )
+  or ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
+    Begin
+      ls_Mode := '' ;
+      lParam1 := '' ;
+      lParam2 := '' ;
+      lParam3 := '' ;
+      lPrefix := '' ;
+
+//          ShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
+
+//          Showmessage ( ano_Node.XML );
+//          if ano_Node.HasAttribute ( CST_LEON_TEMPLATE ) then
+//              ShowMessage ( ano_Node.XML );
+
+      // On ajoute la fonction complémentaire
+      if  ( ano_Node.HasChildNodes ) then
+        for  li_j := 0 to ano_Node.ChildNodes.count - 1 do
+          Begin
+            lNodeChild := ano_Node.ChildNodes [ li_j ];
+            p_SetAttributeValues;
+          End;
+
+      // On ajoute la fonction action
+       SetLength ( ga_Functions, high ( ga_Functions ) + 2 );
+       with ga_Functions [ high ( ga_Functions )] do
+         Begin
+           Clep := ano_Node.Attributes [ CST_LEON_ID ];
+           Groupe := lParam2;
+           Name   := lParam1;
+           AFile  := lParam3;
+           Prefix := lPrefix;
+{                 if (  Name = '' ) then
+             Begin
+               ShowMessage (  Gs_EmptyFunctionName +  Clep );
+             End;   }
+           if ano_Node.Attributes [ CST_LEON_ACTION_TEMPLATE ] = CST_LEON_TEMPLATE_MULTIPAGETABLE then
+             Template := atMultiPageTable ;
+           finalize ( Functions );
+           if ls_Mode =' '
+             Then Mode := Byte(fsStayOnTop)
+             Else if ls_Mode = ' '
+               Then Mode := Byte(fsNormal)
+               Else Mode := Byte(fsMDIChild);
+         End;
+
+       if  ( ano_Parent <> nil )
+       and ( ai_LastCFonction >= 0   )
+       Then
+         Begin
+           p_setCompoundFunction ( CST_LEON_ID );
+         end;
+
+       if ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
+         if  ( ano_Node.HasChildNodes ) then
+           for  li_j := 0 to  ano_Node.ChildNodes.Count- 1 do
+            Begin
+              lNodeChild := ano_Node.ChildNodes [ li_j ];
+              p_SetAttributeValues;
+              finalize (ga_Functions [high ( ga_Functions )].Functions);
+              if  ( lNodeChild.NodeName = CST_LEON_ACTION ) Then
+                p_LoadNodesEntities ( lNodeChild, lNodeChild, high ( ga_Functions ) );
+            End;
+    End
+   else
+    if  ( ano_Node.NodeName = CST_LEON_ACTION_REF )
+    and ( ano_Node.NodeName = CST_LEON_COMPOUND_ACTION ) then
+      Begin
+        p_setCompoundFunction ( CST_LEON_ACTION_IDREF );
+      End;
+End;
+
+/////////////////////////////////////////////////////////////////////////
+// procedure p_Loaddashboard
+// Searching some dashboard in xml tree view
+// ano_Node : A node
+// ano_Parent  : Parent node
+// ai_LastCFonction : Last compound function
+/////////////////////////////////////////////////////////////////////////
+procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
+var li_i, li_j  : LongInt ;
+    lNode : TALXMLNode ;
+
+Begin
+  if ano_Node.HasChildNodes Then
+    for li_i := 0 to ano_Node.ChildNodes.Count - 1 do
+      Begin
+        lNode := ano_Node.ChildNodes [ li_i ];
+        if  ( lnode.Attributes [ CST_LEON_ID ] =  gs_RootAction )
+        or  ( lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD ) then
+          Begin
+            if ( lnode.Attributes [ CST_LEON_TEMPLATE ] =  CST_LEON_TEMPLATE_DASHBOARD ) Then
+              gnod_DashBoard := lnode
+             else
+              gNod_RootAction := lNode;
+            if lnode.HasChildNodes Then
+              for li_j := 0 to lnode.ChildNodes.Count -1 do
+                if lnode.ChildNodes [ li_j ].NodeName = CST_LEON_ACTIONS Then
+                  p_LoadRootAction ( lnode.ChildNodes [ li_j ] );
+            Continue;
+          End;
+        p_LoadNodesEntities ( lNode, nil, -1 );
+      end;
+
+end;
 /////////////////////////////////////////////////////////////////////////
 // function fs_getIniOrNotIniValue
 // Loading  from ini
@@ -273,17 +496,19 @@ End;
 function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ):Boolean;
 var li_i : Integer;
     afwt_Source : TFWTable;
+    ACollection : TCollection;
 Begin
   Result := False;
-  afwt_Source := TFWTable.Create(nil);
+  ACollection := TCollection.Create(TFWTable);
   try
     for li_i := 0 to high ( ga_Functions ) do
      with ga_Functions [li_i] do
+      with ACollection.Add do
        Begin
 
        end;
   finally
-    afwt_Source.Destroy;
+    ACollection.destroy;
   end;
 End;
 
@@ -332,6 +557,7 @@ Begin
            if ( pos ( '.', DataBase ) = 1 ) Then
             DataBase := StringReplace(DataBase,'.',fs_getSoftDir,[]);
            if not FileExistsUTF8(DataBase) Then
+             fb_AutoCreateDatabase ( True );
           end;
        p_setComponentProperty ( Connection, 'DatabaseName', Database );
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )

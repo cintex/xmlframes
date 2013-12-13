@@ -68,7 +68,6 @@ function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : Stri
 function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
-procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWTable ; const ach_FieldDelimiter : Char );
 
 
 
@@ -78,7 +77,8 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
      fonctions_autocomponents, fonctions_dbcomponents, strutils,
-     unite_variables, u_languagevars, Imaging, fonctions_languages,
+     unite_variables, u_languagevars, Imaging,
+     fonctions_languages,
      fonctions_forms;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ Begin
   gxdo_MenuXML    := nil;
   if result Then
     Begin
-      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ) ;
+      ls_entityFile := fs_BuildMenuFromXML ( 0, gxdo_FichierXML.Node ,TOnExecuteProjectNode ( p_onProjectNode ) ) ;
       if  assigned ( gNod_RootAction )
       and ( gNod_RootAction <> gNod_DashBoard ) Then
        Begin
@@ -121,25 +121,6 @@ Begin
 End;
 
 
-procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
-var li_i: Integer ;
-Begin
-  with ar_Source do
-    Begin
-      ar_Destination.Clep     := clep;
-      ar_Destination.Name     := Name;
-      ar_Destination.Mode     := Mode;
-      ar_Destination.Groupe   := Groupe ;
-      ar_Destination.AFile    := AFile  ;
-      ar_Destination.Template := Template  ;
-      ar_Destination.Value    := Value  ;
-      finalize ( ar_Destination.Functions );
-      setLength ( ar_Destination.Functions, high ( Functions ) + 1 );
-      for li_i := 0 to high ( Functions ) do
-        ar_Destination.Functions [ li_i ] := Functions [ li_i ];
-    End;
-
-End;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Modifie une xpbar
@@ -245,105 +226,6 @@ begin
    ab_OnFieldToFill := True;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-// fonction ffd_CreateFieldDef
-// creating CSV definition properties
-// Création de la définition de champ pour les fichiers CSV
-// anod_Field : Field node
-// ab_isLarge : Large or little field
-// afd_FieldsDefs : CSV definitions to add definition
-// result a field definition
-////////////////////////////////////////////////////////////////////////////////
-function fft_getFieldType ( const anod_Field : TALXMLNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
-var lb_isLarge : Boolean ;
-    li_k : Integer;
-    lnod_FieldProperties : TALXMLNode;
-begin
-  Result := ftString;
-  if ab_SearchLarge then
-     Begin
-       lb_isLarge := False;
-       if anod_Field.HasChildNodes then
-       for li_k := 0 to anod_Field.ChildNodes.Count -1 do
-        Begin
-          lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-          if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-          or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-           Begin
-            lb_IsLarge := True;
-            Break;
-           end;
-        end;
-      End
-    Else
-     lb_isLarge:=ab_IsLarge;
-  if ( anod_Field.NodeName = CST_LEON_FIELD_NUMBER ) then
-   begin
-     if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
-     and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
-      Then Result := ftFloat
-      Else Result := ftInteger;
-   end
-  else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
-    Begin
-      if lb_isLarge Then
-        Begin
-          Result := ftBlob;
-        End
-       Else
-        Begin
-          Result := ftString;
-        End
-    End
-  else if anod_Field.NodeName = CST_LEON_FIELD_FILE then
-    Begin
-      Result := ftString;
-    End
-  else if anod_Field.NodeName = CST_LEON_RELATION then
-    Begin
-    End
-  else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
-    Begin
-      Result := ftDate;
-    End
-  else if anod_Field.NodeName = CST_LEON_FIELD_CHOICE then
-    Begin
-      Result := ftInteger;
-    End;
-
-end;
-
-
-////////////////////////////////////////////////////////////////////////////////
-// procedure p_setFieldDefs
-// getting CSV definitions and adding them from file
-// adat_Dataset : CSV dataset
-// alis_NodeFields : node of field nodes
-////////////////////////////////////////////////////////////////////////////////
-
-procedure p_setFieldDefs ( const afws_Source : TFWSource ; const alis_NodeFields : TList );
-var li_i, li_j : Integer ;
-    ls_FieldName : String;
-begin
-  for li_i := 0 to  alis_NodeFields.count - 1 do
-   Begin
-     with TALXMLNode ( alis_NodeFields [ li_i ] ) do
-     Begin
-      if Attributes[CST_LEON_ID] <> Null
-       Then ls_FieldName:= Attributes[CST_LEON_ID]
-       Else ls_FieldName:= Attributes[CST_LEON_IDREF];
-      li_j := afws_Source.FieldsDefs.indexOf(ls_FieldName);
-      if li_j = -1
-       Then
-        Exit;
-      with afws_Source.FieldsDefs.Add do
-       Begin
-        FieldType := fft_getFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ), True );
-        FieldName:=ls_FieldName;
-       end;
-     end;
-   end;
-End;
 
 ////////////////////////////////////////////////////////////////////////////////
 // function fs_GetIDFields
@@ -445,6 +327,8 @@ Begin
     end;
 end;
 
+// procedure p_AddFieldsToFieldColumn
+// used to create a combo
 procedure p_AddFieldsToFieldColumn ( const afc_Fields : TFWFieldColumns; const alis_NodeFields : TList );
 var li_i, li_k : Integer;
     lnode : TALXMLNode;
@@ -461,6 +345,8 @@ Begin
      End;
 end;
 
+// procedure p_AddFieldsToString
+// used to create a combo
 procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
 var li_i, li_k : Integer;
     lnode : TALXMLNode;
@@ -537,130 +423,6 @@ begin
     end;
 end;
 
-
-procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;  const afws_Source : TFWTable ; const ach_FieldDelimiter : Char );
-Begin
-  if anod_FieldIsId.HasAttribute ( CST_LEON_ID)
-  and not ( anod_FieldIsId.Attributes [ CST_LEON_ID ] = CST_LEON_BOOL_FALSE )  then
-     with afws_Source do
-    Begin
-      if afws_Source.FieldsDefs.indexOf(anod_FieldId.Attributes [CST_LEON_ID]) = -1 Then
-        with afws_Source.FieldsDefs.Add do
-         Begin
-          FieldType := fft_getFieldType ( anod_FieldId, True );
-          FieldName := anod_FieldId.Attributes [CST_LEON_ID];
-         end;
-      with GetKey.Add do
-       Begin
-        FieldName := anod_FieldId.Attributes [CST_LEON_ID];
-       end;
-    End;
-end;
-
-
-
-function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ; var axml_SourceFile : TALXMLDocument ):Boolean;
-var ls_ProjectFile : String ;
-begin
-  Result := False;
-  if not assigned ( axml_SourceFile ) Then
-    axml_SourceFile := TALXMLDocument.Create ( acom_owner );
-  ls_ProjectFile := fs_getProjectDir ( ) + as_XMLClass + CST_LEON_File_Extension;
-  // For actions at the end of xml file
-  If ( FileExists ( ls_ProjectFile )) Then
-   // reading the special XML form File
-    try
-      if fb_LoadXMLFile ( axml_SourceFile, ls_ProjectFile ) Then
-         Result := True;
-    Except
-      On E: Exception do
-        Begin
-          ShowMessage ( 'Erreur opening XML Class File : ' + E.Message );
-        End;
-    End ;
-
-end;
-
-
-function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer; const ab_IsLocal : Boolean ):Boolean;
-Begin
-  Result := anod_Field.Attributes [ CST_LEON_ID ] <> Null;
-  if result Then
-    with affd_ColumnFieldDef do
-      begin
-        IsSourceTable := ab_IsSourceTable;
-        NumTag      := ai_Fieldcounter + 1;
-        FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
-        ShowSearch  := -1;
-        ColSelect:=False;
-      end;
-end;
-
-// Function fb_getFieldOptions
-// setting some data properties
-// Result : quitting
-function fb_getFieldOptions ( const afws_Source : TFWSource; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char; const ai_counter : Integer ): Boolean;
-begin
-  Result := False;
-  with anod_FieldProperties do
-  if NodeName = CST_LEON_FIELD_F_MARKS then
-    Begin
-      if HasAttribute ( CST_LEON_FIELD_local )
-      and ( Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
-        Begin
-          ab_IsLocal := True;
-          affd_ColumnFieldDef.ColSelect:=False;
-        End;
-      if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-        Begin
-          affd_ColumnFieldDef.FieldType := fft_GetFieldType ( anod_Field, False, ab_IsLarge );
-        End;
-
-      if HasAttribute ( CST_LEON_FIELD_CREATE)
-       then affd_ColumnFieldDef.ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
-      if HasAttribute ( CST_LEON_FIELD_UNIQUE)
-       then affd_ColumnFieldDef.ColUnique  := Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
-      p_setNodeId ( anod_Field, anod_FieldProperties, afws_Source, ach_FieldDelimiter );
-      if HasAttribute ( CST_LEON_FIELD_hidden )
-      and not ( Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
-        Begin
-          affd_ColumnFieldDef.ShowCol := -1;
-          affd_ColumnFieldDef.ShowSearch := -1;
-          Result := True;
-          Exit;
-        End;
-      affd_ColumnFieldDef.ShowCol := ai_counter + 1;
-      if HasAttribute ( CST_LEON_FIELD_optional)
-      and not ( Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
-        Begin
-          affd_ColumnFieldDef.ColMain  := False;
-          affd_ColumnFieldDef.ShowCol := -1;
-        End
-       Else
-        affd_ColumnFieldDef.ColMain := True;
-      if ( HasAttribute ( CST_LEON_FIELD_sort)
-           and ( Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
-      or ( HasAttribute ( CST_LEON_FIELD_find)
-           and ( Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
-        Begin
-          affd_ColumnFieldDef.ShowSearch := ai_counter + 1;
-        End
-    End;
-
-end;
-
-procedure p_SetFieldSelect ( const afws_Source : TFWSource ; const anod_Field : TALXMLNode; const affd_ColumnFieldDef : TFWFieldColumn ; const ab_IsLocal, ab_IsLarge : Boolean );
-Begin
-  if not ab_IsLocal Then
-   Begin
-     affd_ColumnFieldDef.ColSelect:=True;
-     if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
-      Begin
-        affd_ColumnFieldDef.FieldType := fft_getFieldType ( anod_Field, False, ab_IsLarge );
-      End;
-
-   end;
-end;
 
 
 /////////////////////////////////////////////////////////////////////////
