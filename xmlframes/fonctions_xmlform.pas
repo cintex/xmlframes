@@ -38,8 +38,8 @@ uses Forms, JvXPBar, JvXPContainer,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
-  ALXmlDoc, IniFiles, Graphics,
-  u_multidonnees, fonctions_string,
+  ALXmlDoc, Graphics,
+  u_multidonnees,
   fonctions_manbase, u_xmlform,
   fonctions_ObjetsXML,
   fonctions_service,
@@ -74,9 +74,9 @@ function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : Strin
 implementation
 
 uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
-     fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
+     fonctions_images , fonctions_init,
      Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
-     fonctions_autocomponents, fonctions_dbcomponents, strutils,
+     fonctions_dbcomponents,
      unite_variables, u_languagevars, Imaging,
      fonctions_languages,
      fonctions_forms;

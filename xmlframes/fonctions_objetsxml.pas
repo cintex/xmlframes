@@ -27,10 +27,8 @@ No XMLForm please
 
 }
 
-uses Forms, JvXPBar, JvXPContainer,
-{$IFDEF FPC}
-   LCLIntf, LCLType,
-{$ELSE}
+uses Forms, JvXPBar, LCLType,
+{$IFNDEF FPC}
    Windows, ToolWin,
 {$ENDIF}
   Controls, Classes, JvXPButtons, ExtCtrls,
@@ -38,12 +36,10 @@ uses Forms, JvXPBar, JvXPContainer,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
-
 {$IFDEF TNT}
   TntForms,TntStdCtrls, TntExtCtrls,
 {$ENDIF}
   ALXmlDoc, IniFiles, Graphics,
-  u_multidonnees,
   u_multidata,
   fonctions_string,
   fonctions_service,
@@ -207,12 +203,10 @@ procedure p_RegisterSomeLanguages;
 
 implementation
 
-uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
+uses SysUtils, Dialogs, fonctions_xml,
      fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
-     Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
-     fonctions_autocomponents, fonctions_dbcomponents, strutils,
-     unite_variables, u_languagevars, Imaging, fonctions_languages,
-     fonctions_xmlform;
+     Variants, fonctions_Objets_Dynamiques, fonctions_dbcomponents, strutils,
+     unite_variables, u_languagevars, Imaging, fonctions_languages;
 
 
 /////////////////////////////////////////////////////////////////////////

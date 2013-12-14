@@ -54,7 +54,7 @@ type
                              end;
 
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ): Boolean;
-procedure p_LoadData ( const axno_Node : TALXMLNode );
+procedure p_LoadData ( const axno_Node : TALXMLNode; const acom_owner : TComponent );
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
 function fb_CreateProject ( var amif_Init : TIniFile; const AApplication : TComponent ) : Boolean;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
@@ -200,7 +200,7 @@ Begin
         if ( lNode.NodeName = CST_LEON_PROJECT ) Then
           Begin
             gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
-            p_LoadData ( lNode );
+            p_LoadData ( lNode, AApplication );
           end;
         if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
@@ -220,7 +220,7 @@ Begin
                 if fb_LoadXMLFile ( lxdo_FichierXML, Result )
                  then
                   Begin
-                   p_LoadData ( lxdo_FichierXML.Node );
+                   p_LoadData ( lxdo_FichierXML.Node, AApplication );
                   end;
              End;
           End;
@@ -509,27 +509,168 @@ Begin
      End;
 End;
 
-function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ):Boolean;
+
+// procedure p_CreateFieldComponentAndProperties
+// Creating the column components
+// as_Table : Table Name
+// anod_Field: Node field
+// ai_FieldCounter : Field counter
+//  ai_Counter : Column counter
+// awin_Parent : Parent component
+// ab_Column : Second editing column
+// afws_Source : XML form Column
+// afd_FieldsDefs : Field Definitions
+procedure p_OnCreateFieldProperties ( const ADBSources : TFWTables; const as_Table :String;
+                                    const anod_Field: TALXMLNode;
+                                    var ab_FieldFound, ab_column : Boolean ;
+                                    var   ai_Fieldcounter : Longint; const ai_counter : LongInt  );
+var lnod_FieldProperties : TALXMLNode ;
+    lb_IsLarge, lb_IsLocal  : Boolean;
+    lffd_ColumnFieldDef : TFWFieldColumn;
+    lnod_OriginalNode : TALXmlNode;
+    lfwt_Source : TFWTable;
+
+    // procedure p_CreateArrayStructComponents
+    // Creating groupbox with controls
+    procedure p_CreateArrayStructComponents ;
+    var li_k, li_l, li_FieldCounter : LongInt ;
+        lb_column : Boolean;
+
+        lnod_FieldsNode : TALXmlNode;
+        ls_Table : String ;
+        lfwc_Column : TFWTable ;
+    begin
+      lb_IsLocal := False;
+      lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
+
+      if anod_Field <> lnod_OriginalNode Then
+       Begin
+        ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
+        lfwc_Column  := ffws_CreateSource( ADBSources, '', ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], ADBSources.Owner as TComponent );
+        li_FieldCounter := 0 ;
+       end;
+
+      if lnod_OriginalNode.HasChildNodes then
+        for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
+          Begin
+            lnod_FieldsNode := lnod_OriginalNode.ChildNodes [ li_k ];
+            if lnod_FieldsNode.NodeName = CST_LEON_NAME then
+                Continue;
+            if (   lnod_OriginalNode.NodeName = CST_LEON_STRUCT )
+            and lnod_OriginalNode.ChildNodes [ li_k ].HasChildNodes then
+              Begin
+                lb_column := False;
+                if lnod_FieldsNode.NodeName = CST_LEON_FIELDS Then
+                  Begin
+                    for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
+                      Begin
+                        if anod_Field <> lnod_OriginalNode Then
+                          p_OnCreateFieldProperties ( ADBSources, ls_Table   ,
+                                                    lnod_FieldsNode.ChildNodes [ li_l ],
+                                                    ab_FieldFound, lb_column,
+                                                    li_FieldCounter, ADBSources.Count - 1)
+                         else
+                          p_OnCreateFieldProperties ( ADBSources, as_Table   ,
+                                                    lnod_FieldsNode.ChildNodes [ li_l ],
+                                                    ab_FieldFound, lb_column,
+                                                    li_FieldCounter, ai_Counter);
+                      end;
+                  end
+                 Else
+                  // The parent parameter is a var : so do not want to change it in the function
+                  if anod_Field <> lnod_OriginalNode Then
+                    p_OnCreateFieldProperties ( ADBSources, ls_Table   ,
+                                              lnod_OriginalNode.ChildNodes [ li_k ],
+                                              ab_FieldFound, lb_column,
+                                              li_FieldCounter, ADBSources.Count - 1)
+                   else
+                    p_OnCreateFieldProperties ( ADBSources, as_Table   ,
+                                              lnod_FieldsNode.ChildNodes [ li_k ],
+                                              ab_FieldFound, lb_column,
+                                              li_FieldCounter, ai_Counter);
+                inc ( li_FieldCounter );
+                lb_IsLocal:=True;
+              end;
+          end;
+      p_SetFieldSelect ( lfwt_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+
+    end;
+
+    var li_k : LongInt ;
+
+begin
+  ab_Column:=False;
+  lfwt_Source  := ADBSources [ ADBSources.Count - 1 ];
+  // Creating the properties and setting data link
+
+
+   lffd_ColumnFieldDef := lfwt_Source.FieldsDefs.Add ;
+   if ( anod_Field.NodeName = CST_LEON_ARRAY )
+   or ( anod_Field.NodeName = CST_LEON_STRUCT )
+    Then
+     Begin
+       p_CreateArrayStructComponents;
+       // Quitting because having created properties
+       Exit;
+     end;
+   if not fb_createFieldID ( lfwt_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_Fieldcounter, lb_IsLocal )
+    Then
+     Exit;
+
+   lb_IsLocal := False;
+
+   lb_IsLarge := False;
+   if anod_Field.HasChildNodes then
+     for li_k := 0 to anod_Field.ChildNodes.Count -1 do
+       Begin
+         lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
+         if fb_getFieldOptions ( lfwt_Source, anod_Field, lnod_FieldProperties, lb_IsLarge, lffd_ColumnFieldDef, lb_IsLocal, ',', ai_Counter ) Then
+          Begin
+            p_SetFieldSelect ( lfwt_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+            Exit;
+          end;
+
+         if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
+         or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
+           lb_IsLarge := True;
+       End;
+
+   p_SetFieldSelect ( lfwt_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+
+end;
+
+
+function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ):Boolean;
 var li_i : Integer;
     afwt_Source : TFWTable;
-    ACollection : TCollection;
+    ACollection : TFWTables;
+    ATemp : String;
 Begin
   Result := False;
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
-  ACollection := TCollection.Create(TFWTable);
+  ACollection := TFWTables.Create(TFWTable);
   try
     for li_i := 0 to high ( ga_Functions ) do
      with ga_Functions [li_i] do
-      with ACollection.Add do
        Begin
-
+         if AFile = ''
+          Then ATemp:=Name
+          Else ATemp:=AFile;
+         p_CreateComponents( ACollection, ATemp, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False );
+       end;
+    ATemp:='';
+    for li_i := 0 to ACollection.Count - 1 do
+     with ACollection [ li_i ] do
+       Begin
+         AppendStr(ATemp,GetSQLCreateCode);
        end;
   finally
     ACollection.destroy;
   end;
+  ShowMessage(ATemp);
 End;
 
-procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource );
+procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );
 var li_Pos : LongInt ;
 Begin
   with ads_connection do
@@ -574,7 +715,7 @@ Begin
            if ( pos ( '.', DataBase ) = 1 ) Then
             DataBase := StringReplace(DataBase,'.',fs_getSoftDir,[]);
            if not FileExistsUTF8(DataBase) Then
-             fb_AutoCreateDatabase ( True );
+             fb_AutoCreateDatabase ( True, acom_owner );
           end;
        p_setComponentProperty ( Connection, 'DatabaseName', Database );
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
@@ -603,7 +744,7 @@ end;
 // Charge le lien de données
 // axno_Node : xml data document
 /////////////////////////////////////////////////////////////////////////
-procedure p_LoadData ( const axno_Node : TALXMLNode );
+procedure p_LoadData ( const axno_Node : TALXMLNode; const acom_owner : TComponent );
 var li_i : LongInt ;
     lds_connection,lds_connection2 : TDSSource;
     lNode : TALXMLNode ;
@@ -657,7 +798,7 @@ Begin
                            try
                              lds_connection2 := DMModuleSources.Sources.add;
                              lds_connection2.Connection := fobj_getComponentObjectProperty(Connection,CST_DBPROPERTY_ZEOSDB) as TComponent;
-                             p_LoadConnection ( lNode , lds_connection2 );
+                             p_LoadConnection ( lNode , lds_connection2, acom_owner );
                              p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_Active, True );
                              if not fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_Active)
                                 Then writeln ( 'Connection not active.')
@@ -668,7 +809,7 @@ Begin
                        End;
               {$ENDIF}
               else
-                p_LoadConnection ( lNode , lds_connection );
+                p_LoadConnection ( lNode , lds_connection, acom_owner );
             end;
          End;
        end;

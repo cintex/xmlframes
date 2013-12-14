@@ -224,26 +224,25 @@ var  gb_LoginFormLoaded : Boolean = False;
      gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
     // XML Creating
-    gxf_BuildedForm : TF_XMLForm=nil;
     gwin_Parent : TWinControl;
 
 
 // functions and procédures not methods
 
-procedure p_OnColumnNameNode ( const anod_ANode : TALXMLNode );
+procedure p_OnColumnNameNode ( const ADBSources : TFWTables; const anod_ANode : TALXMLNode );
 Begin
-  with gxf_BuildedForm,DBSources do
+  with ADBSources, ADBSources.Owner as TF_XMLForm do
    DBSources [ Count - 1 ].Title := fs_GetLabelCaption ( anod_ANode.Attributes [ CST_LEON_VALUE ] );
 End;
 // child procedure p_CreateParentAndFieldsComponent
 // Creates the navigation grid and fields components
 // anod_ANode : current node
-procedure p_CreateParentAndFieldsComponent ( const anod_ANode : TALXMLNode ;
+procedure p_OnCreateParentAndFieldsComponent ( const ADBSources : TFWTables; const anod_ANode : TALXMLNode ;
                                              var ab_FieldFound, ab_column : Boolean ;
                                              var   ai_Fieldcounter, ai_counter : Integer );
 var lwin_Last : TWinControl;
 Begin
-  with gxf_BuildedForm,Fonction do
+  with ADBSources.Owner as TF_XMLForm,Fonction do
    Begin
     if not ab_FieldFound Then
       Begin
@@ -255,7 +254,7 @@ Begin
             End
          else
           Begin
-            gwin_Parent := fscb_CreateTabSheet ( FPageControl, gxf_BuildedForm, FMainPanel, Name, Name );
+            gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TF_XMLForm, FMainPanel, Name, Name );
             gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , DBSources.Count - 1);
           End;
         ab_FieldFound := True;
@@ -276,7 +275,7 @@ end;
 // procedure p_CreateFieldsButtonsComponents
 // Creates the Fields and buttons
 // anod_ANode : current node
-procedure p_OnFieldsButtonsComponents ( const anod_ANode : TALXMLNode ;
+procedure p_OnFieldsButtonsComponents ( const ADBSources : TFWTables; const anod_ANode : TALXMLNode ;
                                         var ab_FieldFound, ab_column : Boolean ;
                                         var   ai_Fieldcounter, ai_counter : Integer );
 
@@ -287,11 +286,11 @@ Begin
       ab_Column := False ;
       for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
         Begin
-          p_CreateParentAndFieldsComponent ( anod_ANode.ChildNodes [ li_k ], ab_FieldFound, ab_column, ai_Fieldcounter, ai_counter );
+          p_OnCreateParentAndFieldsComponent ( ADBSources, anod_ANode.ChildNodes [ li_k ], ab_FieldFound, ab_column, ai_Fieldcounter, ai_counter );
         End;
     End;
   if  ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
-    with gxf_BuildedForm do
+    with ADBSources.Owner as TF_XMLForm do
       Begin
         for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
           Begin
@@ -1479,6 +1478,10 @@ var li_i, li_j, li_NoField : LongInt ;
 begin
   // For actions at the end of xml file
    gi_LastFormFieldsHeight := 0;
+   p_CreateComponents ( DBSOurces,as_XMLClass,as_Name,Self,awin_Parent,gxdo_FichierXML,
+                        TOnExecuteFieldNode(p_OnCreateParentAndFieldsComponent),
+                        TOnExecuteFieldNode(p_OnFieldsButtonsComponents),
+                        TOnExecuteNode(p_OncolumnNameNode ));
    p_CreateColumns;
 end;
 

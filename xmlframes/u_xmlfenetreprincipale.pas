@@ -26,10 +26,11 @@ interface
 
 uses
 {$IFDEF FPC}
-   LCLIntf, LCLType, SQLDB, PCheck,
+   PCheck,
 {$ELSE}
   Windows, OleDB, JvComponent, StoHtmlHelp, JvScrollBox,
-  ImgList,
+{$ENDIF}
+{$IFDEF JEDI}
   JvExExtCtrls, JvSplitter, JvLED,
   StdActns, JvExForms, JvExControls, JvXPCore, Messages,
 {$ENDIF}
@@ -42,16 +43,12 @@ uses
   TntMenus, TntExtCtrls, TntStdActns,
   TntActnList,
 {$ENDIF}
-  u_multidonnees,
-  Controls, Graphics, Classes, SysUtils, StrUtils,
-  ExtCtrls, ActnList, Menus,
-  JvXPContainer, ComCtrls, JvXPButtons,
-  IniFiles, Dialogs, Printers,
-  JvXPBar, Forms,  u_formmaindb, fonctions_init,
+  Controls, Classes, SysUtils, StrUtils,
+  ExtCtrls, ActnList, Menus, ComCtrls, JvXPButtons,
+  IniFiles, Dialogs, Forms,  u_formmaindb, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
-  u_buttons_appli,
-  U_OnFormInfoIni, DBCtrls,
-  u_extmenutoolbar, u_extmenucustomize, menutbar, ToolWin;
+  U_OnFormInfoIni,
+  u_extmenutoolbar, u_extmenucustomize;
 
 {$IFDEF VERSIONS}
 const
@@ -222,7 +219,6 @@ uses
 {$ENDIF}
   fonctions_xml,
   fonctions_dialogs,
-  u_xmlform,
   fonctions_xmlform,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
@@ -818,4 +814,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+

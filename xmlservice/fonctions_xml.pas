@@ -16,10 +16,12 @@ uses
   fonctions_manbase,
   Forms;
 type
-  TOnExecuteNode = procedure ( const ANode : TALXMLNode );
-  TOnExecuteFieldNode = procedure ( const ANode : TALXMLNode ;
+  TOnExecuteNode = procedure ( const ADBSources : TFWTables; const ANode : TALXMLNode );
+  TOnExecuteFieldNode = procedure ( const ADBSources : TFWTables;
+                                    const as_Table :String;
+                                    const ANode : TALXMLNode ;
                                     var ab_FieldFound, ab_column : Boolean ;
-                                    var   ai_Fieldcounter, ai_counter : Integer );
+                                    var   ai_Fieldcounter : Longint; const ai_counter : Longint );
 
 const CST_LEON_File_Extension = '.xml';
 
@@ -218,15 +220,16 @@ procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass,
                                const acom_owner : TComponent; const awin_Parent : TWinControl;
                                var   axml_SourceFile : TALXMLDocument ;
                                const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
-                               const ae_onClassNameNode : TOnExecuteNode );
+                               const ae_onClassNameNode : TOnExecuteNode;
+                               const ab_CreateDS : Boolean = True );
 
 implementation
 
-uses fonctions_init, u_multidonnees,
+uses fonctions_init,
 {$IFNDEF FPC}
      Variants, StrUtils,
 {$ENDIF}
-     fonctions_string, Dialogs, U_ExtNumEdits,
+     Dialogs, U_ExtNumEdits,
      fonctions_autocomponents, u_framework_components,
      ExtCtrls, u_framework_dbcomponents,
      u_multidata,
@@ -361,7 +364,8 @@ procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass,
                                const acom_owner : TComponent; const awin_Parent : TWinControl;
                                var   axml_SourceFile : TALXMLDocument ;
                                const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
-                               const ae_onClassNameNode : TOnExecuteNode );
+                               const ae_onClassNameNode : TOnExecuteNode;
+                               const ab_CreateDS : Boolean = True );
 var li_i, li_j, li_NoField : LongInt ;
     lnod_Node : TALXMLNode ;
     lb_Column, lb_FieldFound, lb_Table : Boolean ;
@@ -373,7 +377,7 @@ var li_i, li_j, li_NoField : LongInt ;
   // as_Connection : Connection name
   procedure p_CreateXMLColumn ( const as_Table, as_Connection : String );
   Begin
-    lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner );
+    lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner, ab_CreateDS );
   end;
 
 begin
@@ -409,7 +413,7 @@ begin
               for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
                 Begin
                   if Assigned(ae_OnFieldNode) Then
-                   ae_OnFieldNode ( lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter);
+                   ae_OnFieldNode ( ADBSources, lfwc_Column.Table, lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter);
 
                 End;
             End;
@@ -430,10 +434,10 @@ begin
               end;
           if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
             if Assigned(ae_onActionNode) Then
-             ae_onActionNode ( lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter );
+             ae_onActionNode ( ADBSources, '', lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter );
           if ( lnod_Node.NodeName = CST_LEON_NAME  ) Then
             if Assigned(ae_onClassNameNode) Then
-             ae_onClassNameNode ( lnod_Node );
+             ae_onClassNameNode ( ADBSources, lnod_Node );
         End;
     Except
       On E: Exception do
