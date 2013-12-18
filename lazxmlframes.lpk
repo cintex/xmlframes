@@ -20,7 +20,7 @@
       </Other>
     </CompilerOptions>
     <Version Major="1" Minor="3"/>
-    <Files Count="5">
+    <Files Count="6">
       <Item1>
         <Filename Value="xmlframes/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
@@ -41,6 +41,10 @@
         <Filename Value="xmlframes/fonctions_xmlform.pas"/>
         <UnitName Value="fonctions_xmlform"/>
       </Item5>
+      <Item6>
+        <Filename Value="xmlframes/fonctions_objetsxml.pas"/>
+        <UnitName Value="fonctions_ObjetsXML"/>
+      </Item6>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>

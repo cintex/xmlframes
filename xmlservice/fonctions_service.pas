@@ -74,17 +74,20 @@ implementation
 
 uses u_multidata, u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
+     u_languagevars,
      fonctions_dbcomponents,
      {$IFDEF WINDOWS}
      fonctions_string,
      {$ENDIF}
      {$IFDEF FPC}
      LazFileUtils,
+     fonctions_dialogs,
+     u_connection,
+     Dialogs,
      {$ENDIF}
      DB,
      unite_variables,
      fonctions_manbase,
-     Dialogs,
      fonctions_languages;
 /////////////////////////////////////////////////////////////////////////
 // procedure p_LoadEntitites
@@ -743,7 +746,14 @@ Begin
          Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
      except
        on e: Exception do
-         Raise EDatabaseError.Create ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
+        Begin
+         if MyMessageDlg('SQL',gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,mtWarning,mbYesNo) = mrYes Then
+          Begin
+            p_c
+          end
+         Else
+           Raise EDatabaseError.Create ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
+        End;
      end;
 
    end;

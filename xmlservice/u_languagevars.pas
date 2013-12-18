@@ -12,6 +12,7 @@ resourcestring
    Gs_DetailsSheet         = 'Détails' ;
    Gs_Print                = 'Imprimer' ;
    Gs_NotImplemented       = 'Pas d''implémentation. Participez au projet XML Frames...' ;
+   gs_Could_not_connect_Seems_you_have_not_created_database_Do_you = 'Impossible d''accéder à la base de données.'+#10+'Voulez-vous créer la base de données ?';
 
 implementation
 
