@@ -202,7 +202,7 @@ function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
 function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
 function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
-function fft_getFieldType ( const anod_Field : TALXMLNode; const af_FieldDefs : TFWFieldColumn) : TFieldType;
+procedure p_setFieldType ( const anod_Field : TALXMLNode; const af_FieldDefs : TFWFieldColumn);
 procedure p_setFieldDefs ( const afws_Source : TFWTable ; const alis_NodeFields : TList );
 procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;
                         const afws_Source : TFWTable ;
@@ -258,9 +258,7 @@ begin
           affd_ColumnFieldDef.ColSelect:=False;
         End;
       if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-        Begin
-          affd_ColumnFieldDef.FieldType := fft_GetFieldType ( anod_Field, affd_ColumnFieldDef );
-        End;
+        p_setFieldType ( anod_Field, affd_ColumnFieldDef );
 
       if HasAttribute ( CST_LEON_FIELD_CREATE)
        then affd_ColumnFieldDef.ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
@@ -307,9 +305,7 @@ Begin
    Begin
      affd_ColumnFieldDef.ColSelect:=True;
      if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
-      Begin
-        affd_ColumnFieldDef.FieldType := fft_getFieldType ( anod_Field, affd_ColumnFieldDef );
-      End;
+       p_setFieldType ( anod_Field, affd_ColumnFieldDef );
 
    end;
 end;
@@ -469,7 +465,7 @@ Begin
       if FieldsDefs.indexOf(anod_FieldId.Attributes [CST_LEON_ID]) = -1 Then
         with FieldsDefs,Add do
          Begin
-          FieldType := fft_getFieldType ( anod_FieldId, FieldsDefs [ Count - 1 ] );
+          p_setFieldType ( anod_FieldId, FieldsDefs [ Count - 1 ] );
           FieldName := anod_FieldId.Attributes [CST_LEON_ID];
          end;
       with GetKey.Add do
@@ -520,7 +516,7 @@ begin
         Exit;
       with FieldsDefs,Add do
        Begin
-        FieldType := fft_getFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ),FieldsDefs[Count-1] );
+        p_setFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ),FieldsDefs[Count-1] );
         FieldName:=ls_FieldName;
        end;
      end;
@@ -610,43 +606,42 @@ Begin
    end;
 End;
 ////////////////////////////////////////////////////////////////////////////////
-// fonction ffd_CreateFieldDef
+// fonction p_setFieldType
 // creating CSV definition properties
 // Création de la définition de champ pour les fichiers CSV
 // anod_Field : Field node
-// ab_isLarge : Large or little field
 // afd_FieldsDefs : CSV definitions to add definition
-// result a field definition
+// result a field type definition
 ////////////////////////////////////////////////////////////////////////////////
-function fft_getFieldType ( const anod_Field : TALXMLNode; const af_FieldDefs : TFWFieldColumn) : TFieldType;
+procedure p_setFieldType ( const anod_Field : TALXMLNode; const af_FieldDefs : TFWFieldColumn);
 var lb_isLarge : Boolean ;
     li_k : Integer;
 begin
-  Result := ftString;
   with af_FieldDefs do
    Begin
+    FieldType := ftString;
     lb_isLarge:=False;
     if ( anod_Field.NodeName = CST_LEON_FIELD_NUMBER ) then
      begin
        if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
        and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
-        Then Result := ftFloat
-        Else Result := ftInteger;
+        Then FieldType := ftFloat
+        Else FieldType := ftInteger;
      end
     else if anod_Field.NodeName = CST_LEON_FIELD_FILE then
       Begin
-        Result := ftString;
+        FieldType := ftString;
       End
     else if anod_Field.NodeName = CST_LEON_RELATION then
       Begin
       End
     else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
       Begin
-        Result := ftDate;
+        FieldType := ftDate;
       End
     else if anod_Field.NodeName = CST_LEON_FIELD_CHOICE then
       Begin
-        Result := ftInteger;
+        FieldType := ftInteger;
       End;
     if anod_Field.HasChildNodes then
     for li_k := 0 to anod_Field.ChildNodes.Count -1 do
@@ -658,14 +653,13 @@ begin
       Begin
         if lb_isLarge Then
           Begin
-            Result := ftMemo;
+            FieldType := ftMemo;
           End
          Else
           Begin
-            Result := ftString;
+            FieldType := ftString;
           End
-      End
-
+      End;
   End;
 end;
 

@@ -107,7 +107,6 @@ function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: T
 procedure p_SetFieldSelect ( const afws_Source : TFWTable ; const anod_Field : TALXMLNode; const affd_ColumnFieldDef : TFWFieldColumn ; const ab_IsLocal, ab_IsLarge : Boolean );
 function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char ; const ai_counter : Integer ): Boolean;
 function fb_CreeAppliFromNode ( const as_EntityFile : String ):boolean;
-function fft_getFieldType ( const anod_Field : TALXMLNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_Addone : Boolean ):String;
 function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
                                     var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
@@ -690,7 +689,6 @@ Begin
   // Premier enregistrement
   // Création des XPBars
   // Rien alors pas de menu
-//  ShowMessage ( gnod_DashBoard.XML );
 
   for li_i := 0 to gNod_DashBoard.ChildNodes.Count - 1 do
     Begin
@@ -1598,74 +1596,6 @@ begin
    ab_OnFieldToFill := True;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-// fonction ffd_CreateFieldDef
-// creating CSV definition properties
-// Création de la définition de champ pour les fichiers CSV
-// anod_Field : Field node
-// ab_isLarge : Large or little field
-// afd_FieldsDefs : CSV definitions to add definition
-// result a field definition
-////////////////////////////////////////////////////////////////////////////////
-function fft_getFieldType ( const anod_Field : TALXMLNode; const ab_SearchLarge : Boolean = True ;const ab_IsLarge : Boolean = False) : TFieldType;
-var lb_isLarge : Boolean ;
-    li_k : Integer;
-    lnod_FieldProperties : TALXMLNode;
-begin
-  Result := ftString;
-  if ab_SearchLarge then
-     Begin
-       lb_isLarge := False;
-       if anod_Field.HasChildNodes then
-       for li_k := 0 to anod_Field.ChildNodes.Count -1 do
-        Begin
-          lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-          if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-          or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-           Begin
-            lb_IsLarge := True;
-            Break;
-           end;
-        end;
-      End
-    Else
-     lb_isLarge:=ab_IsLarge;
-  if ( anod_Field.NodeName = CST_LEON_FIELD_NUMBER ) then
-   begin
-     if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
-     and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
-      Then Result := ftFloat
-      Else Result := ftInteger;
-   end
-  else if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
-    Begin
-      if lb_isLarge Then
-        Begin
-          Result := ftBlob;
-        End
-       Else
-        Begin
-          Result := ftString;
-        End
-    End
-  else if anod_Field.NodeName = CST_LEON_FIELD_FILE then
-    Begin
-      Result := ftString;
-    End
-  else if anod_Field.NodeName = CST_LEON_RELATION then
-    Begin
-    End
-  else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
-    Begin
-      Result := ftDate;
-    End
-  else if anod_Field.NodeName = CST_LEON_FIELD_CHOICE then
-    Begin
-      Result := ftInteger;
-    End;
-
-end;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // procedure p_setFieldDefs
@@ -1689,9 +1619,9 @@ begin
       if li_j = -1
        Then
         Exit;
-      with afws_Source.FieldsDefs.Add do
+      with afws_Source.FieldsDefs,Add do
        Begin
-        FieldType := fft_getFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ), True );
+        p_setFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ),Items[Count-1] );
         FieldName:=ls_FieldName;
        end;
      end;
@@ -1838,7 +1768,7 @@ begin
         End;
       if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
         Begin
-          affd_ColumnFieldDef.FieldType := fft_GetFieldType ( anod_Field, False, ab_IsLarge );
+          p_setFieldType ( anod_Field, affd_ColumnFieldDef );
         End;
 
       if HasAttribute ( CST_LEON_FIELD_CREATE)
@@ -1881,7 +1811,7 @@ Begin
      affd_ColumnFieldDef.ColSelect:=True;
      if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
       Begin
-        affd_ColumnFieldDef.FieldType := fft_getFieldType ( anod_Field, False, ab_IsLarge );
+        p_setFieldType ( anod_Field, affd_ColumnFieldDef );
       End;
 
    end;

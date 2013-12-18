@@ -642,6 +642,7 @@ function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ; const 
 var li_i : Integer;
     ACollection : TFWTables;
     ATemp : String;
+    LDatatset : TDataset;
 Begin
   Result := False;
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
@@ -665,7 +666,19 @@ Begin
   finally
     ACollection.destroy;
   end;
-  ShowMessage(ATemp);
+  if ab_DoItWithCommandLine Then
+   Begin
+     p_ExecuteSQLCommand(ATemp);
+   end
+  Else
+   Begin
+     LDatatset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,acom_owner);
+     try
+       p_ExecuteSQLQuery(LDatatset,ATemp);
+     finally
+       LDatatset.Destroy;
+     end;
+   end;
 End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );

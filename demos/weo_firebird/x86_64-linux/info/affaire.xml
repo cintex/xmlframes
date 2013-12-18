@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="affaire" behavior="weo.behavior.AffaireClassBehavior">
+	<C_BIND value="affaire" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_AFFAIRE"/>
+	<PREFIX value="affaire"/>
+	<FIELDS>
+		<NUMBER id="affaire_id">
+			<NAME value="NAME_AFFAIRE_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="affaire_numero">
+			<NAME value="NAME_AFFAIRE_NUMERO"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS name='true' unique='true' private='true' consult='true' main='true' chart='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>
+		<RELATION id="affaire_tier">
+			<NAME value="NAME_CMD_VENTE_TIER"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' private='true' main='true' chart='true'/>
+			<CLASSES>
+				<CLASS_REF idref="tiers" filter="Client_ou_Global"/>
+			</CLASSES>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</RELATION>
+		<TEXT id="affaire_nom">
+			<NAME value="NAME_AFFAIRE_NOM"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'/>
+			<NCOLS value='30'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+		<DATE id="affaire_date_creation" type='DATE'>
+			<NAME value="NAME_AFFAIRE_DATE_CREATION"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' private='true' main='true' chart='true'/>
+			<DEFAULT value="_now"/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</DATE>
+		<DATE id="affaire_date_fin" type='DATE'>
+			<NAME value="NAME_AFFAIRE_DATE_FIN"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true' chart='true'/>
+			<DEFAULT value="_now"/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</DATE>
+		<DATE id="affaire_date_maj" type='DATE'>
+			<NAME value="NAME_AFFAIRE_DATE_MAJ"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true' chart='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<CHOICE id="affaire_solde">
+			<NAME value="NAME_CMD_ACHAT_SOLDE"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' private='true' status='true' main='true' chart='true'/>
+			<OPTIONS>
+				<OPTION id="affaire_solde.non" name="NAME_CMD_ACHAT_SOLDE.NON" value="0" default='true'/>
+				<OPTION id="affaire_solde.oui" name="NAME_CMD_ACHAT_SOLDE.OUI" value="1"/>
+			</OPTIONS>
+		</CHOICE>	
+		<NUMBER id="affaire_total_achat_en_cours" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_ACHAT_CMD_EN_COURS"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="affaire_total_achat_rec" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_ACHAT_CMD_RECU"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>		
+		<NUMBER id="affaire_total_achat" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_ACHAT"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<NUMBER id="affaire_total_vente_en_cours" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_VENTE_CMD_EN_COURS"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="affaire_total_vente_exp" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_VENTE_CMD_EXP"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>	
+		<NUMBER id="affaire_total_vente" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_VENTE"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>		
+		<NUMBER id="affaire_en_cours_resultat" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_RESULT_CMD"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' sort='true' filter='true' chart='true' local='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="affaire_total_vente_en_cours-affaire_total_achat_en_cours"/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>		
+		<NUMBER id="affaire_vente_exp_resultat" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_RESULT_EXP"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' sort='true' filter='true' chart='true' local='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="affaire_total_vente_exp-affaire_total_achat_rec"/>
+			<CONSTRAINT colSpan='1' hAlign='LEFT'/>
+		</NUMBER>		
+		<NUMBER id="affaire_resultat" type='DOUBLE'>
+			<NAME value="NAME_AFFAIRE_RESULT"/>
+			<GROUP value="GROUP_ETAT"/>
+			<F_MARKS consult='true' setConsult='true' optional='true' main='true' chart='true' local='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="affaire_total_vente-affaire_total_achat"/>
+			<TIP value="TIP_AFFAIRE_RESULT"/>
+		</NUMBER>		
+		<TEXT id="affaire_adresse_liv" multiple='true'>
+			<IMPORT relation="affaire_tier" idref="tiers_adresse"/>
+			<NAME value="NAME_CMD_VENTE_ADRESSE_LIV"/>
+			<GROUP value="GROUP_COORDONNEES"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="affaire_description" multiple='true'>
+			<NAME value="NAME_CMD_ACHAT_DESCRIPTION"/>
+			<GROUP value="GROUP_COORDONNEES"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+	</FIELDS>
+	<SORT id="affaire_sort_by_number">
+		<NAME value="NAME_CMD_CLIENT_SORT_BY_NUMBER"/>
+		<SORT_CRITERIA idref="affaire_numero" increasing='false'/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION id="Creer_Affaire" template="_create"
+				builder="weo.builder.Creer_cmd_clientBuilder">
+			<NAME value="NAME_CREER_CMD_CLIENT"/>
+		</ACTION>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>		
+		<ACTION id="SoldeAffaire" template="_modify">
+			<NAME value="NAME_AFFAIRE_SOLDE"/>
+			<PREFIX value="solde"/>
+			<A_MARKS tool='true' form='true'/>
+			<FILTER_REF idref="Affaire_Non_Solde"/>
+			<PARAMETER name="_fieldInfo" idref="affaire_solde"/>
+			<PARAMETER name="_value" value="1"/>
+			<PARAMETER name="_fieldInfo1" idref="affaire_date_fin"/>
+			<PARAMETER name="_value1" value="_now"/>
+		</ACTION>
+		<ACTION id="CalculAffaire" controller="weo.behavior.Action_calcul_affaire">
+					<NAME value="NAME_AFFAIRE_MAJ"/>
+			<PREFIX value="calc"/>
+			<MIN value='1'/>
+			<A_MARKS tool='true'/>
+		</ACTION>		
+	</ACTIONS>
+</CLASS>
