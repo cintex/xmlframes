@@ -76,6 +76,7 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
      u_languagevars,
      fonctions_dbcomponents,
+     fonctions_create,
      {$IFDEF WINDOWS}
      fonctions_string,
      {$ENDIF}
@@ -750,7 +751,7 @@ Begin
         Begin
          if MyMessageDlg('SQL',gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,mtWarning,mbYesNo) = mrYes Then
           try
-            p_ShowConnectionWindow(Connection,f_GetMemIniFile,DataBase, DataUser, DataPassword);
+            p_ShowConnectionWindow(Connection,f_GetMemIniFile);
             p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
             fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner);
           Except
