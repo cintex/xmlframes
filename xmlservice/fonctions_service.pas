@@ -77,6 +77,9 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      u_languagevars,
      fonctions_dbcomponents,
      fonctions_create,
+     FileUtil,
+     fonctions_file,
+     fonctions_db,
      {$IFDEF WINDOWS}
      fonctions_string,
      {$ENDIF}
@@ -647,6 +650,8 @@ var li_i : Integer;
     ACollection : TFWTables;
     ATemp : String;
     LDatatset : TDataset;
+    ls_File : String;
+    lh_handleFile : THandle;
 Begin
   Result := False;
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
@@ -667,10 +672,19 @@ Begin
        Begin
          AppendStr(ATemp,GetSQLCreateCode);
        end;
-    AppendStr(ATemp,fs_EndAlterCreate);
+    AppendStr(ATemp,fs_EndCreate(as_BaseName,as_user,as_password));
   finally
     ACollection.destroy;
   end;
+  ls_File := fs_GetIniDir+'sql-firebird';
+  if FileExistsUTF8(ls_File+CST_EXTENSION_SQL_FILE) Then DeleteFileUTF8(ls_File+CST_EXTENSION_SQL_FILE);
+  lh_handleFile := FileCreateUTF8(ls_File+CST_EXTENSION_SQL_FILE);
+  try
+    FileWriteln(lh_handleFile,ATemp);
+  finally
+    FileClose(lh_handleFile);
+  end;
+  Exit;
   if ab_DoItWithCommandLine Then
    Begin
      p_ExecuteSQLCommand(ATemp);
@@ -679,7 +693,7 @@ Begin
    Begin
      LDatatset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,acom_owner);
      try
-       p_ExecuteSQLQuery(LDatatset,ATemp);
+    //   p_ExecuteSQLQuery(LDatatset,ATemp);
      finally
        LDatatset.Destroy;
      end;
@@ -744,20 +758,21 @@ Begin
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
      try
        p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
-       if not fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then
-         Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
      except
        on e: Exception do
-        Begin
          if MyMessageDlg('SQL',gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,mtWarning,mbYesNo) = mrYes Then
-          try
-            p_ShowConnectionWindow(Connection,f_GetMemIniFile);
-            p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
-            fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner);
-          Except
-           Raise EDatabaseError.Create ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
+          Begin
+          { p_ShowConnectionWindow(Connection,f_GetMemIniFile);
+            try
+              p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
+              if fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then}
+                fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner);
+                Abort;
+            {Except
+              on e: Exception do
+                Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
+            end;}
           end;
-        End;
      end;
 
    end;
