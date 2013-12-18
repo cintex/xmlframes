@@ -641,7 +641,7 @@ begin
 end;
 
 
-function fb_AutoCreateDatabase ( const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ):Boolean;
+function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ):Boolean;
 var li_i : Integer;
     ACollection : TFWTables;
     ATemp : String;
@@ -659,13 +659,14 @@ Begin
           Else ATemp:=AFile;
          p_CreateComponents( ACollection, ATemp, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False );
        end;
-    ATemp:='';
+    ATemp:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password);
     for li_i := 0 to ACollection.Count - 1 do
      with ACollection [ li_i ] do
       if IsMain Then
        Begin
          AppendStr(ATemp,GetSQLCreateCode);
        end;
+    AppendStr(ATemp,fs_EndAlterCreate);
   finally
     ACollection.destroy;
   end;
@@ -729,7 +730,7 @@ Begin
            if ( pos ( '.', DataBase ) = 1 ) Then
             DataBase := StringReplace(DataBase,'.',fs_getSoftDir,[]);
            if not FileExistsUTF8(DataBase) Then
-             fb_AutoCreateDatabase ( True, acom_owner );
+             fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, True, acom_owner );
           end;
        p_setComponentProperty ( Connection, 'DatabaseName', Database );
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
@@ -748,11 +749,13 @@ Begin
        on e: Exception do
         Begin
          if MyMessageDlg('SQL',gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,mtWarning,mbYesNo) = mrYes Then
-          Begin
-            p_c
-          end
-         Else
+          try
+            p_ShowConnectionWindow(Connection,f_GetMemIniFile,DataBase, DataUser, DataPassword);
+            p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
+            fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner);
+          Except
            Raise EDatabaseError.Create ( 'Could not initiate connection on ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database +#13#10 + e.Message   );
+          end;
         End;
      end;
 
