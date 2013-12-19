@@ -750,7 +750,6 @@ Begin
               p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
               if fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then}
                 fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner);
-                Abort;
             {Except
               on e: Exception do
                 Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
