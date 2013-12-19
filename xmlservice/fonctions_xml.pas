@@ -620,7 +620,7 @@ var ldo_Temp : Double;
 Begin
   with af_FieldDefs do
    Begin
-    if fb_FieldTypeRelation ( afws_Source, anod_Field, anod_FieldProperties, af_FieldDefs, ab_createDS, acom_Owner ) Then Exit;
+    fb_FieldTypeRelation ( afws_Source, anod_Field, anod_FieldProperties, af_FieldDefs, ab_createDS, acom_Owner );
     if ( anod_FieldProperties.NodeName = CST_LEON_FIELD_DECIMALS )then
       Begin
        Decimals:=StrToInt(anod_FieldProperties.Attributes[CST_LEON_VALUE]);
