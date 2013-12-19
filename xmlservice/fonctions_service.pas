@@ -598,10 +598,10 @@ var lnod_Field,lnod_FieldProperties : TALXMLNode ;
                 lb_IsLocal:=True;
               end;
           end;
-      p_SetFieldSelect ( lfwt_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+      p_SetFieldSelect( lffd_ColumnFieldDef, lb_IsLocal);
     end;
 
-    var li_i, li_k : LongInt ;
+    var li_i : LongInt ;
 
 begin
   for li_i := 0 to anod_Field.ChildNodes.Count - 1 do
@@ -610,7 +610,6 @@ begin
       ab_Column:=False;
       lfwt_Source  := ADBSources [ ADBSources.Count - 1 ];
       // Creating the properties and setting data link
-
 
        lffd_ColumnFieldDef := lfwt_Source.FieldsDefs.Add ;
        if ( lnod_Field.NodeName = CST_LEON_ARRAY )
@@ -624,26 +623,10 @@ begin
        if not fb_createFieldID ( lfwt_Source.Table = as_Table, lnod_Field, lffd_ColumnFieldDef, ai_Fieldcounter, lb_IsLocal )
         Then
          Exit;
-
-       lb_IsLocal := False;
-
-       lb_IsLarge := False;
-       if lnod_Field.HasChildNodes then
-         for li_k := 0 to lnod_Field.ChildNodes.Count -1 do
-           Begin
-             lnod_FieldProperties := lnod_Field.ChildNodes [ li_k ];
-             if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-             or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-               lb_IsLarge := True;
-             if fb_getFieldOptions ( lfwt_Source, lnod_Field, lnod_FieldProperties, lb_IsLarge, lffd_ColumnFieldDef, lb_IsLocal, ',', ai_Counter ) Then
-               p_SetFieldSelect ( lfwt_Source, lnod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
-
-
-           End;
+       fb_setFieldType(lfwt_Source,lnod_Field,lffd_ColumnFieldDef,li_i,False,nil);
     end;
 
 end;
-
 
 function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ):Boolean;
 var li_i : Integer;

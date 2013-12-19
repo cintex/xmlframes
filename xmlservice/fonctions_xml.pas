@@ -193,7 +193,7 @@ function fs_getSoftFiles : String;
 function fs_getImagesDir : String;
 function fs_getProjectDir : String;
 function fs_LeonFilter ( const AString : String ): String;
-procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
+procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TFWMiniFieldColumns );
 procedure p_CountMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean;  var ai_Count : Integer );
 function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
 function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute : String ) : String ;
@@ -202,22 +202,23 @@ function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
 
 function fwin_CreateAFieldComponent ( const as_FieldType : String ; const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean  ; const ai_Counter : Longint ):TWinControl;
 function fs_GetIdAttribute ( const anode : TALXMLNode ) : String;
-procedure p_setFieldType ( const anod_Field : TALXMLNode; const af_FieldDefs : TFWFieldColumn);
-procedure p_setFieldDefs ( const afws_Source : TFWTable ; const alis_NodeFields : TList );
+function  fb_setFieldType ( const afws_Source : TFWTable ;
+                            const anod_Field : TALXMLNode;
+                            const af_FieldDefs : TFWFieldColumn;
+                            const ai_counter : Integer;
+                            const ab_createDS : Boolean;
+                            const acom_Owner : TComponent):Boolean;
 procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;
                         const afws_Source : TFWTable ;
-                        const ach_FieldDelimiter : Char );
+                        const affd_ColumnFieldDef : TFWMiniFieldColumn );
 function fb_OpenClass ( const as_XMLClass : String ; const acom_owner : TComponent ;
                         var axml_SourceFile : TALXMLDocument ):Boolean;
 function fb_createFieldID ( const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ;
                             const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer;
                             const ab_IsLocal : Boolean ):Boolean;
-procedure p_SetFieldSelect ( const afws_Source : TFWTable ; const anod_Field : TALXMLNode;
-                             const affd_ColumnFieldDef : TFWFieldColumn ;
-                             const ab_IsLocal, ab_IsLarge : Boolean );
+procedure p_SetFieldSelect ( const affd_ColumnFieldDef : TFWFieldColumn; const ab_IsLocal : Boolean  );
 function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ;
-                              const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn;
-                              var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char;
+                              const affd_ColumnFieldDef : TFWFieldColumn;
                               const ai_counter : Integer ): Boolean;
 procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass, as_Name : String ;
                                const acom_owner : TComponent; const awin_Parent : TWinControl;
@@ -225,6 +226,9 @@ procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass,
                                const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
                                const ae_onClassNameNode : TOnExecuteNode;
                                const ab_CreateDS : Boolean = True );
+function fdoc_GetCrossLinkFunction( const ADBSources : TFWTables ; const as_FunctionClep :String;
+                                    const as_Table : String; const arel_Relation : TFWRelation;
+                                    const ab_createDS : Boolean; const acom_Owner : TComponent ): TALXMLDocument ;
 
 implementation
 
@@ -236,78 +240,67 @@ uses fonctions_init,
      fonctions_autocomponents, u_framework_components,
      ExtCtrls, u_framework_dbcomponents,
      u_multidata,
+     u_multidonnees,
      fonctions_system,
      DbCtrls;
 
 // Function fb_getFieldOptions
 // setting some data properties
-// Result : quitting
+// Result : Local
 function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ;
-                              const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn;
-                              var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char;
+                              const affd_ColumnFieldDef : TFWFieldColumn;
                               const ai_counter : Integer ): Boolean;
 begin
   Result := False;
-  with anod_FieldProperties do
-  if NodeName = CST_LEON_FIELD_F_MARKS then
-    Begin
-      if HasAttribute ( CST_LEON_FIELD_local )
-      and ( Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
-        Begin
-          ab_IsLocal := True;
-          affd_ColumnFieldDef.ColSelect:=False;
-        End;
-      if afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}] then
-        p_setFieldType ( anod_Field, affd_ColumnFieldDef );
-
-      if HasAttribute ( CST_LEON_FIELD_CREATE)
-       then affd_ColumnFieldDef.ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
-      if HasAttribute ( CST_LEON_FIELD_DEFAULT)
-       then affd_ColumnFieldDef.DefaultValue  := Attributes [ CST_LEON_VALUE ];
-      if HasAttribute ( CST_LEON_FIELD_UNIQUE)
-       then affd_ColumnFieldDef.ColUnique  := Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
-      p_setNodeId ( anod_Field, anod_FieldProperties, afws_Source, ach_FieldDelimiter );
-      if HasAttribute ( CST_LEON_FIELD_hidden )
-      and not ( Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
-        Begin
-          affd_ColumnFieldDef.ShowCol := -1;
-          affd_ColumnFieldDef.ShowSearch := -1;
-          Result := True;
-          Exit;
-        End;
-      affd_ColumnFieldDef.ShowCol := ai_counter + 1;
-      if HasAttribute ( CST_LEON_FIELD_optional)
-      and not ( Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
-        Begin
-          affd_ColumnFieldDef.ColMain  := False;
-          affd_ColumnFieldDef.ShowCol := -1;
-        End
-       Else
-        affd_ColumnFieldDef.ColMain := True;
-      if ( HasAttribute ( CST_LEON_FIELD_sort)
-           and ( Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
-      or ( HasAttribute ( CST_LEON_FIELD_find)
-           and ( Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
-        Begin
-          affd_ColumnFieldDef.ShowSearch := ai_counter + 1;
-        End
-    End;
-
-end;
-
-// procedure p_SetFieldSelect
-// set selecting fiel from XML
-procedure p_SetFieldSelect ( const afws_Source : TFWTable ; const anod_Field : TALXMLNode;
-                             const affd_ColumnFieldDef : TFWFieldColumn ;
-                             const ab_IsLocal, ab_IsLarge : Boolean );
-Begin
-  if not ab_IsLocal Then
+  with anod_FieldProperties,affd_ColumnFieldDef do
    Begin
-     affd_ColumnFieldDef.ColSelect:=True;
-     if (afws_Source.Connection.DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]) then
-       p_setFieldType ( anod_Field, affd_ColumnFieldDef );
+    if NodeName = CST_LEON_FIELD_F_MARKS then
+      Begin
+        if HasAttribute ( CST_LEON_FIELD_local )
+        and ( Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
+          Begin
+            Result := True;
+            ColSelect:=False;
+          End;
 
-   end;
+        if HasAttribute ( CST_LEON_FIELD_CREATE)
+         then ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
+        if HasAttribute ( CST_LEON_FIELD_DEFAULT)
+         then DefaultValue  := Attributes [ CST_LEON_VALUE ];
+        if HasAttribute ( CST_LEON_FIELD_UNIQUE)
+         then ColUnique  := Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
+        if HasAttribute ( CST_LEON_FIELD_private)
+         then ColPrivate  := Attributes [ CST_LEON_FIELD_private ] = CST_LEON_BOOL_TRUE;
+        p_setNodeId ( anod_Field, anod_FieldProperties, afws_Source,affd_ColumnFieldDef);
+        if HasAttribute ( CST_LEON_FIELD_hidden )
+        and not ( Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
+          Begin
+            ShowCol := -1;
+            ShowSearch := -1;
+            Result := True;
+            Exit;
+          End;
+        ShowCol := ai_counter + 1;
+        if HasAttribute ( CST_LEON_FIELD_optional)
+        and not ( Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
+          Begin
+            ColMain  := False;
+            ShowCol := -1;
+          End
+         Else
+          ColMain := True;
+        if ( HasAttribute ( CST_LEON_FIELD_sort)
+             and ( Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
+        or ( HasAttribute ( CST_LEON_FIELD_find)
+             and ( Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
+          Begin
+            ShowSearch := ai_counter + 1;
+          End
+      End;
+    if NodeName = CST_LEON_NAME then
+      CaptionName := Attributes [CST_LEON_VALUE];
+   End;
+
 end;
 
 // function fb_createFieldID
@@ -354,6 +347,78 @@ begin
 
 end;
 
+
+////////////////////////////////////////////////////////////////////////////////
+// function fdoc_GetCrossLinkFunction
+// Getting over side link of relationships
+// as_FunctionClep    : String
+// as_Table           : Table name and class name
+// as_connection      : connect link key
+// aanod_idRelation   : List to add link
+// anod_NodeCrossLink : linked node in other file
+////////////////////////////////////////////////////////////////////////////////
+function fdoc_GetCrossLinkFunction( const ADBSources : TFWTables ; const as_FunctionClep :String;
+                                    const as_Table : String; const arel_Relation : TFWRelation;
+                                    const ab_createDS : Boolean; const acom_Owner : TComponent ): TALXMLDocument ;
+var li_i , li_j, li_k: Integer ;
+    lnod_ClassProperties : TALXMLNode ;
+    ls_connection : String;
+    lnod_Node, lnod_NodeCrossLink : TALXMLNode;
+    ls_ProjectFile : String;
+    li_CountFields : Integer;
+    lds_Connection : TDSSource;
+begin
+  Result := TALXMLDocument.Create ( Application );
+  ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
+  li_CountFields := 0 ;
+  If ( FileExists ( ls_ProjectFile )) Then
+    try
+      if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
+        Begin
+          for li_i := 0 to Result.ChildNodes.Count -1 do
+            Begin
+              lnod_Node := Result.ChildNodes [ li_i ];
+              if not assigned ( lnod_NodeCrossLink )
+              and fb_GetCrossLinkFunction(as_FunctionClep,lnod_Node ) Then
+                lnod_NodeCrossLink := lnod_Node;
+              if lnod_Node.NodeName = CST_LEON_CLASS then
+               with arel_Relation do
+                Begin
+                  for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
+                    Begin
+                      lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
+                      if lnod_ClassProperties.NodeName = CST_LEON_CLASS_BIND Then
+                       with DestTables.Add do
+                        Begin
+                          Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                          if ab_createDS Then
+                           Begin
+                            lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
+                            with lds_Connection do
+                              Datasource := fds_CreateDataSourceAndTable ( as_Table, '_' + PrimaryKey + IntToStr ( Index ),
+                                                   IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
+                           end;
+                        end;
+                      if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
+                        Begin
+                          for li_k := 0 to lnod_ClassProperties.ChildNodes.Count -1 do
+                            Begin
+                              p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_id, FieldsFK );
+                              p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_main, FieldsDisplay );
+                              p_CountMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_optional, False, li_CountFields );
+                            End;
+                        End;
+                    End;
+                End;
+            End;
+        End;
+    Except
+      On E: Exception do
+        Begin
+          ShowMessage ( 'Erreur : ' + E.Message );
+        End;
+    End ;
+end;
 
 // procedure p_CreateFormComponents
 // Create a form from XML File
@@ -420,21 +485,6 @@ begin
 
                   End;
             End;
-          if ( lnod_Node.NodeName = CST_LEON_FIELD_NUMBER   )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_DATE     )
-          or ( lnod_Node.NodeName = CST_LEON_RELATION       )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_TEXT     )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_CHOICE   )
-          or ( lnod_Node.NodeName = CST_LEON_FIELD_FILE     )
-            Then
-              Begin
-{                    if not lb_FieldFound Then
-                  Begin
-                    p_CreateXMLColumn ( lnod_Node );
-                  end;
-                p_CreateFieldComponent ( lnod_Node );
-                lb_FieldFound := True;               }
-              end;
           if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
             if Assigned(ae_onActionNode) Then
              ae_onActionNode ( ADBSources, '', lnod_Node.ChildNodes [ li_j ], lb_FieldFound, lb_Column, li_NoField, li_Counter );
@@ -456,19 +506,17 @@ end;
 // set TFWTable key
 procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;
                         const afws_Source : TFWTable ;
-                        const ach_FieldDelimiter : Char );
+                        const affd_ColumnFieldDef : TFWMiniFieldColumn );
 Begin
-  if anod_FieldIsId.HasAttribute ( CST_LEON_ID)
-  and not ( anod_FieldIsId.Attributes [ CST_LEON_ID ] = CST_LEON_BOOL_FALSE )  then
-   with afws_Source do
+   with affd_ColumnFieldDef do
     Begin
-      if FieldsDefs.indexOf(anod_FieldId.Attributes [CST_LEON_ID]) = -1 Then
-        with FieldsDefs,Add do
-         Begin
-          p_setFieldType ( anod_FieldId, FieldsDefs [ Count - 1 ] );
-          FieldName := anod_FieldId.Attributes [CST_LEON_ID];
-         end;
-      with GetKey.Add do
+      FieldName := anod_FieldId.Attributes [CST_LEON_ID];
+      if anod_FieldId.Attributes [CST_LEON_NAME] <> Null Then
+        CaptionName := anod_FieldId.Attributes [CST_LEON_NAME];
+      if assigned ( afws_Source )
+      and anod_FieldIsId.HasAttribute ( CST_LEON_ID )
+      and not ( anod_FieldIsId.Attributes [ CST_LEON_ID ] = CST_LEON_BOOL_FALSE )  then
+      with afws_Source.GetKey.Add do
        Begin
         FieldName := anod_FieldId.Attributes [CST_LEON_ID];
        end;
@@ -497,31 +545,6 @@ end;
 // alis_NodeFields : node of field nodes
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure p_setFieldDefs ( const afws_Source : TFWTable ;
-                           const alis_NodeFields : TList );
-var li_i, li_j : Integer ;
-    ls_FieldName : String;
-begin
-  with afws_Source do
-  for li_i := 0 to  alis_NodeFields.count - 1 do
-   Begin
-     with TALXMLNode ( alis_NodeFields [ li_i ] ) do
-     Begin
-      if Attributes[CST_LEON_ID] <> Null
-       Then ls_FieldName:= Attributes[CST_LEON_ID]
-       Else ls_FieldName:= Attributes[CST_LEON_IDREF];
-      li_j := FieldsDefs.indexOf(ls_FieldName);
-      if li_j > -1
-       Then
-        Exit;
-      with FieldsDefs,Add do
-       Begin
-        p_setFieldType ( TALXMLNode ( alis_NodeFields [ li_i ] ),FieldsDefs[Count-1] );
-        FieldName:=ls_FieldName;
-       end;
-     end;
-   end;
-End;
 
 // function fs_LeonFilter
 // special words replacing
@@ -537,7 +560,7 @@ End;
 // anod_Field : Node Field
 // as_MarkSearched : Mark searched
 // aano_IdNodes : List to add scruted field node
-procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TList );
+procedure p_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aano_IdNodes : TFWMiniFieldColumns );
 var lnod_FieldProperties : TALXMLNode ;
     li_i : Integer ;
 Begin
@@ -549,19 +572,55 @@ Begin
           Begin
             if lnod_FieldProperties.HasAttribute ( as_MarkSearched )
             and ( lnod_FieldProperties.Attributes [ as_MarkSearched ] <> CST_LEON_BOOL_FALSE )  then
-              Begin
-                aano_IdNOdes.Add ( anod_Field );
-              End;
+               p_setNodeId(anod_Field,anod_Field,nil,aano_IdNOdes.Add);
             Break;
           End;
       End;
 End;
+function fb_FieldTypeRelation ( const afws_Source : TFWTable ;
+                                const anod_Field,anod_FieldProperties : TALXMLNode;
+                                const af_FieldDefs : TFWFieldColumn;
+                                const ab_createDS : Boolean; const acom_Owner : TComponent):Boolean;
+var ldoc_XMlRelation : TALXMLDocument;
+    ls_ClassLink : String;
+Begin
+  if ( anod_Field.NodeName = CST_LEON_RELATION )
+    Then Result:=True
+    Else
+     Begin
+      Result:=False;
+      Exit;
+     End;
+  if (  ( anod_FieldProperties.NodeName = CST_LEON_CLASSES )
+     or ( anod_FieldProperties.NodeName = CST_LEON_CLASS ))
+   Then
+    Begin
+     // Getting other class
+      if ( ls_ClassLink = '' ) then
+        ls_ClassLink := fs_GetNodeAttribute( anod_FieldProperties, CST_LEON_IDREFs );
+      if ( ls_ClassLink = '' ) then
+        ls_ClassLink := fs_GetNodeAttribute( anod_FieldProperties, CST_LEON_IDREF );
+      // Getting the class finally
+      if ( ls_ClassLink = '' ) then
+        ls_ClassLink := fs_GetNodeAttribute( anod_FieldProperties, CST_LEON_ID );
+      ldoc_XMlRelation := fdoc_GetCrossLinkFunction( afws_Source.Collection as TFWTables, '', ls_ClassLink, afws_Source.Relations.Add, ab_createDS, acom_Owner );
+      try
 
-procedure p_FieldTypeProperties ( const anod_Field,anod_FieldProperties : TALXMLNode; const af_FieldDefs : TFWFieldColumn; var ab_islarge : Boolean);
+      finally
+        ldoc_XMlRelation.Destroy;
+      end;
+   End;
+end;
+
+procedure p_FieldTypeProperties ( const afws_Source : TFWTable ;
+                                  const anod_Field,anod_FieldProperties : TALXMLNode;
+                                  const af_FieldDefs : TFWFieldColumn; var ab_islarge : Boolean;
+                                  const ab_createDS : Boolean; const acom_Owner : TComponent);
 var ldo_Temp : Double;
 Begin
   with af_FieldDefs do
    Begin
+    if fb_FieldTypeRelation ( afws_Source, anod_Field, anod_FieldProperties, af_FieldDefs, ab_createDS, acom_Owner ) Then Exit;
     if ( anod_FieldProperties.NodeName = CST_LEON_FIELD_DECIMALS )then
       Begin
        Decimals:=StrToInt(anod_FieldProperties.Attributes[CST_LEON_VALUE]);
@@ -611,45 +670,52 @@ End;
 // Création de la définition de champ pour les fichiers CSV
 // anod_Field : Field node
 // afd_FieldsDefs : CSV definitions to add definition
-// result a field type definition
+// Result : local
 ////////////////////////////////////////////////////////////////////////////////
-procedure p_setFieldType ( const anod_Field : TALXMLNode; const af_FieldDefs : TFWFieldColumn);
+function  fb_setFieldType ( const afws_Source : TFWTable ;
+                            const anod_Field : TALXMLNode;
+                            const af_FieldDefs : TFWFieldColumn;
+                            const ai_counter : Integer;
+                            const ab_createDS : Boolean;
+                            const acom_Owner : TComponent):Boolean;
 var lb_isLarge : Boolean ;
     li_k : Integer;
+    lnod_Prop : TALXMLNode;
 begin
-  with af_FieldDefs do
+  Result:=False;
+  with af_FieldDefs, anod_Field do
    Begin
     FieldType := ftString;
     lb_isLarge:=False;
-    if ( anod_Field.NodeName = CST_LEON_FIELD_NUMBER ) then
+    if ( NodeName = CST_LEON_FIELD_NUMBER ) then
      begin
-       if  anod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
-       and ( anod_Field.Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
+       if  HasAttribute(CST_LEON_FIELD_TYPE)
+       and ( Attributes [ CST_LEON_FIELD_TYPE ] = CST_LEON_FIELD_DOUBLE )
         Then FieldType := ftFloat
         Else FieldType := ftInteger;
      end
-    else if anod_Field.NodeName = CST_LEON_FIELD_FILE then
+    else if NodeName = CST_LEON_FIELD_FILE then
       Begin
         FieldType := ftString;
       End
-    else if anod_Field.NodeName = CST_LEON_RELATION then
-      Begin
-      End
-    else if anod_Field.NodeName = CST_LEON_FIELD_DATE then
+    else if NodeName = CST_LEON_FIELD_DATE then
       Begin
         FieldType := ftDate;
       End
-    else if anod_Field.NodeName = CST_LEON_FIELD_CHOICE then
+    else if NodeName = CST_LEON_FIELD_CHOICE then
       Begin
         FieldType := ftInteger;
+        FieldLength:=0;
       End;
-    if anod_Field.HasChildNodes then
-    for li_k := 0 to anod_Field.ChildNodes.Count -1 do
+    if HasChildNodes then
+    for li_k := 0 to ChildNodes.Count -1 do
      Begin
-       p_FieldTypeProperties ( anod_Field,anod_Field.ChildNodes [ li_k ], af_FieldDefs, lb_isLarge );
+       lnod_Prop:=ChildNodes [ li_k ];
+       p_FieldTypeProperties ( afws_Source, anod_Field,lnod_Prop, af_FieldDefs, lb_isLarge,ab_createDS,acom_Owner );
+       Result := Result or fb_getFieldOptions ( afws_Source,anod_Field,lnod_Prop,af_FieldDefs,ai_counter);
      End;
     // after setting the choice component setting the height
-    if anod_Field.NodeName = CST_LEON_FIELD_TEXT then
+    if NodeName = CST_LEON_FIELD_TEXT then
       Begin
         if lb_isLarge Then
           Begin
@@ -658,6 +724,7 @@ begin
          Else
           Begin
             FieldType := ftString;
+            ColSelect:=True;
           End
       End;
   End;
@@ -882,6 +949,10 @@ Begin
   Result := fb_LoadXML ();
 End;
 
+procedure p_SetFieldSelect ( const affd_ColumnFieldDef : TFWFieldColumn; const ab_IsLocal : Boolean  );
+Begin
+  affd_ColumnFieldDef.ColSelect:=not ab_IsLocal;
+end;
 
 initialization
   GS_Data_Extension := '.res';

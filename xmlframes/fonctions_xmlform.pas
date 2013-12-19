@@ -67,7 +67,7 @@ function fxf_ExecuteFonction ( const as_Fonction                  : String    ; 
 function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
 
 
 
@@ -165,70 +165,6 @@ Begin
   p_setComponentName ( adx_WinXpBar, as_Fonction );
 End ;
 
-////////////////////////////////////////////////////////////////////////////////
-// function fdoc_GetCrossLinkFunction
-// Getting over side link of relationships
-// as_FunctionClep    : String
-// as_Table           : Table name and class name
-// as_connection      : connect link key
-// aanod_idRelation   : List to add link
-// anod_NodeCrossLink : linked node in other file
-////////////////////////////////////////////////////////////////////////////////
-function fdoc_GetCrossLinkFunction( const as_FunctionClep, as_ClassBind :String;
-                                    var as_Table, as_connection : String; var aanod_idRelation,  aanod_DisplayRelation : TList ;
-                                    var anod_NodeCrossLink : TALXMLNode ; var ab_OnFieldToFill : Boolean ): TALXMLDocument ;
-var li_i , li_j, li_k: Integer ;
-    lnod_ClassProperties,
-    lnod_Node : TALXMLNode;
-    ls_ProjectFile : String;
-    li_CountFields : Integer;
-begin
-  Result := TALXMLDocument.Create ( Application );
-  ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
-  li_CountFields := 0 ;
-  If ( FileExists ( ls_ProjectFile )) Then
-    try
-      if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
-        Begin
-          for li_i := 0 to Result.ChildNodes.Count -1 do
-            Begin
-              lnod_Node := Result.ChildNodes [ li_i ];
-              if not assigned ( anod_NodeCrossLink )
-              and fb_GetCrossLinkFunction(as_FunctionClep,lnod_Node ) Then
-                anod_NodeCrossLink := lnod_Node;
-              if lnod_Node.NodeName = CST_LEON_CLASS then
-                Begin
-                  for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
-                    Begin
-                      lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
-                      if lnod_ClassProperties.NodeName = CST_LEON_CLASS_BIND Then
-                        Begin
-                          as_Table := lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
-                          as_connection:= lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ];
-                        end;
-                      if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
-                        Begin
-                          for li_k := 0 to lnod_ClassProperties.ChildNodes.Count -1 do
-                            Begin
-                              p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_id, aanod_idRelation );
-                              p_GetMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_main, aanod_DisplayRelation );
-                              p_CountMarkFunction(lnod_ClassProperties.ChildNodes [ li_k ], CST_LEON_FIELD_optional, False, li_CountFields );
-                            End;
-                        End;
-                    End;
-                End;
-            End;
-        End;
-    Except
-      On E: Exception do
-        Begin
-          ShowMessage ( 'Erreur : ' + E.Message );
-        End;
-    End ;
-  if li_CountFields <= 1 Then
-   ab_OnFieldToFill := True;
-end;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // function fs_GetIDFields
@@ -276,25 +212,6 @@ Begin
     end
 end;
 
-function fs_GetDisplayFields  ( const alis_NodeFields : TList ; const as_Empty : String ):String;
-var
-    li_i : Integer ;
-    listnodes : TList ;
-Begin
-  Result := as_Empty;
-  listnodes := TList.Create;
-  for li_i := 0 to  alis_NodeFields.count - 1 do
-    Begin
-      p_GetMarkFunction(alis_NodeFields [ li_i ],CST_LEON_FIELD_main, listnodes );
-    End;
-  Result := as_Empty;
-  for li_i := 0 to  listnodes.count - 1 do
-    if li_i = 0 Then
-      Result := fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID )
-     Else
-      Result := Result + CST_COMBO_FIELD_SEPARATOR + fs_GetNodeAttribute( TALXMLNode ( listnodes [ li_i ] ), CST_LEON_ID );
-  listnodes.Free;
-end;
 // procedure p_setImageToMenuAndXPButton
 // Set the xpbutton and menu from prefix
 procedure p_setPrefixToMenuAndXPButton( const as_Prefix : String;
@@ -330,24 +247,6 @@ Begin
     end;
 end;
 
-// procedure p_AddFieldsToFieldColumn
-// used to create a combo
-procedure p_AddFieldsToFieldColumn ( const afc_Fields : TFWFieldColumns; const alis_NodeFields : TList );
-var li_i, li_k : Integer;
-    lnode : TALXMLNode;
-Begin
-  if assigned ( alis_NodeFields ) Then
-    for li_i := 0 to alis_NodeFields.Count - 1 do
-      Begin
-        lnode := TALXMLNode (alis_NodeFields [li_i]);
-        if fb_IsNodeLocal ( lnode ) Then
-          Exit;
-        with afc_Fields.Add do
-            FieldName := fs_GetIdAttribute ( lnode )
-
-     End;
-end;
-
 // procedure p_AddFieldsToString
 // used to create a combo
 procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
@@ -376,12 +275,12 @@ end;
 // ar_Connection : Connection of table
 // alis_NodeFields : Node of fields' nodes
 ////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const ar_Connection : TDSSource; const alis_IdFields, alis_NodeFields : TList ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
 var lfc_Fields : TFWFieldColumns ;
     ls_FieldString : String;
     li_i : Integer;
 begin
-  with ar_Connection do
+  with alr_relation.DestTables [ 0 ].Connection do
     Begin
       Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
       lfc_Fields := nil;
@@ -394,12 +293,9 @@ begin
                  IndexKind:=ikPrimary;
                  lfc_Fields := FieldsDefs;
                 end;
-            p_AddFieldsToFieldColumn ( lfc_Fields, alis_IdFields );
             ls_FieldString := lfc_Fields.GetString;
             Datasource:=Result;
             Table := as_Table;
-            p_setFieldDefs ( afws_SourceAdded, alis_IdFields );
-            p_AddFieldsToFieldColumn ( FieldsDefs, alis_NodeFields );
             ls_FieldString:=FieldsDefs.GetString;
             if ls_FieldString > '' Then
              for li_i := 0 to lfc_Fields.Count -1 do

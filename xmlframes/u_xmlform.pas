@@ -129,9 +129,8 @@ type
                              const ai_FieldCounter, ai_counter: Longint ); virtual;
     function fdbc_CreateLookupCombo ( const awin_Parent: TWinControl;
                                       const ads_Connection : TDSSource;
-                                      const as_Table, as_FieldsID,
-                                            as_FieldsDisplay, as_Name : String;
-                                      const alis_IdRelation, alis_DisplayRelation : TList;
+                                      const as_Table, as_Name : String;
+                                      const alr_Relation : TFWRelation;
                                       const ai_FieldCounter, ai_Counter : Integer ;
                                       const OneFieldToFill : Boolean
                                       ): TXMLFillCombo; virtual;
@@ -140,12 +139,9 @@ type
                                         const ai_Connection : Integer;
                                         const ads_Connection : TDSSource;
                                         const as_NameRelation, as_ConnectionBind,
-                                              as_ClassRelation, as_ClassBind, as_OtherClass,
-                                              as_fieldsId, as_fieldsDisplay : String;
+                                              as_ClassRelation, as_ClassBind, as_OtherClass: String;
                                         const aa_FieldsBind : TRelationBind;
-                                        const alis_IdRelation,
-                                              alis_DisplayRelation: TList;
-                                        const aa_FieldsDisplayNames : Array of String;
+                                        const afr_relation : TFWRelation;
                                         const ai_FieldCounter, ai_Counter : Integer
                                         ): TDBGroupView; virtual;
     function ffwc_getRelationComponent( const afws_source : TFWXMLSource ; const awin_Parent : TWinControl ;
@@ -448,9 +444,8 @@ End;
 ///////////////////////////////////////////////////////////////////////////////////////////
 function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
                                              const ads_Connection : TDSSource;
-                                             const as_Table, as_FieldsID,
-                                                   as_FieldsDisplay, as_Name : String;
-                                             const alis_IdRelation, alis_DisplayRelation : TList;
+                                             const as_Table, as_Name : String;
+                                             const alr_Relation : TFWRelation;
                                              const ai_FieldCounter, ai_Counter : Integer;
                                              const OneFieldToFill : Boolean )
                                              :TXMLFillCombo;
@@ -460,13 +455,13 @@ Begin
    Then
      Begin
       Result.Combo := TExtDBComboInsert.Create ( Self );
-      p_SetComponentObjectProperty(Result.Combo,CST_PROPERTY_SEARCHSOURCE, fds_CreateDataSourceAndOpenedQuery ( as_Table, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, DBSources.Add));
+      p_SetComponentObjectProperty(Result.Combo,CST_PROPERTY_SEARCHSOURCE, fds_CreateDataSourceAndOpenedQuery ( as_Table, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), alr_Relation, Self, DBSources.Add));
      end
    Else Result.Combo := TFWDBLookupCombo.Create ( Self );
   Result.FormRegisteredName:=as_Table;
-  p_SetComboProperties ( Result.Combo, Self, ads_Connection,
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, nil ),
-                         as_Table, as_FieldsID, as_FieldsDisplay, as_Name, alis_IdRelation, ai_FieldCounter, ai_Counter );
+  p_SetComboProperties ( Result.Combo,
+                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), alr_Relation, Self, nil ),
+                         as_Name, alr_Relation );
 end;
 
 // function ffwc_getRelationComponent
@@ -484,11 +479,11 @@ var ldoc_XMlRelation : TALXMLDocument ;
     lnode, lnodeClass,
     lnod_CrossLinkRelation : TALXMLNode;
     ls_ClassLink, ls_ClassBind, ls_ClassBindDB, ls_Connection : String;
-    llis_idRelation, llis_DisplayRelation         : TList;
+    lfr_relation : TFWRelation ;
     la_FieldsBind : TRelationBind;
     li_i : Integer;
     lds_Source : TDSSource;
-    ls_FieldsID, ls_Name, ls_FieldsDisplay : String;
+    ls_FieldsID, ls_Name : String;
     lb_OneFieldToFill : boolean;
     lds_datasource : TDataSource;
 
@@ -555,8 +550,6 @@ Begin
     Begin
       ls_Connection := '';
       lnode := fnod_GetClassFromRelation(anod_Field);
-      llis_IdRelation        := TList.Create;
-      llis_DisplayRelation   := TList.Create;
       lnod_CrossLinkRelation := nil;
       ldoc_XMlRelation       := nil;
       try
@@ -573,33 +566,24 @@ Begin
             lnodeClass := anod_Field.ChildNodes [ li_i ];
             if fb_Join_Daemon ( lnodeClass ) Then Continue;
           end;
-       // Getting other class
-        if ( ls_ClassLink = '' ) then
-          ls_ClassLink := fs_GetNodeAttribute( lnode, CST_LEON_IDREFs );
-        if ( ls_ClassLink = '' ) then
-          ls_ClassLink := fs_GetNodeAttribute( lnode, CST_LEON_IDREF );
-        // Getting the class finally
-        if ( ls_ClassLink = '' ) then
-          ls_ClassLink := fs_GetNodeAttribute( lnode, CST_LEON_ID );
+
+        lfr_relation        := afws_source.Relations.Add;
         lb_OneFieldToFill := False;
         /// getting other xml file info
-        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( gr_Function.Clep, ls_ClassBind, ls_ClassLink, ls_Connection, llis_IdRelation, llis_DisplayRelation, lnod_CrossLinkRelation, lb_OneFieldToFill );
+        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( DBSOurces, gr_Function.Clep, ls_ClassLink, lfr_relation,True, Self );
         lds_Source := DMModuleSources.fds_FindConnection(ls_Connection, True );
-        ls_FieldsID := fs_GetStringFields  ( llis_IdRelation , '', True );
+        ls_FieldsID := lfr_relation.FieldsFK.ToString;
 
         if high ( la_FieldsBind ) < 0 Then
          // 1-N relationships
           Begin
-            ls_FieldsDisplay := fs_GetStringFields  ( llis_DisplayRelation, '', True );
             Result := fdbc_CreateLookupCombo ( awin_Parent, lds_Source, ls_ClassLink,
-                                               ls_FieldsID, ls_FieldsDisplay,
                                                ls_Name,
-                                               llis_idRelation, llis_DisplayRelation,
+                                               lfr_relation,
                                                ai_FieldCounter, ai_Counter, lb_OneFieldToFill );
           end
          else
            Begin
-             ls_FieldsDisplay := fs_GetStringFields  ( llis_DisplayRelation, '', False );
            // N-N N-1 relationships
              Result := fdbg_GroupViewComponents ( afws_source,
                                                   awin_Parent, li_i, lds_Source,
@@ -607,16 +591,12 @@ Begin
                                                   ls_ClassBindDB, ls_ClassLink,
                                                   ls_ClassBind,
                                                   ls_ClassLink,
-                                                  ls_FieldsID, ls_FieldsDisplay,
                                                   la_FieldsBind,
-                                                  llis_IdRelation, llis_DisplayRelation,
-                                                  fa_GetArrayFields(llis_DisplayRelation),
+                                                  lfr_relation,
                                                   ai_FieldCounter, ai_Counter );
 
            end;
       finally
-        llis_IdRelation.free;
-        llis_DisplayRelation.Free;
         lnod_CrossLinkRelation.free;
         ldoc_XMlRelation.free;
       end;
@@ -1314,7 +1294,7 @@ var lnod_FieldProperties : TALXMLNode ;
           end;
       p_setFieldComponentTop ( Result, ab_Column );
       p_setComponentLeft  ( Result, ab_Column );
-      p_SetFieldSelect ( afws_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+      p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
     end;
 
@@ -1348,7 +1328,7 @@ var lnod_FieldProperties : TALXMLNode ;
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
             if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lb_IsLarge, lffd_ColumnFieldDef, lb_IsLocal, FieldDelimiter, ai_Counter ) Then
              Begin
-               p_SetFieldSelect ( afws_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+               p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
                Exit;
              end;
 
@@ -1357,7 +1337,7 @@ var lnod_FieldProperties : TALXMLNode ;
               lb_IsLarge := True;
           End;
 
-      p_SetFieldSelect ( afws_Source, anod_Field, lffd_ColumnFieldDef, lb_IsLocal, lb_IsLarge );
+      p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
       awin_Control := fwin_CreateFieldComponent ( afws_Source, awin_Parent, anod_Field, lb_IsLarge, lb_IsLocal, ai_FieldCounter, ai_counter );
 
@@ -1498,15 +1478,11 @@ function TF_XMLForm.fdbg_GroupViewComponents ( const afws_source : TFWXMLSource 
                                                const awin_Parent : TWinControl ;
                                                const ai_Connection : Integer;
                                                const ads_Connection : TDSSource;
-                                               const as_NameRelation,as_ConnectionBind,
-                                                     as_ClassRelation, as_ClassBind,
-                                                     as_OtherClass,
-                                                     as_fieldsId, as_fieldsDisplay : String;
+                                               const as_NameRelation, as_ConnectionBind,
+                                                     as_ClassRelation, as_ClassBind, as_OtherClass: String;
                                                const aa_FieldsBind : TRelationBind;
-                                               const alis_IdRelation,
-                                                     alis_DisplayRelation: TList;
-                                               const aa_FieldsDisplayNames : Array of String;
-                                               const ai_FieldCounter, ai_Counter : Integer ):TDBGroupView;
+                                               const afr_relation : TFWRelation;
+                                               const ai_FieldCounter, ai_Counter : Integer):TDBGroupView;
 var lpan_ParentPanel   : TWinControl;
     lpan_GroupViewRight,
     lpan_PanelActions,
@@ -1639,12 +1615,12 @@ var lpan_ParentPanel   : TWinControl;
    procedure p_setGroupView ( const adgv_GroupView : TDBGroupView; const ab_Primary : Boolean );
    var li_i : Integer;
    Begin
-     with adgv_GroupView do
+     with adgv_GroupView, afr_relation do
        Begin
          FieldDelimiter    := ',';
          DataKeyOwner      := afws_source.GetKeyString;
-         DataKeyUnit       := as_fieldsId;
-         DataFieldsDisplay := as_fieldsDisplay;
+         DataKeyUnit       := FieldsFK.ToString;
+         DataFieldsDisplay := FieldsDisplay.ToString;
          DataTableGroup    := as_ClassBind;
          DataTableOwner    := afws_source.Table;
          DataTableUnit     := as_OtherClass;
@@ -1659,10 +1635,10 @@ var lpan_ParentPanel   : TWinControl;
              DataListOpposite := Result;
            end;
          DataSourceOwner := afws_source.Datasource;
-         for li_i := 0 to high ( aa_FieldsDisplayNames ) do
+         for li_i := 0 to FieldsDisplay.Count -1 do
            with Columns.Add do
              begin
-               Caption := fs_GetLabelCaption(aa_FieldsDisplayNames [ li_i ]);
+               Caption := FieldsDisplay [ li_i ].GetCaption;
              end;
          ShowColumnHeaders:=True;
        end;
@@ -1680,7 +1656,7 @@ begin
   //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   //      lpan_ParentPanel.ShowHint := True;
         Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + as_ClassRelation + CST_COMPONENTS_LEFT, Self, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), ads_Connection, alis_IdRelation, alis_DisplayRelation, Self, DBSources.Add );
+        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, Self, DBSources.Add );
         Result.Width := CST_GROUPVIEW_WIDTH;
         p_setGroupmentfields ( Result );
         p_AddGroupView ( Result );
