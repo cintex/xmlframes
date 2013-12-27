@@ -67,17 +67,16 @@ function fxf_ExecuteFonction ( const as_Fonction                  : String    ; 
 function fxf_ExecuteFonctionFile ( const as_FonctionFile                  : String    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 function fxf_ExecuteAFonction ( const alf_Function                  : TLeonFunction    ; const ab_Ajuster : Boolean        ): TF_XMLForm;
 procedure p_ExecuteFonction ( aobj_Sender                  : TObject            ); overload;
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
-
-
 
 implementation
 
 uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      fonctions_images , fonctions_init,
-     Variants, fonctions_proprietes, fonctions_Objets_Dynamiques,
+     Variants, fonctions_proprietes,
+     fonctions_Objets_Dynamiques,
      fonctions_dbcomponents,
      unite_variables, u_languagevars, Imaging,
+     u_framework_dbcomponents,
      fonctions_languages,
      fonctions_forms;
 
@@ -265,63 +264,6 @@ Begin
 
      End;
 end;
-
-////////////////////////////////////////////////////////////////////////////////
-// function fds_CreateDataSourceAndOpenedQuery
-// create datasource, dataset, setting and open it
-// as_Table      : Table name
-// as_Fields     : List of fields with comma
-// as_NameEnd    : End of components' names
-// ar_Connection : Connection of table
-// alis_NodeFields : Node of fields' nodes
-////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
-var lfc_Fields : TFWFieldColumns ;
-    ls_FieldString : String;
-    li_i : Integer;
-begin
-  with alr_relation.DestTables [ 0 ].Connection do
-    Begin
-      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
-      lfc_Fields := nil;
-      if assigned ( afws_SourceAdded ) Then
-         with afws_SourceAdded do
-           Begin
-             if GetKeyCount = 0 Then
-              with Indexes.Insert(0) do
-                Begin
-                 IndexKind:=ikPrimary;
-                 lfc_Fields := FieldsDefs;
-                end;
-            ls_FieldString := lfc_Fields.GetString;
-            Datasource:=Result;
-            Table := as_Table;
-            ls_FieldString:=FieldsDefs.GetString;
-            if ls_FieldString > '' Then
-             for li_i := 0 to lfc_Fields.Count -1 do
-              with lfc_Fields [ li_i ] do
-               if FieldsDefs.indexOf ( FieldName ) = -1 Then
-                if ls_FieldString=''
-                 Then ls_FieldString:=FieldName
-                 else ls_FieldString:=','+FieldName;
-           end;
-
-      if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
-       Then
-         Begin
-           if DatasetType = dtCSV Then
-             p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
-           {$IFDEF DBNET}
-           if DatasetType = dtDBNet Then
-             p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_FieldString + ' FROM ' + as_Table );
-           {$ENDIF}
-         end
-        else
-        p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_FieldString + ' FROM ' + as_Table );
-      Result.DataSet.Open;
-    end;
-end;
-
 
 
 /////////////////////////////////////////////////////////////////////////

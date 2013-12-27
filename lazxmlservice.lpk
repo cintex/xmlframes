@@ -2,6 +2,7 @@
 <CONFIG>
   <Package Version="4">
     <Name Value="lazxmlservice"/>
+    <Author Value="Matthieu GIROUX"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
@@ -16,8 +17,11 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
+    <Description Value="Data part of XML Frames
+Use manbase only"/>
+    <License Value="LGPL"/>
     <Version Major="1" Minor="2"/>
-    <Files Count="4">
+    <Files Count="3">
       <Item1>
         <Filename Value="xmlservice/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
@@ -30,18 +34,14 @@
         <Filename Value="xmlservice/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
       </Item3>
-      <Item4>
-        <Filename Value="xmlservice/fonctions_autocomponents.pas"/>
-        <UnitName Value="fonctions_autocomponents"/>
-      </Item4>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">
       <Item1>
-        <PackageName Value="xmldocument"/>
+        <PackageName Value="lazmanbase"/>
       </Item1>
       <Item2>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="xmldocument"/>
       </Item2>
       <Item3>
         <PackageName Value="FCL"/>

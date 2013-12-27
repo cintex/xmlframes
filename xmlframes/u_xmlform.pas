@@ -127,27 +127,9 @@ type
                              const awin_Parent: TWinControl;
                              const anod_Field: TALXMLNode;
                              const ai_FieldCounter, ai_counter: Longint ); virtual;
-    function fdbc_CreateLookupCombo ( const awin_Parent: TWinControl;
-                                      const ads_Connection : TDSSource;
-                                      const as_Table, as_Name : String;
-                                      const alr_Relation : TFWRelation;
-                                      const ai_FieldCounter, ai_Counter : Integer ;
-                                      const OneFieldToFill : Boolean
-                                      ): TXMLFillCombo; virtual;
-    function fdbg_GroupViewComponents ( const afws_source : TFWXMLSource ;
-                                        const awin_Parent : TWinControl ;
-                                        const ai_Connection : Integer;
-                                        const ads_Connection : TDSSource;
-                                        const as_NameRelation, as_ConnectionBind,
-                                              as_ClassRelation, as_ClassBind, as_OtherClass: String;
-                                        const aa_FieldsBind : TRelationBind;
-                                        const afr_relation : TFWRelation;
-                                        const ai_FieldCounter, ai_Counter : Integer
-                                        ): TDBGroupView; virtual;
     function ffwc_getRelationComponent( const afws_source : TFWXMLSource ; const awin_Parent : TWinControl ;
-                                        const anod_Field: TALXMLNode;
-                                        const ai_FieldCounter, ai_Counter : Integer
-                                        ) : TWinControl; virtual;
+                                        const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn
+                                                ) : TWinControl; virtual;
     procedure p_setComponentLeft(const awin_Control: TControl;
       const ab_Column: Boolean);
     procedure p_setFieldComponentTop(const awin_Control: TWinControl;
@@ -158,9 +140,7 @@ type
       const argr_Control : TDBRadioGroup): Boolean; virtual;
     function  CreateSources: TFWSources; override;
     function  fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ;
-                                          const anod_Field : TALXMLNode ;
-                                          const ab_isLarge, ab_IsLocal : Boolean ;
-                                          const ai_FieldCounter, ai_counter : Longint ):TWinControl;
+                                          const aff_Field : TFWFieldColumn  ):TWinControl;
     function  fwin_CreateFieldComponentAndProperties(const as_Table :String; const anod_Field: TALXMLNode;
                                                   var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ; var  awin_Parent, awin_Last : TWinControl ;
                                                   var ab_Column : Boolean ; const afws_Source : TFWXMLSource ):TWinControl; virtual;
@@ -438,172 +418,6 @@ begin
 End;
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// function TF_XMLForm.fdbc_CreateLookupCombo
-// Create the lookup combo box from xml relation
-///////////////////////////////////////////////////////////////////////////////////////////
-function TF_XMLForm.fdbc_CreateLookupCombo ( const awin_Parent : TWinControl ;
-                                             const ads_Connection : TDSSource;
-                                             const as_Table, as_Name : String;
-                                             const alr_Relation : TFWRelation;
-                                             const ai_FieldCounter, ai_Counter : Integer;
-                                             const OneFieldToFill : Boolean )
-                                             :TXMLFillCombo;
-Begin
-  Result :=  TXMLFillCombo.Create(Self);
-  if OneFieldToFill
-   Then
-     Begin
-      Result.Combo := TExtDBComboInsert.Create ( Self );
-      p_SetComponentObjectProperty(Result.Combo,CST_PROPERTY_SEARCHSOURCE, fds_CreateDataSourceAndOpenedQuery ( as_Table, 'Insert'+ IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), alr_Relation, Self, DBSources.Add));
-     end
-   Else Result.Combo := TFWDBLookupCombo.Create ( Self );
-  Result.FormRegisteredName:=as_Table;
-  p_SetComboProperties ( Result.Combo,
-                         fds_CreateDataSourceAndOpenedQuery ( as_Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), alr_Relation, Self, nil ),
-                         as_Name, alr_Relation );
-end;
-
-// function ffwc_getRelationComponent
-// Creates some relationships components, included the full Groupview relationships
-// awin_Parent : Parent of all created components
-// anod_Field : relationships node
-// ab_IsLocal : is relationships not linked to data ?
-// ai_FieldCounter : table counter
-// ai_Counter : column counter
-function TF_XMLForm.ffwc_getRelationComponent ( const afws_source : TFWXMLSource ; const awin_Parent : TWinControl ;
-                                                const anod_Field : TALXMLNode ;
-                                                const ai_FieldCounter, ai_Counter : Integer )
-                                                :TWinControl;
-var ldoc_XMlRelation : TALXMLDocument ;
-    lnode, lnodeClass,
-    lnod_CrossLinkRelation : TALXMLNode;
-    ls_ClassLink, ls_ClassBind, ls_ClassBindDB, ls_Connection : String;
-    lfr_relation : TFWRelation ;
-    la_FieldsBind : TRelationBind;
-    li_i : Integer;
-    lds_Source : TDSSource;
-    ls_FieldsID, ls_Name : String;
-    lb_OneFieldToFill : boolean;
-    lds_datasource : TDataSource;
-
-    //  function fb_ClassRef
-    //  Joining a 1-n relationship
-    // Parameter JOIN_DAEMON node
-    // Returns continuing
-    function fb_ClassRef ( const anodeClass : TALXMLNode ):Boolean;
-    Begin
-      Result := False;
-      if ( anodeClass.NodeName = CST_LEON_CLASS_REF )
-      and anodeClass.HasAttribute ( CST_LEON_IDREF ) Then
-        Begin
-          ls_ClassLink := anodeClass.Attributes [ CST_LEON_IDREF ];
-          Result := True;
-        end;
-    end;
-
-    //  function fb_Join_Daemon
-    //  Joining a n-n relationship
-    // Parameter JOIN_DAEMON and classed nodes
-    // Returns continuing
-    function fb_Join_Daemon ( const anod_Class : TALXMLNode ):Boolean;
-    var li_j : Integer ;
-        lnod_Bind : TALXMLNode;
-    Begin
-      Result := False;   
-      if anod_Class.NodeName = CST_LEON_IDREFs Then
-        Begin
-          ls_ClassBind:=anod_Class.Attributes [ CST_LEON_VALUE ];
-        End;
-      if anod_Class.NodeName = CST_LEON_RELATION_JOIN Then
-        Begin
-         for li_j := 0 to anod_Class.ChildNodes.Count - 1 do
-           Begin
-             lnod_Bind := anod_Class.ChildNodes [ li_j ];
-             if lnod_Bind.NodeName =  CST_LEON_RELATION_C_BIND Then
-               Begin
-                ls_ClassBind   := lnod_Bind.Attributes[CST_LEON_VALUE   ];
-                ls_ClassBindDB := lnod_Bind.Attributes[CST_LEON_LOCATION];
-                Continue;
-               end;
-             if lnod_Bind.NodeName =  CST_LEON_RELATION_F_BIND Then
-               Begin
-                SetLength ( la_FieldsBind, high ( la_FieldsBind) + 2);
-                la_FieldsBind [  high ( la_FieldsBind ) ].GroupField := lnod_Bind.Attributes[CST_LEON_VALUE];
-                la_FieldsBind [  high ( la_FieldsBind ) ].ClassName  := lnod_Bind.Attributes[CST_LEON_RELATION_CBIND];
-                Continue;
-               end;
-           end;
-          Result := True;
-          Exit;
-        end;
-      if anod_Class.NodeName = CST_LEON_NAME Then
-        Begin
-          ls_Name := anod_Class.Attributes [ CST_LEON_VALUE ];
-          Result := True;
-        end;
-    end;
-
-Begin
-  Result := nil;
-  if ( anod_Field.NodeName = CST_LEON_RELATION ) then
-    Begin
-      ls_Connection := '';
-      lnode := fnod_GetClassFromRelation(anod_Field);
-      lnod_CrossLinkRelation := nil;
-      ldoc_XMlRelation       := nil;
-      try
-        // Searching for a probably a N-N relationship
-       if lnode.HasChildNodes Then
-        for li_i := 0 to lnode.ChildNodes.Count -1 do
-          Begin
-            lnodeClass := lnode.ChildNodes [ li_i ];
-            if fb_ClassRef    ( lnodeClass ) Then Break;
-          end;
-       if anod_Field.HasChildNodes Then
-        for li_i := 0 to anod_Field.ChildNodes.Count -1 do
-          Begin
-            lnodeClass := anod_Field.ChildNodes [ li_i ];
-            if fb_Join_Daemon ( lnodeClass ) Then Continue;
-          end;
-
-        lfr_relation        := afws_source.Relations.Add;
-        lb_OneFieldToFill := False;
-        /// getting other xml file info
-        ldoc_XMlRelation := fdoc_GetCrossLinkFunction( DBSOurces, gr_Function.Clep, ls_ClassLink, lfr_relation,True, Self );
-        lds_Source := DMModuleSources.fds_FindConnection(ls_Connection, True );
-        ls_FieldsID := lfr_relation.FieldsFK.ToString;
-
-        if high ( la_FieldsBind ) < 0 Then
-         // 1-N relationships
-          Begin
-            Result := fdbc_CreateLookupCombo ( awin_Parent, lds_Source, ls_ClassLink,
-                                               ls_Name,
-                                               lfr_relation,
-                                               ai_FieldCounter, ai_Counter, lb_OneFieldToFill );
-          end
-         else
-           Begin
-           // N-N N-1 relationships
-             Result := fdbg_GroupViewComponents ( afws_source,
-                                                  awin_Parent, li_i, lds_Source,
-                                                  ls_Name,
-                                                  ls_ClassBindDB, ls_ClassLink,
-                                                  ls_ClassBind,
-                                                  ls_ClassLink,
-                                                  la_FieldsBind,
-                                                  lfr_relation,
-                                                  ai_FieldCounter, ai_Counter );
-
-           end;
-      finally
-        lnod_CrossLinkRelation.free;
-        ldoc_XMlRelation.free;
-      end;
-    End;
-
-end;
-
 // function fwin_CreateFieldComponent
 // Creates some field components from  anod_Field
 // awin_Parent : Parent of created components
@@ -612,23 +426,13 @@ end;
 // ab_IsLocal : Not linked to data
 // ai_FieldCounter : field counter
 // ai_counter : Column counter
-function TF_XMLForm.fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ab_isLarge, ab_IsLocal : Boolean ; const ai_FieldCounter, ai_counter : Longint ):TWinControl;
+function TF_XMLForm.fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ; const aff_Field : TFWFieldColumn  ):TWinControl;
 begin
-  // No comment node to create the Control
-  if anod_Field is TALXmlCommentNode then
-    Begin
-      Result := nil;
-      Exit;
-    End;
-
-  Result := fwin_CreateAFieldComponent ( anod_Field.NodeName, Self, ab_isLarge, ab_IsLocal, ai_counter );
-
-  if  ( Result = nil ) Then
-    Result := ffwc_getRelationComponent ( afws_Source, awin_Parent, anod_Field, ai_FieldCounter, ai_counter );
+  Result := fwin_CreateAFieldComponent ( aff_Field, Self, ai_counter );
 
   if ( Result = nil ) then
     Begin
-      Showmessage ( Gs_NoComponentToCreate + anod_Field.NodeName +'.' );
+      MyShowmessage ( Gs_NoComponentToCreate + anod_Field.NodeName +'.' );
       gb_Unload := True;
     End;
 
@@ -879,7 +683,7 @@ Begin
           Exit;
         end
        Else
-        ShowMessage(GS_LOGIN_FAILED);
+        MyShowmessage(GS_LOGIN_FAILED);
     end;
 end;
 
@@ -1464,225 +1268,6 @@ begin
                         TOnExecuteNode(p_OncolumnNameNode ));
    p_CreateColumns;
 end;
-
-// function fdbg_GroupViewComponents
-// Creates a full N-N or N-1 relationships management
-// awin_Parent : the parent component of the created components
-// anod_NodeRelation : The relationships node
-// const alis_ListCrossLink : The other side relationships
-// ai_FieldCounter : Table counter
-// ai_Counter : Column Counter
-// returns the main list
-
-function TF_XMLForm.fdbg_GroupViewComponents ( const afws_source : TFWXMLSource ;
-                                               const awin_Parent : TWinControl ;
-                                               const ai_Connection : Integer;
-                                               const ads_Connection : TDSSource;
-                                               const as_NameRelation, as_ConnectionBind,
-                                                     as_ClassRelation, as_ClassBind, as_OtherClass: String;
-                                               const aa_FieldsBind : TRelationBind;
-                                               const afr_relation : TFWRelation;
-                                               const ai_FieldCounter, ai_Counter : Integer):TDBGroupView;
-var lpan_ParentPanel   : TWinControl;
-    lpan_GroupViewRight,
-    lpan_PanelActions,
-    lpan_Panel : TPanel ;
-    ldgv_GroupViewRight : TDBGroupView ;
-    lcon_Control   : TControl;
-
-    procedure p_setGroupmentfields ( const adgv_GroupView : TDBGroupView );
-    Begin
-      with adgv_GroupView do
-        if pos ( as_OtherClass, aa_FieldsBind [ 0 ].GroupField ) = 0 Then
-         Begin
-           DataFieldGroup := aa_FieldsBind [ 0 ].GroupField;
-           DataFieldUnit  := aa_FieldsBind [ 1 ].GroupField;
-         end
-        Else
-        Begin
-          DataFieldGroup := aa_FieldsBind [ 1 ].GroupField;
-          DataFieldUnit  := aa_FieldsBind [ 0 ].GroupField;
-        end
-    end;
-
-    procedure p_setLeftFromPanel ( const acon_Control : TWinControl );
-    Begin
-      acon_Control.Left := lpan_panel.Left + lpan_panel.Width + 1;
-    end;
-
-    procedure p_setLeftToPanel ( const acon_Control : TWinControl );
-    Begin
-      lpan_panel.Left := acon_Control.Left + acon_Control.Width + 1;
-    end;
-
-    procedure p_setTopFromPanel ( const acon_Control : TWinControl );
-    Begin
-      acon_Control.Top := lpan_panel.Top + lpan_panel.Height + 1;
-    end;
-
-    procedure p_setTopToPanel ( const acon_Control : TWinControl );
-    Begin
-      lpan_panel.Top := acon_Control.Top + acon_Control.Height + 1;
-    end;
-
-    // procedure p_setAndCreateButtons;
-    // Create The buttons of the main group view
-    procedure p_CreateAndSetButtonsActions;
-    Begin
-      with Result do
-        Begin
-          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + as_ClassRelation + '1', Self, alLeft );
-          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonRecord := TFWRecord.Create ( Self );
-          ButtonRecord.Parent := lpan_PanelActions;
-          lpan_PanelActions.Height := ButtonRecord.Height;
-          ButtonRecord.Name := CST_COMPONENTS_RECORD_BEGIN + as_ClassRelation;
-          ButtonRecord.Align := alLeft ;
-          p_setLeftFromPanel ( ButtonRecord );
-          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + as_ClassRelation + '2', Self, alLeft );
-          p_setLeftToPanel ( ButtonRecord );
-          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonCancel := TFWCancel.Create ( Self );
-          ButtonCancel.Parent := lpan_PanelActions;
-          ButtonCancel.Name := CST_COMPONENTS_ABORT_BEGIN + as_ClassRelation;
-          ButtonCancel.Align := alLeft ;
-          ButtonCancel.Width := ButtonRecord.Width;
-          p_setLeftFromPanel ( ButtonCancel );
-        end;
-    end;
-
-    // procedure p_setAndCreateButtons;
-    // Create The buttons of the main group view
-    procedure p_CreateAndSetButtonsMoving;
-    Begin
-      with Result do
-        Begin
-          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '1', Self, alTop );
-          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonIn := TFWInSelect.Create ( Self );
-          ButtonIn.Parent := lpan_PanelActions;
-          ButtonIn.Name := CST_COMPONENTS_IN_BEGIN + as_ClassRelation;
-          ( ButtonIn as TFWGroupButtonMoving ).Caption := '' ;
-          lpan_PanelActions.Width := ButtonIn.Width;
-          p_setTopFromPanel ( ButtonIn );
-          ButtonIn.Align := alTop ;
-          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '2', Self, alTop );
-          p_setTopToPanel ( ButtonIn );
-          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonOut := TFWOutSelect.Create ( Self );
-          ButtonOut.Parent := lpan_PanelActions;
-          ButtonOut.Name := CST_COMPONENTS_OUT_BEGIN + as_ClassRelation;
-          ( ButtonOut as TFWGroupButtonMoving ).Caption := '' ;
-          p_setTopFromPanel ( ButtonOut );
-          ButtonOut.Align := alTop ;
-          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '3', Self, alTop );
-          p_setTopToPanel ( ButtonOut );
-          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonTotalIn := TFWInAll.Create ( Self );
-          ButtonTotalIn.Parent := lpan_PanelActions;
-          ButtonTotalIn.Name := CST_COMPONENTS_INALL_BEGIN + as_ClassRelation;
-          ( ButtonTotalIn as TFWGroupButtonMoving ).Caption := '' ;
-          p_setTopFromPanel ( ButtonTotalIn );
-          ButtonTotalIn.Align := alTop ;
-          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + as_ClassRelation + '4', Self, alTop );
-          p_setTopToPanel ( ButtonTotalIn );
-          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
-          ButtonTotalOut := TFWOutAll.Create ( Self );
-          ButtonTotalOut.Parent := lpan_PanelActions;
-          ButtonTotalOut.Name := CST_COMPONENTS_OUTALL_BEGIN + as_ClassRelation;
-          ( ButtonTotalOut as TFWGroupButtonMoving ).Caption := '' ;
-          p_setTopFromPanel ( ButtonTotalOut );
-          ButtonTotalOut.Align := alTop ;
-        end;
-    end;
-
-    // procedure p_setButtons;
-    // sets The buttons of the segund group view
-   procedure p_setButtons;
-    Begin
-      with ldgv_GroupViewRight do
-        Begin
-          DataListPrimary := False;
-          DataListOpposite := Result;
-          ButtonRecord   := Result.ButtonRecord;
-          ButtonCancel   := Result.ButtonCancel;
-          ButtonIn       := Result.ButtonOut;
-          ButtonTotalIn  := Result.ButtonTotalOut;
-          ButtonOut      := Result.ButtonIn;
-          ButtonTotalOut := Result.ButtonTotalIn;
-        end;
-    end;
-   procedure p_setGroupView ( const adgv_GroupView : TDBGroupView; const ab_Primary : Boolean );
-   var li_i : Integer;
-   Begin
-     with adgv_GroupView, afr_relation do
-       Begin
-         FieldDelimiter    := ',';
-         DataKeyOwner      := afws_source.GetKeyString;
-         DataKeyUnit       := FieldsFK.ToString;
-         DataFieldsDisplay := FieldsDisplay.ToString;
-         DataTableGroup    := as_ClassBind;
-         DataTableOwner    := afws_source.Table;
-         DataTableUnit     := as_OtherClass;
-         if ab_Primary Then
-           Begin
-             DataListPrimary  := True;
-             DataListOpposite := ldgv_GroupViewRight;
-           end
-          else
-           Begin
-             DataListPrimary  := False;
-             DataListOpposite := Result;
-           end;
-         DataSourceOwner := afws_source.Datasource;
-         for li_i := 0 to FieldsDisplay.Count -1 do
-           with Columns.Add do
-             begin
-               Caption := FieldsDisplay [ li_i ].GetCaption;
-             end;
-         ShowColumnHeaders:=True;
-       end;
-
-   end;
-
-begin
-  with afws_source do
-    Begin
-      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), as_NameRelation );
-      {$IFDEF FPC}
-      lpan_ParentPanel.BeginUpdateBounds;
-      {$ENDIF}
-      try
-  //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
-  //      lpan_ParentPanel.ShowHint := True;
-        Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + as_ClassRelation + CST_COMPONENTS_LEFT, Self, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( as_ClassRelation, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, Self, DBSources.Add );
-        Result.Width := CST_GROUPVIEW_WIDTH;
-        p_setGroupmentfields ( Result );
-        p_AddGroupView ( Result );
-        lpan_PanelActions := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_ACTIONS + as_ClassRelation, Self, alTop );
-        lpan_GroupViewRight := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + as_ClassRelation + CST_COMPONENTS_RIGHT, Self, alClient );
-        // Creating and setting buttons
-        p_CreateAndSetButtonsActions;
-        lpan_PanelActions := fpan_CreatePanel ( lpan_GroupViewRight, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_MIDDLE + as_ClassRelation, Self, alLeft );
-        lpan_Panel.width := CST_GROUPVIEW_INOUT_WIDTH + CST_XML_FIELDS_INTERLEAVING * 2;
-        ldgv_GroupViewRight := fdgv_CreateGroupView ( lpan_GroupViewRight, CST_COMPONENTS_GROUPVIEW_BEGIN + as_ClassRelation + CST_COMPONENTS_RIGHT, Self, alClient );
-        p_CreateAndSetButtonsMoving;
-        p_setGroupmentfields ( ldgv_GroupViewRight );
-        p_AddGroupView ( ldgv_GroupViewRight );
-        p_setButtons;
-        lcon_Control := fspl_CreateSplitter ( lpan_ParentPanel, CST_COMPONENTS_SPLITTER_BEGIN + as_ClassRelation + CST_COMPONENTS_MIDDLE, Self, alLeft );
-        lcon_Control.Left := Result.Width;
-        p_setGroupView ( Result, True );
-        p_setGroupView ( ldgv_GroupViewRight, False );
-      finally
-      {$IFDEF FPC}
-        lpan_ParentPanel.EndUpdateBounds;
-      {$ENDIF}
-      end;
-    end;
-
-End;
 
 
 // function fscb_CreateTabSheet
