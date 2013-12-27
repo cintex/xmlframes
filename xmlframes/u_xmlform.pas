@@ -27,6 +27,7 @@ uses
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
+  fonctions_xmlform,
   U_ExtComboInsert,
   fonctions_service,
   fonctions_manbase,
@@ -66,33 +67,6 @@ const
 {$ENDIF}
 
 type
-
-  { TFWXMLColumn }
-  TFWXMLSource = class(TFWSource)
-   private
-    FPageControlDetails : TPageControl ;
-    FPanelDetails : TPanel ;
-   published
-    property PageControlDetails  : TPageControl read FPageControlDetails write FPageControlDetails ;
-    property PanelDetails : TPanel  read FPanelDetails write FPanelDetails ;
-  end;
-  { Special XML FWColumn}
-
-  TFWXMLColumnClass = class of TFWXMLSource;
-
- { TFWSources }
- {Collection of FWXMLColumn}
-
-  { TFWXMLColumns }
-
-  TFWXMLColumns = class(TFWSources)
-  private
-    function GetColumn(AIndex: Integer): TFWXMLSource;
-    procedure SetColumn(AIndex: Integer; AValue: TFWXMLSource);
-  public
-    function Add: TFWXMLSource;
-    property Items[AIndex: Integer]: TFWXMLSource read GetColumn write SetColumn; default;
-  end;
 
   { TF_XMLForm }
   { Form created from XML}
@@ -428,7 +402,7 @@ End;
 // ai_counter : Column counter
 function TF_XMLForm.fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ; const aff_Field : TFWFieldColumn  ):TWinControl;
 begin
-  Result := fwin_CreateAFieldComponent ( aff_Field, Self, ai_counter );
+  Result := fwin_CreateAFieldComponent ( FPageControl, aff_Field, Self, ai_counter );
 
   if ( Result = nil ) then
     Begin
@@ -443,6 +417,13 @@ begin
   awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
   awin_Control.Tag := ai_FieldCounter + 1;
 End;
+
+function TF_XMLForm.ffwc_getRelationComponent(const afws_source: TFWXMLSource;
+  const awin_Parent: TWinControl; const afr_relation: TFWRelation;
+  const aff_field: TFWFieldColumn): TWinControl;
+begin
+
+end;
 
 procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWXMLSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
 begin
@@ -724,6 +705,20 @@ begin
 
     end;
   inherited;
+end;
+
+function TF_XMLForm.fpc_CreatePageControl(const awin_Parent: TWinControl;
+  const as_Name: String; const apan_PanelOrigin: TWinControl): TPageControl;
+begin
+  gi_MainFieldsHeight := gi_LastFormFieldsHeight;
+  Result:=fpc_CreatePageControl(awin_Parent,as_Name,apan_PanelOrigin,Self);
+end;
+
+function TF_XMLForm.fscb_CreateTabSheet(var apc_PageControl: TPageControl;
+  const awin_ParentPageControl, awin_PanelOrigin: TWinControl; const as_Name,
+  as_Caption: String): TScrollBox;
+begin
+
 end;
 
 // procedure p_CloseLoginAction
@@ -1269,55 +1264,6 @@ begin
    p_CreateColumns;
 end;
 
-
-// function fscb_CreateTabSheet
-// Create a tabsheet and so a pagecontrol
-// apc_PageControl : Page control to eventually create
-// awin_ParentPageControl : Parent of pagecontrol
-//  awin_PanelOrigin    : Panel not in a pagecontrol
-// as_Name              : Pagecontrol name
-// as_Caption : old caption
-// ai_Counter : COlumn counter
-function TF_XMLForm.fscb_CreateTabSheet(
-  var apc_PageControl: TPageControl; const awin_ParentPageControl,
-  awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String
-    ): TScrollBox;
-var ltbs_Tabsheet : TTabSheet ;
-begin
-  if apc_PageControl = nil then
-    apc_PageControl := fpc_CreatePageControl ( awin_ParentPageControl, as_Name, awin_PanelOrigin );
-  ltbs_Tabsheet := TTabSheet.Create ( Self );
-  ltbs_Tabsheet.Align := alClient;
-  ltbs_Tabsheet.PageControl := apc_PageControl;
-  ltbs_Tabsheet.Caption := fs_getlabelCaption ( as_Caption );
-  Result := fscb_CreateScrollBox ( ltbs_Tabsheet, CST_COMPONENTS_TABSHEET_BEGIN +as_Name, Self, alClient );
-
-end;
-
-
-
-// fonction fpc_CreatePageControl
-// Creating a pagecontrol
-// awin_Parent : Parent component
-// as_Name : name of pagecontrol
-// apan_PanelOrigin : Changing The non pagecontrol panel and adding it to the tabsheet getting 2 tabsheet
-function TF_XMLForm.fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ): TPageControl;
-var ltbs_Tabsheet : TTabSheet ;
-begin
-  Result := TPageControl.Create ( Self );
-  Result.Parent := awin_Parent;
-  Result.Name := CST_COMPONENTS_PAGECONTROL_BEGIN + as_Name;
-  // Le parent du pagecontrol
-  gi_MainFieldsHeight := gi_LastFormFieldsHeight;
-  Result.Align := alClient;
-  ltbs_Tabsheet := TTabSheet.Create ( Self );
-  ltbs_Tabsheet.PageControl := Result;
-  ltbs_Tabsheet.Align := alClient;
-  ltbs_Tabsheet.Caption := awin_Parent.Hint;
-  ltbs_Tabsheet.Name := CST_COMPONENTS_TABSHEET_BEGIN + awin_Parent.Name;
-  // Le panneau d'origine change de parent
-  apan_PanelOrigin.Parent := ltbs_Tabsheet;
-End;
 
 
 //procedure p_setFieldComponent

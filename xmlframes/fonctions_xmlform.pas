@@ -40,7 +40,7 @@ uses Forms, JvXPBar, JvXPContainer,
 {$ENDIF}
   ALXmlDoc, Graphics,
   u_multidonnees,
-  fonctions_manbase, u_xmlform,
+  fonctions_manbase,
   fonctions_ObjetsXML,
   fonctions_service,
   fonctions_system, u_customframework,
@@ -59,6 +59,35 @@ const
               			           Major : 1 ; Minor : 1 ; Release : 0 ; Build : 0 );
 
 {$ENDIF}
+
+type
+
+    { TFWXMLColumn }
+    TFWXMLSource = class(TFWSource)
+     private
+      FPageControlDetails : TPageControl ;
+      FPanelDetails : TPanel ;
+     published
+      property PageControlDetails  : TPageControl read FPageControlDetails write FPageControlDetails ;
+      property PanelDetails : TPanel  read FPanelDetails write FPanelDetails ;
+    end;
+    { Special XML FWColumn}
+
+    TFWXMLColumnClass = class of TFWXMLSource;
+
+   { TFWSources }
+   {Collection of FWXMLColumn}
+
+    { TFWXMLColumns }
+
+    TFWXMLColumns = class(TFWSources)
+    private
+      function GetColumn(AIndex: Integer): TFWXMLSource;
+      procedure SetColumn(AIndex: Integer; AValue: TFWXMLSource);
+    public
+      function Add: TFWXMLSource;
+      property Items[AIndex: Integer]: TFWXMLSource read GetColumn write SetColumn; default;
+    end;
 
 function fb_ReadXMLEntitites () : Boolean;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );

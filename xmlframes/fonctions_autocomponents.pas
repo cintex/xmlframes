@@ -97,9 +97,12 @@ const
 
 {$ENDIF}
 
-function fwin_CreateAFieldComponent ( const aff_Field : TFWFieldColumn ;
+function fwin_CreateAFieldComponent ( var apc_PageControl: TPageControl;
+                                      const afws_sources : TFWxmlsTables;
+                                      const aff_Field : TFWFieldColumn ;
                                       const acom_Owner : TComponent ;
-                                      const awin_Parent : TControl;
+                                      const awin_Parent : TWinControl;
+                                      const ab_islocal  : Boolean;
                                       const ai_Counter : Longint ):TWinControl;
 function fwin_CreateAEditComponent ( const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean ):TWinControl;
 function fwin_CreateADateEditComponent ( const acom_Owner : TComponent ; const ab_IsLocal : Boolean ; const adat_Initialdate : TDateTime ):TWinControl;
@@ -120,6 +123,15 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const aal_Align : TAlign
                                ):TControl ;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
+function fpc_CreatePageControl ( const awin_Parent : TWinControl ;
+                                 const  as_Name : String;
+                                 const  apan_PanelOrigin : TWinControl ;
+                                 const acom_owner : TComponent ): TPageControl;
+function fscb_CreateTabSheet ( var apc_PageControl: TPageControl;
+                               const awin_ParentPageControl, awin_PanelOrigin: TWinControl;
+                               const as_Name, as_Caption: String ;
+                               const acom_owner : TComponent
+                               ): TScrollBox;
 
 implementation
 
@@ -461,6 +473,58 @@ Begin
 end;
 
 
+// function fscb_CreateTabSheet
+// Create a tabsheet and so a pagecontrol
+// apc_PageControl : Page control to eventually create
+// awin_ParentPageControl : Parent of pagecontrol
+//  awin_PanelOrigin    : Panel not in a pagecontrol
+// as_Name              : Pagecontrol name
+// as_Caption : old caption
+// ai_Counter : COlumn counter
+function fscb_CreateTabSheet ( var apc_PageControl: TPageControl;
+                               const awin_ParentPageControl, awin_PanelOrigin: TWinControl;
+                               const as_Name, as_Caption: String ;
+                               const acom_owner : TComponent
+                               ): TScrollBox;
+var ltbs_Tabsheet : TTabSheet ;
+begin
+  if apc_PageControl = nil then
+    apc_PageControl := fpc_CreatePageControl ( awin_ParentPageControl, as_Name, awin_PanelOrigin, acom_owner );
+  ltbs_Tabsheet := TTabSheet.Create ( acom_owner );
+  ltbs_Tabsheet.Align := alClient;
+  ltbs_Tabsheet.PageControl := apc_PageControl;
+  ltbs_Tabsheet.Caption := fs_getlabelCaption ( as_Caption );
+  Result := fscb_CreateScrollBox ( ltbs_Tabsheet, CST_COMPONENTS_TABSHEET_BEGIN +as_Name, acom_owner, alClient );
+
+end;
+
+
+
+// fonction fpc_CreatePageControl
+// Creating a pagecontrol
+// awin_Parent : Parent component
+// as_Name : name of pagecontrol
+// apan_PanelOrigin : Changing The non pagecontrol panel and adding it to the tabsheet getting 2 tabsheet
+function fpc_CreatePageControl ( const awin_Parent : TWinControl ;
+                                 const  as_Name : String;
+                                 const  apan_PanelOrigin : TWinControl ;
+                                 const acom_owner : TComponent ): TPageControl;
+var ltbs_Tabsheet : TTabSheet ;
+begin
+  Result := TPageControl.Create ( acom_owner );
+  Result.Parent := awin_Parent;
+  Result.Name := CST_COMPONENTS_PAGECONTROL_BEGIN + as_Name;
+  // Le parent du pagecontrol
+  Result.Align := alClient;
+  ltbs_Tabsheet := TTabSheet.Create ( acom_owner );
+  ltbs_Tabsheet.PageControl := Result;
+  ltbs_Tabsheet.Align := alClient;
+  ltbs_Tabsheet.Caption := awin_Parent.Hint;
+  ltbs_Tabsheet.Name := CST_COMPONENTS_TABSHEET_BEGIN + awin_Parent.Name;
+  // Le panneau d'origine change de parent
+  apan_PanelOrigin.Parent := ltbs_Tabsheet;
+End;
+
 // function fdbg_GroupViewComponents
 // Creates a full N-N or N-1 relationships management
 // awin_Parent : the parent component of the created components
@@ -470,9 +534,11 @@ end;
 // ai_Counter : Column Counter
 // returns the main list
 
-function fdbg_GroupViewComponents (  const afws_source : TFWTable;
+function fdbg_GroupViewComponents (  var apc_PageControl: TPageControl;
+                                     var apa_PanelDetails: TCustomPanel;
+                                     const afws_sources : TFWTables;
+                                     const afws_source : TFWTable;
                                      const awin_Parent : TWinControl ;
-                                     const ai_Connection : Integer;
                                      const ads_Connection : TDSSource;
                                      const afr_relation : TFWRelation;
                                      const acom_owner   : TComponent):TDBGroupView;
@@ -633,9 +699,9 @@ var lpan_ParentPanel   : TWinControl;
    end;
 
 begin
-  with afws_source do
+  with afws_source,afr_relation do
     Begin
-      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), as_NameRelation );
+      lpan_ParentPanel := fscb_CreateTabSheet ( apc_PageControl, apa_PanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( afws_source.Index ), afr_relation.ToString, acom_owner );
       {$IFDEF FPC}
       lpan_ParentPanel.BeginUpdateBounds;
       {$ENDIF}
@@ -643,10 +709,10 @@ begin
   //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   //      lpan_ParentPanel.ShowHint := True;
         Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + TablesDest [0].Table + CST_COMPONENTS_LEFT, acom_owner, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( TablesDest [0].Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, acom_owner, DBSources.Add );
+        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( TablesDest [0].Table, IntToStr ( afws_source.Index ) + '_' + IntToStr ( afr_relation.Index ), afr_relation, acom_owner, afws_sources.Add );
         Result.Width := CST_GROUPVIEW_WIDTH;
         p_setGroupmentfields ( Result );
-        p_AddGroupView ( Result );
+        (afr_relation as TFWRelationGroup).GroupView:=Result;
         lpan_PanelActions := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_ACTIONS + TablesDest [0].Table, acom_owner, alTop );
         lpan_GroupViewRight := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + TablesDest [0].Table + CST_COMPONENTS_RIGHT, acom_owner, alClient );
         // Creating and setting buttons
@@ -656,7 +722,6 @@ begin
         ldgv_GroupViewRight := fdgv_CreateGroupView ( lpan_GroupViewRight, CST_COMPONENTS_GROUPVIEW_BEGIN + TablesDest [0].Table + CST_COMPONENTS_RIGHT, acom_owner, alClient );
         p_CreateAndSetButtonsMoving;
         p_setGroupmentfields ( ldgv_GroupViewRight );
-        p_AddGroupView ( ldgv_GroupViewRight );
         p_setButtons;
         lcon_Control := fspl_CreateSplitter ( lpan_ParentPanel, CST_COMPONENTS_SPLITTER_BEGIN + TablesDest [0].Table + CST_COMPONENTS_MIDDLE, acom_owner, alLeft );
         lcon_Control.Left := Result.Width;
@@ -672,6 +737,7 @@ begin
 End;
 
 
+
 // function ffwc_getRelationComponent
 // Creates some relationships components, included the full Groupview relationships
 // awin_Parent : Parent of all created components
@@ -679,9 +745,12 @@ End;
 // ab_IsLocal : is relationships not linked to data ?
 // ai_FieldCounter : table counter
 // ai_Counter : column counter
-function ffwc_getRelationComponent ( const afws_source : TFWTable ; const awin_Parent : TWinControl ;
-                                                const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn;
-                                                const acom_owner : TComponent):TWinControl;
+function ffwc_getRelationComponent ( var apc_PageControl: TPageControl;
+                                     var apa_PanelDetails: TCustomPanel;
+                                     const afws_sources : TFWTables;
+                                     const afws_source : TFWTable ; const awin_Parent : TWinControl ;
+                                     const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn;
+                                     const acom_owner : TComponent):TWinControl;
 var //ldoc_XMlRelation : TALXMLDocument ;
     //lnode, lnodeClass,
     //lnod_CrossLinkRelation : TALXMLNode;
@@ -768,11 +837,14 @@ Begin
      else
        Begin
        // N-N N-1 relationships
-         Result := fdbg_GroupViewComponents ( afws_source,
+         Result := fdbg_GroupViewComponents ( apc_PageControl,
+                                              apa_PanelDetails,
+                                              afws_sources,
+                                              afws_source,
                                               awin_Parent,
                                               lds_Source,
                                               afr_relation,
-                                              aff_field );
+                                              acom_owner );
 
        end;
 
@@ -789,9 +861,13 @@ end;
 // ai_Counter : Field counter
 // returns an editing component
 //////////////////////////////////////////////////////////////////////////
-function fwin_CreateAFieldComponent ( const aff_Field : TFWFieldColumn ;
+function fwin_CreateAFieldComponent ( var apc_PageControl: TPageControl;
+                                      var apa_PanelDetails: TCustomPanel;
+                                      const afws_sources : TFWTables;
+                                      const aff_Field : TFWFieldColumn ;
                                       const acom_Owner : TComponent ;
-                                      const awin_Parent : TControl;
+                                      const awin_Parent : TWinControl;
+                                      const ab_islocal  : Boolean;
                                       const ai_Counter : Longint ):TWinControl;
 begin
   Result := nil;
@@ -824,8 +900,8 @@ begin
   ftMemo : Result := fwin_CreateAEditComponent ( acom_Owner, True, ab_IsLocal );
   ftDate : Result := fwin_CreateADateEditComponent ( acom_Owner, ab_IsLocal, Now );
   else
-    if LookupSource > -1 Then
-      Result := ffwc_getRelationComponent ( aff_Field.Collection as TFWTable, awin_Parent, anod_Field, afws_Source,af,ai_FieldCounter, ai_counter );
+    if Relation.TablesDest.Count > 0 Then
+      Result := ffwc_getRelationComponent ( apc_PageControl, apa_PanelDetails, afws_sources, aff_Field.Collection.Owner as TFWTable, awin_Parent,aff_Field.Relation, aff_Field, acom_Owner );
   end;
 end;
 
