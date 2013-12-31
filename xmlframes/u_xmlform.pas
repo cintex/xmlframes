@@ -27,7 +27,6 @@ uses
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
-  fonctions_xmlform,
   U_ExtComboInsert,
   fonctions_service,
   fonctions_manbase,
@@ -50,7 +49,8 @@ const
                                   FileUnit  : 'U_XMLForm' ;
                                   Owner     : 'Matthieu Giroux' ;
                                   Comment   : 'Fiche personnalisée avec création de composant à partir du XML.' ;
-                                  BugsStory : '0.9.1.6 : Adapting to ManFrames and auto create sql.'  + #13#10 +
+                                  BugsStory : '0.9.2.0 : centralizimg on manframes.'  + #13#10 +
+                                              '0.9.1.6 : Adapting to ManFrames and auto create sql.'  + #13#10 +
                                               '0.9.1.5 : centralizing on ManFrames.'  + #13#10 +
                                               '0.9.1.4 : UTF 8.'  + #13#10 +
                                               '0.9.1.3 : Testing.'  + #13#10 +
@@ -63,11 +63,10 @@ const
                                               '0.0.2.0 : Identification, more functionalities.'  + #13#10 +
                                               '0.0.1.0 : Working on weo.'   ;
                                   UnitType  : 3 ;
-                                  Major : 0 ; Minor : 9 ; Release : 1; Build : 6 );
+                                  Major : 0 ; Minor : 9 ; Release : 2; Build : 0 );
 {$ENDIF}
 
 type
-
   { TF_XMLForm }
   { Form created from XML}
 
@@ -83,15 +82,11 @@ type
     gbtn_PrintButton : TFWPrintSources;
     function fpc_CreatePageControl(const awin_Parent: TWinControl;
       const as_Name: String; const apan_PanelOrigin: TWinControl): TPageControl;
-    function fscb_CreateTabSheet(var apc_PageControl: TPageControl;
-      const awin_ParentPageControl, awin_PanelOrigin: TWinControl;
-      const as_Name, as_Caption: String): TScrollBox;
     procedure p_CloseLoginAction(AObject: TObject;
       var ACLoseAction: TCloseaction);
     procedure p_LoginCancelClick(AObject: TObject);
     procedure p_LoginOKClick(AObject: TObject);
     procedure p_setFunction ( const a_Value : TLeonFunction );
-    function  ffx_getSources : TFWXMLColumns;
   protected
     gxml_SourceFile : TALXMLDocument ;
     procedure p_ScruteComposantsFiche (); override;
@@ -101,23 +96,20 @@ type
                              const awin_Parent: TWinControl;
                              const anod_Field: TALXMLNode;
                              const ai_FieldCounter, ai_counter: Longint ); virtual;
-    function ffwc_getRelationComponent( const afws_source : TFWXMLSource ; const awin_Parent : TWinControl ;
+    function ffwc_getRelationComponent( const afws_source : TFWSource ; const awin_Parent : TWinControl ;
                                         const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn
                                                 ) : TWinControl; virtual;
     procedure p_setComponentLeft(const awin_Control: TControl;
       const ab_Column: Boolean);
     procedure p_setFieldComponentTop(const awin_Control: TWinControl;
       const ab_Column: Boolean);
-    procedure p_setFieldComponentData(const awin_Control: TWinControl; const afw_Source: TFWXMLSource; const afw_columnField: TFWFieldColumn; const ab_IsLocal : Boolean ); virtual;
+    procedure p_setFieldComponentData(const awin_Control: TWinControl; const afw_Source: TFWSource; const afw_columnField: TFWFieldColumn; const ab_IsLocal : Boolean ); virtual;
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
-    function  CreateSources: TFWSources; override;
-    function  fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ;
-                                          const aff_Field : TFWFieldColumn  ):TWinControl;
     function  fwin_CreateFieldComponentAndProperties(const as_Table :String; const anod_Field: TALXMLNode;
                                                   var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ; var  awin_Parent, awin_Last : TWinControl ;
-                                                  var ab_Column : Boolean ; const afws_Source : TFWXMLSource ):TWinControl; virtual;
+                                                  var ab_Column : Boolean ; const afws_Source : TFWSource ):TWinControl; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl;
       const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
     procedure p_SetFieldButtonsProperties(const anod_Action : TALXMLNode;
@@ -150,7 +142,6 @@ type
     procedure p_CreateFormComponents ( const as_XMLClass, as_Name : String ;  awin_Parent : TWinControl ) ; virtual;
     constructor Create ( AOwner : TComponent ); override;
     property Fonction : TLeonFunction read gr_Function write p_setfunction;
-    property DBSOurces : TFWXMLColumns read ffx_getSources;
   published
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
     property MainPanel   : TPanel read FMainPanel write FMainPanel;
@@ -163,11 +154,13 @@ implementation
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
      u_extdbgrid, fonctions_images,
+     fonctions_dialogs,
      fonctions_Objets_Dynamiques,
      fonctions_languages, fonctions_reports,
      u_buttons_defs,
+     fonctions_xmlform,
      fonctions_forms,
-     u_buttons_appli, fonctions_xmlform,
+     u_buttons_appli,
      unite_variables, StdCtrls;
 
 var  gb_LoginFormLoaded : Boolean = False;
@@ -204,7 +197,7 @@ Begin
             End
          else
           Begin
-            gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TF_XMLForm, FMainPanel, Name, Name );
+            gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TWinControl, FMainPanel, Name, Name, ADBSources.Owner as TComponent );
             gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , DBSources.Count - 1);
           End;
         ab_FieldFound := True;
@@ -249,33 +242,6 @@ Begin
       End;
 End;
 
-
-{ TFWXMLSource }
-
-
-
-function TFWXMLColumns.GetColumn(AIndex: Integer): TFWXMLSource;
-begin
-  Result := Items[AIndex] as TFWXMLSource;
-end;
-
-procedure TFWXMLColumns.SetColumn(AIndex: Integer; AValue: TFWXMLSource
-  );
-begin
-  if  ( AIndex > -1 )
-  and ( AIndex < Count ) Then
-    Items[AIndex].Assign(AValue);
-end;
-
-////////////////////////////////////////////////////////////////////////////////
-// function Add
-// Adding a column to form
-////////////////////////////////////////////////////////////////////////////////
-function TFWXMLColumns.Add: TFWXMLSource;
-begin
-  Result := TFWXMLSource(inherited Add);
-end;
-
 { TF_XMLForm }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -318,14 +284,6 @@ Begin
 end;
 
 
-// function CreateSources overrided
-// Create The TFWXMLColumns into the inherited TF_XMLForm
-// returns original and inherited TFWXMLColumns
-function TF_XMLForm.CreateSources: TFWSources;
-begin
-  Result := TFWXMLColumns.Create(Self, TFWXMLSource);
-end;
-
 // procedure DestroyComponents
 // Destroy all the visible components for the form to be re-used
 // Initiate the XML Form
@@ -362,10 +320,10 @@ var lpan_ParentPanel : TPanel ;
     lpan_Panel : TPanel ;
     ldbn_Navigator : TExtDBNavigator ;
     ldbg_Grid      : TCustomDBGrid;
-    lfwc_Column    : TFWXMLSource ;
+    lfwc_Column    : TFWSource ;
     lcon_Control   : TControl ;
 begin
-  lfwc_Column := DBSources [ ai_Counter ] as TFWXMLSource;
+  lfwc_Column := DBSources [ ai_Counter ] as TFWSource;
   lpan_ParentPanel := fpan_CreatePanel ( awin_Parent, CST_COMPONENTS_PANEL_MAIN + as_Name + IntToStr(ai_counter), Self, alClient );
   lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   lpan_ParentPanel.ShowHint := True;
@@ -396,21 +354,7 @@ End;
 // Creates some field components from  anod_Field
 // awin_Parent : Parent of created components
 // anod_Field : Node which wants a component
-// ab_isLarge : Large field
-// ab_IsLocal : Not linked to data
-// ai_FieldCounter : field counter
-// ai_counter : Column counter
-function TF_XMLForm.fwin_CreateFieldComponent ( const afws_Source : TFWXMLSource; const awin_Parent : TWinControl ; const aff_Field : TFWFieldColumn  ):TWinControl;
-begin
-  Result := fwin_CreateAFieldComponent ( FPageControl, aff_Field, Self, ai_counter );
 
-  if ( Result = nil ) then
-    Begin
-      MyShowmessage ( Gs_NoComponentToCreate + anod_Field.NodeName +'.' );
-      gb_Unload := True;
-    End;
-
-end;
 procedure TF_XMLForm.p_setControl  ( const as_BeginName : String ; const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint );
 begin
   awin_Control.Parent := awin_Parent ;
@@ -418,14 +362,14 @@ begin
   awin_Control.Tag := ai_FieldCounter + 1;
 End;
 
-function TF_XMLForm.ffwc_getRelationComponent(const afws_source: TFWXMLSource;
+function TF_XMLForm.ffwc_getRelationComponent(const afws_source: TFWSource;
   const awin_Parent: TWinControl; const afr_relation: TFWRelation;
   const aff_field: TFWFieldColumn): TWinControl;
 begin
 
 end;
 
-procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWXMLSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
+procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
 begin
   if not ab_IsLocal Then
     Begin
@@ -497,7 +441,7 @@ var
     ls_location   : String;
     lwin_Control  : TWinControl;
     lfwl_Label    : TFWLabel;
-    lfwc_Column   : TFWXMLSource ;
+    lfwc_Column   : TFWSource ;
 begin
   DisableAlign ;
   Screen.Cursor := Self.Cursor;
@@ -532,7 +476,7 @@ begin
                     else
                      ls_location := '';
 
-                   lfwc_Column := TFWXMLSource ( ffws_CreateSource ( DBSOurces, ConnectionName, lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location, Self ));
+                   lfwc_Column := TFWSource ( ffws_CreateSource ( DBSOurces, ConnectionName, lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location, Self ));
                    {$IFDEF DBNET}
                      If ( lfwc_Column.Connection.DatasetType = dtDBNet ) Then
                       Begin
@@ -711,14 +655,7 @@ function TF_XMLForm.fpc_CreatePageControl(const awin_Parent: TWinControl;
   const as_Name: String; const apan_PanelOrigin: TWinControl): TPageControl;
 begin
   gi_MainFieldsHeight := gi_LastFormFieldsHeight;
-  Result:=fpc_CreatePageControl(awin_Parent,as_Name,apan_PanelOrigin,Self);
-end;
-
-function TF_XMLForm.fscb_CreateTabSheet(var apc_PageControl: TPageControl;
-  const awin_ParentPageControl, awin_PanelOrigin: TWinControl; const as_Name,
-  as_Caption: String): TScrollBox;
-begin
-
+  Result:=fonctions_autocomponents.fpc_CreatePageControl(awin_Parent,as_Name,apan_PanelOrigin,Self);
 end;
 
 // procedure p_CloseLoginAction
@@ -788,11 +725,6 @@ begin
  finally
    EnableAlign ;
  end;
-end;
-
-function TF_XMLForm.ffx_getSources: TFWXMLColumns;
-begin
-  Result := DBSOurces as TFWXMLColumns;
 end;
 
 // procedure p_setChoiceComponent
@@ -1011,7 +943,7 @@ end;
 // ab_Column : Second editing column
 // afws_Source : XML form Column
 // afd_FieldsDefs : Field Definitions
-function TF_XMLForm.fwin_CreateFieldComponentAndProperties (const as_Table :String; const anod_Field: TALXMLNode; var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; var awin_Parent, awin_Last : TWinControl ; var ab_Column : Boolean ; const afws_Source : TFWXMLSource  ):TWinControl;
+function TF_XMLForm.fwin_CreateFieldComponentAndProperties (const as_Table :String; const anod_Field: TALXMLNode; var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; var awin_Parent, awin_Last : TWinControl ; var ab_Column : Boolean ; const afws_Source : TFWSource  ):TWinControl;
 var lnod_FieldProperties : TALXMLNode ;
     llab_Label  : TFWLabel;
     lb_IsLarge, lb_IsLocal  : Boolean;
@@ -1030,7 +962,7 @@ var lnod_FieldProperties : TALXMLNode ;
         lwin_Parent : TWinControl;
         lnod_FieldsNode : TALXmlNode;
         ls_Table : String ;
-        lfwc_Column : TFWXMLSource ;
+        lfwc_Column : TFWSource ;
     begin
       ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
       Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
@@ -1040,7 +972,7 @@ var lnod_FieldProperties : TALXMLNode ;
       if anod_Field <> lnod_OriginalNode Then
        Begin
         ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
-        lfwc_Column  := TFWXMLSource ( ffws_CreateSource( DBSOurces, ConnectionName, ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], Self ));
+        lfwc_Column  := TFWSource ( ffws_CreateSource( DBSOurces, ConnectionName, ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], Self ));
         li_FieldCounter := 0 ;
         with afws_Source.Linked.Add do
           Begin
@@ -1138,7 +1070,13 @@ var lnod_FieldProperties : TALXMLNode ;
 
       p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
-      awin_Control := fwin_CreateFieldComponent ( afws_Source, awin_Parent, anod_Field, lb_IsLarge, lb_IsLocal, ai_FieldCounter, ai_counter );
+      awin_Control := fwin_CreateAFieldComponent ( FPageControl, DBSources, lffd_ColumnFieldDef, Self, awin_Parent, lb_IsLocal, ai_Counter );
+
+      if ( awin_Control = nil ) then
+        Begin
+          MyShowmessage ( Gs_NoComponentToCreate + lffd_ColumnFieldDef.FieldName +'.' );
+          gb_Unload := True;
+        End;
 
       if not assigned ( awin_Control )
       or ( awin_Control is TDBGroupView ) then
@@ -1189,9 +1127,9 @@ begin
          gi_LastFormFieldsHeight := 0;
          gi_LastFormColumnHeight := 0;
          ab_Column:=False;
-         awin_Parent := fscb_CreateTabSheet ( FPageControlDetails, FPanelDetails, awin_Parent,
+         awin_Parent := fscb_CreateTabSheet ( FPageControl, Self, awin_Parent,
                           CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
-                          {$IFNDEF FPC}UTF8Decode{$ENDIF}( Gs_DetailsSheet ));
+                          {$IFNDEF FPC}UTF8Decode{$ENDIF}( Gs_DetailsSheet ),Self);
          afws_Source.Panels.add.Panel := awin_Parent;
        End;
 
@@ -1251,7 +1189,7 @@ procedure TF_XMLForm.p_CreateFormComponents ( const as_XMLClass, as_Name : Strin
 var li_i, li_j, li_NoField : LongInt ;
     lnod_Node : TALXMLNode ;
     lb_Column, lb_FieldFound, lb_Table : Boolean ;
-    lfwc_Column : TFWXMLSource ;
+    lfwc_Column : TFWSource ;
     lwin_Last : TWinControl;
     li_Counter : Integer;
 begin

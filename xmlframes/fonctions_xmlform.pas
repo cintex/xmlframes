@@ -40,7 +40,9 @@ uses Forms, JvXPBar, JvXPContainer,
 {$ENDIF}
   ALXmlDoc, Graphics,
   u_multidonnees,
+  u_xmlform,
   fonctions_manbase,
+  ComCtrls,
   fonctions_ObjetsXML,
   fonctions_service,
   fonctions_system, u_customframework,
@@ -60,34 +62,6 @@ const
 
 {$ENDIF}
 
-type
-
-    { TFWXMLColumn }
-    TFWXMLSource = class(TFWSource)
-     private
-      FPageControlDetails : TPageControl ;
-      FPanelDetails : TPanel ;
-     published
-      property PageControlDetails  : TPageControl read FPageControlDetails write FPageControlDetails ;
-      property PanelDetails : TPanel  read FPanelDetails write FPanelDetails ;
-    end;
-    { Special XML FWColumn}
-
-    TFWXMLColumnClass = class of TFWXMLSource;
-
-   { TFWSources }
-   {Collection of FWXMLColumn}
-
-    { TFWXMLColumns }
-
-    TFWXMLColumns = class(TFWSources)
-    private
-      function GetColumn(AIndex: Integer): TFWXMLSource;
-      procedure SetColumn(AIndex: Integer; AValue: TFWXMLSource);
-    public
-      function Add: TFWXMLSource;
-      property Items[AIndex: Integer]: TFWXMLSource read GetColumn write SetColumn; default;
-    end;
 
 function fb_ReadXMLEntitites () : Boolean;
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
@@ -107,6 +81,8 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      unite_variables, u_languagevars, Imaging,
      u_framework_dbcomponents,
      fonctions_languages,
+     u_xmlfillcombobutton,
+     u_fillcombobutton,
      fonctions_forms;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -141,8 +117,6 @@ Begin
        p_CreeAppliFromNode ( '' );
     End;
 End;
-
-
 
 
 procedure p_CreeAppliFromNode ( const as_EntityFile : String );
@@ -455,5 +429,6 @@ begin
     end;
 End ;
 
-
+initialization
+  gefc_FillComboAutoCreated := TXMLFillCombo;
 end.
