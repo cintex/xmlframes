@@ -111,6 +111,11 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const acom_Owner : TComponent ;
                                const aal_Align : TAlign
                                ):TControl ;
+function fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ; const acom_Owner : TComponent ): TPageControl;
+function fscb_CreateTabSheet(
+  var apc_PageControl: TPageControl; const awin_ParentPageControl,
+  awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
+    ): TScrollBox;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
 
 implementation
@@ -381,6 +386,52 @@ Begin
     End;
 
 End;
+
+
+// fonction fpc_CreatePageControl
+// Creating a pagecontrol
+// awin_Parent : Parent component
+// as_Name : name of pagecontrol
+// apan_PanelOrigin : Changing The non pagecontrol panel and adding it to the tabsheet getting 2 tabsheet
+function fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ; const acom_Owner : TComponent ): TPageControl;
+var ltbs_Tabsheet : TTabSheet ;
+begin
+  Result := TPageControl.Create ( acom_Owner );
+  Result.Parent := awin_Parent;
+  Result.Name := CST_COMPONENTS_PAGECONTROL_BEGIN + as_Name;
+  Result.Align := alClient;
+  ltbs_Tabsheet := TTabSheet.Create ( acom_Owner );
+  ltbs_Tabsheet.PageControl := Result;
+  ltbs_Tabsheet.Align := alClient;
+  ltbs_Tabsheet.Caption := awin_Parent.Hint;
+  ltbs_Tabsheet.Name := CST_COMPONENTS_TABSHEET_BEGIN + awin_Parent.Name;
+  // Le panneau d'origine change de parent
+  apan_PanelOrigin.Parent := ltbs_Tabsheet;
+End;
+
+// function fscb_CreateTabSheet
+// Create a tabsheet and so a pagecontrol
+// apc_PageControl : Page control to eventually create
+// awin_ParentPageControl : Parent of pagecontrol
+//  awin_PanelOrigin    : Panel not in a pagecontrol
+// as_Name              : Pagecontrol name
+// as_Caption : old caption
+// ai_Counter : COlumn counter
+function fscb_CreateTabSheet(
+  var apc_PageControl: TPageControl; const awin_ParentPageControl,
+  awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
+    ): TScrollBox;
+var ltbs_Tabsheet : TTabSheet ;
+begin
+  if apc_PageControl = nil then
+    apc_PageControl := fpc_CreatePageControl ( awin_ParentPageControl, as_Name, awin_PanelOrigin, acom_Owner );
+  ltbs_Tabsheet := TTabSheet.Create ( acom_Owner );
+  ltbs_Tabsheet.Align := alClient;
+  ltbs_Tabsheet.PageControl := apc_PageControl;
+  ltbs_Tabsheet.Caption := fs_getlabelCaption ( as_Caption );
+  Result := fscb_CreateScrollBox ( ltbs_Tabsheet, CST_COMPONENTS_TABSHEET_BEGIN +as_Name, acom_Owner, alClient );
+
+end;
 
 {$IFDEF VERSIONS}
 initialization
