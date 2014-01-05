@@ -610,6 +610,9 @@ begin
   for li_i := 0 to anod_Field.ChildNodes.Count - 1 do
     Begin
       lnod_Field := anod_Field.ChildNodes [ li_i ];
+      if    lnod_Field.HasAttribute(CST_LEON_FIELD_TYPE)
+      and ( lnod_Field.Attributes[CST_LEON_FIELD_TYPE] = CST_LEON_FIELD_COMPOSITION ) Then
+        Continue;
       ab_Column:=False;
       lfwt_Source  := ADBSources [ ADBSources.Count - 1 ];
       // Creating the properties and setting data link
