@@ -20,6 +20,7 @@ uses
   {$ENDIF}
   SysUtils, ALXmlDoc,
   DB,
+  u_multidata,
   fonctions_manbase,
   fonctions_system,
   IniFiles;
@@ -42,6 +43,7 @@ const // Champs utilisés
 {$ENDIF}
 type
   TOnExecuteProjectNode = procedure ( const as_FileName : String; const ANode : TALXMLNode );
+  TOnExecuteSQLScript = function ( const as_BaseName, as_user, as_password, as_sql : String ; const ads_connection : TDSSource ):Boolean;
   TActionTemplate          = (atmultiPageTable,atLogin);
   TLeonFunctionID          = String ;
   TLeonFunctions           = Array of TLeonFunctionID;
@@ -56,7 +58,7 @@ type
                                   Mode     : Byte ;
                                   Functions : TLeonFunctions;
                              end;
-
+ const ge_ExecuteSQLScript : TOnExecuteSQLScript = nil;
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ): Boolean;
 procedure p_LoadData ( const axno_Node : TALXMLNode; const acom_owner : TComponent );
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
@@ -76,7 +78,7 @@ var
 
 implementation
 
-uses u_multidata, u_multidonnees, fonctions_xml,
+uses u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
      u_languagevars,
      fonctions_dbcomponents,
@@ -91,7 +93,6 @@ uses u_multidata, u_multidonnees, fonctions_xml,
      {$IFDEF FPC}
      LazFileUtils,
      fonctions_dialogs,
-     u_connection,
      Dialogs,
      {$ENDIF}
      unite_variables,
@@ -626,19 +627,22 @@ begin
            // Quitting because having created properties
            Exit;
          end;
-       if not fb_createFieldID ( lfwt_Source.Table = as_Table, lnod_Field, lffd_ColumnFieldDef, ai_Fieldcounter, lb_IsLocal )
+       if not fb_createFieldID ( lfwt_Source.Table = as_Table, lnod_Field, lffd_ColumnFieldDef, ai_Fieldcounter )
         Then
-         Exit;
-       fb_setFieldType(lfwt_Source,lnod_Field,lffd_ColumnFieldDef,li_i,False,nil);
+         Begin
+           lfwt_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
+           Exit;
+         end;
+       if fb_setFieldType(lfwt_Source,lnod_Field,lffd_ColumnFieldDef,li_i,False,nil) Then
+         lfwt_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
     end;
 
 end;
 
-function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ):Boolean;
+function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ; const ads_connection : TDSSource = nil ):Boolean;
 var li_i : Integer;
     ACollection : TFWTables;
     ATemp : String;
-    LDatatset : TDataset;
     ls_File : String;
     lh_handleFile : THandle;
 Begin
@@ -652,7 +656,8 @@ Begin
          if AFile = ''
           Then ATemp:=Name
           Else ATemp:=AFile;
-         p_CreateComponents( ACollection, ATemp, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False );
+         if ACollection.indexOf(ATemp) = -1 Then
+           p_CreateComponents( ACollection, ATemp, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
        end;
     ATemp:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password);
     for li_i := 0 to ACollection.Count - 1 do
@@ -665,28 +670,21 @@ Begin
   finally
     ACollection.destroy;
   end;
-  ls_File := fs_GetIniDir+'sql-firebird';
-  if FileExistsUTF8(ls_File+CST_EXTENSION_SQL_FILE) Then DeleteFileUTF8(ls_File+CST_EXTENSION_SQL_FILE);
-  lh_handleFile := FileCreateUTF8(ls_File+CST_EXTENSION_SQL_FILE);
-  try
-    FileWriteln(lh_handleFile,ATemp);
-  finally
-    FileClose(lh_handleFile);
-  end;
-  Exit;
   if ab_DoItWithCommandLine Then
    Begin
-     p_ExecuteSQLCommand(ATemp);
+    ls_File := fs_GetIniDir+'sql-auto';
+    if FileExistsUTF8(ls_File+CST_EXTENSION_SQL_FILE) Then DeleteFileUTF8(ls_File+CST_EXTENSION_SQL_FILE);
+    lh_handleFile := FileCreateUTF8(ls_File+CST_EXTENSION_SQL_FILE);
+    try
+      FileWriteln(lh_handleFile,ATemp);
+    finally
+      FileClose(lh_handleFile);
+    end;
+    p_ExecuteSQLCommand(ATemp);
    end
   Else
-   Begin
-     LDatatset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,acom_owner);
-     try
-    //   p_ExecuteSQLQuery(LDatatset,ATemp);
-     finally
-       LDatatset.Destroy;
-     end;
-   end;
+   if Assigned(ge_ExecuteSQLScript)
+    Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password, ATemp, ads_connection );
 End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );
@@ -731,8 +729,8 @@ Begin
          Then
           Begin
            DataBase:=fs_GetCorrectPath (DataBase);
-           if ( pos ( '.', DataBase ) = 1 ) Then
-            DataBase := StringReplace(DataBase,'.',fs_getSoftDir,[]);
+           if ( pos ( '.'+DirectorySeparator, DataBase ) = 1 ) Then
+            DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getSoftDir,[]);
            if not FileExistsUTF8(DataBase) Then
              fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, True, acom_owner );
           end;
@@ -751,16 +749,8 @@ Begin
        on e: Exception do
          if MyMessageDlg('SQL',gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,mtWarning,mbYesNo) = mrYes Then
           Begin
-          { p_ShowConnectionWindow(Connection,f_GetMemIniFile);
-            try
-              p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
-              if fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then}
-                fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner);
-                Abort;
-            {Except
-              on e: Exception do
-                Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
-            end;}
+           if not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner,ads_connection) Then
+            Exit;
           end;
      end;
 

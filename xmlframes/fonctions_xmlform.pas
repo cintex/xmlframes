@@ -80,6 +80,7 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      fonctions_dbcomponents,
      unite_variables, u_languagevars, Imaging,
      u_framework_dbcomponents,
+     u_connection,
      fonctions_languages,
      u_xmlfillcombobutton,
      u_fillcombobutton,
@@ -241,8 +242,8 @@ Begin
   for li_k := 0 to anode.ChildNodes.Count - 1 do
   with anode.ChildNodes [ li_k ] do
    if  ( NodeName = CST_LEON_FIELD_F_MARKS )
-   and   HasAttribute(CST_LEON_FIELD_LOCAL )
-   and ( Attributes[CST_LEON_FIELD_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
+   and   HasAttribute(CST_LEON_LOCAL )
+   and ( Attributes[CST_LEON_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
     Begin
      Result := True;
      Exit;
@@ -429,6 +430,30 @@ begin
     end;
 End ;
 
+function fb_AutoCreateDatabaseWithQuery ( const as_BaseName, as_user, as_password, as_sql : String ; const ads_connection : TDSSource = nil ):Boolean;
+var     LDataset : TDataset;
+Begin
+  with ads_connection do
+   Begin
+    p_ShowConnectionWindow(Connection,f_GetMemIniFile);
+    try
+      p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
+      if not fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then
+        Abort;
+    Except
+      on e: Exception do
+        Raise EDatabaseError.Create ( 'Connection not started : ' + DataDriver + ' and ' + DataURL +#13#10 + 'User : ' + DataUser +#13#10 + 'Base : ' + Database    );
+    end;
+    LDataset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,ads_connection.Connection.Owner);
+    try
+      p_ExecuteSQLQuery(LDataset,as_sql);
+    finally
+      LDataset.Destroy;
+    end;
+   end;
+ End;
+
 initialization
   gefc_FillComboAutoCreated := TXMLFillCombo;
+  ge_ExecuteSQLScript:=TOnExecuteSQLScript(fb_AutoCreateDatabaseWithQuery);
 end.

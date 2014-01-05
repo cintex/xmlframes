@@ -1563,8 +1563,8 @@ Begin
         for li_k := 0 to lnode.ChildNodes.Count - 1 do
           with lnode.ChildNodes [ li_k ] do
            if  ( NodeName = CST_LEON_FIELD_F_MARKS )
-           and   HasAttribute(CST_LEON_FIELD_LOCAL )
-           and ( Attributes[CST_LEON_FIELD_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
+           and   HasAttribute(CST_LEON_LOCAL )
+           and ( Attributes[CST_LEON_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
              Exit;
         if as_Fields = '*'
          Then as_Fields := fs_GetIdAttribute ( lnode )
@@ -1598,8 +1598,8 @@ begin
   if NodeName = CST_LEON_FIELD_F_MARKS then
    with affd_ColumnFieldDef do
     Begin
-      if HasAttribute ( CST_LEON_FIELD_local )
-      and ( Attributes [ CST_LEON_FIELD_local ] <> CST_LEON_BOOL_FALSE )  then
+      if HasAttribute ( CST_LEON_LOCAL )
+      and ( Attributes [ CST_LEON_LOCAL ] <> CST_LEON_BOOL_FALSE )  then
         Begin
           ab_IsLocal := True;
           ColSelect:=False;
