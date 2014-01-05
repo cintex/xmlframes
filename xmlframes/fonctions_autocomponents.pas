@@ -106,6 +106,7 @@ function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
 function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
+function fwin_CreateAFieldComponent ( const aft_FieldType : TFieldType ; const afo_FieldOptions : TFWFieldOptions; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
 function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const as_Name : String;
                                const acom_Owner : TComponent ;
@@ -159,6 +160,303 @@ Begin
     awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE ;
 
 end;
+
+function fwin_getChoice ( const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
+Begin
+  if ab_IsLocal then
+    Result := TRadioGroup.Create ( acom_Owner )
+   Else
+    Result := TDBRadioGroup.Create ( acom_Owner );
+End;
+
+
+// function fdbg_GroupViewComponents
+// Creates a full N-N or N-1 relationships management
+// awin_Parent : the parent component of the created components
+// anod_NodeRelation : The relationships node
+// const alis_ListCrossLink : The other side relationships
+// ai_FieldCounter : Table counter
+// ai_Counter : Column Counter
+// returns the main list
+
+function fdbg_GroupViewComponents  ( var FPageControlDetails : TPageControl;
+                                     const afws_source : TFWSource ;
+                                     const awin_Parent : TWinControl ;
+                                     const ai_Connection : Integer;
+                                     const ads_Connection : TDSSource;
+                                     const afr_relation : TFWRelation;
+                                     const acom_Owner : TComponent;
+                                     const ai_FieldCounter,
+                                           ai_counter     : Integer):TDBGroupView;
+var lpan_ParentPanel   : TWinControl;
+    lpan_GroupViewRight,
+    lpan_PanelActions,
+    lpan_Panel : TPanel ;
+    ldgv_GroupViewRight : TDBGroupView ;
+    lcon_Control   : TControl;
+
+    procedure p_setGroupmentfields ( const adgv_GroupView : TDBGroupView );
+    Begin
+
+      with adgv_GroupView, afws_source, afr_relation do
+        if pos ( Table, FieldsFK [ 0 ].FieldName ) = 0 Then
+         Begin
+           DataFieldGroup := FieldsFK [ 0 ].FieldName;
+           DataFieldUnit  := FieldsFK [ 1 ].FieldName;
+         end
+        Else
+        Begin
+          DataFieldGroup := FieldsFK [ 1 ].FieldName;
+          DataFieldUnit  := FieldsFK [ 0 ].FieldName;
+        end
+    end;
+
+    procedure p_setLeftFromPanel ( const acon_Control : TWinControl );
+    Begin
+      acon_Control.Left := lpan_panel.Left + lpan_panel.Width + 1;
+    end;
+
+    procedure p_setLeftToPanel ( const acon_Control : TWinControl );
+    Begin
+      lpan_panel.Left := acon_Control.Left + acon_Control.Width + 1;
+    end;
+
+    procedure p_setTopFromPanel ( const acon_Control : TWinControl );
+    Begin
+      acon_Control.Top := lpan_panel.Top + lpan_panel.Height + 1;
+    end;
+
+    procedure p_setTopToPanel ( const acon_Control : TWinControl );
+    Begin
+      lpan_panel.Top := acon_Control.Top + acon_Control.Height + 1;
+    end;
+
+    // procedure p_setAndCreateButtons;
+    // Create The buttons of the main group view
+    procedure p_CreateAndSetButtonsActions;
+    Begin
+      with afr_relation,Result do
+        Begin
+          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + TablesDest.toString(False) + '1', acom_Owner, alLeft );
+          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
+          ButtonRecord := TFWRecord.Create ( acom_Owner );
+          ButtonRecord.Parent := lpan_PanelActions;
+          lpan_PanelActions.Height := ButtonRecord.Height;
+          ButtonRecord.Name := CST_COMPONENTS_RECORD_BEGIN + TablesDest.toString(False);
+          ButtonRecord.Align := alLeft ;
+          p_setLeftFromPanel ( ButtonRecord );
+          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_ACTIONS + TablesDest.toString(False) + '2', acom_Owner, alLeft );
+          p_setLeftToPanel ( ButtonRecord );
+          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
+          ButtonCancel := TFWCancel.Create ( acom_Owner );
+          ButtonCancel.Parent := lpan_PanelActions;
+          ButtonCancel.Name := CST_COMPONENTS_ABORT_BEGIN + TablesDest.toString(False);
+          ButtonCancel.Align := alLeft ;
+          ButtonCancel.Width := ButtonRecord.Width;
+          p_setLeftFromPanel ( ButtonCancel );
+        end;
+    end;
+
+    // procedure p_setAndCreateButtons;
+    // Create The buttons of the main group view
+    procedure p_CreateAndSetButtonsMoving;
+    Begin
+      with afr_relation,Result do
+        Begin
+          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + TablesDest.toString(False) + '1', acom_Owner, alTop );
+          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
+          ButtonIn := TFWInSelect.Create ( acom_Owner );
+          ButtonIn.Parent := lpan_PanelActions;
+          ButtonIn.Name := CST_COMPONENTS_IN_BEGIN + TablesDest.toString(False);
+          ( ButtonIn as TFWGroupButtonMoving ).Caption := '' ;
+          lpan_PanelActions.Width := ButtonIn.Width;
+          p_setTopFromPanel ( ButtonIn );
+          ButtonIn.Align := alTop ;
+          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + TablesDest.toString(False) + '2', acom_Owner, alTop );
+          p_setTopToPanel ( ButtonIn );
+          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
+          ButtonOut := TFWOutSelect.Create ( acom_Owner );
+          ButtonOut.Parent := lpan_PanelActions;
+          ButtonOut.Name := CST_COMPONENTS_OUT_BEGIN + TablesDest.toString(False);
+          ( ButtonOut as TFWGroupButtonMoving ).Caption := '' ;
+          p_setTopFromPanel ( ButtonOut );
+          ButtonOut.Align := alTop ;
+          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + TablesDest.toString(False) + '3', acom_Owner, alTop );
+          p_setTopToPanel ( ButtonOut );
+          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
+          ButtonTotalIn := TFWInAll.Create ( acom_Owner );
+          ButtonTotalIn.Parent := lpan_PanelActions;
+          ButtonTotalIn.Name := CST_COMPONENTS_INALL_BEGIN + TablesDest.toString(False);
+          ( ButtonTotalIn as TFWGroupButtonMoving ).Caption := '' ;
+          p_setTopFromPanel ( ButtonTotalIn );
+          ButtonTotalIn.Align := alTop ;
+          lpan_Panel := fpan_CreatePanel ( lpan_PanelActions, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_INTERLEAVING + CST_COMPONENTS_BUTTONS + TablesDest.toString(False) + '4', acom_Owner, alTop );
+          p_setTopToPanel ( ButtonTotalIn );
+          lpan_Panel.Width := CST_BUTTONS_INTERLEAVING;
+          ButtonTotalOut := TFWOutAll.Create ( acom_Owner );
+          ButtonTotalOut.Parent := lpan_PanelActions;
+          ButtonTotalOut.Name := CST_COMPONENTS_OUTALL_BEGIN + TablesDest.toString(False);
+          ( ButtonTotalOut as TFWGroupButtonMoving ).Caption := '' ;
+          p_setTopFromPanel ( ButtonTotalOut );
+          ButtonTotalOut.Align := alTop ;
+        end;
+    end;
+
+    // procedure p_setButtons;
+    // sets The buttons of the segund group view
+   procedure p_setButtons;
+    Begin
+      with ldgv_GroupViewRight do
+        Begin
+          DataListPrimary := False;
+          DataListOpposite := Result;
+          ButtonRecord   := Result.ButtonRecord;
+          ButtonCancel   := Result.ButtonCancel;
+          ButtonIn       := Result.ButtonOut;
+          ButtonTotalIn  := Result.ButtonTotalOut;
+          ButtonOut      := Result.ButtonIn;
+          ButtonTotalOut := Result.ButtonTotalIn;
+        end;
+    end;
+   procedure p_setGroupView ( const adgv_GroupView : TDBGroupView; const ab_Primary : Boolean );
+   var li_i : Integer;
+   Begin
+     with adgv_GroupView, afr_relation do
+       Begin
+         FieldDelimiter    := ',';
+         DataKeyOwner      := afws_source.GetKeyString;
+         DataKeyUnit       := FieldsFK.ToString;
+         DataFieldsDisplay := FieldsDisplay.ToString;
+         DataTableGroup    := TablesDest [ 0 ].Table;
+         DataTableOwner    := afws_source.Table;
+         DataTableUnit     := TablesDest [ 1 ].Table;
+         if ab_Primary Then
+           Begin
+             DataListPrimary  := True;
+             DataListOpposite := ldgv_GroupViewRight;
+           end
+          else
+           Begin
+             DataListPrimary  := False;
+             DataListOpposite := Result;
+           end;
+         DataSourceOwner := afws_source.Datasource;
+         for li_i := 0 to FieldsDisplay.Count -1 do
+           with Columns.Add do
+             begin
+               Caption := FieldsDisplay [ li_i ].GetCaption;
+             end;
+         ShowColumnHeaders:=True;
+       end;
+
+   end;
+
+begin
+  with afws_source, afr_relation do
+    Begin
+      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, PanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), CST_COMPONENTS_GROUPBOX_BEGIN + TablesDest.toString(False) + IntToStr(ai_counter), acom_Owner  );
+      {$IFDEF FPC}
+      lpan_ParentPanel.BeginUpdateBounds;
+      {$ENDIF}
+      try
+  //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
+  //      lpan_ParentPanel.ShowHint := True;
+        Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + Table + CST_COMPONENTS_LEFT, acom_Owner, alLeft );
+        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, acom_Owner, DBSources.Add );
+        Result.Width := CST_GROUPVIEW_WIDTH;
+        p_setGroupmentfields ( Result );
+        p_AddGroupView ( Result );
+        lpan_PanelActions := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_ACTIONS + Table, acom_Owner, alTop );
+        lpan_GroupViewRight := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + Table + CST_COMPONENTS_RIGHT, acom_Owner, alClient );
+        // Creating and setting buttons
+        p_CreateAndSetButtonsActions;
+        lpan_PanelActions := fpan_CreatePanel ( lpan_GroupViewRight, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_MIDDLE + Table, acom_Owner, alLeft );
+        lpan_Panel.width := CST_GROUPVIEW_INOUT_WIDTH + CST_XML_FIELDS_INTERLEAVING * 2;
+        ldgv_GroupViewRight := fdgv_CreateGroupView ( lpan_GroupViewRight, CST_COMPONENTS_GROUPVIEW_BEGIN + Table + CST_COMPONENTS_RIGHT, acom_Owner, alClient );
+        p_CreateAndSetButtonsMoving;
+        p_setGroupmentfields ( ldgv_GroupViewRight );
+        p_AddGroupView ( ldgv_GroupViewRight );
+        p_setButtons;
+        lcon_Control := fspl_CreateSplitter ( lpan_ParentPanel, CST_COMPONENTS_SPLITTER_BEGIN + Table + CST_COMPONENTS_MIDDLE, acom_Owner, alLeft );
+        lcon_Control.Left := Result.Width;
+        p_setGroupView ( Result, True );
+        p_setGroupView ( ldgv_GroupViewRight, False );
+      finally
+      {$IFDEF FPC}
+        lpan_ParentPanel.EndUpdateBounds;
+      {$ENDIF}
+      end;
+    end;
+
+End;
+
+/////////////////////////////////////////////////////////////////////////
+// function fwin_CreateAFieldComponent
+// Creating an edit component and setting properties
+// as_FieldType : XML field type string
+// acom_Owner : Form
+// ab_isLarge : Large or litte edit
+// ab_IsLocal : Local or data linked
+// ai_Counter : Field counter
+// returns an editing component
+//////////////////////////////////////////////////////////////////////////
+function fwin_CreateAFieldComponent ( const aft_FieldType : TFieldType ; const afo_FieldOptions : TFWFieldOptions; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
+begin
+  Result := nil;
+  case aft_FieldType of
+    ftFloat :
+     Begin
+      if ab_IsLocal then
+        Begin
+         Result := TExtNumEdit.Create ( acom_Owner );
+         (Result as TExtNumEdit).Text:='';
+        end
+       else
+        Result := TExtDBNumEdit.Create ( acom_Owner );
+     end;
+  ftMemo :
+    Begin
+        Result := fwin_CreateAEditComponent ( acom_Owner, True, ab_IsLocal );
+    End;
+  ftString:
+    Begin
+      if foFile in afo_FieldOptions Then
+       Begin
+        if ab_IsLocal then
+          Result := TFWFileEdit.Create ( acom_Owner )
+         else
+          Result := TFWDBFileEdit.Create ( acom_Owner );
+       end
+      else
+        if foChoice in afo_FieldOptions Then
+          Result := fwin_getChoice  ( acom_Owner, ab_IsLocal )
+         else
+          if ab_IsLocal then
+            Result := TFWEdit.Create ( acom_Owner )
+           else
+            Result := TFWDBEdit.Create ( acom_Owner );
+    End;
+  ftDate,ftDateTime:
+    Begin
+      if ab_IsLocal then
+        Result := TFWDateEdit.Create ( acom_Owner )
+       Else
+        Result := TFWDBDateEdit.Create ( acom_Owner );
+    End;
+    ftInteger :
+      Begin
+       if foChoice in afo_FieldOptions Then
+        Result := fwin_getChoice  ( acom_Owner, ab_IsLocal )
+       else
+        if ab_IsLocal then
+          Result := TFWSpinEdit.Create ( acom_Owner )
+         else
+          Result := TFWDBSpinEdit.Create ( acom_Owner );
+
+      end;
+  end;
+end;
+
 
 /////////////////////////////////////////////////////////////////////////
 // function fwin_CreateAEditComponent
