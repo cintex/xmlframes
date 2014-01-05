@@ -106,7 +106,7 @@ function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
 function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
-function fwin_CreateAFieldComponent ( const aft_FieldType : TFieldType ; const afo_FieldOptions : TFWFieldOptions; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
+function fwin_CreateAFieldComponent ( const afdt_FieldDataType : TFWFieldData ; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
 function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const as_Name : String;
                                const acom_Owner : TComponent ;
@@ -118,6 +118,7 @@ function fscb_CreateTabSheet(
   awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
     ): TScrollBox;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
 
 implementation
 
@@ -128,6 +129,62 @@ uses JvXPButtons,fonctions_dbcomponents,
      U_ExtNumEdits,
      u_buttons_appli, fonctions_proprietes,
      u_fillcombobutton,fonctions_languages;
+
+////////////////////////////////////////////////////////////////////////////////
+// function fds_CreateDataSourceAndOpenedQuery
+// create datasource, dataset, setting and open it
+// as_Table      : Table name
+// as_Fields     : List of fields with comma
+// as_NameEnd    : End of components' names
+// ar_Connection : Connection of table
+// alis_NodeFields : Node of fields' nodes
+////////////////////////////////////////////////////////////////////////////////
+function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
+var lfc_Fields : TFWFieldColumns ;
+    ls_FieldString : String;
+    li_i : Integer;
+begin
+  with alr_relation.TablesDest [ 0 ].Connection do
+    Begin
+      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
+      lfc_Fields := nil;
+      if assigned ( afws_SourceAdded ) Then
+         with afws_SourceAdded do
+           Begin
+             if GetKeyCount = 0 Then
+              with Indexes.Insert(0) do
+                Begin
+                 IndexKind:=ikPrimary;
+                 lfc_Fields := FieldsDefs;
+                end;
+            ls_FieldString := lfc_Fields.GetString;
+            Datasource:=Result;
+            Table := as_Table;
+            ls_FieldString:=FieldsDefs.GetString;
+            if ls_FieldString > '' Then
+             for li_i := 0 to lfc_Fields.Count -1 do
+              with lfc_Fields [ li_i ] do
+               if FieldsDefs.indexOf ( FieldName ) = -1 Then
+                if ls_FieldString=''
+                 Then ls_FieldString:=FieldName
+                 else ls_FieldString:=','+FieldName;
+           end;
+
+      if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
+       Then
+         Begin
+           if DatasetType = dtCSV Then
+             p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
+           {$IFDEF DBNET}
+           if DatasetType = dtDBNet Then
+             p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_FieldString + ' FROM ' + as_Table );
+           {$ENDIF}
+         end
+        else
+        p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_FieldString + ' FROM ' + as_Table );
+      Result.DataSet.Open;
+    end;
+end;
 
 /////////////////////////////////////////////////////////////////////////
 // function ffwl_CreateALabelComponent
@@ -180,6 +237,7 @@ End;
 // returns the main list
 
 function fdbg_GroupViewComponents  ( var FPageControlDetails : TPageControl;
+                                     const afws_sources : TFWSources ;
                                      const afws_source : TFWSource ;
                                      const awin_Parent : TWinControl ;
                                      const ai_Connection : Integer;
@@ -352,7 +410,7 @@ var lpan_ParentPanel   : TWinControl;
    end;
 
 begin
-  with afws_source, afr_relation do
+  with afws_source, afr_relation as TFWRelationGroup do
     Begin
       lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, PanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), CST_COMPONENTS_GROUPBOX_BEGIN + TablesDest.toString(False) + IntToStr(ai_counter), acom_Owner  );
       {$IFDEF FPC}
@@ -362,10 +420,10 @@ begin
   //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   //      lpan_ParentPanel.ShowHint := True;
         Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + Table + CST_COMPONENTS_LEFT, acom_Owner, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, acom_Owner, DBSources.Add );
+        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, acom_Owner, afws_sources.Add );
         Result.Width := CST_GROUPVIEW_WIDTH;
         p_setGroupmentfields ( Result );
-        p_AddGroupView ( Result );
+        GroupView := Result ;
         lpan_PanelActions := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_ACTIONS + Table, acom_Owner, alTop );
         lpan_GroupViewRight := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + Table + CST_COMPONENTS_RIGHT, acom_Owner, alClient );
         // Creating and setting buttons
@@ -375,7 +433,6 @@ begin
         ldgv_GroupViewRight := fdgv_CreateGroupView ( lpan_GroupViewRight, CST_COMPONENTS_GROUPVIEW_BEGIN + Table + CST_COMPONENTS_RIGHT, acom_Owner, alClient );
         p_CreateAndSetButtonsMoving;
         p_setGroupmentfields ( ldgv_GroupViewRight );
-        p_AddGroupView ( ldgv_GroupViewRight );
         p_setButtons;
         lcon_Control := fspl_CreateSplitter ( lpan_ParentPanel, CST_COMPONENTS_SPLITTER_BEGIN + Table + CST_COMPONENTS_MIDDLE, acom_Owner, alLeft );
         lcon_Control.Left := Result.Width;
@@ -400,10 +457,10 @@ End;
 // ai_Counter : Field counter
 // returns an editing component
 //////////////////////////////////////////////////////////////////////////
-function fwin_CreateAFieldComponent ( const aft_FieldType : TFieldType ; const afo_FieldOptions : TFWFieldOptions; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
+function fwin_CreateAFieldComponent ( const afdt_FieldDataType : TFWFieldData ; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
 begin
   Result := nil;
-  case aft_FieldType of
+  case afdt_FieldDataType.FieldType of
     ftFloat :
      Begin
       if ab_IsLocal then
@@ -420,7 +477,7 @@ begin
     End;
   ftString:
     Begin
-      if foFile in afo_FieldOptions Then
+      if foFile in afdt_FieldDataType.Options Then
        Begin
         if ab_IsLocal then
           Result := TFWFileEdit.Create ( acom_Owner )
@@ -428,7 +485,7 @@ begin
           Result := TFWDBFileEdit.Create ( acom_Owner );
        end
       else
-        if foChoice in afo_FieldOptions Then
+        if foChoice in afdt_FieldDataType.Options Then
           Result := fwin_getChoice  ( acom_Owner, ab_IsLocal )
          else
           if ab_IsLocal then
@@ -445,7 +502,7 @@ begin
     End;
     ftInteger :
       Begin
-       if foChoice in afo_FieldOptions Then
+       if foChoice in afdt_FieldDataType.Options Then
         Result := fwin_getChoice  ( acom_Owner, ab_IsLocal )
        else
         if ab_IsLocal then

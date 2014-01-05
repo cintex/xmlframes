@@ -1070,7 +1070,7 @@ var lnod_FieldProperties : TALXMLNode ;
 
       p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
-      awin_Control := fwin_CreateAFieldComponent ( FPageControl, DBSources, lffd_ColumnFieldDef, Self, awin_Parent, lb_IsLocal, ai_Counter );
+      awin_Control := fwin_CreateAFieldComponent ( lffd_ColumnFieldDef, Self, lb_IsLocal );
 
       if ( awin_Control = nil ) then
         Begin
