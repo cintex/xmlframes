@@ -53,6 +53,8 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_COMPONENTS_SPLITTER_BEGIN     = 'spl_' ;
       CST_COMPONENTS_FILLCOMBO_BEGIN    = 'fcb_' ;
       CST_COMPONENTS_COMBO_BEGIN        = 'cbx_' ;
+      CST_COMPONENTS_LABEL_BEGIN        = 'lb_' ;
+      CST_COMPONENTS_EDIT_BEGIN         = 'ed_' ;
       CST_COMPONENTS_GROUPVIEW_BEGIN    = 'grv_' ;
       CST_COMPONENTS_RECORD_BEGIN       = 'fwr_Record' ;
       CST_COMPONENTS_ABORT_BEGIN        = 'fwa_Abort' ;
@@ -202,10 +204,14 @@ end;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
 Begin
   Result := TFWLabel.Create ( acom_Owner );
-  Result.Parent := awin_Parent ;
-  Result.MyEdit := awin_Control;
-  Result.Caption := fs_GetLabelCaption ( as_Name );
-  Result.Tag := ai_counter + 1;
+  with Result do
+   Begin
+    Parent := awin_Parent ;
+    Name   := CST_COMPONENTS_LABEL_BEGIN+as_Name+IntToStr(ai_Counter);
+    MyEdit := awin_Control;
+    Caption := fs_GetLabelCaption ( as_Name );
+    Tag := ai_counter + 1;
+   end;
   if assigned ( afcf_ColumnField ) Then
     Begin
       afcf_ColumnField.CaptionName := Result.Caption; //lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);

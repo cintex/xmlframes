@@ -491,19 +491,24 @@ begin
           for li_j := 0 to lnod_Node.ChildNodes.Count - 1 do
             Begin
               lnod_NodeChild := lnod_Node.ChildNodes [ li_j ];
-              if  ( lnod_NodeChild.NodeName = CST_LEON_PARAMETER )
-              and lnod_NodeChild.HasAttribute ( CST_LEON_PARAMETER_NAME )
-              and (  ( lnod_NodeChild.Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_LOGIN_INFO    )
-                  or ( lnod_NodeChild.Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_PASSWORD_INFO ))
+              with lnod_NodeChild do
+              if  ( NodeName = CST_LEON_PARAMETER )
+              and HasAttribute ( CST_LEON_PARAMETER_NAME )
+              and (  ( Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_LOGIN_INFO    )
+                  or ( Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_PASSWORD_INFO ))
                Then
                 Begin
                    Begin
                      lwin_Control := fwin_CreateAEditComponent ( Self, False, True );
-                     lwin_Control.Parent := Self;
-                     lwin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE;
-                     lwin_Control.Width := 120 ;
-                     lfwl_Label   := ffwl_CreateALabelComponent ( Self, Self, lwin_Control, lfwc_Column.FieldsDefs.Add, lnod_NodeChild.Attributes [ CST_LEON_PARAMETER_NAME ], li_Counter, False );
-                     if ( lnod_NodeChild.Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_LOGIN_INFO ) Then
+                     with lwin_Control do
+                      Begin
+                       Parent := Self;
+                       Left := CST_XML_FIELDS_CAPTION_SPACE;
+                       Name := CST_COMPONENTS_EDIT_BEGIN+Attributes [ CST_LEON_PARAMETER_NAME ]+IntToStr(li_j);
+                       Width := 120;
+                      end;
+                     lfwl_Label   := ffwl_CreateALabelComponent ( Self, Self, lwin_Control, lfwc_Column.FieldsDefs.Add, Attributes [ CST_LEON_PARAMETER_NAME ], li_Counter, False );
+                     if ( Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_LOGIN_INFO ) Then
                        Begin
                          li_counter := 0;
                          lwin_Control.Top := 50 ;
@@ -523,7 +528,7 @@ begin
                      p_setLabelComponent ( lwin_Control, lfwl_Label, False );
                      with lfwc_Column.FieldsDefs [ lfwc_Column.FieldsDefs.Count - 1 ] do
                        Begin
-                         FieldName:= lnod_NodeChild.Attributes [ CST_LEON_IDREF ];
+                         FieldName:= Attributes [ CST_LEON_IDREF ];
                          NumTag:= li_counter + 1 ;
                        end;
                    end;
@@ -531,21 +536,29 @@ begin
             end;
           // Setting buttons
           lwin_Control := TFWOK.Create(Self);
-          lwin_Control.Parent := Self;
-          lwin_Control.Width  := 90;
-          lwin_Control.Height := 25;
-          lwin_Control.Left:= Width div 2 - ( lwin_Control.Width * 2 ) div 2;
-          lwin_Control.Top := 150 ;
-          ( lwin_Control as TFWOK ).OnClick := p_LoginOKClick;
+          with lwin_Control as TFWOK do
+           Begin
+            Parent := Self;
+            Name   := CST_COMPONENTS_BUTTON_BEGIN+ClassName+IntToStr(li_i);
+            Width  := 90;
+            Height := 25;
+            Left:= Self.Width div 2 - ( Width * 2 ) div 2;
+            Top := 150 ;
+            OnClick := p_LoginOKClick;
+           end;
           lwin_Control := TFWCancel.Create(Self);
-          lwin_Control.Parent := Self;
-          lwin_Control.Width  := 90;
-          lwin_Control.Height := 25;
-          lwin_Control.Left:= Width div 2 + lwin_Control.Width div 2;
-          lwin_Control.Top := 150 ;
-          ( lwin_Control as TFWCancel ).OnClick := p_LoginCancelClick;
+          with lwin_Control as TFWCancel do
+           Begin
+            Parent := Self;
+            Name   := CST_COMPONENTS_BUTTON_BEGIN+ClassName+IntToStr(li_i);
+            Width  := 90;
+            Height := 25;
+            Left:= Self.Width div 2 + Width div 2;
+            Top := 150 ;
+            OnClick := p_LoginCancelClick;
+           end;
         end;
-    end;
+      end;
   if not gb_LoginFormLoaded Then
     Begin
       gb_LoginFormLoaded := True;
@@ -630,22 +643,22 @@ begin
   // No LFM Bug
   for li_i := 0 to ComponentCount - 1 do
     Begin
-      lcom_Component := Components [ li_i ];
+     lcom_Component := Components [ li_i ];
      if lcom_Component is TFWButton Then
       Begin
        (lcom_Component as TFWButton).Loaded;
        Continue;
       end;
-      if lcom_Component is TDBGroupView Then
+     if lcom_Component is TDBGroupView Then
+      Begin
+        (lcom_Component as TDBGroupView).Loaded;
+        Continue;
+      end;
+     if ( lcom_Component is TExtDBNumEdit )
+     and (( lcom_Component as TExtDBNumEdit ).Field is TIntegerField )   then
        Begin
-         (lcom_Component as TDBGroupView).Loaded;
-         Continue;
+        ( lcom_Component as TExtDBNumEdit ).NbAfterComma:=0;
        end;
-      if ( lcom_Component is TExtDBNumEdit )
-      and (( lcom_Component as TExtDBNumEdit ).Field is TIntegerField )   then
-        Begin
-          ( lcom_Component as TExtDBNumEdit ).NbAfterComma:=0;
-        end;
 
     end;
   inherited;
