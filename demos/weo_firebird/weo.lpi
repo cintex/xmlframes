@@ -63,7 +63,7 @@
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="51" Y="65"/>
@@ -2707,13 +2707,10 @@
       <Unit328>
         <Filename Value="../../../Extended/core/fonctions_string.pas"/>
         <UnitName Value="fonctions_string"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="52"/>
         <CursorPos X="101" Y="99"/>
         <UsageCount Value="24"/>
-        <Loaded Value="True"/>
       </Unit328>
       <Unit329>
         <Filename Value="/usr/share/lazarus/1.0.12/lcl/stdctrls.pp"/>
@@ -2726,10 +2723,11 @@
       <Unit330>
         <Filename Value="../../../ManFrames/manbase/fonctions_create.pas"/>
         <UnitName Value="fonctions_create"/>
-        <EditorIndex Value="9"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="258"/>
-        <CursorPos X="64" Y="298"/>
+        <CursorPos X="34" Y="258"/>
         <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit330>
@@ -2800,7 +2798,7 @@
       <Unit339>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
         <UnitName Value="fonctions_xmlform"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="409"/>
         <CursorPos X="199" Y="409"/>
@@ -2931,12 +2929,10 @@
       </Unit354>
       <Unit355>
         <Filename Value="/usr/share/fpcsrc/2.6.2/rtl/objpas/classes/classesh.inc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="423"/>
         <CursorPos X="1" Y="450"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit355>
       <Unit356>
         <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
@@ -2949,7 +2945,7 @@
       <Unit357>
         <Filename Value="../../../ManFrames/manframes/u_fillcombobutton.pas"/>
         <UnitName Value="u_fillcombobutton"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="105" Y="9"/>
@@ -2959,7 +2955,7 @@
       <Unit358>
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="540"/>
         <CursorPos X="4" Y="546"/>
@@ -2969,7 +2965,7 @@
       <Unit359>
         <Filename Value="../../xmlservice/fonctions_service.pas"/>
         <UnitName Value="fonctions_service"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="638"/>
         <CursorPos X="1" Y="663"/>
@@ -2979,7 +2975,7 @@
       <Unit360>
         <Filename Value="../../../ManFrames/manregister/fonctions_ibx.pas"/>
         <UnitName Value="fonctions_ibx"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="45"/>
         <CursorPos X="10" Y="55"/>
@@ -2989,12 +2985,10 @@
       <Unit361>
         <Filename Value="../../../ibx/runtime/IB.pas"/>
         <UnitName Value="IB"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="387"/>
         <CursorPos X="1" Y="411"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit361>
       <Unit362>
         <Filename Value="../../../ibx/runtime/IBDatabase.pas"/>
@@ -3167,7 +3161,7 @@
       <Unit383>
         <Filename Value="../../../Extended/btncomp/u_buttons_appli.pas"/>
         <UnitName Value="u_buttons_appli"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="86" Y="27"/>
@@ -3192,43 +3186,35 @@
       </Unit385>
       <Unit386>
         <Filename Value="/usr/share/fpcsrc/2.6.2/rtl/objpas/classes/collect.inc"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="147"/>
         <CursorPos X="3" Y="149"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit386>
       <Unit387>
         <Filename Value="/usr/share/fpcsrc/2.6.2/rtl/objpas/classes/persist.inc"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="46"/>
         <CursorPos X="3" Y="49"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit387>
       <Unit388>
         <Filename Value="../../../dbdesigner-fork-lazarus-3-trunk/EERExportSQLScript.pas"/>
         <UnitName Value="EERExportSQLScript"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="620"/>
         <CursorPos X="44" Y="644"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit388>
       <Unit389>
         <Filename Value="/usr/share/fpcsrc/2.6.2/rtl/unix/sysunixh.inc"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="2" Y="28"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit389>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="21" HistoryIndex="20">
       <Position1>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
         <Caret Line="1381" Column="31" TopLine="1341"/>
@@ -3270,85 +3256,49 @@
         <Caret Line="750" Column="55" TopLine="708"/>
       </Position10>
       <Position11>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="31" Column="72" TopLine="28"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="749" Column="1" TopLine="716"/>
       </Position11>
       <Position12>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="55" Column="33" TopLine="28"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="806" Column="45" TopLine="764"/>
       </Position12>
       <Position13>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="63" Column="83" TopLine="28"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="1409" Column="32" TopLine="1372"/>
       </Position13>
       <Position14>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="70" Column="51" TopLine="28"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position14>
       <Position15>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="71" Column="60" TopLine="29"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="41" Column="94" TopLine="1"/>
       </Position15>
       <Position16>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="126" Column="16" TopLine="87"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="1402" Column="32" TopLine="1361"/>
       </Position16>
       <Position17>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="58" Column="95" TopLine="33"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="1380" Column="112" TopLine="1361"/>
       </Position17>
       <Position18>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="749" Column="1" TopLine="716"/>
+        <Caret Line="1366" Column="20" TopLine="1342"/>
       </Position18>
       <Position19>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="806" Column="45" TopLine="764"/>
+        <Caret Line="1388" Column="70" TopLine="1369"/>
       </Position19>
       <Position20>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1409" Column="32" TopLine="1372"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position20>
       <Position21>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position21>
-      <Position22>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="41" Column="94" TopLine="1"/>
-      </Position22>
-      <Position23>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1402" Column="32" TopLine="1361"/>
-      </Position23>
-      <Position24>
-        <Filename Value="/usr/share/fpcsrc/2.6.2/rtl/unix/sysunixh.inc"/>
-        <Caret Line="54" Column="3" TopLine="21"/>
-      </Position24>
-      <Position25>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1380" Column="112" TopLine="1361"/>
-      </Position25>
-      <Position26>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1366" Column="20" TopLine="1342"/>
-      </Position26>
-      <Position27>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1388" Column="70" TopLine="1369"/>
-      </Position27>
-      <Position28>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position28>
-      <Position29>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
         <Caret Line="2076" Column="101" TopLine="2066"/>
-      </Position29>
-      <Position30>
-        <Filename Value="../../../Extended/core/fonctions_string.pas"/>
-        <Caret Line="100" Column="50" TopLine="99"/>
-      </Position30>
+      </Position21>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -3370,6 +3320,7 @@
     <Linking>
       <Debugging>
         <UseValgrind Value="True"/>
+        <UseExternalDbgSyms Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
     </Linking>
@@ -3403,4 +3354,4 @@
       </Item3>
     </Exceptions>
   </Debugging>
-</CONFIG>
+</CONFIG>
