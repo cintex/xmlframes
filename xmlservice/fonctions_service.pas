@@ -145,7 +145,7 @@ Begin
                 gs_RootEntities := copy ( gs_RootEntities, 1, pos ( '.', gs_RootEntities ) - 1 );
               End;
 
-            Result := fs_getSoftDir + fs_WithoutFirstDirectory ( Result );
+            Result := fs_getLeonDir + fs_WithoutFirstDirectory ( Result );
             if FileExists ( Result ) then
                aopn_OnProjectNode ( Result, lNode );
           End;
@@ -165,19 +165,19 @@ Begin
   if ( gs_ProjectFile = '' ) then
     Begin
       lstl_FichierIni := TStringList.Create ;
-      if not FileExists(fs_getSoftDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
+      if not FileExists(fs_getAppDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
         Begin
           raise Exception.Create ( 'No ini file of LEONARDI project !' );
           Exit;
         end;
       try
-        lstl_FichierIni.LoadFromFile( fs_getSoftDir + fs_GetNameSoft + CST_EXTENSION_INI);
+        lstl_FichierIni.LoadFromFile( fs_getAppDir + fs_GetNameSoft + CST_EXTENSION_INI);
         if ( pos ( INISEC_PAR, lstl_FichierIni [ 0 ] ) <= 0 ) Then
           Begin
             lstl_FichierIni.Insert(0,'['+INISEC_PAR+']');
-            lstl_FichierIni.SaveToFile(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI );
+            lstl_FichierIni.SaveToFile(fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI );
             lstl_FichierIni.Free;
-            raise Exception.Create ( 'New INI in '+ fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI + '.'+#13#10+#13#10 +
+            raise Exception.Create ( 'New INI in '+ fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI + '.'+#13#10+#13#10 +
                           'Restart.');
             Exit;
           End;
@@ -222,7 +222,7 @@ Begin
             Result := fs_RemplaceChar ( Result, '/', '\' );
             {$ENDIF}
 
-            Result := fs_getSoftDir + fs_WithoutFirstDirectory ( Result );
+            Result := fs_getLeonDir + fs_WithoutFirstDirectory ( Result );
             if FileExists ( Result )
             and  ( pos ( CST_LEON_SYSTEM_LOCATION, lNode.NodeName ) > 0 ) Then
              Begin
@@ -253,7 +253,7 @@ End;
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ) : Boolean;
 Begin
   if fb_CreateProject ( amif_Init, AApplication )
-  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
+  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getLeonDir + gs_ProjectFile ) Then
     Begin
       Result := True;
       fs_BuildFromXML ( 0, gxdo_FichierXML.Node, AApplication ) ;
@@ -274,7 +274,7 @@ End;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 Begin
   Result := False;
-  if  fb_LoadProperties (  fs_getSoftDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + gs_NomApp,  as_little_lang ) then
+  if  fb_LoadProperties (  fs_getLeonDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + gs_NomApp,  as_little_lang ) then
     Begin
       if assigned ( FMainIni ) then
         Begin
@@ -283,7 +283,7 @@ Begin
         End;
       Result := True;
     End
-  else fb_LoadProperties ( fs_getSoftDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + GS_EXT_LANGUAGES );
+  else fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + GS_EXT_LANGUAGES );
 End;
 
 
@@ -302,8 +302,8 @@ Begin
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
   if not assigned ( amif_Init ) then
-    if FileExists(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
-      Then amif_Init := TIniFile.Create(fs_getSoftDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+    if FileExists(fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+      Then amif_Init := TIniFile.Create(fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
       Else p_InitIniProjectFile;
   if assigned ( amif_Init ) Then
     Begin
@@ -322,7 +322,7 @@ Begin
           gs_ProjectFile := fs_RemplaceChar ( gs_ProjectFile, '/', '\' );
           {$ENDIF}
           gs_ProjectFile := fs_EraseNameSoft ( gs_NomApp, gs_ProjectFile );
-//          Showmessage ( fs_getSoftDir + gs_ProjectFile );
+//          Showmessage ( fs_getLeonDir + gs_ProjectFile );
 
 
         End;
@@ -720,7 +720,7 @@ Begin
           Begin
            DataBase:=fs_GetCorrectPath (DataBase);
            if ( pos ( '.'+DirectorySeparator, DataBase ) = 1 ) Then
-            DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getSoftDir,[]);
+            DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getAppDir,[]);
            if not FileExistsUTF8(DataBase) Then
              fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, True, acom_owner );
           end;

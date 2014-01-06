@@ -2,6 +2,7 @@ unit u_languagevars;
 
 interface
 
+var gs_LeonardiSubDir : String = '';
 resourcestring
 
    Gs_NoFormToCreate       = 'Pas de formulaire répertorié pour ' ;

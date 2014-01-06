@@ -192,8 +192,9 @@ var gs_ProjectFile  : String;
     gs_Encoding     : String = 'ISO-8859-1';
 
 
-function fs_getSoftInfo : String;
-function fs_getSoftFiles : String;
+function fs_getLeonDir :String ;
+function fs_getLeonInfo : String;
+function fs_getLeonFiles : String;
 function fs_getImagesDir : String;
 function fs_getProjectDir : String;
 function fs_LeonFilter ( const AString : String ): String;
@@ -249,7 +250,13 @@ uses fonctions_init,
      u_multidata,
      u_multidonnees,
      fonctions_system,
+     u_languagevars,
      DbCtrls;
+
+function fs_getLeonDir :String ;
+Begin
+  Result:=fs_getAppDir+gs_LeonardiSubDir;
+end;
 
 // Function fb_getFieldOptions
 // setting some data properties
@@ -585,8 +592,8 @@ end;
 // AString : Leon string
 function fs_LeonFilter ( const AString : String ): String;
 Begin
-  Result := StringReplace ( AString, CST_LEON_DIR+DirectorySeparator, fs_getSoftDir, [rfReplaceAll] );
-  Result := StringReplace ( AString, CST_LEON_DIR, fs_getSoftDir, [rfReplaceAll] );
+  Result := StringReplace ( AString, CST_LEON_DIR+DirectorySeparator, fs_getLeonDir, [rfReplaceAll] );
+  Result := StringReplace ( AString, CST_LEON_DIR, fs_getLeonDir, [rfReplaceAll] );
 End;
 
 // procedure fb_GetMarkFunction
@@ -904,33 +911,33 @@ begin
     end;
 end;
 
-// function fs_getSoftInfo
+// function fs_getLeonInfo
 // getting info directory
 
-function fs_getSoftInfo : String;
+function fs_getLeonInfo : String;
 Begin
-  Result := fs_getSoftFiles + 'info' + DirectorySeparator ;
+  Result := fs_getLeonFiles + 'info' + DirectorySeparator ;
 End;
 
-// function fs_getSoftFiles
+// function fs_getLeonFiles
 // getting files directory
-function fs_getSoftFiles : String;
+function fs_getLeonFiles : String;
 Begin
-  Result := fs_getSoftDir + 'files' + DirectorySeparator ;
+  Result := fs_getLeonDir + 'files' + DirectorySeparator ;
 End;
 
 // function fs_getProjectDir
 // getting main directory
 function fs_getProjectDir : String;
 Begin
-  Result := fs_getSoftDir + ExtractFileDir ( gs_ProjectFile ) + DirectorySeparator ;
+  Result := fs_getLeonDir + ExtractFileDir ( gs_ProjectFile ) + DirectorySeparator ;
 End;
 
 // function fs_getImagesDir
 // getting image directory
 function fs_getImagesDir : String;
 Begin
-  Result := fs_getSoftDir + CST_IMAGES_DIR;
+  Result := fs_getLeonDir + CST_IMAGES_DIR;
 End;
 
 // function fb_LoadXMLFile

@@ -631,11 +631,11 @@ begin
   for li_i := 0 to ComponentCount - 1 do
     Begin
       lcom_Component := Components [ li_i ];
-      if lcom_Component is TFWButton Then
-       Begin
-        (lcom_Component as TFWButton).Loaded;
-        Continue;
-       end;
+     if lcom_Component is TFWButton Then
+      Begin
+       (lcom_Component as TFWButton).Loaded;
+       Continue;
+      end;
       if lcom_Component is TDBGroupView Then
        Begin
          (lcom_Component as TDBGroupView).Loaded;

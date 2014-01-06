@@ -263,12 +263,12 @@ var ls_Dir, ls_lang, ls_Language : String ;
     lini_Inifile : TStringList;
     li_pos : Cardinal;
  Begin
-  ls_Dir := fs_getSoftDir +CST_DIR_LANGUAGE;
+  ls_Dir := fs_getLeonDir +CST_DIR_LANGUAGE;
   lini_Inifile := nil;
-  if FileExists( fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES) Then
+  if FileExists( fs_getLeonDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES) Then
   try
     lini_Inifile := TStringList.Create( );
-    lini_Inifile.LoadFromFile(fs_getSoftDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES);
+    lini_Inifile.LoadFromFile(fs_getLeonDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES);
   Except
   End ;
   try
@@ -1453,7 +1453,7 @@ End;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 Begin
   if fb_CreateProject ( amif_Init, Application )
-  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getSoftDir + gs_ProjectFile ) Then
+  and fb_LoadXMLFile ( gxdo_FichierXML, fs_getLeonDir + gs_ProjectFile ) Then
     Begin
       Result := True;
       // La fenêtre n'est peut-être pas encore complètement créée
