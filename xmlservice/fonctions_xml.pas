@@ -532,7 +532,6 @@ procedure p_setNodeField ( const anod_Field : TALXMLNode;const affd_ColumnFieldD
 Begin
    with affd_ColumnFieldDef do
     Begin
-      FieldName := anod_Field.Attributes [CST_LEON_ID];
       if anod_Field.Attributes [CST_LEON_NAME] <> Null Then
         CaptionName := anod_Field.Attributes [CST_LEON_NAME];
     End;
@@ -546,6 +545,7 @@ procedure p_setNodeId ( const anod_FieldId, anod_FieldIsId : TALXMLNode;
 Begin
    with affd_ColumnFieldDef do
     Begin
+      FieldName := anod_FieldId.Attributes [CST_LEON_ID];
       p_setNodeField ( anod_FieldId,affd_ColumnFieldDef );
       if assigned ( afws_Source )
       and anod_FieldIsId.HasAttribute ( CST_LEON_ID )

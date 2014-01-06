@@ -671,17 +671,7 @@ Begin
     ACollection.destroy;
   end;
   if ab_DoItWithCommandLine Then
-   Begin
-    ls_File := fs_GetIniDir+'sql-auto';
-    if FileExistsUTF8(ls_File+CST_EXTENSION_SQL_FILE) Then DeleteFileUTF8(ls_File+CST_EXTENSION_SQL_FILE);
-    lh_handleFile := FileCreateUTF8(ls_File+CST_EXTENSION_SQL_FILE);
-    try
-      FileWriteln(lh_handleFile,ATemp);
-    finally
-      FileClose(lh_handleFile);
-    end;
-    p_ExecuteSQLCommand(ATemp);
-   end
+    p_ExecuteSQLCommand(ATemp)
   Else
    if Assigned(ge_ExecuteSQLScript)
     Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password, ATemp, ads_connection );
