@@ -725,7 +725,6 @@ Begin
              fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, True, acom_owner );
           end;
        p_setComponentProperty ( Connection, 'DatabaseName', Database );
-       p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_FIREBIRD )
       end
      else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
        p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
