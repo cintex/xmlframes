@@ -23,10 +23,9 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   KeyPreview = True
   Menu = mu_MainMenu
   OnActivate = F_FormMainIniActivate
-  OnCreate = FormCreate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  LCLVersion = '1.0.10.0'
+  LCLVersion = '1.0.12.0'
   Visible = True
   object im_appli: TImage
     Left = 248
@@ -792,8 +791,8 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object br_statusbar: TStatusBar
     Left = 0
-    Height = 19
-    Top = 601
+    Height = 16
+    Top = 604
     Width = 884
     AutoHint = True
     Panels = <    
@@ -973,14 +972,14 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object spl_Volet: TSplitter
     Left = 227
-    Height = 551
+    Height = 554
     Top = 50
     Width = 5
     Visible = False
   end
   object mtb_CustomizedMenu: TExtMenuToolBar
     Left = 0
-    Height = 551
+    Height = 554
     Top = 50
     Width = 30
     Align = alLeft
@@ -1000,12 +999,12 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   end
   object tbar_volet: TPanel
     Left = 30
-    Height = 551
+    Height = 554
     Top = 50
     Width = 197
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 551
+    ClientHeight = 554
     ClientWidth = 197
     Color = cl3DLight
     ParentColor = False
@@ -1013,13 +1012,13 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
     object scb_Volet: TScrollBox
       Left = 0
-      Height = 551
+      Height = 554
       Hint = 'Cliquez pour accÃ©der aux fonctions'
       Top = 0
       Width = 197
       HelpContext = 1440
       HorzScrollBar.Page = 197
-      VertScrollBar.Page = 551
+      VertScrollBar.Page = 554
       Align = alClient
       BorderStyle = bsNone
       Constraints.MinHeight = 10
@@ -2864,10 +2863,10 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
     object mu_fenetre: TMenuItem
-      Caption = 'Fe&nÃªtre'
+      Caption = 'Fe&nêtre'
       Hint = 'Commandes relatives aux fenÃÂªtres'
       object mu_Reinitiliserpresentation: TMenuItem
-        Caption = 'RÃ©initialiser la &prÃ©sentation'
+        Caption = 'Réinitialiser la &présentation'
         HelpContext = 1420
         OnClick = mu_ReinitiliserpresentationClick
       end
@@ -2896,19 +2895,19 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_affichage: TMenuItem
       Caption = 'Affichage'
       object mu_barreoutils: TMenuItem
-        Caption = 'Barre d''accÃ¨s'
+        Caption = 'Barre d''accès'
         Checked = True
         HelpContext = 1420
         OnClick = mu_barreoutilsClick
       end
       object mu_voletexplore: TMenuItem
-        Caption = 'Volet d''accÃ¨s'
+        Caption = 'Volet d''accès'
         Checked = True
         HelpContext = 1420
         OnClick = mu_voletexploreClick
       end
       object mi_CustomizedMenu: TMenuItem
-        Caption = 'Volet personnalisÃ©'
+        Caption = 'Volet personnalisé'
         OnClick = mi_CustomizedMenuClick
       end
     end

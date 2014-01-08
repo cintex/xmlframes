@@ -86,6 +86,7 @@ uses u_multidonnees, fonctions_xml,
      FileUtil,
      Controls,
      fonctions_file,
+     fonctions_string,
      fonctions_db,
      {$IFDEF WINDOWS}
      fonctions_string,
@@ -736,7 +737,7 @@ Begin
        p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
      except
        on e: Exception do
-         if MyMessageDlg('SQL',gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,mtWarning,mbYesNo) = mrYes Then
+         if MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,'Database'),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrYes Then
           Begin
            if not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner,ads_connection) Then
             Exit;

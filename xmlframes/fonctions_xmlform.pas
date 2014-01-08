@@ -446,7 +446,7 @@ Begin
     end;
     LDataset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,ads_connection.Connection.Owner);
     try
-      p_ExecuteSQLQuery(LDataset,as_sql);
+      p_ExecuteSQLScriptServer(Connection,as_sql);
     finally
       LDataset.Destroy;
     end;
