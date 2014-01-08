@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <path id="application.directoryclasspath">
+        <pathelement path="${application.basedir}"/>
+        <pathelement path="${application.basedir}/${application.package}"/>
+    </path>
+    <path id="application.classpath">
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/addsOnLeon.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/leon.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/mysql-connector-java-bin.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/velocity/velocity.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/skin_aqua.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/skin_nautilus.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/skin_poppei.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/skin_w4.jar"/>
+        <pathelement path="usr/lib/eclipse/plugins/com.lyria.studio_4.4/lib/xmlbeans/xmlbeans.jar"/>
+    </path>
+    <path id="application.web.classpath">
+        <pathelement path="${library.basedir}/lib/struts/*.jar"/>
+    </path>
+    <path id="application.swing.classpath">
+        <pathelement path="${library.basedir}/lib/miglayout-swing.jar"/>
+    </path>
+    <path id="application.swt.classpath">
+        <pathelement path="${library.basedir}/lib/swt_win/swt.jar"/>
+    </path>
+    <path id="application.skins">
+        <pathelement path="${library.basedir}/lib/skin_poppei.jar"/>
+        <pathelement path="${library.basedir}/lib/skin_nautilus.jar"/>
+        <pathelement path="${library.basedir}/lib/skin_aqua.jar"/>
+        <pathelement path="${library.basedir}/lib/skin_w4.jar"/>
+    </path>
+    <property environment="env"/>
+    <path id="application.webservices.classpath">
+        <pathelement path="${library.basedir}/lib/j2ee/*.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/jaxb-api.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/jaxb-impl.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/jaxb-xjc.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/jaxws-api.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/jaxws-rt.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/jaxws-tools.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/axis2-1.2.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/mimepull.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/stax-api-1.0-2.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/stax-ex.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/streambuffer.jar"/>
+        <pathelement path="${library.basedir}/lib/webservice/woodstox.jar"/>
+        <pathelement path="${env.JAVA_HOME}/lib/tools.jar"/>
+    </path>
+</project>

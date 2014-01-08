@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="parametres" behavior="weo.behavior.ParametresClassBehavior"
+		javaName="weo.src.Parametres">
+	<C_BIND value="parametres" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_PARAMETRES"/>
+	<GROUP value="GROUP_PARAMETRES"/>
+	<FIELDS>
+		<NUMBER id="param_id">
+			<NAME value="NAME_PARAM_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+		</NUMBER>
+		<TEXT id="param_nom">
+			<NAME value="NAME_PARAM_NOM_NOM"/>
+			<F_MARKS name='true' create='true' set='true' unique='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<MAX value='30'/>
+		</TEXT>
+		<TEXT id="param_adresse" multiple='true'>
+			<NAME value="NAME_PARAM_ADRESSE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<TIP value="TIP_PARAM_ADRESSE"/>
+		</TEXT>
+		<TEXT id="param_siret">
+			<NAME value="NAME_PARAM_SIRET"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<MIN value='0'/>
+			<MAX value='20'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="param_tvaintra">
+			<NAME value="NAME_PARAM_TVAINTRA"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<MIN value='0'/>
+			<MAX value='20'/>
+		</TEXT>
+		<TEXT id="param_devise">
+			<NAME value="NAME_PARAM_DEVISE"/>
+			<F_MARKS create='true' set='true' sort='true' filter='true' find='true'/>
+			<MIN value='0'/>
+			<MAX value='10'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<RELATION id="param_default_tva">
+			<NAME value="NAME_TVA_DEFAUT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' sort='true' filter='true' find='true'/>
+			<CLASSES idrefs="tva"/>
+		</RELATION>
+		<NUMBER id="param_num_devis">
+			<NAME value="NAME_PARAM_NUM_DEVIS_DER"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="param_num_demande_achat">
+			<NAME value="NAME_PARAM_NUM_DEMANDE_PRIX_DER"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="param_num_cmd_cl">
+			<NAME value="NAME_PARAM_NUM_CMD_CL_DER"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="param_num_cmd_fr">
+			<NAME value="NAME_PARAM_NUM_CMD_FR"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="param_num_bon_livraison">
+			<NAME value="NAME_PARAM_NUM_BON_LIVRAISON"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="param_num_bon_reception">
+			<NAME value="NAME_PARAM_NUM_BON_RECEPTION"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="param_num_facture">
+			<NAME value="NAME_PARAM_NUM_FACTURE"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+ 		<NUMBER id="param_num_facture_br">
+			<NAME value="NAME_PARAM_NUM_FACTURE_BR"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+ 		<NUMBER id="param_num_affaire">
+			<NAME value="NAME_PARAM_NUM_AFFAIRE"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<CHOICE id="param_backup_auto">
+			<NAME value="NAME_PARAM_BACKUP_AUTO"/>
+			<F_MARKS create='true' set='true' private='true'/>
+			<OPTIONS>
+				<OPTION id="param_backup_auto.non" name="NON" value="0" default='true'>
+					<RULE idref="param_backup_auto_time" operation='SET_OPTIONAL'/>
+					<RULE idref="param_backup_auto_time" operation='CLEAR' onCheck='false'/>
+				</OPTION>
+				<OPTION id="param_backup_auto.oui" name="OUI" value="1">
+					<RULE idref="param_backup_auto_time" operation='SET_EDITABLE'/>
+					<RULE idref="param_backup_auto_time" operation='CLEAR' onCheck='false'/>
+					<RULE idref="param_backup_auto_time" operation='SET_VALUE' value='15'/>
+				</OPTION>
+			</OPTIONS>
+			<TIP value="TIP_PARAM_BACKUP_AUTO"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</CHOICE>
+ 		<NUMBER id="param_backup_auto_time">
+			<NAME value="NAME_PARAM_BACKUP_AUTO_TIME"/>
+			<F_MARKS create='true' set='true' private='true'/>
+			<MIN value='10'/>
+			<PITCH value='5'/>
+			<UNIT value="Minutes"/>
+			<N_DEFAULT value='15'/>
+		</NUMBER>
+		<TEXT id="param_serveurfordata">
+			<NAME value="NAME_PARAM_SERVEURFORDATA"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NCOLS value='80'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<TIP value="TIP_PARAM_SERVEURFORDATA"/>
+		</TEXT>
+		<TEXT id="param_url_for_consult">
+			<NAME value="NAME_PARAM_URL_FOR_CONSULT_URL"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NCOLS value='80'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<TIP value="TIP_PARAM_URL_FOR_CONSULT_URL"/>
+		</TEXT>
+		<TEXT id="param_mail_expeditor">
+			<NAME value="NAME_PARAM_MAIL_EXPEDITOR"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NCOLS value='30'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+		<TEXT id="param_smtp_serveur">
+			<NAME value="NAME_PARAM_SMTP_SERVEUR"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+ 		<NUMBER id="param_smtp_port">
+			<NAME value="NAME_PARAM_SMTP_PORT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<MIN value='1'/>
+			<MAX value='65535'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='25'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<CHOICE id="param_smtp_ssl">
+			<NAME value="NAME_PARAM_SMTP_SSL"/>
+			<F_MARKS create='true' set='true' private='true'/>
+			<OPTIONS>
+				<OPTION id="param_Smtp_SSL.non" name="NON" value="0" default='true'/>
+				<OPTION id="param_Smtp_SSL.oui" name="OUI" value="1"/>
+			</OPTIONS>
+		</CHOICE>
+		<CHOICE id="param_smtpauthentification">
+			<NAME value="NAME_PARAM_SMTPAUTHENTIFICATION_SMT"/>
+			<F_MARKS create='true' set='true' private='true'/>
+			<OPTIONS>
+				<OPTION id="param_SmtpAuthentification.non" name="NAME_PARAM_SMTPAUTHENTIFICATION.NON" value="0" default='true'/>
+				<OPTION id="param_SmtpAuthentification.oui" name="NAME_PARAM_SMTPAUTHENTIFICATION.OUI" value="1">
+					<RULE idref="param_smtpuserlogin" operation='SET_EDITABLE'/>
+					<RULE idref="param_smtpuserlogin" operation='CLEAR' onCheck='false'/>
+					<RULE idref="param_smtpuserpassword" operation='SET_EDITABLE'/>
+					<RULE idref="param_smtpuserpassword" operation='CLEAR' onCheck='false'/>
+				</OPTION>
+			</OPTIONS>
+		</CHOICE>
+		<TEXT id="param_smtpuserlogin">
+			<NAME value="NAME_PARAM_SMTPUSERLOGIN"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+		<TEXT id="param_smtpuserpassword">
+			<NAME value="NAME_PARAM_SMTPUSERPASSWORD"/>
+			<F_MARKS create='true' set='true' optional='true' secret='true' private='true'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+		<TEXT id="param_passwordforchange">
+			<NAME value="NAME_PARAM_PASSWORDFORCHANGE"/>
+			<F_MARKS hidden='true'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+		<DATE id="param_date_creat">
+			<NAME value="NAME_PRODUIT_DATE_CREAT"/>
+			<F_MARKS hidden='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

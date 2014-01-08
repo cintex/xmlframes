@@ -1,0 +1,95 @@
+package XMLFrames;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  dbrtl,
+  bdertl,
+  dbexpress,
+  vcldb,
+  adortl,
+  vcljpg,
+  vclx,
+  Jcl,
+  JclVcl,
+  designide,
+  vclactnband,
+  rxdb,
+  rxctl,
+  VclSmp,
+  rxbde,
+  dsnap,
+  dclstd,
+  vcldesigner,
+  dcldb,
+  designdgm,
+  dclado,
+  inet,
+  VirtualTreesD10,
+  JvXPCtrlsD10R,
+  JvCtrlsD10R,
+  JvDBD10R,
+  JvSystemD10R,
+  JvStdCtrlsD10R,
+  JvCoreD10R,
+  PCK_ALCINOE,
+  ExtComponents,
+  ManSoft,
+  dklang10,
+  JvDlgsD10R,
+  JvCustomD10R,
+  VampyreImagingPackage,
+  ZComponent,
+  ZParseSql,
+  ZCore,
+  ZDbc,
+  ZPlain,
+  JvXPCtrlsD10D,
+  xmlrtl,
+  JvCoreD10D,
+  TntUnicodeVcl_R90,
+  dcldklang10,
+  TntUnicodeVcl_D90,
+  JvCmpD10R,
+  JvPageCompsD10R,
+  JvHMID10R,
+  JvGlobusD10R,
+  ManFrames,
+  dmenutoolbar;
+
+contains
+  fonctions_autocomponents in 'xmlservice\fonctions_autocomponents.pas',
+  fonctions_service in 'xmlservice\fonctions_service.pas',
+  fonctions_xml in 'xmlservice\fonctions_xml.pas',
+  u_languagevars in 'xmlservice\u_languagevars.pas',
+  fonctions_objetsxml in 'xmlframes\fonctions_objetsxml.pas',
+  u_xmlfenetreprincipale in 'xmlframes\u_xmlfenetreprincipale.pas',
+  u_xmlfillcombobutton in 'xmlframes\u_xmlfillcombobutton.pas',
+  u_xmlform in 'xmlframes\u_xmlform.pas';
+
+end.

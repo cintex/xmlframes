@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="droits">
+	<C_BIND value="droits" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_DROITS"/>
+	<GROUP value="GROUP_ADMINISTRATION"/>
+	<PREFIX value="droits"/>
+	<C_MARKS load='true'/>
+	<FIELDS>
+		<NUMBER id="droit_id">
+			<NAME value="NAME_DROIT_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<TEXT id="droit_description">
+			<NAME value="DROIT_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<CHOICE id="droit_type">
+			<NAME value="NAME_DROIT_TYPE"/>
+			<F_MARKS name='true' create='true' set='true' status='true' sort='true' filter='true'/>
+			<OPTIONS>
+				<OPTION id="droit_type.oui" name="NAME_DROIT_TYPE.OUI" value="0" default='true'/>
+				<OPTION id="droit_type.non" name="NAME_DROIT_TYPE.NON" value="1"/>
+			</OPTIONS>
+			<TIP value="TIP_DROIT_TYPE"/>
+		</CHOICE>		
+
+		<CHOICE id="droit_modele">
+			<NAME value="NAME_DROIT_MODELE"/>
+			<F_MARKS name='true' create='true' set='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="droit_type.st" name="NAME_DROIT_TYPE.ST" value="0" default='true'/>
+				<OPTION id="droit_type.db" name="NAME_DROIT_TYPE.DB" value="1"/>
+				<OPTION id="droit_type.sp" name="NAME_DROIT_TYPE.SP" value="2"/>
+			</OPTIONS>
+			<TIP value="TIP_DROIT_MODELE"/>
+		</CHOICE>		
+		
+		<TEXT id="droit_class">
+			<NAME value="DROIT_CLASS"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value="30"/>
+		</TEXT>
+		<TEXT id="droit_action">
+			<NAME value="DROIT_ACTION"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value="30"/>
+		</TEXT>
+
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

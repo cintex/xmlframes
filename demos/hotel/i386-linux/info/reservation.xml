@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="reservation"
+		behavior="hotel.behavior.ReservationClassBehavior">
+	<C_BIND value="reservation" location="hotel_db"/>
+	<NAME value="NAME_RESERVATION"/>
+	<PREFIX value="reservation"/>
+	<FIELDS>
+		<NUMBER id="reservation_number">
+			<NAME value="NAME_RESERVATION_NUMBER"/>
+			<ALIAS value="ALIAS_NR"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS id='true' name='true' setConsult='true' main='true' hidden='true' providerValue='true'/>
+			<MIN value='0'/>
+		</NUMBER>
+		<CHOICE id="reservation_state">
+			<NAME value="NAME_RESERVATION_STATE"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS notNull='true' set='true' status='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="reservation_state_waiting" name="NAME_OPT_WAITING" value="0" default='true' unknown='true'>
+					<RULE id="rule_waiting_client" idref="reservation_client" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_check_in" idref="reservation_check_in" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_check_out" idref="reservation_check_out" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_days" idref="reservation_days" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_establishment" idref="reservation_establishment" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_rooms" idref="reservation_rooms" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_adults" idref="reservation_adults" operation='SET_EDITABLE'/>
+					<RULE id="rule_waiting_children" idref="reservation_children" operation='SET_EDITABLE'/>
+				</OPTION>
+				<OPTION id="reservation_state_confirmed" name="NAME_OPT_CONFIRMED" value="1"/>
+				<OPTION id="reservation_state_terminated" name="NAME_OPT_TERMINATED" value="2"/>
+			</OPTIONS>
+		</CHOICE>
+		<DATE id="reservation_date" type='DATE'>
+			<NAME value="NAME_RESERVATION_DATE"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS consult='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="reservation_client" noContext="true">
+			<NAME value="NAME_RESERVATION_CLIENT"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS name='true' create='true' main='true' load='true'/>
+			<CLASSES idrefs="client"/>
+		</RELATION>
+		<DATE id="reservation_check_in" type='DATE'>
+			<NAME value="NAME_RESERVATION_CHECK_IN"/>
+			<ALIAS value="ALIAS_ARRIVAL"/>
+			<GROUP value="GROUP_DATES"/>
+			<F_MARKS create='true' set='true' needPost='true' main='true'>
+				<MARK name="TREEMAP_TOOLTIP"/>
+			</F_MARKS>
+		</DATE>
+		<DATE id="reservation_check_out" type='DATE'>
+			<NAME value="NAME_RESERVATION_CHECK_OUT"/>
+			<ALIAS value="ALIAS_CHECK_OUT"/>
+			<GROUP value="GROUP_DATES"/>
+			<F_MARKS create='true' set='true' needPost='true' main='true'>
+				<MARK name="TREEMAP_TOOLTIP"/>
+			</F_MARKS>
+		</DATE>
+		<NUMBER id="reservation_days">
+			<NAME value="NAME_RESERVATION_DAYS"/>
+			<ALIAS value="ALIAS_NIGHTS"/>
+			<GROUP value="GROUP_DATES"/>
+			<F_MARKS create='true' set='true' readOnly='true'/>
+		</NUMBER>
+		<RELATION id="reservation_establishment">
+			<NAME value="NAME_RESERVATION_ESTABLISHMENT"/>
+			<GROUP value="GROUP_ROOMS"/>
+			<F_MARKS create='true' set='true' main='true'>
+				<MARK name="TREEMAP_TOOLTIP"/>
+			</F_MARKS>
+			<CLASSES idrefs="establishment"/>
+		</RELATION>
+		<RELATION id="reservation_rooms" multiple='true' noContext='true'>
+			<NAME value="NAME_RESERVATION_ROOMS"/>
+			<GROUP value="GROUP_ROOMS"/>
+			<F_MARKS create='true' set='true' needPost='true'/>
+			<CLASSES idrefs="room"/>
+			<CONTEXT_FIELD idref="reservation_establishment"/>
+		</RELATION>
+		<NUMBER id="reservation_adults">
+			<NAME value="NAME_RESERVATION_ADULTS"/>
+			<ALIAS value="ALIAS_NB_ADULTS"/>
+			<GROUP value="GROUP_PEOPLE"/>
+			<F_MARKS create='true' set='true' table='true'/>
+			<MIN value='0'/>
+			<MAX value='4'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='1'/>
+		</NUMBER>
+		<NUMBER id="reservation_children">
+			<NAME value="NAME_RESERVATION_CHILDREN"/>
+			<ALIAS value="ALIAS_NB_CHILDREN"/>
+			<GROUP value="GROUP_PEOPLE"/>
+			<F_MARKS create='true' set='true' table='true'/>
+			<MIN value='0'/>
+			<MAX value='4'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="reservation_day_amount" template="amount" type='DOUBLE'>
+			<IMPORT relation="reservation_rooms" idref="room_rate"/>
+			<NAME value="NAME_DAY_AMOUNT"/>
+			<GROUP value="GROUP_PRICE"/>
+			<F_MARKS optional='true' filter='true' local='true' consult='true' complexTable='true'/>
+			<DECIMALS value='0'/>
+		</NUMBER>
+		<NUMBER id="reservation_amount" template="amount" type='DOUBLE'>
+			<NAME value="NAME_RESERVATION_AMOUNT"/>
+			<ALIAS value="ALIAS_RES_AMOUNT"/>
+			<GROUP value="GROUP_PRICE"/>
+			<F_MARKS optional='true' local='true' consult='true' main='true'/>
+			<DECIMALS value='0'/>
+			<FORMULA value="reservation_day_amount * reservation_days"/>
+		</NUMBER>
+	</FIELDS>
+	<SORT id="_1108476541974">
+		<SORT_CRITERIA id="reservation_sort" idref="reservation_check_in"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION id="print_model_reservation" template="_printModel"
+				behavior="hotel.behavior.PrintReservationBehavior">
+			<NAME value="NAME_PRINT_MODEL_RESERVATION"/>
+			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/print/reservation.rtf"/>
+			<PARAMETER name="_output" value="$LY_APP_DOC_DIR$/print/Facture.rtf"/>
+			<PARAMETER name="_synchronous" value='true'/>
+		</ACTION>
+		<ACTION id="change_reservation_state" template="_activate">
+			<NAME value="NAME_CHANGE_RESERVATION_STATE"/>
+			<PREFIX value="change_state"/>
+			<PARAMETER name="_fieldInfo" idref="reservation_state"/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>

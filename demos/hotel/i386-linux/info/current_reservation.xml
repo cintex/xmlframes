@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="current_reservation"
+		behavior="hotel.behavior.ReservationClassBehavior">
+	<C_BIND value="reservation" location="hotel_db">
+		<FILTER_REF idref="filter_current_reservation"/>
+	</C_BIND>
+	<NAME value="NAME_CURRENT_RESERVATION"/>
+	<PREFIX value="reservation"/>
+	<FIELDS>
+		<FIELD_REF idref="reservation_number"/>
+		<FIELD_REF idref="reservation_state"/>
+		<FIELD_REF idref="reservation_date"/>
+		<FIELD_REF idref="reservation_client"/>
+		<FIELD_REF idref="reservation_check_in"/>
+		<FIELD_REF idref="reservation_check_out"/>
+		<FIELD_REF idref="reservation_days"/>
+		<FIELD_REF idref="reservation_establishment"/>
+		<RELATION id="current_reservation_rooms" template="reservation_rooms" multiple='true' noContext='true'>
+			<NAME value="NAME_RESERVATION_ROOMS"/>
+			<GROUP value="GROUP_ROOMS"/>
+			<F_MARKS create='true' set='true' needPost='true'/>
+			<CLASSES idrefs="room"/>
+			<CONTEXT_FIELD idref="reservation_establishment"/>
+		</RELATION>
+		<FIELD_REF idref="reservation_adults"/>
+		<FIELD_REF idref="reservation_children"/>
+		<NUMBER id="current_reservation_day_amount" template="amount" type='DOUBLE'>
+			<IMPORT relation="current_reservation_rooms" idref="room_rate"/>
+			<NAME value="NAME_DAY_AMOUNT"/>
+			<GROUP value="GROUP_PRICE"/>
+			<F_MARKS optional='true' filter='true' local='true' consult='true' complexTable='true'/>
+			<DECIMALS value='0'/>
+		</NUMBER>
+		<NUMBER id="current_reservation_amount" template="amount" type='DOUBLE'>
+			<NAME value="NAME_RESERVATION_AMOUNT"/>
+			<ALIAS value="ALIAS_RES_AMOUNT"/>
+			<GROUP value="GROUP_PRICE"/>
+			<F_MARKS optional='true' local='true' consult='true' main='true'/>
+			<DECIMALS value='0'/>
+			<FORMULA value="current_reservation_day_amount * reservation_days"/>
+		</NUMBER>
+	</FIELDS>
+	<SORT id="_1108476541975">
+		<SORT_CRITERIA id="current_reservation_sort" idref="reservation_check_in"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION id="print_model_current_reservation" template="_printModel"
+				behavior="hotel.behavior.PrintReservationBehavior">
+			<NAME value="NAME_PRINT_MODEL_RESERVATION"/>
+			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/print/reservation_model.rtf"/>
+			<PARAMETER name="_output" value="$LY_APP_DOC_DIR$/print/Facture.rtf"/>
+			<PARAMETER name="_synchronous" value='true'/>
+		</ACTION>
+		<ACTION_REF idref="change_reservation_state"/>
+	</ACTIONS>
+</CLASS>

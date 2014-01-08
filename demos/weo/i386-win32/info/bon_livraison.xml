@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="bon_livraison">
+	<C_BIND value="bon_livraison" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_BON_LIVRAISON"/>
+	<PREFIX value="bl"/>
+	<FIELDS>
+		<NUMBER id="bon_livraison_id">
+			<NAME value="NAME_BON_LIVRAISON_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<CHOICE id="bon_livraison_facturable">
+			<NAME value="NAME_BON_LIVRAISON_FACTURABLE"/>
+			<F_MARKS create='true' set='true' private='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="bon_livraison_facturable.oui" name="OUI" value="0" default='true'/>
+				<OPTION id="bon_livraison_facturable.non" name="NON" value="1"/>
+			</OPTIONS>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</CHOICE>
+		<RELATION id="bon_livraison_affaire">
+			<NAME value="NAME_AFFAIRE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' sort='true' filter='true' find='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="affaire"/>
+		</RELATION>
+		<NUMBER id="bon_livraison_numero">
+			<NAME value="NAME_BON_LIVRAISON_NUMERO"/>
+			<F_MARKS name='true' unique='true' private='true' consult='true' main='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<DATE id="bon_livraison_date_creation">
+			<NAME value="NAME_BON_LIVRAISON_DATE_CREATION"/>
+			<F_MARKS create='true' private='true' main='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="bon_livraison_commande">
+			<NAME value="NAME_BON_LIVRAISON_COMMANDE"/>
+			<F_MARKS create='true' optional='true' private='true' main='true'/>
+			<CLASSES idrefs="cmd_client"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<RELATION id="bon_livraison_client">
+			<NAME value="NAME_BON_LIVRAISON_CLIENT"/>
+			<F_MARKS create='true' set='true' private='true' main='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="tiers"/>
+		</RELATION>
+		<TEXT id="bon_livraison_adresse" multiple='true'>
+			<NAME value="NAME_BON_LIVRAISON_ADRESSE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="bon_livraison_description" multiple='true'>
+			<NAME value="NAME_CMD_ACHAT_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<RELATION id="bon_livraison_relation_lignes" multiple='true' type='COMPOSITION'>
+			<REVERSE reverseRelation="ligne_bl_bl"/>
+			<NAME value="NAME_BON_LIVRAISON_RELATION_LIGNES"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' local='true'/>
+			<CLASSES idrefs="ligne_bon_livraison"/>
+		</RELATION>
+		<RELATION id="bon_livraison_facture">
+			<NAME value="NAME_BON_LIVRAISON_FACTURE"/>
+			<F_MARKS optional='true' private='true' setConsult='true' main='true'/>
+			<CLASSES idrefs="facture"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<RELATION id="bon_livraison_tva">
+			<NAME value="NAME_CMD_ACHAT_TVA"/>
+			<F_MARKS create='true' set='true' private='true' sort='true' filter='true' find='true' optional='true' needPost='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="tva"/>
+		</RELATION>
+	</FIELDS>
+	<SORT id="bon_livraison_sort">
+		<NAME value="NAME_BON_LIVRAISON_SORT"/>
+		<SORT_CRITERIA idref="bon_livraison_numero" increasing='false'/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="print_bon_livraison" template="_printModel"
+				behavior="weo.print.WeoDocumentPrinter">
+			<NAME value="PRINT_MODEL_RTF"/>
+			<PREFIX value="rtf"/>
+			<MIN value='1'/>
+			<MAX value='1'/>
+			<PARAMETER name="_synchronous" value="true"/>
+			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/models/bon_de_livraison.rtf"/>
+			<PARAMETER name="_output" value="$LY_APP_DOC_DIR$/tmp/bon_de_livraison.rtf"/>
+		</ACTION>
+		<ACTION id="sendMail_bon_livraison" template="print_bon_livraison"
+				behavior="weo.print.WeoDocumentGenerator">
+			<NAME value="NAME_ENVOIMAIL_ENV"/>
+			<PREFIX value="sendmail"/>
+			<ACTIONS idrefs="mailCreate"/>
+		</ACTION>
+		<ACTION id="Action_Genrate_Facture"
+				controller="weo.behavior.Action_generate_factureBehavior">
+			<NAME value="NAME_ACTION_GENRATE_FACTURE"/>
+			<PREFIX value="facture"/>
+			<MIN value='1'/>
+			<A_MARKS tool='true'/>
+		</ACTION>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="routeFromBon_de_LivraisonToLignes_de_Bon_de_Livraison" target="ligne_bon_livraison">
+			<STEP target="ligne_bon_livraison" idrefs="ligne_bl_bl"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>

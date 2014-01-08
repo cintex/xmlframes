@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="profils" behavior="weo.behavior.ProfilClassBehavior">
+	<C_BIND value="profils" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_PROFIL"/>
+	<GROUP value="GROUP_ADMINISTRATION"/>
+	<PREFIX value="profils"/>
+	<C_MARKS load='true'/>
+	<FIELDS>
+		<NUMBER id="profil_id">
+			<NAME value="PROFIL_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+		</NUMBER>
+		<TEXT id="profil_nom">
+			<NAME value="PROFIL_NOM"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<MIN value='0'/>
+			<MAX value='30'/>
+		</TEXT>
+		<TEXT id="profil_description">
+			<NAME value="PROFIL_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<NCOLS value="51"/>
+			<NCHARS value='255'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION id="ColnageProfil" template="_clone">
+			<PREFIX value="clonage"/>
+			<MIN value='1'/>
+			<MAX value='1'/>
+		</ACTION>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="routeFromProfilsToDroits" target="droits">
+			<STEP target="joint_profils_droits" idrefs="joint_profil"/>
+			<STEP target="droits" idrefs="joint_droit"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>

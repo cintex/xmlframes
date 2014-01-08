@@ -1,0 +1,2 @@
+Importez les DLL de weo.
+l'exécutable hotel n'est que le clone renommé de weo.

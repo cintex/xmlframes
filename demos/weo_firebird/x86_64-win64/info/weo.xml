@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE PROJECT SYSTEM 'leon/conf/dtd/leon.dtd'
+[
+	<!-- Standard includes -->
+	<!ENTITY LEON SYSTEM 'leon/conf/xml/leon.xml'>
+
+	<!-- Root include -->
+	<!ENTITY ROOT SYSTEM 'weo/info/rootEntities.xml'>
+	<!ENTITY NAVIGATION SYSTEM 'weo/info/navigationTree.xml'>
+	<!ENTITY LOCATION SYSTEM 'weo/info/location.xml'>
+
+	<!-- Classes includes -->
+	<!ENTITY bon_livraison SYSTEM 'weo/info/bon_livraison.xml'>
+	<!ENTITY cmd_achat SYSTEM 'weo/info/cmd_achat.xml'>
+	<!ENTITY cmd_achat_lignes SYSTEM 'weo/info/cmd_achat_lignes.xml'>
+	<!ENTITY devis_client SYSTEM 'weo/info/devis_client.xml'>
+	<!ENTITY devis_lignes SYSTEM 'weo/info/devis_lignes.xml'>
+	<!ENTITY demande_achat SYSTEM 'weo/info/demande_achat.xml'>
+	<!ENTITY demande_achat_lignes SYSTEM 'weo/info/demande_achat_lignes.xml'>
+	<!ENTITY cmd_client SYSTEM 'weo/info/cmd_client.xml'>
+	<!ENTITY cmd_vente_lignes SYSTEM 'weo/info/cmd_vente_lignes.xml'>
+	<!ENTITY create_rec_achat_lignes SYSTEM 'weo/info/create_rec_achat_lignes.xml'>
+	<!ENTITY create_bl_produit SYSTEM 'weo/info/create_bl_produit.xml'>
+	<!ENTITY create_lignes_bl_produit SYSTEM 'weo/info/create_lignes_bl_produit.xml'>
+	<!ENTITY create_lignes_bl SYSTEM 'weo/info/create_lignes_bl.xml'>
+	<!ENTITY facture SYSTEM 'weo/info/facture.xml'>
+	<!ENTITY familles SYSTEM 'weo/info/familles.xml'>
+	<!ENTITY historique SYSTEM 'weo/info/historique.xml'>
+	<!ENTITY ligne_bon_livraison SYSTEM 'weo/info/ligne_bon_livraison.xml'>
+	<!ENTITY ligne_facture SYSTEM 'weo/info/ligne_facture.xml'>
+	<!ENTITY parametres SYSTEM 'weo/info/parametres.xml'>
+	<!ENTITY produits SYSTEM 'weo/info/produits.xml'>
+	<!ENTITY represent SYSTEM 'weo/info/represent.xml'>
+	<!ENTITY tiers SYSTEM 'weo/info/tiers.xml'>
+	<!ENTITY tva SYSTEM 'weo/info/tva.xml'>
+	<!ENTITY users SYSTEM 'weo/info/users.xml'>
+	<!ENTITY sendMail SYSTEM 'weo/info/sendMail.xml'>
+	<!ENTITY attachedMailFile SYSTEM 'weo/info/attachedMailFile.xml'>
+	<!ENTITY historiqueMailFile SYSTEM 'weo/info/historiqueMailFile.xml'>
+	<!ENTITY historiqueMail SYSTEM 'weo/info/historiqueMail.xml'>
+	<!ENTITY ErrorMessages SYSTEM 'weo/info/ErrorMessages.xml'>
+	<!ENTITY fichiers SYSTEM 'weo/info/fichiers.xml'>
+	<!ENTITY choice_Attachment SYSTEM 'weo/info/choice_Attachment.xml'>
+	<!ENTITY bon_reception SYSTEM 'weo/info/bon_reception.xml'>
+	<!ENTITY ligne_bon_reception SYSTEM 'weo/info/ligne_bon_reception.xml'>
+	<!ENTITY resultat SYSTEM 'weo/info/resultat.xml'>
+	<!ENTITY affaire SYSTEM 'weo/info/affaire.xml'>
+	<!ENTITY profils SYSTEM 'weo/info/profils.xml'>
+	<!ENTITY droits SYSTEM 'weo/info/droits.xml'>
+	<!ENTITY joint_profils_droits SYSTEM 'weo/info/joint_profils_droits.xml'>
+
+]>
+
+<PROJECT id="weo" version="Version V 0.1" name="weo" rootAction="weoLogin"
+		applicationBehavior="weo.behavior.WeoApplicationBehavior"
+		sessionBehavior="weo.behavior.WeoSessionBehavior">
+		
+	<!-- Standard Leonardi declarations -->
+	&LEON;
+
+	<!-- Root declarations -->
+	&ROOT;
+
+	<!-- Locations -->
+	&LOCATION;
+	&bon_livraison;
+	&cmd_achat;
+	&cmd_achat_lignes;
+	&devis_client;
+	&devis_lignes;
+	&demande_achat;
+	&demande_achat_lignes;
+	&cmd_client;
+	&cmd_vente_lignes;
+	&create_rec_achat_lignes;
+	&create_bl_produit;
+	&create_lignes_bl_produit;
+	&create_lignes_bl;
+	&facture;
+	&familles;
+	&historique;
+	&ligne_bon_livraison;
+	&ligne_facture;
+	&parametres;
+	&produits;
+	&represent;
+	&tiers;
+	&tva;
+	&users;
+	&sendMail;
+	&attachedMailFile;
+	&historiqueMailFile;
+	&historiqueMail;
+	&ErrorMessages;
+	&fichiers;
+	&choice_Attachment;
+	&bon_reception;
+	&ligne_bon_reception;
+	&resultat;
+	&affaire;
+	&profils;
+	&droits;
+	&joint_profils_droits;
+	
+	<!-- Navigation Tree -->
+	&NAVIGATION;
+</PROJECT>

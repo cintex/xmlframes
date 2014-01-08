@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="historique"
+		javaName="weo.src.Historique">
+	<C_BIND value="historique" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_HISTORIQUE"/>
+	<FIELDS>
+		<NUMBER id="histor_id">
+			<NAME value="NAME_HISTOR_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<DATE id="histor_date_mvt">
+			<NAME value="NAME_HISTOR_DATE_MVT"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="histor_produit">
+			<NAME value="NAME_HISTOR_PRODUIT"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'/>
+			<CLASSES idrefs="produits"/>
+		</RELATION>
+		<TEXT id="histor_libelle">
+			<NAME value="NAME_HISTOR_LIBELLE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' sort='true' filter='true' find='true'/>
+			<MIN value='0'/>
+			<MAX value='20'/>
+		</TEXT>
+		<CHOICE id="histor_class_mvt">
+			<NAME value="NAME_HISTOR_CLASS_MVT"/>
+			<F_MARKS optional='true' private='true' hidden='true'/>
+			<OPTIONS>
+				<OPTION id="histor_classe.cmdAchat" name="NAME_LIGNE_BON_RECEPTION" value="0" default='true'/>
+				<OPTION id="histor_classe.Expe" name="NAME_LIGNE_BON_LIVRAISON" value="1"/>
+			</OPTIONS>
+		</CHOICE>
+		<RELATION id="histor_document">
+			<NAME value="NAME_HISTOR_DOCUMENT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'/>
+			<CLASSES>
+				<CLASS_REF idref="ligne_bon_reception"/>
+				<CLASS_REF idref="ligne_bon_livraison"/>
+			</CLASSES>
+			<CLASS_FIELD idref="histor_class_mvt"/>
+		</RELATION>
+		<NUMBER id="histor_qt_mvt" type='DOUBLE'>
+			<NAME value="NAME_HISTOR_QT_MVT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<NUMBER id="histor_pu_mouvement" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_PU"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#########0.00###"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='5'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<NUMBER id="histor_mnt_mouvement" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_TOTAL"/>
+			<F_MARKS optional='true' local='true' consult='true' sort='true' filter='true' find='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="histor_qt_mvt*histor_pu_mouvement"/>
+		</NUMBER>
+		<RELATION id="histor_user">
+			<NAME value="NAME_HISTOR_USER"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' sort='true' filter='true' find='true'/>
+			<CLASSES idrefs="users"/>
+		</RELATION>
+	</FIELDS>
+	<SORT id="historique_sort">
+		<NAME value="NAME_HISTORIQUE_SORT"/>
+		<SORT_CRITERIA idref="histor_date_mvt" increasing='false'/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

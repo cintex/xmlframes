@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="cmd_client"
+		behavior="weo.behavior.Cmd_venteClassBehavior">
+	<C_BIND value="cmd_client" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_CMD_CLIENT"/>
+	<PREFIX value="cmdvente"/>
+	<FIELDS>
+		<NUMBER id="cmd_vente_id">
+			<NAME value="NAME_CMD_VENTE_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<CHOICE id="cmd_vente_facturable">
+			<NAME value="NAME_BON_LIVRAISON_FACTURABLE"/>
+			<F_MARKS hidden='true' set='true' private='true' sort='true' filter='true' find='true'>
+				<MARK name="BL_CREATE"/>
+			</F_MARKS>
+			<OPTIONS>
+				<OPTION id="cmd_vente_facturable.oui" name="OUI" value="0" default='true'/>
+				<OPTION id="cmd_vente_facturable.non" name="NON" value="1"/>
+			</OPTIONS>
+		</CHOICE>
+		<NUMBER id="cmd_vente_numero">
+			<NAME value="NAME_CMD_ACHAT_NUMERO_CMD"/>
+			<F_MARKS name='true' unique='true' private='true' consult='true' main='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<RELATION id="cmd_vente_affaire">
+			<NAME value="NAME_AFFAIRE"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES>
+				<CLASS_REF idref="affaire" filter="Affaire_Non_Solde"/>
+			</CLASSES>
+		</RELATION>
+		<DATE id="cmd_vente_date_creation" type='DATE_HOUR_MIN'>
+			<NAME value="NAME_CMD_ACHAT_DATE_CREATION"/>
+			<F_MARKS create='true' private='true' main='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="cmd_vente_tier">
+			<NAME value="NAME_CMD_VENTE_TIER"/>
+			<F_MARKS create='true' set='true' private='true' main='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES>
+				<CLASS_REF idref="tiers" filter="Client_ou_Global"/>
+			</CLASSES>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<RELATION id="cmd_vente_tva">
+			<NAME value="NAME_CMD_ACHAT_TVA"/>
+			<F_MARKS create='true' set='true' private='true' sort='true' filter='true' find='true' needPost='true'>
+				<MARK name="BL_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="tva"/>
+		</RELATION>
+		<TEXT id="cmd_vente_adresse_liv" multiple='true'>
+			<IMPORT relation="cmd_vente_tier" idref="tiers_adresse"/>
+			<NAME value="NAME_CMD_VENTE_ADRESSE_LIV"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'>
+				<MARK name="BL_CREATE"/>
+			</F_MARKS>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="cmd_vente_description" multiple='true'>
+			<NAME value="NAME_CMD_ACHAT_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'>
+				<MARK name="BL_CREATE"/>
+			</F_MARKS>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<CHOICE id="cmd_vente_solde">
+			<NAME value="NAME_CMD_ACHAT_SOLDE"/>
+			<F_MARKS create='true' set='true' private='true' status='true' main='true'>
+				<MARK name="BL_CREATE"/>
+			</F_MARKS>
+			<OPTIONS>
+				<OPTION id="cmd_vente_solde.non" name="NAME_CMD_ACHAT_SOLDE.NON" value="0" default='true'/>
+				<OPTION id="cmd_vente_solde.oui" name="NAME_CMD_ACHAT_SOLDE.OUI" value="1"/>
+			</OPTIONS>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</CHOICE>
+		<NUMBER id="cmd_vente_total" type='DOUBLE'>
+			<IMPORT relation="cmd_vente_relation_lignes" idref="cmd_vente_ligne_total"/>
+			<NAME value="NAME_CMD_VENTE_TOTAL_TOT_TOT"/>
+			<F_MARKS optional='true' local='true' consult='true' needPost='true' main='true'/>
+			<DECIMALS value='2'/>
+			<CONSTRAINT colSpan='3' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="cmd_vente_tva_total" type='DOUBLE'>
+			<NAME value="NAME_CMD_VENTE_TVA_TOTAL"/>
+			<F_MARKS private='true' sort='true' filter='true' find='true' consult='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="cmd_vente_ttc" type='DOUBLE'>
+			<NAME value="NAME_CMD_VENTE_TTC"/>
+			<F_MARKS sort='true' filter='true' find='true' consult='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<RELATION id="cmd_vente_relation_lignes" multiple='true' direction='BACKWARD' type='COMPOSITION'>
+			<REVERSE reverseRelation="cmd_vente_ligne_commande"/>
+			<NAME value="NAME_CMD_ACHAT_RELATION_LIGNES"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' local='true'/>
+			<CLASSES idrefs="cmd_vente_lignes"/>
+			<NROWS value='10'/>
+		</RELATION>
+		<RELATION id="cmd_vente_create_ligne_bl" multiple='true' direction='BACKWARD' type='COMPOSITION'>
+			<REVERSE reverseRelation="create_ligne_bl_cmd"/>
+			<NAME value="NAME_CMD_VENTE_CREATE_LIGNE_BL"/>
+			<GROUP value="GROUP_LIGNES"/>
+			<F_MARKS optional='true' private='true' local='true' hidden='true'>
+				<MARK name="BL_CREATE"/>
+			</F_MARKS>
+			<CLASSES idrefs="create_lignes_bl"/>
+		</RELATION>
+		<NUMBER id="cmd_vente_mnt_ral_total" type='DOUBLE'>
+			<IMPORT relation="cmd_vente_relation_lignes" idref="cmd_vente_ligne_mnt_ral"/>
+			<NAME value="NAME_CMD_MNT_RAL"/>
+			<F_MARKS optional='true' local='true' private='true' hidden='true'/>
+			<DECIMALS value='2'/>
+		</NUMBER>
+	</FIELDS>
+	<SORT id="cmd_client_sort_by_number">
+		<NAME value="NAME_CMD_CLIENT_SORT_BY_NUMBER"/>
+		<SORT_CRITERIA idref="cmd_vente_numero" increasing='false'/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION id="Creer_Cmd_Client" template="_create"
+				builder="weo.builder.Creer_cmd_clientBuilder">
+			<NAME value="NAME_CREER_CMD_CLIENT"/>
+		</ACTION>
+		<ACTION_REF idref="_clone"/>
+		<ACTION id="Modifie_Cmd_Client" template="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="print_commande_vente" template="_printModel"
+				behavior="weo.print.WeoDocumentPrinter">
+			<NAME value="PRINT_MODEL_RTF"/>
+			<PREFIX value="rtf"/>
+			<MIN value='1'/>
+			<MAX value='1'/>
+			<PARAMETER name="_synchronous" value="true"/>
+			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/models/commande_vente.rtf"/>
+			<PARAMETER name="_output" value="$LY_APP_DOC_DIR$/tmp/commande_vente.rtf"/>
+		</ACTION>
+		<ACTION id="sendMail_commande_vente" template="print_commande_vente"
+				behavior="weo.print.WeoDocumentGenerator">
+			<NAME value="NAME_ENVOIMAIL_ENV"/>
+			<PREFIX value="sendmail"/>
+			<ACTIONS idrefs="mailCreate"/>
+		</ACTION>
+		<ACTION id="Action_Create_Bl" template="_set"
+				behavior="weo.behavior.Action_create_blBehavior">
+			<NAME value="NAME_ACTION_CREATE_BL"/>
+			<PREFIX value="createbl"/>
+			<MAX value='1'/>
+			<PARAMETER name="_fieldMarks">
+				<F_MARKS>
+					<MARK name="BL_CREATE"/>
+				</F_MARKS>
+			</PARAMETER>
+			<PARAMETER name="_consultMarks">
+				<F_MARKS>
+					<MARK name="BL_CONSULT"/>
+				</F_MARKS>
+			</PARAMETER>
+			<PARAMETER name="_classInfo" idref="cmd_client"/>
+			<RESOURCE name="LY_APPLY_BUTTON" value="false"/>
+			<RESOURCE name="LY_FREE_ON_CLOSE" value="true"/>
+		</ACTION>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+	<ROUTES>
+		<!--ROUTE id="routeFromCommande_VenteToLignes_de_Commandes_Vente" target="cmd_vente_lignes">
+			<STEP target="cmd_vente_lignes" idrefs="cmd_vente_ligne_commande"/>
+		</ROUTE-->
+		<ROUTE id="routeFromCommande_VenteToProduits" target="produits">
+			<STEP target="cmd_vente_lignes" idrefs="cmd_vente_ligne_commande"/>
+			<STEP target="produits" idrefs="cmd_vente_ligne_produit"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>
