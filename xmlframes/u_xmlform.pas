@@ -28,7 +28,7 @@ uses
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
   u_xmlfillcombobutton,
   U_ExtComboInsert,
-  fonctions_service,
+  fonctions_dbservice,
   fonctions_manbase,
 {$IFDEF RX}
   rxdbgrid,
@@ -73,6 +73,10 @@ type
   TF_XMLForm = class(TF_CustomFrameWork)
   private
   { Déclarations privées }
+     // XML Creating
+    gwin_Last : TWinControl;
+    gwin_Parent : TWinControl;
+
     gfin_FormIni : TOnFormInfoIni ;
     FPageControl : TPageControl ;
     FMainPanel   ,
@@ -166,8 +170,6 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
 var  gb_LoginFormLoaded : Boolean = False;
      gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
-    // XML Creating
-    gwin_Parent : TWinControl;
 
 
 // functions and procédures not methods
@@ -180,10 +182,10 @@ End;
 // child procedure p_CreateParentAndFieldsComponent
 // Creates the navigation grid and fields components
 // anod_ANode : current node
-procedure p_OnCreateParentAndFieldsComponent ( const ADBSources : TFWTables; const anod_ANode : TALXMLNode ;
-                                             var ab_FieldFound, ab_column : Boolean ;
-                                             var   ai_Fieldcounter, ai_counter : Integer );
-var lwin_Last : TWinControl;
+procedure p_OnCreateParentAndFieldsComponent ( const ADBSources : TFWTables; const as_table : String;
+                                               const anod_ANode : TALXMLNode ;
+                                               var ab_FieldFound, ab_column : Boolean ;
+                                               var   ai_Fieldcounter : Longint; const ai_counter : Longint );
 Begin
   with ADBSources.Owner as TF_XMLForm,Fonction do
    Begin
@@ -202,14 +204,8 @@ Begin
           End;
         ab_FieldFound := True;
       end;
-    lwin_Last := nil;
-    if anod_ANode.Attributes [ CST_LEON_ID ] = Null then
-      fwin_CreateFieldComponentAndProperties ( '', anod_ANode, ai_Fieldcounter, ai_Counter, gwin_Parent,
-                                              lwin_Last, ab_Column, DBSources [ DBSources.count - 1 ] )
-     else
-      fwin_CreateFieldComponentAndProperties ( anod_ANode.Attributes [ CST_LEON_ID ], anod_ANode, ai_Fieldcounter,
-                                               ai_Counter, gwin_Parent, lwin_Last, ab_Column,
-                                               DBSources [ DBSources.count - 1 ]);
+    gwin_Last := fwin_CreateFieldComponentAndProperties ( as_table, anod_ANode, ai_Fieldcounter, ai_Counter, gwin_Parent,
+                                              gwin_Last, ab_Column, DBSources [ DBSources.count - 1 ] );
     inc ( ai_Fieldcounter );
    end;
 
@@ -218,27 +214,18 @@ end;
 // procedure p_CreateFieldsButtonsComponents
 // Creates the Fields and buttons
 // anod_ANode : current node
-procedure p_OnFieldsButtonsComponents ( const ADBSources : TFWTables; const anod_ANode : TALXMLNode ;
-                                        var ab_FieldFound, ab_column : Boolean ;
-                                        var   ai_Fieldcounter, ai_counter : Integer );
+procedure p_OnFieldsButtonsComponents (  const ADBSources : TFWTables; const as_table : String;
+                                         const anod_ANode : TALXMLNode ;
+                                         var ab_FieldFound, ab_column : Boolean ;
+                                         var   ai_Fieldcounter : Longint; const ai_counter : Longint );
 
 var li_k : Longint;
 Begin
-  if  ( anod_ANode.NodeName = CST_LEON_FIELDS ) then
-    Begin
-      ab_Column := False ;
-      for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
-        Begin
-          p_OnCreateParentAndFieldsComponent ( ADBSources, anod_ANode.ChildNodes [ li_k ], ab_FieldFound, ab_column, ai_Fieldcounter, ai_counter );
-        End;
-    End;
   if  ( anod_ANode.NodeName = CST_LEON_ACTIONS ) then
     with ADBSources.Owner as TF_XMLForm do
       Begin
         for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
-          Begin
-            p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], ai_Counter );
-          End;
+          p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], ai_Counter );
       End;
 End;
 
@@ -505,6 +492,7 @@ begin
                        Parent := Self;
                        Left := CST_XML_FIELDS_CAPTION_SPACE;
                        Name := CST_COMPONENTS_EDIT_BEGIN+Attributes [ CST_LEON_PARAMETER_NAME ]+IntToStr(li_j);
+                       Text := '';
                        Width := 120;
                       end;
                      lfwl_Label   := ffwl_CreateALabelComponent ( Self, Self, lwin_Control, lfwc_Column.FieldsDefs.Add, Attributes [ CST_LEON_PARAMETER_NAME ], li_Counter, False );
@@ -572,6 +560,7 @@ begin
   FormCreate ( Self );
   Position := poDesktopCenter;
 //  FormStyle:=fsNoStayOnTop;
+  Application.MainForm.WindowState:=wsMinimized;
   {$IFDEF FPC}
   Visible := True;
   {$ELSE}
@@ -703,9 +692,7 @@ var li_i : Integer ;
     lpan_Panel : TPanel;
 begin
   with a_Value do
-    Begin
-      p_CopyLeonFunction ( a_Value, gr_Function );
-    End;
+    p_CopyLeonFunction ( a_Value, gr_Function );
  if a_value.AFile = ''
   then Name := a_value.Name
   Else Name := a_value.AFile;
@@ -815,7 +802,7 @@ Begin
                 p_setComponentProperty ( awin_Control, 'Caption', fs_GetLabelCaption(lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]));
               end
              Else
-               REsult := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );
+               Result := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );
             Continue;
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS then
@@ -1047,6 +1034,7 @@ var lnod_FieldProperties : TALXMLNode ;
 
     function fb_CreateComponents ( var awin_Control : TWinControl ) : Boolean ;
     var li_k : LongInt ;
+        lb_local : Boolean;
     Begin
       Result := False;
       lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
@@ -1061,7 +1049,11 @@ var lnod_FieldProperties : TALXMLNode ;
         end;
       if not fb_createFieldID ( afws_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter, lb_IsLocal )
        Then
-        Exit;
+        Begin
+          afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
+          Exit;
+        end;
+      lb_local := fb_setFieldType(afws_Source,anod_Field,lffd_ColumnFieldDef,ai_FieldCounter,True,Self);
 
       lb_IsLocal := False;
 
@@ -1090,7 +1082,8 @@ var lnod_FieldProperties : TALXMLNode ;
           MyShowmessage ( Gs_NoComponentToCreate + lffd_ColumnFieldDef.FieldName +'.' );
           gb_Unload := True;
         End;
-
+      awin_Control.Font.Color:=clWindowText;
+      awin_Control.Color :=clBtnFace;
       if not assigned ( awin_Control )
       or ( awin_Control is TDBGroupView ) then
         Exit;
@@ -1119,6 +1112,9 @@ var lnod_FieldProperties : TALXMLNode ;
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
        Else
         p_setComponentLeft  ( awin_Control, ab_Column );
+      if lb_local Then
+        afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index); // no local definition
+
     end;
 
     // procedure p_SetParentWidth
@@ -1186,9 +1182,7 @@ begin
             end ;
       end;
   if assigned ( lxfc_ButtonCombo ) Then
-    Begin
-      lxfc_ButtonCombo.AutoPlace;
-    end;
+    lxfc_ButtonCombo.AutoPlace;
 end;
 
 

@@ -32,7 +32,7 @@ uses Forms, JvXPBar, LCLType,
    Windows, ToolWin,
 {$ENDIF}
   Controls, Classes, JvXPButtons, ExtCtrls,
-  Menus, DB,
+  Menus,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -42,7 +42,7 @@ uses Forms, JvXPBar, LCLType,
   ALXmlDoc, IniFiles, Graphics,
   u_multidata,
   fonctions_string,
-  fonctions_service,
+  fonctions_dbservice,
   fonctions_manbase,
   fonctions_system;
 

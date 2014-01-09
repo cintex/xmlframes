@@ -171,6 +171,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_ACTION_NAME = 'NAME' ;
       CST_LEON_ACTION_TEMPLATE = 'template' ;
       CST_LEON_ACTION = 'ACTION' ;
+      CST_LEON_ACTIONS = 'ACTIONS' ;
       CST_LEON_ACTION_REF = 'ACTION_REF' ;
       CST_LEON_ACTION_PREFIX = 'PREFIX' ;
       CST_LEON_ACTION_GROUP = 'GROUP' ;
@@ -184,7 +185,6 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_ACTION_REF_CLONE  = '_clone' ;
 
       CST_LEON_COMPOUND_ACTION = 'COMPOUND_ACTION' ;
-      CST_LEON_ACTIONS = 'ACTIONS' ;
       CST_LEON_ENTITY = '!ENTITY ';
 
       CST_XMLFRAMES_ROOT_FORM_CLEP = 'rootentitie' ;
@@ -413,7 +413,7 @@ begin
                            Begin
                             lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
                             with lds_Connection do
-                              Datasource := fds_CreateDataSourceAndTable ( as_Table, '_' + PrimaryKey + IntToStr ( Index ),
+                              Datasource := fds_CreateDataSourceAndTable ( as_Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
                                                    IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
                            end;
                         end;
@@ -453,7 +453,7 @@ procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass,
                                const ae_onClassNameNode : TOnExecuteNode;
                                const ab_CreateDS : Boolean = True ;
                                const ab_ContinueIfLocal : Boolean = False);
-var li_i, li_j, li_NoField : LongInt ;
+var li_i, li_j, li_k, li_NoField : LongInt ;
     lnod_Node, lnod_Class, lnod_ClassNode : TALXMLNode ;
     lb_Column, lb_FieldFound, lb_Table : Boolean ;
     lfwc_Column : TFWTable ;
@@ -508,17 +508,19 @@ begin
               for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
                Begin
                 lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];
-                if ( lnod_ClassNode.NodeName = CST_LEON_FIELDS  ) then
+                if ( lnod_ClassNode.NodeName = CST_LEON_FIELDS  )
+                and lnod_ClassNode.HasChildNodes then
+                 for li_k := 0 to lnod_ClassNode.ChildNodes.Count-1 do
                   Begin
                     if Assigned(ae_OnFieldNode) Then
-                     ae_OnFieldNode ( ADBSources, lfwc_Column.Table, lnod_ClassNode, lb_FieldFound, lb_Column, li_NoField, li_Counter);
+                     ae_OnFieldNode ( ADBSources, lfwc_Column.Table, lnod_ClassNode.ChildNodes [ li_k ], lb_FieldFound, lb_Column, li_NoField, li_Counter);
 
                   End;
                end;
             End;
-          if ( lnod_Node.NodeName = CST_LEON_ACTION  ) Then
+          if ( lnod_Node.NodeName = CST_LEON_ACTIONS  ) Then
             if Assigned(ae_onActionNode) Then
-             ae_onActionNode ( ADBSources, '', lnod_ClassNode, lb_FieldFound, lb_Column, li_NoField, li_Counter );
+             ae_onActionNode ( ADBSources, '', lnod_Node, lb_FieldFound, lb_Column, li_NoField, li_Counter );
           if ( lnod_Node.NodeName = CST_LEON_NAME  ) Then
             if Assigned(ae_onClassNameNode) Then
              ae_onClassNameNode ( ADBSources, lnod_Node );

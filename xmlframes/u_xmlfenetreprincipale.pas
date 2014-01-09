@@ -226,7 +226,7 @@ uses
   fonctions_system, U_FormMainIni,
   fonctions_forms,
   fonctions_proprietes,
-  fonctions_service,
+  fonctions_dbservice,
   fonctions_languages ;
 
 
@@ -810,4 +810,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+

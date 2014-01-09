@@ -44,7 +44,7 @@ uses Forms, JvXPBar, JvXPContainer,
   fonctions_manbase,
   ComCtrls,
   fonctions_ObjetsXML,
-  fonctions_service,
+  fonctions_dbservice,
   fonctions_system, u_customframework,
   u_multidata;
 
@@ -81,7 +81,7 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      unite_variables, u_languagevars, Imaging,
      u_framework_dbcomponents,
      u_connection,
-     fonctions_create,
+     fonctions_createsql,
      fonctions_languages,
      u_xmlfillcombobutton,
      u_fillcombobutton,
@@ -125,6 +125,7 @@ procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 Begin
   if fb_CreeAppliFromNode ( as_EntityFile ) then
    fxf_ExecuteNoFonction(high ( ga_Functions ), True);
+  Application.MainForm.WindowState:=wsMaximized;
 End;
 
 

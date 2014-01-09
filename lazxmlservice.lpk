@@ -23,8 +23,8 @@ Use manbase only"/>
     <Version Major="1" Minor="2"/>
     <Files Count="3">
       <Item1>
-        <Filename Value="xmlservice/fonctions_service.pas"/>
-        <UnitName Value="fonctions_service"/>
+        <Filename Value="xmlservice/fonctions_dbservice.pas"/>
+        <UnitName Value="fonctions_dbservice"/>
       </Item1>
       <Item2>
         <Filename Value="xmlservice/u_languagevars.pas"/>

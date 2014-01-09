@@ -119,7 +119,12 @@ function fscb_CreateTabSheet(
   var apc_PageControl: TPageControl; const awin_ParentPageControl,
   awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
     ): TScrollBox;
-function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
+function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ;
+                                      const awin_Parent, awin_Control : TWinControl ;
+                                      const afcf_ColumnField : TFWFieldColumn;
+                                      const as_Name : String ;
+                                      const ai_Counter : Longint ;
+                                      const ab_Column : Boolean ):TFWLabel;
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
 
 implementation
@@ -129,6 +134,7 @@ uses JvXPButtons,fonctions_dbcomponents,
      JvSplitter,
 {$ENDIF}
      U_ExtNumEdits,
+     fonctions_string,
      u_buttons_appli, fonctions_proprietes,
      u_fillcombobutton,fonctions_languages;
 
@@ -201,13 +207,18 @@ end;
 // returns TFWLabel;
 //////////////////////////////////////////////////////////////////////////
 
-function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ; const awin_Parent, awin_Control : TWinControl ; const afcf_ColumnField : TFWFieldColumn; const as_Name : String ; const ai_Counter : Longint ; const ab_Column : Boolean ):TFWLabel;
+function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ;
+                                      const awin_Parent, awin_Control : TWinControl ;
+                                      const afcf_ColumnField : TFWFieldColumn;
+                                      const as_Name : String ;
+                                      const ai_Counter : Longint ;
+                                      const ab_Column : Boolean ):TFWLabel;
 Begin
   Result := TFWLabel.Create ( acom_Owner );
   with Result do
    Begin
     Parent := awin_Parent ;
-    Name   := CST_COMPONENTS_LABEL_BEGIN+as_Name+IntToStr(ai_Counter);
+    Name   := fs_TextToFileName( CST_COMPONENTS_LABEL_BEGIN+as_Name+IntToStr(afcf_ColumnField.index)+'_'+IntToStr(ai_Counter));
     MyEdit := awin_Control;
     Caption := fs_GetLabelCaption ( as_Name );
     Tag := ai_counter + 1;
