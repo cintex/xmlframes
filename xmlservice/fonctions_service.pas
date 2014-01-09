@@ -685,6 +685,7 @@ End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );
 var li_Pos : LongInt ;
+    AParams : Tstrings;
 Begin
   with ads_connection do
    Begin
@@ -723,6 +724,12 @@ Begin
        end
      else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
       Begin
+        AParams := fobj_getComponentObjectProperty(Connection,'Params') as TStrings;
+        with AParams do
+          Begin
+           Add('user_name='+DataUser);
+           Add('password='+DataPassword);
+          end;
         if ( pos ( '.', DataBase ) = 1 )
         or ( pos ( {$IFDEF WINDOWS}':', DataBase ) = 2{$ELSE}DirectorySeparator, DataBase ) = 1{$ENDIF} )
          Then
