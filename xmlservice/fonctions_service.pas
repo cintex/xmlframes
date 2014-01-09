@@ -88,7 +88,6 @@ uses u_multidonnees, fonctions_xml,
      FileUtil,
      Controls,
      fonctions_file,
-     fonctions_string,
      fonctions_db,
      {$IFDEF WINDOWS}
      fonctions_string,
@@ -97,6 +96,8 @@ uses u_multidonnees, fonctions_xml,
      LazFileUtils,
      fonctions_dialogs,
      Dialogs,
+     {$ELSE}
+     fonctions_string,
      {$ENDIF}
      unite_variables,
      fonctions_languages;
