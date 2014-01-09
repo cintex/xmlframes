@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+	<L_SQL id="weo_db"
+			url="jdbc:postgres://localhost/"
+			driver="com.postgres.jdbc.Driver"
+			user="demo"
+			password="vraduser"
+			dbName="weo"
+			valueSep="&#010;"/>
+
+
+

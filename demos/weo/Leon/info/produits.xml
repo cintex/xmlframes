@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="produits" behavior="weo.behavior.ImportImageBehavior" javaName="weo.src.Produits">
+	<C_BIND value="produits" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_PRODUITS"/>
+	<GROUP value="GROUP_PRODUITS"/>
+	<FIELDS>
+		<NUMBER id="produit_id">
+			<NAME value="NAME_PRODUIT_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+		</NUMBER>
+		<TEXT id="produit_code">
+			<NAME value="NAME_PRODUIT_CODE"/>
+			<GROUP value="GROUP_ART_CODE"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value='30'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="produit_libelle">
+			<NAME value="NAME_PRODUIT_LIBELLE"/>
+			<GROUP value="GROUP_ART_CODE"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value='30'/>
+			<MAX value='50'/>
+		</TEXT>
+		<TEXT id="produit_description" multiple='true'>
+			<NAME value="NAME_PRODUIT_DESCRIPTION"/>
+			<GROUP value="GROUP_ART_CODE"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<CHOICE id="produit_type">
+			<NAME value="NAME_PRODUIT_TYPE"/>
+			<GROUP value="NAME_PRODUIT_TYPE"/>
+			<F_MARKS create='true' set='true' status='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="produit_type_vente" name="NAME_PRODUIT_TYPE_VENTE" value="0" default='true'>
+					<RULE idref="produit_compte_compta_fr" operation='SET_ENABLED' onCheck='false'/>
+					<RULE idref="produit_compte_compta_fr" operation='CLEAR' onCheck='true'/>
+					<RULE idref="produit_compte_compta" operation='SET_ENABLED' onCheck='true'/>
+					<RULE idref="produit_compte_compta" operation='CLEAR' onCheck='false'/>
+				</OPTION>
+				<OPTION id="produit_type_achat" name="NAME_PRODUIT_TYPE_ACHAT" value="1">
+					<RULE idref="produit_compte_compta_fr" operation='SET_ENABLED' onCheck='true'/>
+					<RULE idref="produit_compte_compta_fr" operation='CLEAR' onCheck='false'/>
+					<RULE idref="produit_compte_compta" operation='SET_ENABLED' onCheck='false'/>
+					<RULE idref="produit_compte_compta" operation='CLEAR' onCheck='true'/>
+				</OPTION>
+				<OPTION id="produit_type_achat_vente" name="NAME_PRODUIT_TYPE_ACHAT_VENTE" value="2">
+					<RULE idref="produit_compte_compta_fr" operation='SET_ENABLED' onCheck='true'/>
+					<RULE idref="produit_compte_compta_fr" operation='CLEAR' onCheck='false'/>
+					<RULE idref="produit_compte_compta" operation='SET_ENABLED' onCheck='true'/>
+					<RULE idref="produit_compte_compta" operation='CLEAR' onCheck='false'/>
+				</OPTION>
+				<OPTION id="produit_type_autre" name="NAME_PRODUIT_TYPE_AUTRE" value="3">
+					<RULE idref="produit_compte_compta_fr" operation='SET_ENABLED' onCheck='true'/>
+					<RULE idref="produit_compte_compta_fr" operation='CLEAR' onCheck='false'/>
+					<RULE idref="produit_compte_compta" operation='SET_ENABLED' onCheck='true'/>
+					<RULE idref="produit_compte_compta" operation='CLEAR' onCheck='false'/>
+				</OPTION>
+			</OPTIONS>
+			<CONSTRAINT colSpan='3' hAlign='LEFT'/>
+		</CHOICE>
+		<RELATION id="produit_famille">
+			<NAME value="NAME_PRODUIT_FAMILLE"/>
+			<GROUP value="NAME_PRODUIT_TYPE"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<CLASSES>
+				<CLASS_REF idref="familles" filter="familli_produits_autre"/>
+			</CLASSES>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<DATE id="produit_date_creat">
+			<NAME value="NAME_PRODUIT_DATE_CREAT"/>
+			<GROUP value="NAME_PRODUIT_TYPE"/>
+			<F_MARKS create='true' setConsult='true' private='true' sort='true' filter='true' find='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<TEXT id="produit_compte_compta">
+			<NAME value="NAME_PRODUIT_COMPTE_COMPTA_IMP"/>
+			<GROUP value="NAME_PRODUIT_TYPE"/>
+			<F_MARKS create='true' set='true' sort='true' filter='true' find='true'/>
+			<MIN value='0'/>
+			<MAX value='10'/>
+			<DEFAULT value="7010000"/>
+			<TIP value="TIP_PRODUIT_COMPTE_COMPTA"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</TEXT>
+		<TEXT id="produit_compte_compta_fr">
+			<NAME value="NAME_PRODUIT_COMPTE_COMPTA_IMP"/>
+			<GROUP value="NAME_PRODUIT_TYPE"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<MIN value='0'/>
+			<MAX value='10'/>
+			<DEFAULT value="6010000"/>
+			<TIP value="TIP_PRODUIT_COMPTE_COMPTA_FR"/>
+		</TEXT>
+		<CHOICE id="produit_gest_stock">
+			<NAME value="NAME_PRODUIT_GEST_STOCK"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="produit_gest_stock.oui" name="NAME_PRODUIT_GEST_STOCK.OUI" value="0" default='true'/>
+				<OPTION id="produit_gest_stock.non" name="NAME_PRODUIT_GEST_STOCK.NON" value="1"/>
+			</OPTIONS>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+			<CONSTRAINT type='CAPTION'/>
+		</CHOICE>
+		<CHOICE id="produit_autorise_stock_negatif">
+			<NAME value="NAME_PRODUIT_AUTORISE_STOCK_NEGATIF"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="produit_stock_neg.oui" name="NAME_PRODUIT_STOCK_NEG.OUI" value="0"/>
+				<OPTION id="produit_stock_neg.non" name="NAME_PRODUIT_STOCK_NEG.NON" value="1" default='true'/>
+			</OPTIONS>
+		</CHOICE>
+		<CHOICE id="produit_gest_reapro">
+			<NAME value="NAME_PROUDUIT_GEST_REAPRO"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="prouduit_gest_reapro.oui" name="NAME_PROUDUIT_GEST_REAPRO.OUI" value="1"/>
+				<OPTION id="prouduit_gest_reapro.non" name="NAME_PROUDUIT_GEST_REAPRO.NON" value="0" default='true'/>
+			</OPTIONS>
+		</CHOICE>
+		<RELATION id="produit_default_fournisseur">
+			<NAME value="NAME_PRODUIT_DEFAULT_FOURNISSEUR"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<CLASSES idrefs="tiers"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<NUMBER id="produit_prix_achat" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_PRIX_ACHAT"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<FORMAT value="#######0.00###"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='5'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<RELATION id="produit_default_client">
+			<NAME value="NAME_PRODUIT_DEFAULT_CLIENT"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<CLASSES idrefs="tiers"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</RELATION>
+		<NUMBER id="produit_prix_vente" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_PRIX_VENTE"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<FORMAT value="#######0.00###"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='5'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<NUMBER id="produit_cmdachat_min" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_CMDACHAT_MIN"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0.##"/>
+			<MIN value='0.0'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='1'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_cmdachat_max" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_CMDACHAT_MAX"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0.##"/>
+			<MIN value='0.0'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='1'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<NUMBER id="produit_cmdvente_min" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_CMDVENTE_MIN"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0.##"/>
+			<MIN value='0.0'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='1'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_cmdvente_max" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_CMDVENTE_MAX"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0.##"/>
+			<MIN value='0.0'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='1'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<NUMBER id="produit_stock_min" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_STOCK_MIN"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0.##"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='1'/>
+			<N_DEFAULT value='0.0'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_stock_max" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_STOCK_MAX"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0.##"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='1'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<NUMBER id="produit_stock" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_STOCK"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'/>
+			<FORMAT value="#######0.##"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='5'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_valeur_stock" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_VALEUR_STOCK"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS local='true' consult='true' main='true'/>
+			<FORMAT value="#######0.##"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="produit_prix_achat*produit_stock"/>
+			<TIP value="TIP_PRODUIT_VALEUR_STOCK"/>
+		</NUMBER>
+		<NUMBER id="produit_ventes_en_cours" type='DOUBLE'>
+			<IMPORT relation="produit_lignes_ventes_en_cours" idref="cmd_vente_ligne_ral">
+				<FILTER_REF idref="_weo.Filter23_"/>
+			</IMPORT>
+			<NAME value="NAME_PRODUIT_VENTES_EN_COURS_BES"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS optional='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_ecart_stock_mini" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_ECART_STOCK_MINI"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS optional='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="produit_stock-produit_stock_min"/>
+		</NUMBER>
+		<NUMBER id="produit_achats_en_cours" type='DOUBLE'>
+			<IMPORT relation="produit_lignes_achat_en_cours" idref="cmd_achat_ligne_ral">
+				<FILTER_REF idref="CommandesAchatNonSolde"/>
+			</IMPORT>
+			<NAME value="NAME_PRODUIT_ACHATS_EN_COURS_EN "/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS optional='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_ecart_stock_maxi" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_ECART_STOCK_MAXI"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS optional='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="produit_stock-produit_stock_max"/>
+		</NUMBER>
+		<NUMBER id="produit_disponible" type='DOUBLE'>
+			<NAME value="NAME_PRODUIT_DISPONIBLE"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS optional='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="produit_stock-produit_ventes_en_cours+produit_achats_en_cours"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="produit_delai_reapro">
+			<NAME value="NAME_PRODUIT_DELAI_REAPRO"/>
+			<GROUP value="GROUP_ART_GESTION"/>
+			<F_MARKS create='true' set='true' optional='true' sort='true' filter='true' find='true'/>
+			<FORMAT value="#######0"/>
+			<MIN value='0'/>
+			<MAX value='365'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='1'/>
+		</NUMBER>
+		<FILE id="produit_image" mimeTypes="image" filter="*.jpg *.JPG *.jpeg *.JPEG *.gif *.GIF *.png *.PNG *.bmp *.BMP"  attachmentHandler="default"
+						attachmentDirectory="/files/" directory="$LY_APP_DIR$/files/">
+			<NAME value="NAME_PRODUIT_IMAGE"/>
+			<GROUP value="GROUP_ART_IMAGE"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+		</FILE>
+		<RELATION id="produit_lignes_ventes_en_cours" multiple='true' direction='NONE'>
+			<REVERSE reverseRelation="cmd_vente_ligne_produit"/>
+			<NAME value="NAME_PRODUIT_LIGNES_VENTES_EN_COURS"/>
+			<F_MARKS local='true' hidden='true'/>
+			<CLASSES>
+				<CLASS_REF idref="cmd_vente_lignes" filter="_weo.Filter23_"/>
+			</CLASSES>
+		</RELATION>
+		<RELATION id="produit_lignes_achat_en_cours" multiple='true' direction='NONE'>
+			<REVERSE reverseRelation="cmd_achat_ligne_produit"/>
+			<NAME value="NAME_PRODUIT_LIGNES_ACHAT_EN_COURS"/>
+			<F_MARKS local='true' hidden='true'/>
+			<CLASSES>
+				<CLASS_REF idref="cmd_achat_lignes" filter="Cmd_Achat_Non_Solde_et_RAL_sup_0"/>
+			</CLASSES>
+		</RELATION>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="Action_Create_Bl_Produit" controller="weo.behavior.CreateBlStartAction">
+			<NAME value="NAME_ACTION_CREATE_BL_SANS_CMD"/>
+			<PREFIX value="createbl"/>
+			<MIN value='1'/>
+			<A_MARKS tool='true'/>
+		</ACTION>
+		<ACTION id="MouvementStockManuel" template="_userInput"
+				behavior="weo.behavior.WeoMouvementStockManuel">
+			<NAME value="MOUVEMENT_STOCK_MANUEL"/>
+			<PREFIX value="conso"/>
+			<MIN value='1'/>
+			<MAX value='1'/>
+			<A_MARKS tool='true'/>
+		</ACTION>
+		<ACTION id="GenerationCmdChatAuto"
+				controller="weo.behavior.GenerCmdAchatAuto">
+			<NAME value="NAME_CMD_ACHAT_GEN_AUTO"/>
+			<PREFIX value="cmdauto"/>
+			<MIN value='1'/>
+			<A_MARKS tool='true'/>
+		</ACTION>
+		<ACTION id="Atache_file" template="_userInput"
+				behavior="weo.behavior.Atache_fileBehavior">
+			<NAME value="NAME_ATACHE_FILE"/>
+			<PREFIX value="joint"/>
+			<MIN value='1'/>
+			<MAX value='1'/>
+			<A_MARKS tool='true'/>
+			<RESOURCE name="LY_APPLY_BUTTON" value="false"/>
+		</ACTION>
+		<ACTION id="send_e_Mailing_Produit"
+				controller="weo.behavior.Send_e_mailing">
+			<NAME value="NAME_ENVOIMAIL_ENV"/>
+			<PREFIX value="sendmail"/>
+			<MIN value='1'/>
+			<A_MARKS tool='true'/>
+			<ACTIONS idrefs="mailCreate"/>
+		</ACTION>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>
