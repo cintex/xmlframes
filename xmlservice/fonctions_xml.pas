@@ -23,7 +23,35 @@ type
                                     var ab_FieldFound, ab_column : Boolean ;
                                     var   ai_Fieldcounter : Longint; const ai_counter : Longint );
 
+
+  // XML parameters
+  var gs_ProjectFile  : String;
+      gs_RootEntities : String ;
+      gNod_DashBoard  : TALXMLNode = nil;
+      gNod_RootAction : TALXMLNode = nil;
+      gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+      gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+      gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
+      gs_entities     : String  = 'rootEntities' ;
+      gs_Encoding     : String = 'ISO-8859-1';
+      gs_LeonardiSubDir : String = '';
+
 const CST_LEON_File_Extension = '.xml';
+      {$IFDEF VERSIONS}
+        gver_fonctions_XML : T_Version = ( Component : 'Librairie de fonctions XML' ;
+                                           FileUnit : 'fonctions_xml' ;
+                    			                 Owner : 'Matthieu Giroux' ;
+                    			                 Comment : 'XML Form and SQL creating Functions. No XML Form in this unit.' + #13#10 +
+                                                                 'Il ne doit pas y avoir de lien vers les objets à créer.' ;
+                    			                 BugsStory :'Version 0.9.9.0 : centralising SQL Creating functions.' + #13#10 +
+                                                                    'Version 0.9.0.2 : centralising searching on xml nodes.' + #13#10 +
+                                                                    'Version 0.9.0.1 : Images Directory.' + #13#10 +
+                                                                    'Version 0.9.0.0 : Unit functionnal.' + #13#10 +
+                                                                    'Version 0.1.0.0 : Création de l''unité.';
+                    			                 UnitType : 1 ;
+                    			                 Major : 0 ; Minor : 9 ; Release : 9 ; Build : 0 );
+
+      {$ENDIF}
 
       CST_LEON_DUMMY = 'DUMMY' ;
       CST_LEON_PROJECT = 'PROJECT' ;
@@ -61,7 +89,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_DATA_VALUESEP = 'valueSep' ;
       CST_LEON_DATA_MYSQL    = '.mysql.' ;
       CST_LEON_DATA_FIREBIRD = '.firebird.' ;
-      CST_LEON_DATA_POSTGRES = '.postgresql.' ;
+      CST_LEON_DATA_POSTGRES = '.postgres' ;
       CST_LEON_DATA_SQLSERVER= '.mssql.' ;
       CST_LEON_DATA_ORACLE   = '.oracle.' ;
       CST_LEON_DATA_SQLLITE  = '.sqllite.' ;
@@ -163,35 +191,7 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_COMBO_FIELD_SEPARATOR    = ',' ;
 
-{$IFDEF VERSIONS}
-  gver_fonctions_XML : T_Version = ( Component : 'Librairie de fonctions XML' ;
-                                     FileUnit : 'fonctions_xml' ;
-              			                 Owner : 'Matthieu Giroux' ;
-              			                 Comment : 'XML Form and SQL creating Functions. No XML Form in this unit.' + #13#10 +
-                                                           'Il ne doit pas y avoir de lien vers les objets à créer.' ;
-              			                 BugsStory :  'Version 0.9.9.0 : centralising SQL Creating functions.' + #13#10 +
-                                                              'Version 0.9.0.2 : centralising searching on xml nodes.' + #13#10 +
-                                                              'Version 0.9.0.1 : Images Directory.' + #13#10 +
-                                                              'Version 0.9.0.0 : Unit functionnal.' + #13#10 +
-                                                              'Version 0.1.0.0 : Création de l''unité.';
-              			                 UnitType : 1 ;
-              			                 Major : 0 ; Minor : 9 ; Release : 9 ; Build : 0 );
-
-{$ENDIF}
 function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileXML : String ): Boolean;
-
-// XML parameters
-var gs_ProjectFile  : String;
-    gs_RootEntities : String ;
-    gNod_DashBoard  : TALXMLNode = nil;
-    gNod_RootAction : TALXMLNode = nil;
-    gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
-    gs_entities     : String  = 'rootEntities' ;
-    gs_Encoding     : String = 'ISO-8859-1';
-
-
 function fs_getLeonDir :String ;
 function fs_getLeonInfo : String;
 function fs_getLeonFiles : String;

@@ -29,6 +29,8 @@ const // Champs utilisés
   CST_INI_PROJECT_FILE = 'LY_PROJECT_FILE';
   CST_INI_LANGUAGE = 'LY_LANGUAGE';
   CST_DIR_LANGUAGE = 'properties'+ DirectorySeparator;
+  CST_DB_PROTOCOL = 'Protocol';
+  CST_DB_DATABASE = 'Database';
   CST_DIR_LANGUAGE_LAZARUS = 'LangFiles'+ DirectorySeparator;
   CST_SUBFILE_LANGUAGE =  'strings_';
   {$IFDEF VERSIONS}
@@ -43,7 +45,7 @@ const // Champs utilisés
 {$ENDIF}
 type
   TOnExecuteProjectNode = procedure ( const as_FileName : String; const ANode : TALXMLNode );
-  TOnExecuteSQLScript = function ( const as_BaseName, as_user, as_password, as_sql : String ; const ads_connection : TDSSource ):Boolean;
+  TOnExecuteSQLScript = function ( const as_BaseName, as_user, as_password, as_host, as_sql1, as_sql2 : String ; const ads_connection : TDSSource ):Boolean;
   TActionTemplate          = (atmultiPageTable,atLogin);
   TLeonFunctionID          = String ;
   TLeonFunctions           = Array of TLeonFunctionID;
@@ -640,10 +642,11 @@ begin
 
 end;
 
-function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ; const ads_connection : TDSSource = nil ):Boolean;
+function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password, as_host : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ; const ads_connection : TDSSource = nil ):Boolean;
 var li_i : Integer;
     ACollection : TFWTables;
-    ATemp : String;
+    ATemp1,
+    ATemp2,
     ls_File : String;
     lh_handleFile : THandle;
 Begin
@@ -655,27 +658,28 @@ Begin
      with ga_Functions [li_i] do
        Begin
          if AFile = ''
-          Then ATemp:=Name
-          Else ATemp:=AFile;
-         if ACollection.indexOf(ATemp) = -1 Then
-           p_CreateComponents( ACollection, ATemp, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
+          Then ATemp1:=Name
+          Else ATemp1:=AFile;
+         if ACollection.indexOf(ATemp1) = -1 Then
+           p_CreateComponents( ACollection, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
        end;
-    ATemp:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password);
+    ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
+    ATemp2:=fs_BeginAlterCreate;
     for li_i := 0 to ACollection.Count - 1 do
      with ACollection [ li_i ] do
       if IsMain Then
        Begin
-         AppendStr(ATemp,GetSQLCreateCode);
+         AppendStr(ATemp2,GetSQLCreateCode);
        end;
-    AppendStr(ATemp,fs_EndCreate(as_BaseName,as_user,as_password));
+    AppendStr(ATemp2,fs_EndCreate(as_BaseName,as_user,as_password,as_host));
   finally
     ACollection.destroy;
   end;
   if ab_DoItWithCommandLine Then
-    p_ExecuteSQLCommand(ATemp)
+    p_ExecuteSQLCommand(ATemp1+ATemp2)
   Else
    if Assigned(ge_ExecuteSQLScript)
-    Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password, ATemp, ads_connection );
+    Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
 End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );
@@ -708,11 +712,14 @@ Begin
      p_setComponentProperty ( Connection, 'User', DataUser );
      p_setComponentProperty ( Connection, 'Password', DataPassword );
      p_setComponentProperty ( Connection, 'Hostname', DataURL );
-     p_setComponentProperty ( Connection, 'Database', Database );
+     p_setComponentProperty ( Connection, CST_DB_DATABASE, Database );
      if DataPort > 0 Then
        p_setComponentProperty ( Connection, 'Port', DataPort );
      if ( pos ( CST_LEON_DATA_MYSQL, DataDriver ) > 0 ) Then
-       p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_MYSQL )
+       Begin
+        p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_MYSQL );
+        gbm_DatabaseToGenerate:=bmMySQL;
+       end
      else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
       Begin
         if ( pos ( '.', DataBase ) = 1 )
@@ -723,23 +730,31 @@ Begin
            if ( pos ( '.'+DirectorySeparator, DataBase ) = 1 ) Then
             DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getAppDir,[]);
            if not FileExistsUTF8(DataBase) Then
-             fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, True, acom_owner );
+             fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, DataURL, True, acom_owner );
           end;
        p_setComponentProperty ( Connection, 'DatabaseName', Database );
       end
      else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
-       p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_SQLLITE )
+      Begin
+       p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_SQLLITE );
+      end
      else if ( pos ( CST_LEON_DATA_ORACLE, DataDriver ) > 0 ) Then
-       p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_ORACLE )
+      Begin
+       p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_ORACLE );
+       gbm_DatabaseToGenerate:=bmOracle;
+      end
      else if ( pos ( CST_LEON_DATA_POSTGRES, DataDriver ) > 0 ) Then
-       p_setComponentProperty ( Connection, 'Protocol', CST_LEON_DRIVER_POSTGRES );
+      Begin
+       p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_POSTGRES );
+       gbm_DatabaseToGenerate:=bmPostgreSQL;
+      end;
      try
        p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
      except
        on e: Exception do
-         if MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,'Database'),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrYes Then
+         if MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrYes Then
           Begin
-           if not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,False,acom_owner,ads_connection) Then
+           if not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection) Then
             Exit;
           end;
      end;

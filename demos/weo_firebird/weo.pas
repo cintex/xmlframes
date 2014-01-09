@@ -9,6 +9,8 @@ uses
   {$ENDIF}{$ENDIF}
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents,
+  fonctions_xml,
+  fonctions_system,
   SysUtils, fonctions_ibx, UniqueInstance,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz, uniqueinstance_package;
@@ -52,6 +54,8 @@ begin
   Unique := TUniqueInstance ( Application );
   Unique.Identifier:=Application.ExeName;
   {$ENDIF}
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;  
   F_SplashForm := TF_SplashForm.Create(nil);
   F_SplashForm.Label1.Caption := 'GENERIC' ;
   F_SplashForm.Label1.Width   := F_SplashForm.Width ;

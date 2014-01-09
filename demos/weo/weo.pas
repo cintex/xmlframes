@@ -33,6 +33,7 @@ begin
   Application.Initialize;
   {$IFNDEF FPC}
   Application.Title := 'Test';
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
 
   // Met dans gc_classname le nom de la class de l'application
   GetClassName(Application.handle, gc_classname, 254);

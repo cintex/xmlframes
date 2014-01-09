@@ -81,6 +81,7 @@ uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
      unite_variables, u_languagevars, Imaging,
      u_framework_dbcomponents,
      u_connection,
+     fonctions_create,
      fonctions_languages,
      u_xmlfillcombobutton,
      u_fillcombobutton,
@@ -430,7 +431,7 @@ begin
     end;
 End ;
 
-function fb_AutoCreateDatabaseWithQuery ( const as_BaseName, as_user, as_password, as_sql : String ; const ads_connection : TDSSource = nil ):Boolean;
+function fb_AutoCreateDatabaseWithQuery ( const as_BaseName, as_user, as_password, as_host, as_sql1, as_sql2 : String ; const ads_connection : TDSSource = nil ):Boolean;
 var     LDataset : TDataset;
 Begin
   with ads_connection do
@@ -446,7 +447,9 @@ Begin
     end;
     LDataset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,ads_connection.Connection.Owner);
     try
-      p_ExecuteSQLScriptServer(Connection,as_sql);
+      p_ExecuteSQLScriptServer(Connection,as_sql1);
+      p_SetComponentProperty(Connection,CST_DB_DATABASE,as_BaseName);
+      p_ExecuteSQLScriptServer(Connection,as_sql2);
     finally
       LDataset.Destroy;
     end;
