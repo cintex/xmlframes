@@ -159,6 +159,7 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents, ALFcnString,
      u_extdbgrid, fonctions_images,
      fonctions_dialogs,
+     fonctions_dbcomponents,
      fonctions_Objets_Dynamiques,
      fonctions_languages, fonctions_reports,
      u_buttons_defs,
@@ -200,12 +201,13 @@ Begin
          else
           Begin
             gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TWinControl, FMainPanel, Name, Name, ADBSources.Owner as TComponent );
-            gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , DBSources.Count - 1);
+            gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , ADBSources.Count - 1);
           End;
         ab_FieldFound := True;
       end;
+    gwin_Last := nil;
     gwin_Last := fwin_CreateFieldComponentAndProperties ( as_table, anod_ANode, ai_Fieldcounter, ai_Counter, gwin_Parent,
-                                              gwin_Last, ab_Column, DBSources [ DBSources.count - 1 ] );
+                                              gwin_Last, ab_Column, ADBSources [ ADBSources.count - 1 ] as TFWSource );
     inc ( ai_Fieldcounter );
    end;
 
@@ -1082,8 +1084,7 @@ var lnod_FieldProperties : TALXMLNode ;
           MyShowmessage ( Gs_NoComponentToCreate + lffd_ColumnFieldDef.FieldName +'.' );
           gb_Unload := True;
         End;
-      awin_Control.Font.Color:=clWindowText;
-      awin_Control.Color :=clBtnFace;
+
       if not assigned ( awin_Control )
       or ( awin_Control is TDBGroupView ) then
         Exit;
@@ -1101,6 +1102,10 @@ var lnod_FieldProperties : TALXMLNode ;
          end;
 
       p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+
+      if Assigned(GetPropInfo(awin_Control,CST_DBPROPERTY_DATASOURCE))
+       Then p_SetComponentObjectProperty(awin_Control,CST_DBPROPERTY_DATASOURCE,afws_Source.Datasource)
+       Else p_SetComponentProperty(awin_Control,CST_PROPERTY_TEXT,'');
 
       p_setFieldComponentTop ( awin_Control, ab_Column );
 
@@ -1202,6 +1207,7 @@ var li_i, li_j, li_NoField : LongInt ;
 begin
   // For actions at the end of xml file
    gi_LastFormFieldsHeight := 0;
+   gwin_Parent:=awin_Parent;
    p_CreateComponents ( DBSOurces,as_XMLClass,as_Name,Self,awin_Parent,gxdo_FichierXML,
                         TOnExecuteFieldNode(p_OnCreateParentAndFieldsComponent),
                         TOnExecuteFieldNode(p_OnFieldsButtonsComponents),

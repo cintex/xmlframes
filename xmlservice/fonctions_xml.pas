@@ -517,13 +517,17 @@ begin
 
                   End;
                end;
+              for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
+               Begin
+                lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];
+                if ( lnod_ClassNode.NodeName = CST_LEON_ACTIONS  ) Then
+                  if Assigned(ae_onActionNode) Then
+                   ae_onActionNode ( ADBSources, '', lnod_ClassNode, lb_FieldFound, lb_Column, li_NoField, li_Counter );
+                if ( lnod_ClassNode.NodeName = CST_LEON_NAME  ) Then
+                  if Assigned(ae_onClassNameNode) Then
+                   ae_onClassNameNode ( ADBSources, lnod_ClassNode );
+               end;
             End;
-          if ( lnod_Node.NodeName = CST_LEON_ACTIONS  ) Then
-            if Assigned(ae_onActionNode) Then
-             ae_onActionNode ( ADBSources, '', lnod_Node, lb_FieldFound, lb_Column, li_NoField, li_Counter );
-          if ( lnod_Node.NodeName = CST_LEON_NAME  ) Then
-            if Assigned(ae_onClassNameNode) Then
-             ae_onClassNameNode ( ADBSources, lnod_Node );
         End;
     Except
       On E: Exception do
