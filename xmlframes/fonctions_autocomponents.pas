@@ -165,10 +165,10 @@ begin
                  IndexKind:=ikPrimary;
                  lfc_Fields := FieldsDefs;
                 end;
-            ls_FieldString := lfc_Fields.GetString;
+            ls_FieldString := lfc_Fields.toString;
             Datasource:=Result;
             Table := as_Table;
-            ls_FieldString:=FieldsDefs.GetString;
+            ls_FieldString:=FieldsDefs.toString;
             if ls_FieldString > '' Then
              for li_i := 0 to lfc_Fields.Count -1 do
               with lfc_Fields [ li_i ] do

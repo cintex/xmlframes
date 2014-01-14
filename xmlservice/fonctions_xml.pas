@@ -287,8 +287,8 @@ begin
         if HasAttribute ( CST_LEON_FIELD_private)
          then ColPrivate  := Attributes [ CST_LEON_FIELD_private ] = CST_LEON_BOOL_TRUE;
         if ab_isreference
-          Then p_setNodeField(anod_Field,affd_ColumnFieldDef)
-          Else p_setNodeId ( anod_Field, anod_FieldProperties, afws_Source,affd_ColumnFieldDef);
+          Then p_setNodeField(anod_Field,affd_ColumnFieldDef);
+
         if HasAttribute ( CST_LEON_FIELD_hidden )
         and not ( Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
           Begin
