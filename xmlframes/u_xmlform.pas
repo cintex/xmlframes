@@ -192,9 +192,9 @@ Begin
    Begin
     if not ab_FieldFound Then
       Begin
-        if ( DBSources.Count = 1 ) Then
+        if ( ADBSources.Count = 1 ) Then
             Begin
-              gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name, DBSources.Count - 1 );
+              gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name, ADBSources.Count - 1 );
               Hint := fs_GetLabelCaption ( Name );
               ShowHint := True;
             End
@@ -1047,7 +1047,7 @@ var lnod_FieldProperties : TALXMLNode ;
           Result := True;
           Exit;
         end;
-      if not fb_createFieldID ( afws_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter, lb_IsLocal )
+      if not fb_createFieldID ( afws_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter )
        Then
         Begin
           afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
@@ -1064,8 +1064,7 @@ var lnod_FieldProperties : TALXMLNode ;
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
             if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lb_IsLarge, lffd_ColumnFieldDef, lb_IsLocal, FieldDelimiter, ai_Counter ) Then
              Begin
-               p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
-               Exit;
+               Break;
              end;
 
             if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
@@ -1211,7 +1210,6 @@ begin
                         TOnExecuteFieldNode(p_OnCreateParentAndFieldsComponent),
                         TOnExecuteFieldNode(p_OnFieldsButtonsComponents),
                         TOnExecuteNode(p_OncolumnNameNode ));
-   p_CreateColumns;
 end;
 
 

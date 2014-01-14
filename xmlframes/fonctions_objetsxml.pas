@@ -103,7 +103,7 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
-function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer; const ab_IsLocal : Boolean ):Boolean;
+function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer ):Boolean;
 function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char ; const ai_counter : Integer ): Boolean;
 function fb_CreeAppliFromNode ( const as_EntityFile : String ):boolean;
 function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
@@ -1574,7 +1574,7 @@ Begin
 end;
 
 
-function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer; const ab_IsLocal : Boolean ):Boolean;
+function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer ):Boolean;
 Begin
   Result := anod_Field.Attributes [ CST_LEON_ID ] <> Null;
   if result Then
@@ -1598,6 +1598,7 @@ begin
   if NodeName = CST_LEON_FIELD_F_MARKS then
    with affd_ColumnFieldDef do
     Begin
+      Result := True;
       if HasAttribute ( CST_LEON_LOCAL )
       and ( Attributes [ CST_LEON_LOCAL ] <> CST_LEON_BOOL_FALSE )  then
         Begin
@@ -1616,7 +1617,6 @@ begin
         Begin
           ShowCol := -1;
           ShowSearch := -1;
-          Result := True;
           Exit;
         End;
       ShowCol := ai_counter + 1;
