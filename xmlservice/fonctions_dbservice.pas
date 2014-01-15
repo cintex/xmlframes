@@ -19,7 +19,6 @@ uses
   fonctions_version,
   {$ENDIF}
   SysUtils, ALXmlDoc,
-  DB,
   u_multidata,
   fonctions_manbase,
   fonctions_system,
@@ -88,18 +87,12 @@ uses u_multidonnees, fonctions_xml,
      FileUtil,
      Controls,
      fonctions_file,
-     fonctions_db,
-     {$IFDEF WINDOWS}
-     fonctions_string,
-     {$ENDIF}
      {$IFDEF FPC}
      LazFileUtils,
+     {$ENDIF}
      fonctions_dialogs,
      Dialogs,
-     {$ELSE}
      fonctions_string,
-     {$ENDIF}
-     unite_variables,
      fonctions_languages;
 /////////////////////////////////////////////////////////////////////////
 // procedure p_LoadEntitites
@@ -134,7 +127,7 @@ Begin
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
         // connects before build
-        if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
+        if ( UpperCase (copy ( lNode.NodeName, 1, 8 )) = CST_LEON_ENTITY )
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
 //            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
@@ -150,7 +143,7 @@ Begin
               End;
 
             Result := fs_getLeonDir + fs_WithoutFirstDirectory ( Result );
-            if FileExists ( Result ) then
+            if FileExistsUTF8 ( Result ) then
                aopn_OnProjectNode ( Result, lNode );
           End;
 //         else
@@ -169,7 +162,7 @@ Begin
   if ( gs_ProjectFile = '' ) then
     Begin
       lstl_FichierIni := TStringList.Create ;
-      if not FileExists(fs_getAppDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
+      if not FileExistsUTF8(fs_getAppDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
         Begin
           raise Exception.Create ( 'No ini file of LEONARDI project !' );
           Exit;
@@ -217,7 +210,7 @@ Begin
             gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
             p_LoadData ( lNode, AApplication );
           end;
-        if ( copy ( lNode.NodeName, 1, 8 ) = CST_LEON_ENTITY )
+        if ( Uppercase (copy ( lNode.NodeName, 1, 8 )) = CST_LEON_ENTITY )
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
 //            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
@@ -227,17 +220,19 @@ Begin
             {$ENDIF}
 
             Result := fs_getLeonDir + fs_WithoutFirstDirectory ( Result );
-            if FileExists ( Result )
-            and  ( pos ( CST_LEON_SYSTEM_LOCATION, lNode.NodeName ) > 0 ) Then
-             Begin
-               if lxdo_FichierXML = nil then
-                 lxdo_FichierXML := TALXMLDocument.Create(AApplication);
-                if fb_LoadXMLFile ( lxdo_FichierXML, Result )
-                 then
-                  Begin
-                   p_LoadData ( lxdo_FichierXML.Node, AApplication );
-                  end;
-             End;
+            if FileExistsUTF8 ( Result ) Then
+              Begin
+                if  ( pos ( CST_LEON_SYSTEM_LOCATION, Uppercase(lNode.NodeName) ) > 0 ) Then
+                 Begin
+                   if lxdo_FichierXML = nil then
+                     lxdo_FichierXML := TALXMLDocument.Create(AApplication);
+                    if fb_LoadXMLFile ( lxdo_FichierXML, Result )
+                     then
+                      Begin
+                       p_LoadData ( lxdo_FichierXML.Node, AApplication );
+                      end;
+                 End
+              end;
           End;
 //         else
 //          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
@@ -306,7 +301,7 @@ Begin
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
   if not assigned ( amif_Init ) then
-    if FileExists(fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+    if FileExistsUTF8(fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
       Then amif_Init := TIniFile.Create(fs_getAppDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
       Else p_InitIniProjectFile;
   if assigned ( amif_Init ) Then
@@ -509,19 +504,34 @@ End;
 
 procedure p_onProjectInitNode ( const as_FileName : String ; const ANode : TALXMLNode );
 Begin
-  if  ( pos ( CST_LEON_SYSTEM_ROOT, aNode.NodeName ) > 0 )
+  if  ( pos ( CST_LEON_SYSTEM_ROOT, Uppercase (aNode.NodeName) ) > 0 )
    then
      Begin
        if not assigned ( gxdo_MenuXML ) Then
          gxdo_RootXML := TALXMLDocument.Create(nil);
-       try
-         if fb_LoadXMLFile ( gxdo_RootXML, as_FileName ) then
-           p_LoadEntitites ( gxdo_RootXML );
+       if fb_LoadXMLFile ( gxdo_RootXML, as_FileName ) then
+         p_LoadEntitites ( gxdo_RootXML );
 
-       finally
-         FreeAndNil(gxdo_RootXML);
-       end;
-     End;
+     End
+   else
+    if  ( pos ( CST_LEON_ENTITY, Uppercase (aNode.NodeName) ) > 0 )
+    and ( pos ( CST_LEON_SYSTEM, Uppercase (aNode.NodeName) ) > 0 )
+    and ( pos ( CST_LEON_SYSTEM_NAVIGATION, Uppercase (aNode.NodeName) ) = 0 )
+    and ( pos ( CST_LEON_SYSTEM_LOCATION, Uppercase (aNode.NodeName) ) = 0 )
+     then
+       Begin
+        SetLength ( ga_Functions, high ( ga_Functions ) + 2 );
+        with ga_Functions [ high ( ga_Functions )] do
+          Begin
+            Clep := ExtractFileNameOnly(ANode.Attributes [ CST_LEON_DUMMY ]);
+            Groupe := '';
+            Name   := Clep;
+            AFile  := Clep;
+            Prefix := '';
+            finalize ( Functions );
+          End;
+      End;
+
 End;
 
 
@@ -634,6 +644,7 @@ begin
        lfwt_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
        Exit;
      end;
+   li_i := 0;
    if fb_setFieldType(lfwt_Source,anod_Field,lffd_ColumnFieldDef,li_i,False,nil) Then
      lfwt_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
 
@@ -651,15 +662,18 @@ Begin
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
   ACollection := TFWTables.Create(TFWTable);
   try
-    for li_i := 0 to high ( ga_Functions ) do
+    for li_i := 2 to high ( ga_Functions ) do
      with ga_Functions [li_i] do
        Begin
          if AFile = ''
           Then ATemp1:=Name
           Else ATemp1:=AFile;
-         if ACollection.indexOf(ATemp1) = -1 Then
+         if  ( ATemp1 > '' )
+         and ( ACollection.indexOf(ATemp1) = -1 ) Then
            p_CreateComponents( ACollection, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
        end;
+    FreeAndNil(gxdo_RootXML);
+    Finalize(ga_Functions);
     ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
     ATemp2:=fs_BeginAlterCreate;
     for li_i := 0 to ACollection.Count - 1 do
@@ -731,6 +745,8 @@ Begin
          Then
           Begin
            DataBase:=fs_GetCorrectPath (DataBase);
+           if ( pos ( '..'+DirectorySeparator, DataBase ) = 1 ) Then
+            DataBase := StringReplace(DataBase,'..'+DirectorySeparator,ExtractSubDir(fs_getAppDir)+DirectorySeparator,[]);
            if ( pos ( '.'+DirectorySeparator, DataBase ) = 1 ) Then
             DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getAppDir,[]);
            if not FileExistsUTF8(DataBase) Then

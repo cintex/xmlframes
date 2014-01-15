@@ -73,6 +73,7 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_LEON_SYSTEM_ROOT     = 'ROOT SYSTEM';
       CST_LEON_SYSTEM_LOCATION = 'LOCATION SYSTEM';
+      CST_LEON_SYSTEM          = 'SYSTEM';
       CST_LEON_SYSTEM_NAVIGATION = 'NAVIGATION SYSTEM';
 
       CST_LEON_DIR           = '$LY_APP_DIR$';
@@ -241,12 +242,13 @@ function fdoc_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_fie
 implementation
 
 uses fonctions_init,
-{$IFNDEF FPC}
+{$IFDEF FPC}
+     FileUtil,
+{$ELSE}
      Variants, StrUtils,
 {$ENDIF}
-     Dialogs, U_ExtNumEdits,
-     u_framework_components,
-     ExtCtrls, u_framework_dbcomponents,
+     Dialogs,
+     ExtCtrls,
      u_multidata,
      u_multidonnees,
      fonctions_system,
@@ -350,7 +352,7 @@ begin
     axml_SourceFile := TALXMLDocument.Create ( acom_owner );
   ls_ProjectFile := fs_getProjectDir ( ) + as_XMLClass + CST_LEON_File_Extension;
   // For actions at the end of xml file
-  If ( FileExists ( ls_ProjectFile )) Then
+  If ( FileExistsUTF8 ( ls_ProjectFile )) Then
    // reading the special XML form File
     try
       if fb_LoadXMLFile ( axml_SourceFile, ls_ProjectFile ) Then
@@ -389,7 +391,7 @@ begin
   Result := TALXMLDocument.Create ( Application );
   ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
   li_CountFields := 0 ;
-  If ( FileExists ( ls_ProjectFile )) Then
+  If ( FileExistsUTF8 ( ls_ProjectFile )) Then
     try
       if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
         Begin
@@ -516,16 +518,12 @@ begin
                      ae_OnFieldNode ( ADBSources, lfwc_Column.Table, lnod_ClassNode.ChildNodes [ li_k ], lb_FieldFound, lb_Column, li_NoField, li_Counter);
 
                   End;
-               end;
-              for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
-               Begin
-                lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];
-                if ( lnod_ClassNode.NodeName = CST_LEON_ACTIONS  ) Then
-                  if Assigned(ae_onActionNode) Then
-                   ae_onActionNode ( ADBSources, '', lnod_ClassNode, lb_FieldFound, lb_Column, li_NoField, li_Counter );
-                if ( lnod_ClassNode.NodeName = CST_LEON_NAME  ) Then
-                  if Assigned(ae_onClassNameNode) Then
-                   ae_onClassNameNode ( ADBSources, lnod_ClassNode );
+                 if ( lnod_ClassNode.NodeName = CST_LEON_ACTIONS  ) Then
+                   if Assigned(ae_onActionNode) Then
+                    ae_onActionNode ( ADBSources, '', lnod_ClassNode, lb_FieldFound, lb_Column, li_NoField, li_Counter );
+                 if ( lnod_ClassNode.NodeName = CST_LEON_NAME  ) Then
+                   if Assigned(ae_onClassNameNode) Then
+                    ae_onClassNameNode ( ADBSources, lnod_ClassNode );
                end;
             End;
         End;
@@ -953,7 +951,7 @@ End;
 function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileXML : String ): Boolean;
   function fb_LoadXML (): Boolean;
     Begin
-      if not FileExists ( as_FileXML ) Then
+      if not FileExistsUTF8 ( as_FileXML ) Then
         Begin
           ShowMessage ( 'File Not Found : ' + as_FileXML );
           Result := False;

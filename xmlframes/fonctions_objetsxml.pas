@@ -197,6 +197,9 @@ procedure p_RegisterSomeLanguages;
 implementation
 
 uses SysUtils, Dialogs, fonctions_xml,
+{$IFDEF FPC}
+     FileUtil,
+{$ENDIF}
      fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
      Variants, fonctions_Objets_Dynamiques, fonctions_dbcomponents, strutils,
      unite_variables, u_languagevars, Imaging, fonctions_languages;
@@ -265,7 +268,7 @@ var ls_Dir, ls_lang, ls_Language : String ;
  Begin
   ls_Dir := fs_getLeonDir +CST_DIR_LANGUAGE;
   lini_Inifile := nil;
-  if FileExists( fs_getLeonDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES) Then
+  if FileExistsUTF8( fs_getLeonDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES) Then
   try
     lini_Inifile := TStringList.Create( );
     lini_Inifile.LoadFromFile(fs_getLeonDir +CST_DIR_LANGUAGE_LAZARUS + CST_FILE_LANGUAGES + GS_EXT_LANGUAGES);
@@ -275,7 +278,7 @@ var ls_Dir, ls_lang, ls_Language : String ;
     lb_IsFound := FindFirst(ls_Dir+CST_SUBFILE_LANGUAGE+gs_NomApp+'_*'+GS_EXT_LANGUAGES, faAnyFile-faDirectory, lsr_Files) = 0;
     while lb_IsFound do
      begin
-        if FileExists ( ls_Dir + lsr_Files.Name )
+        if FileExistsUTF8 ( ls_Dir + lsr_Files.Name )
          Then
           Begin
             li_pos := Length(CST_SUBFILE_LANGUAGE+gs_NomApp+'_');
@@ -333,7 +336,7 @@ Begin
   End ;
   while lb_IsFound do
    begin
-    if  FileExists ( ls_ImagesDir + SR.Name )
+    if  FileExistsUTF8 ( ls_ImagesDir + SR.Name )
     and ( DetermineFileFormat ( ls_ImagesDir + SR.Name ) <> '' )
      then
       Begin

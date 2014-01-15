@@ -3,26 +3,41 @@ program weo;
 {$MODE Delphi}
 
 
-uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
-  {$ENDIF}{$ENDIF}
-  Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
-  LCLType, lazextcomponents,
-  SysUtils, fonctions_zeos, UniqueInstance,
-  u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
-  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz, uniqueinstance_package;
+uses {$IFDEF UNIX} {$IFDEF UseCThreads}
+  cthreads, {$ENDIF} {$ENDIF}
+  Forms,
+  Interfaces,
+  fonctions_init,
+  U_XMLFenetrePrincipale,
+  U_Splash,
+  LCLType,
+  lazextcomponents,
+  SysUtils,
+  fonctions_zeos,
+  UniqueInstance,
+  u_multidonnees,
+  U_CustomFrameWork,
+  lazmanframes,
+  lazmansoft,
+  lazxmlframes,
+  fonctions_ObjetsXML,
+  Dialogs,
+  LResources,
+  fonctions_xml,
+  fonctions_system,
+  JvXPBarLaz,
+  uniqueinstance_package;
 
 {$IFNDEF FPC}
 {$R *.res}
 {$R WindowsXP.res}
 var
-  gc_classname: Array[0..255] of char;
+  gc_classname: array[0..255] of char;
   gi_result: integer;
 
 {$ELSE}
 var
-  Unique : TUniqueInstance;
+  Unique: TUniqueInstance;
 {$ENDIF}
 
 
@@ -31,9 +46,10 @@ var
 begin
   {$I weo.lrs}
   Application.Initialize;
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;
   {$IFNDEF FPC}
   Application.Title := 'Test';
-  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
 
   // Met dans gc_classname le nom de la class de l'application
   GetClassName(Application.handle, gc_classname, 254);
@@ -44,33 +60,33 @@ begin
 
   if gi_result <> 0 then   // Une instance existante trouvée
     begin
-      ShowWindow(gi_result, SW_RESTORE);
-      SetForegroundWindow(gi_result);
-      Application.Terminate;
-      Exit;
+    ShowWindow(gi_result, SW_RESTORE);
+    SetForegroundWindow(gi_result);
+    Application.Terminate;
+    Exit;
     end;
   {$ELSE}
-  Unique := TUniqueInstance ( Application );
-  Unique.Identifier:=Application.ExeName;
+  Unique := TUniqueInstance(Application);
+  Unique.Identifier := Application.ExeName;
   {$ENDIF}
   F_SplashForm := TF_SplashForm.Create(nil);
-  F_SplashForm.Label1.Caption := 'GENERIC' ;
-  F_SplashForm.Label1.Width   := F_SplashForm.Width ;
+  F_SplashForm.Label1.Caption := 'GENERIC';
+  F_SplashForm.Label1.Width := F_SplashForm.Width;
   F_SplashForm.Show;   // Affichage de la fiche
   F_SplashForm.Update; // Force la fiche à se dessiner complètement
 
-  try
-    gb_DicoKeyFormPresent  := True ;
-    gb_DicoUseFormField    := True ;
-    gb_DicoGroupementMontreCaption := False ;
-    if not fb_ReadIni ( FMainIni ) Then
-     Begin
-      ShowMessage ( 'XML file not initalized.' );
+    try
+    gb_DicoKeyFormPresent := True;
+    gb_DicoUseFormField := True;
+    gb_DicoGroupementMontreCaption := False;
+    if not fb_ReadIni(FMainIni) then
+      begin
+      ShowMessage('XML file not initalized.');
       Application.Terminate;
-     end;
+      end;
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
-  finally
-  end;
+    finally
+    end;
   Application.Run;
-  SetHeapTraceOutput (ExtractFilePath (ParamStr (0)) + 'heaptrclog.txt');
+  SetHeapTraceOutput(ExtractFilePath(ParamStr(0)) + 'heaptrclog.txt');
 end.

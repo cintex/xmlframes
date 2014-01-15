@@ -4,7 +4,7 @@
 			driver="com.firebird.jdbc.Driver"
 			user="SYSDBA"
 			password="masterkey"
-			dbName="./weo.fdb"
+			dbName="../weo.fdb"
 			valueSep="&#010;"/>
 
 

@@ -96,10 +96,8 @@ function fb_ReadXMLEntitites () : Boolean;
 var ls_entityFile : String ;
 Begin
   Result := gs_ProjectFile <> '';
-  gxdo_RootXML.Free;
-  gxdo_MenuXML   .Free;
-  gxdo_RootXML := nil;
-  gxdo_MenuXML    := nil;
+  FreeAndNil(gxdo_RootXML);
+  FreeAndNil(gxdo_MenuXML);
   if result Then
     Begin
       ls_entityFile := fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node ,TOnExecuteProjectNode ( p_onProjectNode ) ) ;

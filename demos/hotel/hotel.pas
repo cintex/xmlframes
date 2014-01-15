@@ -3,8 +3,10 @@ program hotel;
 {$MODE Delphi}
 
 uses
-  Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
+  Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
   LCLType, lazextcomponents, fonctions_zeos,
+  fonctions_system,
+  fonctions_xml,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
 
@@ -20,47 +22,49 @@ var
 
 begin
   {$I hotel.lrs}
-	Application.Initialize;
-        {$IFNDEF FPC}
-	Application.Title := 'Test';
+  Application.Initialize;
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;
+  {$IFNDEF FPC}
+  Application.Title := 'Test';
 
-	// Met dans gc_classname le nom de la class de l'application
-	GetClassName(Application.handle, gc_classname, 254);
+  // Met dans gc_classname le nom de la class de l'application
+  GetClassName(Application.handle, gc_classname, 254);
 
-	// Renvoie le Handle de la première fenêtre de Class (type) gc_classname
-	// et de titre TitreApplication (0 s'il n'y en a pas)
-	gi_result := FindWindow(gc_classname, 'GENERIQUE');
+  // Renvoie le Handle de la première fenêtre de Class (type) gc_classname
+  // et de titre TitreApplication (0 s'il n'y en a pas)
+  gi_result := FindWindow(gc_classname, 'GENERIQUE');
 
-	if gi_result <> 0 then   // Une instance existante trouvée
-		begin
-			ShowWindow(gi_result, SW_RESTORE);
-			SetForegroundWindow(gi_result);
-			Application.Terminate;
-			Exit;
-		end
-	else  // Première création
-        {$ENDIF}
-		begin
+  if gi_result <> 0 then   // Une instance existante trouvée
+    begin
+      ShowWindow(gi_result, SW_RESTORE);
+      SetForegroundWindow(gi_result);
+      Application.Terminate;
+      Exit;
+    end
+  else  // Première création
+  {$ENDIF}
+	  begin
 
-		end;
+	  end;
 
-	F_SplashForm := TF_SplashForm.Create(nil);
-	F_SplashForm.Label1.Caption := 'GENERIC' ;
-	F_SplashForm.Label1.Width   := F_SplashForm.Width ;
-	F_SplashForm.Show;   // Affichage de la fiche
-	F_SplashForm.Update; // Force la fiche à se dessiner complètement
+  F_SplashForm := TF_SplashForm.Create(nil);
+  F_SplashForm.Label1.Caption := 'GENERIC' ;
+  F_SplashForm.Label1.Width   := F_SplashForm.Width ;
+  F_SplashForm.Show;   // Affichage de la fiche
+  F_SplashForm.Update; // Force la fiche à se dessiner complètement
 
-      	try
-                gb_DicoKeyFormPresent  := True ;
-                gb_DicoUseFormField    := True ;
-                gb_DicoGroupementMontreCaption := False ;
-                if not fb_ReadIni ( gmif_MainFormIniInit ) Then
-                 Begin
-                  ShowMessage ( 'XML file not initalized.' );
-                  Application.Terminate;
-                 end;
-		Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
-        finally
-	end;
-Application.Run;
+  try
+    gb_DicoKeyFormPresent  := True ;
+    gb_DicoUseFormField    := True ;
+    gb_DicoGroupementMontreCaption := False ;
+    if not fb_ReadIni ( FMainIni ) Then
+     Begin
+      ShowMessage ( 'XML file not initalized.' );
+      Application.Terminate;
+     end;
+    Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
+  finally
+  end;
+  Application.Run;
 end.

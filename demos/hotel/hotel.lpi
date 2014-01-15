@@ -11,7 +11,7 @@
     </General>
     <i18n>
       <EnableI18N Value="True"/>
-      <OutDir Value="properties"/>
+      <OutDir Value="LangFiles"/>
     </i18n>
     <VersionInfo>
       <StringTable ProductVersion=""/>
@@ -55,15 +55,16 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="186">
+    <Units Count="191">
       <Unit0>
         <Filename Value="hotel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="hotel"/>
-        <EditorIndex Value="3"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="5"/>
-        <CursorPos X="88" Y="28"/>
+        <TopLine Value="2"/>
+        <CursorPos X="64" Y="10"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -623,12 +624,10 @@
       <Unit74>
         <Filename Value="../../fonctions/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="178"/>
         <CursorPos X="31" Y="201"/>
         <UsageCount Value="38"/>
-        <Loaded Value="True"/>
       </Unit74>
       <Unit75>
         <Filename Value="../../fonctions/fonctions_ObjetsXML.pas"/>
@@ -1285,12 +1284,10 @@
       <Unit154>
         <Filename Value="../../../ZEOSDBO/src/dbc/ZDbcMySqlUtils.pas"/>
         <UnitName Value="ZDbcMySqlUtils"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="375"/>
         <CursorPos X="142" Y="382"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit154>
       <Unit155>
@@ -1509,7 +1506,7 @@
       </Unit181>
       <Unit182>
         <Filename Value="hotel.lpi"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -1520,61 +1517,118 @@
       <Unit183>
         <Filename Value="../../../Imaging/Source/ImagingJpeg.pas"/>
         <UnitName Value="ImagingJpeg"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="39"/>
         <CursorPos X="18" Y="45"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit183>
       <Unit184>
         <Filename Value="../weo/weo.pas"/>
         <UnitName Value="weo"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="17"/>
-        <CursorPos X="1" Y="60"/>
+        <TopLine Value="13"/>
+        <CursorPos X="19" Y="27"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit184>
       <Unit185>
         <Filename Value="../../../Extended/core/fonctions_forms.pas"/>
         <UnitName Value="fonctions_forms"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="22"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit185>
+      <Unit186>
+        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
+        <UnitName Value="fonctions_zeos"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="23"/>
+        <CursorPos X="24" Y="41"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit186>
+      <Unit187>
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <UnitName Value="fonctions_manbase"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit187>
+      <Unit188>
+        <Filename Value="../weo_firebird/weo.pas"/>
+        <UnitName Value="weo"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="28"/>
+        <CursorPos X="22" Y="58"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit188>
+      <Unit189>
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <UnitName Value="fonctions_xml"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="19"/>
+        <CursorPos X="7" Y="37"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit189>
+      <Unit190>
+        <Filename Value="../../../Extended/core/fonctions_system.pas"/>
+        <UnitName Value="fonctions_system"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="44"/>
+        <CursorPos X="3" Y="62"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit190>
     </Units>
-    <JumpHistory Count="6" HistoryIndex="5">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
-        <Filename Value="../../../Imaging/Source/ImagingJpeg.pas"/>
+        <Filename Value="hotel.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="../../../Imaging/Source/ImagingJpeg.pas"/>
-        <Caret Line="226" Column="44" TopLine="217"/>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="25" Column="71" TopLine="8"/>
       </Position2>
       <Position3>
-        <Filename Value="../../../Imaging/Source/ImagingJpeg.pas"/>
-        <Caret Line="227" Column="56" TopLine="217"/>
+        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position3>
       <Position4>
-        <Filename Value="hotel.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
+        <Caret Line="39" Column="14" TopLine="23"/>
       </Position4>
       <Position5>
         <Filename Value="hotel.pas"/>
-        <Caret Line="25" Column="71" TopLine="8"/>
+        <Caret Line="30" Column="1" TopLine="5"/>
       </Position5>
       <Position6>
-        <Filename Value="../../../Extended/core/fonctions_forms.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="25" Column="1" TopLine="11"/>
       </Position6>
+      <Position7>
+        <Filename Value="../weo_firebird/weo.pas"/>
+        <Caret Line="59" Column="1" TopLine="28"/>
+      </Position7>
+      <Position8>
+        <Filename Value="hotel.pas"/>
+        <Caret Line="8" Column="16" TopLine="3"/>
+      </Position8>
+      <Position9>
+        <Filename Value="../weo_firebird/weo.pas"/>
+        <Caret Line="58" Column="22" TopLine="28"/>
+      </Position9>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1607,99 +1661,6 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="13">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../Alcinoe/source/ALXMLDoc.pas"/>
-        <Line Value="1513"/>
-      </Item1>
-      <Item2>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../ExtToolbar/Source/exttbtls.pas"/>
-        <Line Value="425"/>
-      </Item2>
-      <Item3>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../ExtToolbar/Source/extdock.pas"/>
-        <Line Value="213"/>
-      </Item3>
-      <Item4>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../ExtToolbar/Source/extdock.pas"/>
-        <Line Value="1799"/>
-      </Item4>
-      <Item5>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../ExtToolbar/Source/extdock.pas"/>
-        <Line Value="2219"/>
-      </Item5>
-      <Item6>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../ExtToolbar/Source/extdock.pas"/>
-        <Line Value="4590"/>
-      </Item6>
-      <Item7>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../ExtToolbar/Source/extdock.pas"/>
-        <Line Value="4693"/>
-      </Item7>
-      <Item8>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../ManFrames/composants/u_customframework.pas"/>
-        <Line Value="3423"/>
-      </Item8>
-      <Item9>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/dataset.inc"/>
-        <Line Value="295"/>
-      </Item9>
-      <Item10>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/dataset.inc"/>
-        <Line Value="1683"/>
-      </Item10>
-      <Item11>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="/usr/share/fpcsrc/2.4.2/packages/fcl-db/src/base/datasource.inc"/>
-        <Line Value="543"/>
-      </Item11>
-      <Item12>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../ManFrames/composants/u_customframework.pas"/>
-        <Line Value="3329"/>
-      </Item12>
-      <Item13>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsGlobal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="/usr/share/fpcsrc/2.4.2/packages/fcl-base/src/inifiles.pp"/>
-        <Line Value="744"/>
-      </Item13>
-    </BreakPoints>
     <Exceptions Count="3">
       <Item1>
         <Name Value="EAbort"/>

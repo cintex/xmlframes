@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="manager">
+	<C_BIND value="manager" location="hotel_db"/>
+	<NAME value="NAME_MANAGER"/>
+	<PREFIX value="manager"/>
+	<FIELDS>
+		<TEXT id="manager_id">
+			<NAME value="NAME_MANAGER_ID"/>
+			<GROUP_REF idref="identification_group"/>
+			<F_MARKS id='true' create='true'/>
+		</TEXT>
+		<TEXT id="manager_password">
+			<NAME value="NAME_MANAGER_PASSWORD"/>
+			<GROUP_REF idref="identification_group"/>
+			<F_MARKS create='true' set='true' secret='true' private='true'/>
+		</TEXT>
+		<TEXT id="manager_name">
+			<NAME value="NAME_MANAGER_NAME"/>
+			<GROUP_REF idref="identification_group"/>
+			<F_MARKS name='true' create='true' set='true' main='true' complexTable='true'/>
+		</TEXT>
+		<TEXT id="manager_firstname">
+			<NAME value="NAME_MANAGER_FIRSTNAME"/>
+			<GROUP_REF idref="identification_group"/>
+			<F_MARKS name='true' create='true' set='true' main='true' complexTable='true'/>
+		</TEXT>
+		<FILE id="manager_picture" mimeTypes="image" directory="$LY_APP_DOC_DIR$/images/managers">
+			<NAME value="_null"/>
+			<ALIAS value="NAME_MANAGER_PICTURE"/>
+			<GROUP_REF idref="picture_group"/>
+			<F_MARKS create='true' set='true' main='true' optional='true' complexTable='true'/>
+		</FILE>
+		<DATE id="manager_date" type='DATE'>
+			<NAME value="NAME_MANAGER_DATE"/>
+			<GROUP_REF idref="data_group"/>
+			<F_MARKS create='true' set='true' main='true' complexTable='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="manager_establishments" multiple='true'>
+			<REVERSE reverseRelation="establishment_manager"/>
+			<NAME value="NAME_MANAGER_ESTABLISHMENTS"/>
+			<GROUP_REF idref="data_group"/>
+			<F_MARKS local='true' complexTable='true'/>
+			<CLASSES idrefs="establishment"/>
+		</RELATION>
+		<RELATION id="manager_clients" multiple="true">
+			<JOIN_DAEMON>
+				<C_BIND value="manager_client" location="hotel_db"/>
+				<F_BIND value="manager_id" cbind="manager_client"/>
+				<F_BIND value="client_number" cbind="manager_client"/>
+			</JOIN_DAEMON>
+			<NAME value="NAME_MANAGER_CLIENTS"/>
+			<GROUP_REF idref="data_group"/>
+			<F_MARKS local='true'/>
+			<CLASSES idrefs="client"/>
+		</RELATION>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="printXSLFOForm_manager" template="_printXSLFOForm">
+			<NAME value="NAME_PRINTXSLFOFORM_MANAGER"/>
+			<PREFIX value="pdf"/>
+			<MIN value="1"/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>
+
+<GROUP id="identification_group" value="GROUP_IDENTIFICATION">
+	<CONSTRAINT colSpan="1" remainder="false" fill="BOTH"/>
+</GROUP>
+
+<GROUP id="data_group" value="GROUP_DATA">
+	<CONSTRAINT colSpan="2" fill="BOTH"/>
+</GROUP>
+
+<GROUP id="picture_group" value="GROUP_PICTURE">
+	<CONSTRAINT colSpan="1" fill="VERTICAL" remainder="true"/>
+</GROUP>
