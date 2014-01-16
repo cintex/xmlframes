@@ -545,34 +545,34 @@ End;
 // ab_Column : Second editing column
 // afws_Source : XML form Column
 // afd_FieldsDefs : Field Definitions
-procedure p_OnCreateFieldProperties ( const ADBSources : TFWTables; const as_Table :String;
-                                    const anod_Field: TALXMLNode;
-                                    var ab_FieldFound, ab_column : Boolean ;
-                                    var   ai_Fieldcounter : Longint; const ai_counter : LongInt  );
-var lnod_FieldProperties : TALXMLNode ;
-    lb_IsLarge, lb_IsLocal  : Boolean;
+procedure p_OnCreateFieldProperties ( const ADBSources : TFWTables; const ADBSource : TFWTable;
+                                      const anod_Field: TALXMLNode;
+                                      var ab_FieldFound, ab_column : Boolean ;
+                                      var   ai_Fieldcounter : Longint; const ai_counter : LongInt  );
+var lb_IsLocal  : Boolean;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lnod_OriginalNode : TALXmlNode;
-    lfwt_Source : TFWTable;
+
 
     // procedure p_CreateArrayStructComponents
     // Creating groupbox with controls
     procedure p_CreateArrayStructComponents ;
     var li_k, li_l, li_FieldCounter : LongInt ;
         lb_column : Boolean;
-
-        lnod_FieldsNode : TALXmlNode;
-        ls_Table : String ;
+        lfwt_Source2 : TFWTable;
+        lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
     begin
       lb_IsLocal := False;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
-
+      lfwt_Source2 := nil;
       if anod_Field <> lnod_OriginalNode Then
-       Begin
-        ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
-        ffws_CreateSource( ADBSources, '', ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], ADBSources.Owner as TComponent );
-        li_FieldCounter := 0 ;
-       end;
+        Begin
+         if fb_getOptionalStructTable ( ADBSources,ADBSource,lfwt_Source2,lffd_ColumnFieldDef,anod_Field,lnod_OriginalNode )
+          Then
+            Exit;
+
+         li_FieldCounter := 0 ;
+        end;
 
       if lnod_OriginalNode.HasChildNodes then
         for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
@@ -588,34 +588,36 @@ var lnod_FieldProperties : TALXMLNode ;
                   Begin
                     for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
                       Begin
-                        if anod_Field <> lnod_OriginalNode Then
-                          p_OnCreateFieldProperties ( ADBSources, ls_Table   ,
-                                                    lnod_FieldsNode.ChildNodes [ li_l ],
+                        lnod_FieldsChildNode := lnod_FieldsNode.ChildNodes [ li_l ];
+                        if anod_Field = lnod_OriginalNode Then
+                          p_OnCreateFieldProperties ( ADBSources, ADBSource,
+                                                    lnod_FieldsChildNode,
                                                     ab_FieldFound, lb_column,
-                                                    li_FieldCounter, ADBSources.Count - 1)
+                                                    ai_Fieldcounter, ai_Counter)
                          else
-                          p_OnCreateFieldProperties ( ADBSources, as_Table   ,
-                                                    lnod_FieldsNode.ChildNodes [ li_l ],
+                          p_OnCreateFieldProperties ( ADBSources, lfwt_Source2,
+                                                    lnod_FieldsChildNode,
                                                     ab_FieldFound, lb_column,
-                                                    li_FieldCounter, ai_Counter);
+                                                    li_FieldCounter, lfwt_Source2.Index);
                       end;
                   end
                  Else
                   // The parent parameter is a var : so do not want to change it in the function
-                  if anod_Field <> lnod_OriginalNode Then
-                    p_OnCreateFieldProperties ( ADBSources, ls_Table   ,
-                                              lnod_OriginalNode.ChildNodes [ li_k ],
+                  if anod_Field = lnod_OriginalNode Then
+                    p_OnCreateFieldProperties ( ADBSources, ADBSource,
+                                              lnod_FieldsNode,
                                               ab_FieldFound, lb_column,
-                                              li_FieldCounter, ADBSources.Count - 1)
+                                              ai_FieldCounter, ai_Counter)
                    else
-                    p_OnCreateFieldProperties ( ADBSources, as_Table   ,
-                                              lnod_FieldsNode.ChildNodes [ li_k ],
+                    p_OnCreateFieldProperties ( ADBSources, lfwt_Source2,
+                                              lnod_FieldsNode,
                                               ab_FieldFound, lb_column,
-                                              li_FieldCounter, ai_Counter);
-                inc ( li_FieldCounter );
+                                              li_FieldCounter, lfwt_Source2.Index);
                 lb_IsLocal:=True;
               end;
           end;
+      if anod_Field <> lnod_OriginalNode Then
+        lffd_ColumnFieldDef.Assign(lfwt_Source2.FieldsDefs.FieldByName(lfwt_Source2.GetKey.Items [0].FieldName));
       p_SetFieldSelect( lffd_ColumnFieldDef, lb_IsLocal);
     end;
 
@@ -626,43 +628,38 @@ begin
   and ( anod_Field.Attributes[CST_LEON_FIELD_TYPE] = CST_LEON_FIELD_COMPOSITION ) Then
     Exit;
   ab_Column:=False;
-  lfwt_Source  := ADBSources [ ADBSources.Count - 1 ];
   // Creating the properties and setting data link
 
-   lffd_ColumnFieldDef := lfwt_Source.FieldsDefs.Add ;
-   if ( anod_Field.NodeName = CST_LEON_ARRAY )
-   or ( anod_Field.NodeName = CST_LEON_STRUCT )
+   lffd_ColumnFieldDef := ADBSource.FieldsDefs.Add ;
+   if //( anod_Field.NodeName = CST_LEON_ARRAY ) // to do
+    ( anod_Field.NodeName = CST_LEON_STRUCT )
     Then
      Begin
        p_CreateArrayStructComponents;
+       fb_setNodeField (anod_Field,lffd_ColumnFieldDef);
        // Quitting because having created properties
        Exit;
      end;
-   if not fb_createFieldID ( lfwt_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_Fieldcounter )
-    Then
-     Begin
-       lfwt_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
-       Exit;
-     end;
    li_i := 0;
-   if fb_setFieldType(lfwt_Source,anod_Field,lffd_ColumnFieldDef,li_i,False,nil) Then
-     lfwt_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
-
+   if not fb_createFieldID ( ADBSource.Table = ADBSource.Table, anod_Field, lffd_ColumnFieldDef, ai_Fieldcounter )
+   or fb_setFieldType(ADBSource,anod_Field,lffd_ColumnFieldDef,li_i,False,nil)
+    Then
+     ADBSource.FieldsDefs.Delete(lffd_ColumnFieldDef.Index)
+    Else
+      inc ( ai_Fieldcounter );
 end;
 
 function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password, as_host : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ; const ads_connection : TDSSource = nil ):Boolean;
 var li_i : Integer;
     ACollection : TFWTables;
     ATemp1,
-    ATemp2,
-    ls_File : String;
-    lh_handleFile : THandle;
+    ATemp2 : String;
 Begin
   Result := False;
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
   ACollection := TFWTables.Create(TFWTable);
   try
-    for li_i := 2 to high ( ga_Functions ) do
+    for li_i := 0 to high ( ga_Functions ) do
      with ga_Functions [li_i] do
        Begin
          if AFile = ''

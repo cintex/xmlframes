@@ -110,7 +110,7 @@ type
     procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
-    function  fwin_CreateFieldComponentAndProperties(const as_Table :String; const anod_Field: TALXMLNode;
+    function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
                                                      const awin_parent : TWinControl; var awin_last : TWinControl;
                                                   var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ;
                                                   var ab_Column : Boolean ; const afws_Source : TFWSource ):TWinControl; virtual;
@@ -179,7 +179,7 @@ End;
 // child procedure p_CreateParentAndFieldsComponent
 // Creates the navigation grid and fields components
 // anod_ANode : current node
-procedure p_OnCreateParentAndFieldsComponent ( const ADBSources : TFWTables; const as_table : String;
+procedure p_OnCreateParentAndFieldsComponent ( const ADBSources : TFWTables;const ADBSource : TFWTable;
                                                const anod_ANode : TALXMLNode ;
                                                var ab_FieldFound, ab_column : Boolean ;
                                                var   ai_Fieldcounter : Longint; const ai_counter : Longint );
@@ -201,8 +201,8 @@ Begin
           End;
         ab_FieldFound := True;
       end;
-    gwin_Last := fwin_CreateFieldComponentAndProperties ( as_table, anod_ANode, gwin_Parent, gwin_Last, ai_Fieldcounter, ai_Counter,
-                                                          ab_Column, ADBSources [ ADBSources.count - 1 ] as TFWSource );
+    gwin_Last := fwin_CreateFieldComponentAndProperties ( anod_ANode, gwin_Parent, gwin_Last, ai_Fieldcounter, ai_Counter,
+                                                          ab_Column, ADBSource as TFWSource );
     inc ( ai_Fieldcounter );
    end;
 
@@ -211,7 +211,7 @@ end;
 // procedure p_CreateFieldsButtonsComponents
 // Creates the Fields and buttons
 // anod_ANode : current node
-procedure p_OnFieldsButtonsComponents (  const ADBSources : TFWTables; const as_table : String;
+procedure p_OnFieldsButtonsComponents (  const ADBSources : TFWTables;const ADBSource : TFWTable;
                                          const anod_ANode : TALXMLNode ;
                                          var ab_FieldFound, ab_column : Boolean ;
                                          var   ai_Fieldcounter : Longint; const ai_counter : Longint );
@@ -729,7 +729,6 @@ end;
 // argr_Control : Choice component
 
 procedure TF_XMLForm.p_setChoiceComponent( const argr_Control : TDBRadioGroup );
-var li_Size : Integer;
 Begin
   with argr_Control do
     begin
@@ -940,7 +939,7 @@ end;
 // ab_Column : Second editing column
 // afws_Source : XML form Column
 // afd_FieldsDefs : Field Definitions
-function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const as_Table :String; const anod_Field: TALXMLNode;
+function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: TALXMLNode;
                                                              const awin_parent : TWinControl; var awin_last : TWinControl;
                                                              var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; var ab_Column : Boolean ; const afws_Source : TFWSource  ):TWinControl;
 var lnod_FieldProperties : TALXMLNode ;
@@ -958,10 +957,20 @@ var lnod_FieldProperties : TALXMLNode ;
         lb_column : Boolean;
         ls_NodeId : String;
         lwin_last : TWinControl;
-        lnod_FieldsNode : TALXmlNode;
-        ls_Table : String ;
         lfwc_Column : TFWSource ;
+        lfwt_Source2 : TFWTable;
+        lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
     begin
+      lb_IsLocal := False;
+      lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
+      if anod_Field <> lnod_OriginalNode Then
+        Begin
+         if fb_getOptionalStructTable ( ADBSources,lfwt_Source2,lffd_ColumnFieldDef,anod_Field,lnod_OriginalNode )
+          Then
+            Exit;
+         li_FieldCounter := 0 ;
+        end;
+
       ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
       Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
       lb_IsLocal := False;
@@ -970,9 +979,19 @@ var lnod_FieldProperties : TALXMLNode ;
       if anod_Field <> lnod_OriginalNode Then
        Begin
         ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
+         if lnod_OriginalNode.HasChildNodes then
+           for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
+             Begin
+               lnod_FieldsNode := lnod_OriginalNode.ChildNodes [ li_k ];
+               if lnod_FieldsNode.NodeName = CST_LEON_CLASS_C_BIND Then
+                Begin
+                 ls_Table:=lnod_FieldsNode.Attributes[CST_LEON_VALUE];
+                 Break;
+                end;
+             end;
         lfwc_Column  := TFWSource ( ffws_CreateSource( DBSOurces, ConnectionName, ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], Self ));
         li_FieldCounter := 0 ;
-        with afws_Source.Linked.Add do
+        with afws_Source.Relations.Add do
           Begin
             Source:=lfwc_Column.Index;
             LookupFields := ls_NodeId;
@@ -1067,7 +1086,7 @@ var lnod_FieldProperties : TALXMLNode ;
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-            if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lb_IsLarge, lffd_ColumnFieldDef, lb_IsLocal, FieldDelimiter, ai_Counter ) Then
+            if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lffd_ColumnFieldDef, ai_Counter, lb_IsLocal ) Then
              Begin
                Break;
              end;

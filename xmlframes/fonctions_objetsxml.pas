@@ -104,7 +104,6 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
 function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer ):Boolean;
-function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char ; const ai_counter : Integer ): Boolean;
 function fb_CreeAppliFromNode ( const as_EntityFile : String ):boolean;
 function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
 procedure p_onProjectNode ( const as_FileName : String ; const ANode : TALXMLNode );
@@ -225,12 +224,13 @@ End;
 
 procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWTable ; const acom_owner : TComponent ; const ach_FieldDelimiter : Char );
 var  li_k, li_l, li_m, li_n : Longint;
-    lnod_NodeClass, lnod_Fields,
-    lnod_Field, lnod_mark      : TALXMLNode ;
+    lnod_NodeClass, lnod_Field, lnod_FieldsTemp,
+    lnod_FieldProperty, lnod_mark      : TALXMLNode ;
     lfd_Fielddef : TFWFieldColumn;
     lxdoc_Document : TALXMLDocument;
 Begin
   lxdoc_Document := nil;
+  lnod_FieldsTemp := nil;
   If fb_OpenClass ( as_class, acom_owner, lxdoc_Document ) Then
    // reading the special XML form File
       for li_k := 0 to lxdoc_Document.ChildNodes.Count -1 do
@@ -240,18 +240,24 @@ Begin
           or ( lnod_NodeClass.NodeName = CST_LEON_STRUCT ) then
               for li_l := 0 to lnod_NodeClass.ChildNodes.Count -1 do
                 Begin
-                  lnod_Fields := lnod_NodeClass.ChildNodes [ li_l ];
-                  if lnod_Fields.NodeName = CST_LEON_FIELDS Then
-                   for li_m := 0 to lnod_Fields.ChildNodes.Count -1 do
+                  lnod_Field := lnod_NodeClass.ChildNodes [ li_l ];
+                  if lnod_Field.NodeName = CST_LEON_FIELDS Then
+                   for li_m := 0 to lnod_Field.ChildNodes.Count -1 do
                      Begin
-                       lnod_Field := lnod_Fields.ChildNodes [ li_m ];
-                       if lnod_Field.HasChildNodes Then
-                        for li_n := 0 to lnod_Field.ChildNodes.Count -1 do
-                          if ( lnod_Field.ChildNodes [ li_n ].NodeName = CST_LEON_FIELD_F_MARKS  ) then
+                       lnod_FieldProperty := lnod_Field.ChildNodes [ li_m ];
+                       if fb_getNodesField(lnod_FieldProperty) Then
+                         lnod_FieldsTemp:=lnod_FieldProperty;
+                       with lnod_FieldProperty do
+                       if HasChildNodes Then
+                        for li_n := 0 to lnod_FieldProperty.ChildNodes.Count -1 do
+                          if ( ChildNodes [ li_n ].NodeName = CST_LEON_FIELD_F_MARKS  ) then
                            Begin
                              lfd_Fielddef:=afws_Source.FieldsDefs.Add;
-                             fb_setFieldType(afws_Source,lnod_Field,lfd_Fielddef,li_m,True,acom_owner);
-                             p_setNodeId ( lnod_Field, lnod_Field.ChildNodes [ li_n ], afws_Source, lfd_Fielddef );
+                             fb_setNodeField(lnod_Field,lfd_Fielddef);
+                             if assigned(lnod_FieldsTemp)Then
+                              p_setNodesField(lnod_FieldsTemp,lfd_Fielddef);
+                             fb_setFieldType(afws_Source,lnod_FieldProperty,lfd_Fielddef,li_m,True,acom_owner);
+                             p_setNodeId ( ChildNodes [ li_n ], afws_Source, lfd_Fielddef );
                            end;
                      end;
                 end;
@@ -1591,56 +1597,6 @@ Begin
       end;
 end;
 
-// Function fb_getFieldOptions
-// setting some data properties
-// Result : quitting
-function fb_getFieldOptions ( const afws_Source : TFWTable; const anod_Field,anod_FieldProperties : TALXMLNode ; const ab_IsLarge : Boolean; const affd_ColumnFieldDef : TFWFieldColumn; var ab_IsLocal : Boolean ; const ach_FieldDelimiter : Char; const ai_counter : Integer ): Boolean;
-begin
-  Result := False;
-  with anod_FieldProperties do
-  if NodeName = CST_LEON_FIELD_F_MARKS then
-   with affd_ColumnFieldDef do
-    Begin
-      Result := True;
-      if HasAttribute ( CST_LEON_LOCAL )
-      and ( Attributes [ CST_LEON_LOCAL ] <> CST_LEON_BOOL_FALSE )  then
-        Begin
-          ab_IsLocal := True;
-          ColSelect:=False;
-        End;
-      if HasAttribute ( CST_LEON_FIELD_CREATE)
-       then ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
-      if HasAttribute ( CST_LEON_FIELD_UNIQUE)
-       then ColUnique  := Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
-      if HasAttribute ( CST_LEON_FIELD_private)
-       then ColPrivate  := Attributes [ CST_LEON_FIELD_private ] = CST_LEON_BOOL_TRUE;
-      p_setNodeId ( anod_Field, anod_FieldProperties, afws_Source, affd_ColumnFieldDef );
-      if HasAttribute ( CST_LEON_FIELD_hidden )
-      and not ( Attributes [ CST_LEON_FIELD_hidden ] = CST_LEON_BOOL_FALSE )  then
-        Begin
-          ShowCol := -1;
-          ShowSearch := -1;
-          Exit;
-        End;
-      ShowCol := ai_counter + 1;
-      if HasAttribute ( CST_LEON_FIELD_optional)
-      and not ( Attributes [ CST_LEON_FIELD_optional ] = CST_LEON_BOOL_TRUE )  then
-        Begin
-          ColMain  := False;
-          ShowCol := -1;
-        End
-       Else
-        ColMain := True;
-      if ( HasAttribute ( CST_LEON_FIELD_sort)
-           and ( Attributes [ CST_LEON_FIELD_sort ] = CST_LEON_BOOL_TRUE ))
-      or ( HasAttribute ( CST_LEON_FIELD_find)
-           and ( Attributes [ CST_LEON_FIELD_find ] = CST_LEON_BOOL_TRUE ))  then
-        Begin
-          ShowSearch := ai_counter + 1;
-        End
-    End;
-
-end;
 
 initialization
   GS_SUBDIR_IMAGES_SOFT := DirectorySeparator+'images'+DirectorySeparator;
