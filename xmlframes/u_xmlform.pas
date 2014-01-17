@@ -112,7 +112,7 @@ type
       const argr_Control : TDBRadioGroup): Boolean; virtual;
     function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
                                                      const awin_parent : TWinControl; var awin_last : TWinControl;
-                                                  var  ai_FieldCounter : Longint ; const  ai_Counter : Longint ;
+                                                  var  ai_FieldCounter : Longint ;
                                                   var ab_Column : Boolean ; const afws_Source : TFWSource ):TWinControl; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl;
       const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
@@ -182,26 +182,29 @@ End;
 procedure p_OnCreateParentAndFieldsComponent ( const ADBSources : TFWTables;const ADBSource : TFWTable;
                                                const anod_ANode : TALXMLNode ;
                                                var ab_FieldFound, ab_column : Boolean ;
-                                               var   ai_Fieldcounter : Longint; const ai_counter : Longint );
+                                               var   ai_Fieldcounter : Longint );
 Begin
+  if    anod_ANode.HasAttribute(CST_LEON_FIELD_TYPE) // compositions are not yet supported
+  and ( anod_ANode.Attributes[CST_LEON_FIELD_TYPE] = CST_LEON_FIELD_COMPOSITION ) Then
+    Exit;
   with ADBSources.Owner as TF_XMLForm,Fonction do
    Begin
     if not ab_FieldFound Then
       Begin
         if ( ADBSources.Count = 1 ) Then
             Begin
-              gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name, ADBSources.Count - 1 );
+              gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name, ADBSource.Index );
               Hint := fs_GetLabelCaption ( Name );
               ShowHint := True;
             End
          else
           Begin
             gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TWinControl, FMainPanel, Name, Name, ADBSources.Owner as TComponent );
-            gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , ADBSources.Count - 1);
+            gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , ADBSource.Index);
           End;
         ab_FieldFound := True;
       end;
-    gwin_Last := fwin_CreateFieldComponentAndProperties ( anod_ANode, gwin_Parent, gwin_Last, ai_Fieldcounter, ai_Counter,
+    gwin_Last := fwin_CreateFieldComponentAndProperties ( anod_ANode, gwin_Parent, gwin_Last, ai_Fieldcounter,
                                                           ab_Column, ADBSource as TFWSource );
     inc ( ai_Fieldcounter );
    end;
@@ -214,7 +217,7 @@ end;
 procedure p_OnFieldsButtonsComponents (  const ADBSources : TFWTables;const ADBSource : TFWTable;
                                          const anod_ANode : TALXMLNode ;
                                          var ab_FieldFound, ab_column : Boolean ;
-                                         var   ai_Fieldcounter : Longint; const ai_counter : Longint );
+                                         var   ai_Fieldcounter : Longint );
 
 var li_k : Longint;
 Begin
@@ -222,7 +225,7 @@ Begin
     with ADBSources.Owner as TF_XMLForm do
       Begin
         for li_k := 0 to anod_ANode.ChildNodes.Count -1 do
-          p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], ai_Counter );
+          p_SetFieldButtonsProperties ( anod_ANode.ChildNodes [ li_k ], ADBSource.Index );
       End;
 End;
 
@@ -941,7 +944,7 @@ end;
 // afd_FieldsDefs : Field Definitions
 function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: TALXMLNode;
                                                              const awin_parent : TWinControl; var awin_last : TWinControl;
-                                                             var  ai_FieldCounter : Longint ; const ai_Counter : Longint ; var ab_Column : Boolean ; const afws_Source : TFWSource  ):TWinControl;
+                                                             var  ai_FieldCounter : Longint ; var ab_Column : Boolean ; const afws_Source : TFWSource  ):TWinControl;
 var lnod_FieldProperties : TALXMLNode ;
     llab_Label  : TFWLabel;
     lb_IsLarge, lb_IsLocal  : Boolean;
@@ -996,12 +999,12 @@ var lnod_FieldProperties : TALXMLNode ;
                         if anod_Field <> lnod_OriginalNode Then
                           fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
                                                                    Result, lwin_last,
-                                                                   li_FieldCounter, DBSources.Count - 1,
+                                                                   li_FieldCounter,
                                                                    lb_column, lfwt_Source2 as TFWSource )
                          else
                           fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
                                                                    Result, lwin_last,
-                                                                   ai_FieldCounter, ai_Counter,
+                                                                   ai_FieldCounter,
                                                                    ab_column, afws_Source );
                       end;
                   end
@@ -1010,12 +1013,12 @@ var lnod_FieldProperties : TALXMLNode ;
                   if anod_Field <> lnod_OriginalNode Then
                     fwin_CreateFieldComponentAndProperties ( lnod_OriginalNode.ChildNodes [ li_k ],
                                                              Result, lwin_last,
-                                                             li_FieldCounter, DBSources.Count - 1,
+                                                             li_FieldCounter,
                                                              lb_column, lfwt_Source2 as TFWSource )
                    else
                     fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_k ],
                                                              Result, lwin_last,
-                                                             ai_FieldCounter, ai_Counter,
+                                                             ai_FieldCounter,
                                                              ab_column, afws_Source );
                 inc ( li_FieldCounter );
                 lb_IsLocal:=True;
@@ -1036,8 +1039,8 @@ var lnod_FieldProperties : TALXMLNode ;
       Result := False;
       llab_Label:=nil;
       lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
-      if ( anod_Field.NodeName = CST_LEON_ARRAY )
-      or ( anod_Field.NodeName = CST_LEON_STRUCT )
+      if //( anod_Field.NodeName = CST_LEON_ARRAY ) // to do
+       ( anod_Field.NodeName = CST_LEON_STRUCT )
        Then
         Begin
           p_CreateArrayStructComponents;
@@ -1051,7 +1054,7 @@ var lnod_FieldProperties : TALXMLNode ;
           afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
           Exit;
         end;
-      fb_setFieldType(afws_Source,anod_Field,lffd_ColumnFieldDef,ai_FieldCounter,True,Self);
+      fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,True,Self);
 
       lb_IsLocal := False;
 
@@ -1060,7 +1063,7 @@ var lnod_FieldProperties : TALXMLNode ;
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
             lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-            if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lffd_ColumnFieldDef, ai_Counter, lb_IsLocal ) Then
+            if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lffd_ColumnFieldDef, lb_IsLocal ) Then
              Begin
                Break;
              end;
@@ -1092,18 +1095,18 @@ var lnod_FieldProperties : TALXMLNode ;
        then
          Begin
            lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
-           p_setControl( 'xfc_', awin_Control, awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+           p_setControl( 'xfc_', awin_Control, awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
            awin_Control := ( awin_Control as TXMLFillCombo ).Combo;
          end;
 
-      p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, ai_Counter);
+      p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
 
 
       p_setFieldComponentTop ( awin_Control, ab_Column );
 
       p_setFieldComponentData ( awin_Control, afws_Source, lffd_ColumnFieldDef, lb_IsLocal );
 
-      llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, ai_Counter, ab_Column, lffd_ColumnFieldDef );
+      llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, afws_Source.Index, ab_Column, lffd_ColumnFieldDef );
 
       if assigned ( llab_Label ) Then
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
@@ -1137,7 +1140,7 @@ begin
          gwin_Last := nil;
          ab_Column:=False;
          gwin_Parent := fscb_CreateTabSheet ( FPageControl, PanelDetails, gwin_Parent,
-                          CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( ai_Counter ),
+                          CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( afws_Source.Index ),
                           {$IFNDEF FPC}UTF8Decode{$ENDIF}( Gs_DetailsSheet ),Self);
          afws_Source.Panels.add.Panel := gwin_Parent;
        End;

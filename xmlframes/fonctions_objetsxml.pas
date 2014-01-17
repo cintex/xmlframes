@@ -256,7 +256,7 @@ Begin
                              fb_setNodeField(lnod_Field,lfd_Fielddef);
                              if assigned(lnod_FieldsTemp)Then
                               p_setNodesField(lnod_FieldsTemp,lfd_Fielddef);
-                             fb_setFieldType(afws_Source,lnod_FieldProperty,lfd_Fielddef,li_m,True,acom_owner);
+                             fb_setFieldType(afws_Source,lfd_Fielddef,lnod_FieldProperty,li_m,True,False,acom_owner);
                              p_setNodeId ( ChildNodes [ li_n ], afws_Source, lfd_Fielddef );
                            end;
                      end;
