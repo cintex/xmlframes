@@ -780,7 +780,7 @@ end;
 
 function getMaximum(const aInterval: TArrayIntervals): integer;
 var
-  i, j: integer;
+  i : integer;
   Resultat, tmp: string;
   newchaine: string;
 begin

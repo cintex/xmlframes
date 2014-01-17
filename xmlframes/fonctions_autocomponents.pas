@@ -135,6 +135,7 @@ uses JvXPButtons,fonctions_dbcomponents,
 {$ENDIF}
      U_ExtNumEdits,
      fonctions_string,
+     fonctions_createsql,
      u_buttons_appli, fonctions_proprietes,
      u_fillcombobutton,fonctions_languages;
 
@@ -149,7 +150,6 @@ uses JvXPButtons,fonctions_dbcomponents,
 ////////////////////////////////////////////////////////////////////////////////
 function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
 var lfc_Fields : TFWFieldColumns ;
-    ls_FieldString : String;
     li_i : Integer;
 begin
   with alr_relation.TablesDest [ 0 ].Connection do
@@ -165,19 +165,11 @@ begin
                  IndexKind:=ikPrimary;
                  lfc_Fields := FieldsDefs;
                 end;
-            ls_FieldString := lfc_Fields.toString;
             Datasource:=Result;
             Table := as_Table;
-            ls_FieldString:=FieldsDefs.toString;
-            if ls_FieldString > '' Then
-             for li_i := 0 to lfc_Fields.Count -1 do
-              with lfc_Fields [ li_i ] do
-               if FieldsDefs.indexOf ( FieldName ) = -1 Then
-                if ls_FieldString=''
-                 Then ls_FieldString:=FieldName
-                 else ls_FieldString:=','+FieldName;
            end;
 
+      with alr_relation,afws_SourceAdded do
       if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
        Then
          Begin
@@ -185,11 +177,11 @@ begin
              p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
            {$IFDEF DBNET}
            if DatasetType = dtDBNet Then
-             p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_FieldString + ' FROM ' + as_Table );
+             p_SetSQLQuery (Result.DataSet,FieldsDisplay,FieldsFK,Table);
            {$ENDIF}
          end
         else
-        p_SetSQLQuery(Result.Dataset, 'SELECT '+ls_FieldString + ' FROM ' + as_Table );
+        p_SetSQLQuery (Result.DataSet,FieldsDisplay,FieldsFK,Table);
       Result.DataSet.Open;
     end;
 end;
@@ -477,6 +469,12 @@ End;
 function fwin_CreateAFieldComponent ( const afdt_FieldDataType : TFWFieldData ; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
 begin
   Result := nil;
+  if afdt_FieldDataType.Relation.TablesDest.Count > 0 Then
+   Begin
+     Result:=ffc_CreateFillComboButton(acom_Owner);
+     (Result as TExtFillCombo).Combo:=TFWDBLookupCombo.Create(acom_Owner);
+     Exit;
+   end;
   case afdt_FieldDataType.FieldType of
     ftFloat :
      Begin

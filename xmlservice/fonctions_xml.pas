@@ -276,7 +276,6 @@ uses fonctions_init,
      u_multidata,
      u_multidonnees,
      fonctions_system,
-     u_languagevars,
      DbCtrls;
 
 function fs_getLeonDir :String ;
@@ -527,7 +526,7 @@ begin
                                 p_OnCreateFieldProperties(ADBSources,lfwt_Source2,lnod_id,lb_fieldfound,lb_Column,li_FullFields);
                                End;
                               if fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_id, FieldsFK ) Then
-                               fb_setFieldType(lfwt_Source, Aff_field, lnod_id, Aff_field.Index,False,ab_FullTable,nil, False );
+                                 fb_setFieldType(lfwt_Source, Aff_field, lnod_id, Aff_field.Index,False,ab_FullTable,nil, False );
                               fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_main, FieldsDisplay );
                               p_CountMarkFunction(lnod_id, CST_LEON_FIELD_optional, False, li_CountFields );
                             End;
@@ -758,7 +757,6 @@ Begin
                lff_Field := aff_FieldNodes.Add;
                if Assigned(lnod_FieldPropertiesTemp) Then
                 p_setNodesField(lnod_FieldPropertiesTemp,lff_Field);
-               p_setNodeId(lnod_FieldProperties,nil,lff_Field);
                fb_setNodeField(anod_Field,lff_Field);
                Result:=True;
              end;
@@ -804,7 +802,7 @@ Begin
               Break;
             end;
          end;
-      ldoc_XMlRelation := fdoc_GetCrossLinkFunction( afws_Source.Collection as TFWTables, af_FieldDefs,'', ls_ClassLink, afws_Source.Relations.Add, ab_createDS, ab_FullTable, acom_Owner );
+      ldoc_XMlRelation := fdoc_GetCrossLinkFunction( afws_Source.Collection as TFWTables, af_FieldDefs,'', ls_ClassLink, af_FieldDefs.Relation, ab_createDS, ab_FullTable, acom_Owner );
       try
 
       finally
@@ -985,7 +983,7 @@ Begin
    with afwt_Source.Relations.Add do
      Begin
        TableLinked:=afwt_Source2.Index;
-       FieldsFK.Add(affd_ColumnFieldDef);
+       FieldsFK.Assign(afwt_Source2.GetKey);
      end;
    with afwt_Source2.Relations.Add do
      Begin

@@ -36,16 +36,19 @@ Use manbase only"/>
       </Item3>
     </Files>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="lazmanbase"/>
+        <PackageName Value="lazextbuttons"/>
       </Item1>
       <Item2>
-        <PackageName Value="xmldocument"/>
+        <PackageName Value="lazmanbase"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="xmldocument"/>
       </Item3>
+      <Item4>
+        <PackageName Value="FCL"/>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

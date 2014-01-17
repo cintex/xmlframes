@@ -158,6 +158,7 @@ implementation
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
      fonctions_dialogs,
+     fonctions_createsql,
      fonctions_Objets_Dynamiques,
      fonctions_languages,
      u_buttons_defs,
@@ -947,7 +948,7 @@ function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: T
                                                              var  ai_FieldCounter : Longint ; var ab_Column : Boolean ; const afws_Source : TFWSource  ):TWinControl;
 var lnod_FieldProperties : TALXMLNode ;
     llab_Label  : TFWLabel;
-    lb_IsLarge, lb_IsLocal  : Boolean;
+    lb_IsLocal  : Boolean;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lnod_OriginalNode : TALXmlNode;
     lxfc_ButtonCombo : TXMLFillCombo;
@@ -1058,7 +1059,6 @@ var lnod_FieldProperties : TALXMLNode ;
 
       lb_IsLocal := False;
 
-      lb_IsLarge := False;
       if anod_Field.HasChildNodes then
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
@@ -1067,10 +1067,6 @@ var lnod_FieldProperties : TALXMLNode ;
              Begin
                Break;
              end;
-
-            if ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS )
-            or ( lnod_FieldProperties.NodeName = CST_LEON_FIELD_NCOLS ) then
-              lb_IsLarge := True;
           End;
 
       p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
@@ -1095,8 +1091,17 @@ var lnod_FieldProperties : TALXMLNode ;
        then
          Begin
            lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
-           p_setControl( 'xfc_', awin_Control, awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
-           awin_Control := ( awin_Control as TXMLFillCombo ).Combo;
+           awin_Control:=lxfc_ButtonCombo.Combo;
+           with lxfc_ButtonCombo.Combo,lffd_ColumnFieldDef.Relation,TablesDest[0] do
+             Begin
+               {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF} := Datasource;
+               p_SetSQLQuery ({$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}.DataSet,FieldsDisplay,FieldsFK,Table);
+               DisplayAllFields:=True;
+               //MyShowMessage(ListField+#10+fs_getSQLQuery(ListSource.DataSet));
+               {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF} := FieldsDisplay.toString;
+               {$IFNDEF RXJVCOMBO}KeyField {$ELSE}LookupField  {$ENDIF} := FieldsFK [ 0 ].FieldName;
+             end;
+           p_setControl( 'xfc_', lxfc_ButtonCombo, awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
          end;
 
       p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
@@ -1124,6 +1129,8 @@ var lnod_FieldProperties : TALXMLNode ;
     // Setting parent component width
     procedure p_SetParentWidth ;
     Begin
+      if awin_parent.Width <Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING
+       Then Result.Width := awin_parent.Width - Result.Left - CST_XML_FIELDS_INTERLEAVING;
       if Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
         awin_Parent.ClientWidth := Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING;
       awin_Parent.ClientHeight := Result.Top + Result.Height + CST_XML_FIELDS_INTERLEAVING;
@@ -1157,8 +1164,8 @@ begin
             if Assigned(llab_Label) Then
               llab_Label.Top:=Result.Top;
             p_SetParentWidth ;
-          end;
-        if ( awin_Parent is TGroupBox )
+          end
+        else if ( awin_Parent is TGroupBox )
          Then
            Begin
              Result.Top:=CST_XML_FIELDS_INTERLEAVING;
