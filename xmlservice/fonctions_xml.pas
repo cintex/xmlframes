@@ -803,7 +803,6 @@ function fb_getOptionalStructTable ( const afwt_Sources : TFWTables;
                                      const anod_Field,anod_OriginalNode : TALXMLNode  ): Boolean;
 var li_k : LongInt ;
     lb_column : Boolean;
-    lfwt_Source2 : TFWTable;
     lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
     ls_Table : String ;
 Begin
@@ -830,6 +829,15 @@ Begin
        affd_ColumnFieldDef.Assign(afwt_Source2.FieldsDefs.FieldByName(afwt_Source2.GetKey.Items [0].FieldName));
        Result := True;
        Exit;
+     end;
+   with afwt_Source.Relations.Add do
+     Begin
+       TableLinked:=afwt_Source2.Index;
+       FieldsFK.Add(affd_ColumnFieldDef);
+     end;
+   with afwt_Source2.Relations.Add do
+     Begin
+       TableLinked:=afwt_Source.Index;
      end;
 End;
 

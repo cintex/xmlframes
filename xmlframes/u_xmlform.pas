@@ -957,7 +957,6 @@ var lnod_FieldProperties : TALXMLNode ;
         lb_column : Boolean;
         ls_NodeId : String;
         lwin_last : TWinControl;
-        lfwc_Column : TFWSource ;
         lfwt_Source2 : TFWTable;
         lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
     begin
@@ -965,7 +964,7 @@ var lnod_FieldProperties : TALXMLNode ;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
       if anod_Field <> lnod_OriginalNode Then
         Begin
-         if fb_getOptionalStructTable ( ADBSources,lfwt_Source2,lffd_ColumnFieldDef,anod_Field,lnod_OriginalNode )
+         if fb_getOptionalStructTable ( DBSources,afws_Source,lfwt_Source2,lffd_ColumnFieldDef,anod_Field,lnod_OriginalNode )
           Then
             Exit;
          li_FieldCounter := 0 ;
@@ -976,31 +975,6 @@ var lnod_FieldProperties : TALXMLNode ;
       lb_IsLocal := False;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
 
-      if anod_Field <> lnod_OriginalNode Then
-       Begin
-        ls_Table:=lnod_OriginalNode.Attributes[CST_LEON_ID];
-         if lnod_OriginalNode.HasChildNodes then
-           for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
-             Begin
-               lnod_FieldsNode := lnod_OriginalNode.ChildNodes [ li_k ];
-               if lnod_FieldsNode.NodeName = CST_LEON_CLASS_C_BIND Then
-                Begin
-                 ls_Table:=lnod_FieldsNode.Attributes[CST_LEON_VALUE];
-                 Break;
-                end;
-             end;
-        lfwc_Column  := TFWSource ( ffws_CreateSource( DBSOurces, ConnectionName, ls_Table,lnod_OriginalNode.Attributes[CST_LEON_LOCATION], Self ));
-        li_FieldCounter := 0 ;
-        with afws_Source.Relations.Add do
-          Begin
-            Source:=lfwc_Column.Index;
-            LookupFields := ls_NodeId;
-          end;
-        with lfwc_Column.Linked.Add do
-          Begin
-            Source:=afws_Source.Index;
-          end;
-       end;
       if lnod_OriginalNode.HasChildNodes then
         for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
           Begin
@@ -1020,12 +994,12 @@ var lnod_FieldProperties : TALXMLNode ;
                     for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
                       Begin
                         if anod_Field <> lnod_OriginalNode Then
-                          fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_FieldsNode.ChildNodes [ li_l ],
+                          fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
                                                                    Result, lwin_last,
                                                                    li_FieldCounter, DBSources.Count - 1,
-                                                                   lb_column, lfwc_Column )
+                                                                   lb_column, lfwt_Source2 as TFWSource )
                          else
-                          fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_l ],
+                          fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
                                                                    Result, lwin_last,
                                                                    ai_FieldCounter, ai_Counter,
                                                                    ab_column, afws_Source );
@@ -1034,12 +1008,12 @@ var lnod_FieldProperties : TALXMLNode ;
                  Else
                   // The parent parameter is a var : so do not want to change it in the function
                   if anod_Field <> lnod_OriginalNode Then
-                    fwin_CreateFieldComponentAndProperties ( ls_Table   , lnod_OriginalNode.ChildNodes [ li_k ],
+                    fwin_CreateFieldComponentAndProperties ( lnod_OriginalNode.ChildNodes [ li_k ],
                                                              Result, lwin_last,
                                                              li_FieldCounter, DBSources.Count - 1,
-                                                             lb_column, lfwc_Column )
+                                                             lb_column, lfwt_Source2 as TFWSource )
                    else
-                    fwin_CreateFieldComponentAndProperties ( as_Table   , lnod_FieldsNode.ChildNodes [ li_k ],
+                    fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_k ],
                                                              Result, lwin_last,
                                                              ai_FieldCounter, ai_Counter,
                                                              ab_column, afws_Source );
@@ -1071,7 +1045,7 @@ var lnod_FieldProperties : TALXMLNode ;
           Result := True;
           Exit;
         end;
-      if not fb_createFieldID ( afws_Source.Table = as_Table, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter )
+      if not fb_createFieldID ( True, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter )
        Then
         Begin
           afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
