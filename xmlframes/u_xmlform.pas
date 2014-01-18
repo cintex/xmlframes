@@ -102,12 +102,8 @@ type
     function ffwc_getRelationComponent( const afws_source : TFWSource ; const awin_Parent : TWinControl ;
                                         const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn
                                                 ) : TWinControl; virtual;
-    procedure p_setComponentLeft(const awin_Control: TControl;
-      const ab_Column: Boolean);
     procedure p_setFieldComponentTop(const awin_Control: TWinControl;
-      const ab_Column: Boolean);
-    procedure p_setFieldComponentData(const awin_Control: TWinControl; const afw_Source: TFWSource; const afw_columnField: TFWFieldColumn; const ab_IsLocal : Boolean ); virtual;
-    procedure p_setLabelComponent(const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean); virtual;
+      var ab_Column: Boolean);
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
     function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
@@ -158,6 +154,7 @@ implementation
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
      fonctions_dialogs,
+     Math,
      fonctions_createsql,
      fonctions_Objets_Dynamiques,
      fonctions_languages,
@@ -357,38 +354,8 @@ begin
 
 end;
 
-procedure TF_XMLForm.p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
-begin
-  if not ab_IsLocal Then
-    Begin
-      p_setComponentProperty       ( awin_Control, 'DataField' , afw_columnField.FieldName );
-      p_setComponentObjectProperty ( awin_Control, 'Datasource', afw_Source.Datasource );
-    end;
-end;
-procedure TF_XMLForm.p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
-begin
-  if ab_Column then
-    awin_Control.Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
-   Else
-    awin_Control.Left := CST_XML_FIELDS_INTERLEAVING ;
-end;
-
-// procedure p_setLabelComponent
-// after having fully read the field nodes last setting of label component
-// awin_Control : Field Component
-// alab_Label : Label to set
-// ab_Column : Second editing column
-procedure TF_XMLForm.p_setLabelComponent (const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean);
-begin
-  if assigned ( alab_Label ) then
-    Begin
-      alab_Label.Top  := awin_Control.Top + ( awin_Control.Height - alab_Label.Height ) div 2 ;
-      alab_label.Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
-      p_setComponentLeft  ( alab_Label, ab_Column );
-    End;
-end;
 // overrided procedure p_AfterColumnFrameShow
-// aFWColumn : Column showing
+// aFWColumn : abstract Column showing
 procedure TF_XMLForm.p_AfterColumnFrameShow( const aFWColumn : TFWSource );
 begin
 end;
@@ -823,11 +790,11 @@ Begin
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_MAX then
           Begin
-            if ( awin_Control is TDBEdit ) then
+            if ( awin_Control is TCustomEdit ) then
               try
                 ldo_Temp := lnod_FieldProperties.Attributes [ CST_LEON_VALUE ];
                 p_setComponentProperty ( awin_Control, 'MaxLength', ldo_Temp);
-                awin_Control.Width := CST_XML_FIELDS_CHARLENGTH * StrToInt ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
+                awin_Control.Width :=  Min ( 50, CST_XML_FIELDS_CHARLENGTH ) * StrToInt ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
                 afcf_ColumnField.FieldSize:=Trunc(ldo_Temp);
               Except
               end
@@ -1129,8 +1096,6 @@ var lnod_FieldProperties : TALXMLNode ;
     // Setting parent component width
     procedure p_SetParentWidth ;
     Begin
-      if awin_parent.Width <Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING
-       Then Result.Width := awin_parent.Width - Result.Left - CST_XML_FIELDS_INTERLEAVING;
       if Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
         awin_Parent.ClientWidth := Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING;
       awin_Parent.ClientHeight := Result.Top + Result.Height + CST_XML_FIELDS_INTERLEAVING;
@@ -1164,8 +1129,8 @@ begin
             if Assigned(llab_Label) Then
               llab_Label.Top:=Result.Top;
             p_SetParentWidth ;
-          end
-        else if ( awin_Parent is TGroupBox )
+          end;
+        if ( awin_Parent is TGroupBox )
          Then
            Begin
              Result.Top:=CST_XML_FIELDS_INTERLEAVING;
@@ -1222,13 +1187,19 @@ end;
 // afw_columnField : Field Column
 // ab_IsLocal : Not linked to data
 // ab_Column : Second editing column
-procedure TF_XMLForm.p_setFieldComponentTop  ( const awin_Control : TWinControl ; const ab_Column : Boolean );
+procedure TF_XMLForm.p_setFieldComponentTop  ( const awin_Control : TWinControl ; var ab_Column : Boolean );
 begin
-  if ab_Column Then
+  if awin_Control.Width > CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2  Then
+    awin_Control.Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2;
+  if ab_Column and ( awin_Control.Width < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH )  Then
    // Intervalle entre les champs
     awin_Control.Top := gi_LastFormColumnHeight + CST_XML_FIELDS_INTERLEAVING
    Else
-    awin_Control.Top := gi_LastFormFieldsHeight + CST_XML_FIELDS_INTERLEAVING ;
+    Begin
+     awin_Control.Top := gi_LastFormFieldsHeight + CST_XML_FIELDS_INTERLEAVING ;
+     ab_Column:=False;
+    end;
+
 end;
 
 

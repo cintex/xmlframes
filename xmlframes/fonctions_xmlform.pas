@@ -315,45 +315,45 @@ begin
     Begin
       Result := TF_XMLForm.create ( Application );
       Result.Fonction := alf_Function;
+      lbmp_Bitmap := TBitmap.Create;
+      fb_getImageToBitmap(alf_Function.Prefix,lbmp_Bitmap);
+      lico_Icon := TIcon.Create;
+      p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
+    // Assigne l'icône si existe
+      If not lico_Icon.Empty
+       Then
+        try
+          Result.Icon.Modified := False ;
+          Result.Icon.PaletteModified := False ;
+          if Result.Icon.Handle <> 0 Then
+            Begin
+              Result.Icon.ReleaseHandle ;
+              Result.Icon.CleanupInstance ;
+            End ;
+          Result.Icon.Handle := 0 ;
+          Result.Icon.width  := 16 ;
+          Result.Icon.Height := 16 ;
+          Result.Icon.Assign ( lico_Icon );
+          Result.Icon.Modified := True ;
+          Result.Icon.PaletteModified := True ;
+
+          Result.Invalidate ;
+        Except
+        End ;
+      {$IFDEF FPC}
+      if lico_Icon.Handle <> 0 Then
+        lico_Icon.ReleaseHandle;
+      lico_Icon.Handle := 0;
+      {$ENDIF}
+       lico_Icon.Free;
+      {$IFDEF DELPHI}
+       lbmp_Bitmap.Dormant ;
+      {$ENDIF}
+       lbmp_Bitmap.FreeImage;
+       lbmp_Bitmap.Free;
+        // Paramètres d'affichage
     End;
 
-  lbmp_Bitmap := TBitmap.Create;
-  fb_getImageToBitmap(alf_Function.Prefix,lbmp_Bitmap);
-  lico_Icon := TIcon.Create;
-  p_BitmapVersIco(lbmp_Bitmap,lico_Icon);
-// Assigne l'icône si existe
-  If not lico_Icon.Empty
-   Then
-    try
-      Result.Icon.Modified := False ;
-      Result.Icon.PaletteModified := False ;
-      if Result.Icon.Handle <> 0 Then
-        Begin
-          Result.Icon.ReleaseHandle ;
-          Result.Icon.CleanupInstance ;
-        End ;
-      Result.Icon.Handle := 0 ;
-      Result.Icon.width  := 16 ;
-      Result.Icon.Height := 16 ;
-      Result.Icon.Assign ( lico_Icon );
-      Result.Icon.Modified := True ;
-      Result.Icon.PaletteModified := True ;
-
-      Result.Invalidate ;
-    Except
-    End ;
-  {$IFDEF FPC}
-  if lico_Icon.Handle <> 0 Then
-    lico_Icon.ReleaseHandle;
-  lico_Icon.Handle := 0;
-  {$ENDIF}
-   lico_Icon.Free;
-  {$IFDEF DELPHI}
-   lbmp_Bitmap.Dormant ;
-  {$ENDIF}
-   lbmp_Bitmap.FreeImage;
-   lbmp_Bitmap.Free;
-    // Paramètres d'affichage
   if  ab_Ajuster then
     Begin
       lb_Unload := fb_getComponentBoolProperty ( Result, 'DataUnload' );

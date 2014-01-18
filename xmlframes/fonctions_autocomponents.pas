@@ -106,6 +106,9 @@ function fgrb_CreateGroupBox ( const awin_Parent : TWinControl ;  const as_Name 
 function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TPanel;
 function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TScrollBox;
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
+procedure p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
+procedure p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
+procedure p_setLabelComponent (const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean);
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
 function fdbg_CreateGrid ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBGrid;
 function fwin_CreateAFieldComponent ( const afdt_FieldDataType : TFWFieldData ; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
@@ -621,6 +624,7 @@ Begin
 //  Result.BevelOuter := bvNone ;
   Result.Name := as_Name;
   Result.Caption := '';
+  Result.Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH-CST_XML_FIELDS_INTERLEAVING * 2;
 
 End;
 
@@ -694,6 +698,15 @@ Begin
     End;
 
 End;
+
+procedure p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
+begin
+  if not ab_IsLocal Then
+    Begin
+      p_setComponentData ( awin_Control, afw_Source.Datasource, afw_columnField.FieldName );
+    end;
+end;
+
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -778,6 +791,31 @@ begin
   // Le panneau d'origine change de parent
   apan_PanelOrigin.Parent := ltbs_Tabsheet;
 End;
+
+procedure p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
+begin
+  if ab_Column then
+    awin_Control.Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
+   Else
+    awin_Control.Left := CST_XML_FIELDS_INTERLEAVING ;
+end;
+
+
+// procedure p_setLabelComponent
+// after having fully read the field nodes last setting of label component
+// awin_Control : Field Component
+// alab_Label : Label to set
+// ab_Column : Second editing column
+procedure p_setLabelComponent (const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean);
+begin
+  if assigned ( alab_Label ) then
+    Begin
+      alab_Label.Top  := awin_Control.Top + ( awin_Control.Height - alab_Label.Height ) div 2 ;
+      alab_label.Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
+      p_setComponentLeft  ( alab_Label, ab_Column );
+    End;
+end;
+
 
 // function fscb_CreateTabSheet
 // Create a tabsheet and so a pagecontrol
