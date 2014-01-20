@@ -469,8 +469,6 @@ var li_i , li_j, li_k: Integer ;
 begin
   Result := TALXMLDocument.Create ( Application );
   ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
-  li_CountFields := 0 ;
-  li_FullFields  := 0 ;
   If ( FileExistsUTF8 ( ls_ProjectFile )) Then
     try
       if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
@@ -517,6 +515,10 @@ begin
                         end;
                       if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
                         Begin
+                          lb_Column:=False;
+                          lb_fieldfound:=False;
+                          li_CountFields := 0 ;
+                          li_FullFields:=0;
                           for li_k := 0 to lnod_ClassProperties.ChildNodes.Count -1 do
                             Begin
                               lnod_id := lnod_ClassProperties.ChildNodes [ li_k ];
@@ -564,7 +566,7 @@ var li_i, li_j, li_k, li_NoField : LongInt ;
   // Creates the XML form column
   // as_Table : Table name
   // as_Connection : Connection name
-  procedure p_CreateXMLColumn ( const as_Table, as_Connection : String );
+  procedure p_CreateXMLColumn ( const as_Table, as_TableKey, as_Connection : String );
   Begin
     lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner, ab_CreateDS );
     lfwc_Column.IsMain:=True;
@@ -599,13 +601,13 @@ begin
                       if lnod_ClassNode.NodeName = CST_LEON_CLASS_C_BIND Then
                        with lnod_ClassNode do
                         Begin
-                          p_CreateXMLColumn (Attributes [ CST_LEON_VALUE ], Attributes [ CST_LEON_LOCATION ]);
+                          p_CreateXMLColumn (Attributes [ CST_LEON_VALUE ], lnod_Node.Attributes [ CST_LEON_ID ], Attributes [ CST_LEON_LOCATION ]);
                           lb_Table := True;
                           Break;
                         end;
                     end;
                   if not lb_Table Then
-                    p_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], '' );
+                    p_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], lnod_Node.Attributes [ CST_LEON_ID ], '' );
                 end;
               for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
                Begin

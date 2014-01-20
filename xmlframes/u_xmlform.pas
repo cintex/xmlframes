@@ -93,7 +93,7 @@ type
   protected
     gxml_SourceFile : TALXMLDocument ;
     procedure p_ScruteComposantsFiche (); override;
-    procedure p_setChoiceComponent(const argr_Control: TDBRadioGroup); virtual;
+    procedure p_setChoiceComponent( const argr_Control : TCustomRadioGroup );
     procedure p_setControl ( const as_BeginName : String ;
                              const awin_Control: TWinControl;
                              const awin_Parent: TWinControl;
@@ -153,6 +153,7 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
+     fonctions_dbcomponents,
      fonctions_dialogs,
      Math,
      fonctions_createsql,
@@ -699,11 +700,21 @@ end;
 // After having read child node from choice node setting the height of choice node
 // argr_Control : Choice component
 
-procedure TF_XMLForm.p_setChoiceComponent( const argr_Control : TDBRadioGroup );
+procedure TF_XMLForm.p_setChoiceComponent( const argr_Control : TCustomRadioGroup );
+var li_i, li_length : Integer;
 Begin
   with argr_Control do
     begin
-      Height:= Items.Count  * gi_FontHeight + fli_getComponentProperty ( argr_Control, 'BorderWidth' )  * 2 ;
+      Height:= Items.Count  * gi_FontHeight + Byte(BorderStyle)  * 2 ;
+      li_length := 0;
+      for li_i := 0 to Items.Count -1 do
+        li_length:=Max(Length(Items [ li_i ]), li_length );
+      case li_length of
+       0..1 : Columns:=4;
+       2..3 : Columns:=3;
+       4..7 : Columns:=2;
+       else Columns:=1;
+      end;
     end;
 end;
 
@@ -790,16 +801,8 @@ Begin
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_MAX then
           Begin
-            if ( awin_Control is TCustomEdit ) then
-              try
-                ldo_Temp := lnod_FieldProperties.Attributes [ CST_LEON_VALUE ];
-                p_setComponentProperty ( awin_Control, 'MaxLength', ldo_Temp);
-                awin_Control.Width :=  Min ( 50, CST_XML_FIELDS_CHARLENGTH ) * StrToInt ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
-                afcf_ColumnField.FieldSize:=Trunc(ldo_Temp);
-              Except
-              end
-            else if ( awin_Control is TExtNumEdit ) then
-              try
+            if ( awin_Control is TExtNumEdit ) then
+              try // numedit is a customedit
                 DecimalSeparator := '.' ;
                 ldo_Temp := Abs ( StrToFloat ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]));
 
@@ -807,6 +810,13 @@ Begin
                   awin_Control.Width := length ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ] ) * CST_XML_FIELDS_CHARLENGTH;
                 p_setComponentProperty ( awin_Control, 'Max', lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
                 p_setComponentBoolProperty ( awin_Control, 'HasMax', True);
+              Except
+              end
+            else if ( awin_Control is TCustomEdit ) then
+              try
+                ldo_Temp := lnod_FieldProperties.Attributes [ CST_LEON_VALUE ];
+                p_setComponentProperty ( awin_Control, 'MaxLength', ldo_Temp);
+                awin_Control.Width :=  Min ( 50, CST_XML_FIELDS_CHARLENGTH ) * StrToInt ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
               Except
               end;
             try
@@ -818,20 +828,20 @@ Begin
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_MIN then
           Begin
-            if ( awin_Control is TDBEdit ) then
-              try
-                ldo_Temp := lnod_FieldProperties.Attributes [ CST_LEON_VALUE ];
-                p_setComponentProperty ( awin_Control, 'MinLength', ldo_Temp);
-              Except
-              end
-            else if ( awin_Control is TExtNumEdit ) then
-              try
+            if ( awin_Control is TExtNumEdit ) then
+              try  // numedit is a customedit
                 DecimalSeparator := '.' ;
                 ldo_Temp := StrToFloat ( lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
                 if awin_Control.Width < ldo_Temp * CST_XML_FIELDS_CHARLENGTH then
-                  awin_Control.Width := Round ( ldo_Temp * CST_XML_FIELDS_CHARLENGTH );
+                  awin_Control.Width := Min ( 50, Round ( ldo_Temp * CST_XML_FIELDS_CHARLENGTH ));
                 p_setComponentProperty ( awin_Control, 'Min', ldo_Temp);
                 p_setComponentBoolProperty ( awin_Control, 'HasMin', True);
+              Except
+              end
+            else if ( awin_Control is TCustomEdit ) then
+              try
+                ldo_Temp := lnod_FieldProperties.Attributes [ CST_LEON_VALUE ];
+                p_setComponentProperty ( awin_Control, 'MinLength', ldo_Temp);
               Except
               end;
             DecimalSeparator := gchar_DecimalSeparator ;
@@ -839,9 +849,9 @@ Begin
           End;
       End;
   // after setting the choice component setting the height
-  if awin_Control is TDBRadioGroup then
+  if awin_Control is TCustomRadioGroup then
     Begin
-      p_setChoiceComponent ( awin_Control as TDBRadioGroup );
+      p_setChoiceComponent ( awin_Control as TCustomRadioGroup );
     End;
 
 End;
@@ -1029,8 +1039,7 @@ var lnod_FieldProperties : TALXMLNode ;
       if anod_Field.HasChildNodes then
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
-            lnod_FieldProperties := anod_Field.ChildNodes [ li_k ];
-            if fb_getFieldOptions ( afws_Source, anod_Field, lnod_FieldProperties, lffd_ColumnFieldDef, lb_IsLocal ) Then
+            if fb_getFieldOptions ( afws_Source, anod_Field, anod_Field.ChildNodes [ li_k ], lffd_ColumnFieldDef, lb_IsLocal ) Then
              Begin
                Break;
              end;
@@ -1059,14 +1068,20 @@ var lnod_FieldProperties : TALXMLNode ;
          Begin
            lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
            awin_Control:=lxfc_ButtonCombo.Combo;
-           with lxfc_ButtonCombo.Combo,lffd_ColumnFieldDef.Relation,TablesDest[0] do
+           with lxfc_ButtonCombo,Combo,lffd_ColumnFieldDef.Relation,TablesDest[0] do
              Begin
+               FormRegisteredName:=TableKey;
+               FormSource:=0;
                {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF} := Datasource;
                p_SetSQLQuery ({$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}.DataSet,FieldsDisplay,FieldsFK,Table);
                DisplayAllFields:=True;
                //MyShowMessage(ListField+#10+fs_getSQLQuery(ListSource.DataSet));
-               {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF} := FieldsDisplay.toString;
+               {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF} := FieldsDisplay.toString(';');
                {$IFNDEF RXJVCOMBO}KeyField {$ELSE}LookupField  {$ENDIF} := FieldsFK [ 0 ].FieldName;
+               try
+                 Datasource.DataSet.Open;
+               Except
+               end;
              end;
            p_setControl( 'xfc_', lxfc_ButtonCombo, awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
          end;
@@ -1092,15 +1107,6 @@ var lnod_FieldProperties : TALXMLNode ;
 
     end;
 
-    // procedure p_SetParentWidth
-    // Setting parent component width
-    procedure p_SetParentWidth ;
-    Begin
-      if Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
-        awin_Parent.ClientWidth := Result.Left + Result.Width + CST_XML_FIELDS_INTERLEAVING;
-      awin_Parent.ClientHeight := Result.Top + Result.Height + CST_XML_FIELDS_INTERLEAVING;
-    end;
-
 begin
    Result := nil;
    // create eventually a tabsheet if too many controls
@@ -1123,20 +1129,17 @@ begin
   if fb_CreateComponents ( Result )  Then
     if assigned ( Result ) Then
       Begin
-        if awin_Last <> nil then
-          Begin
-            Result.Top := awin_Last.Top + awin_Last.Height + CST_XML_FIELDS_INTERLEAVING;
-            if Assigned(llab_Label) Then
-              llab_Label.Top:=Result.Top;
-            p_SetParentWidth ;
-          end;
+
+        p_setControlAndLabelTop ( Result, llab_Label, awin_last, ab_Column );
+        if Assigned(awin_last)
+         Then p_SetControlAndParentWidth ( Result, awin_parent );
         if ( awin_Parent is TGroupBox )
          Then
            Begin
              Result.Top:=CST_XML_FIELDS_INTERLEAVING;
              if Assigned(llab_Label) Then
-               llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
-             p_SetParentWidth ;
+               llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;  '
+             p_SetControlAndParentWidth ( Result, awin_parent );
            end
           Else
           Begin
@@ -1152,10 +1155,11 @@ begin
 
               End;
           end ;
+
       end;
-  awin_Last := Result;
   if assigned ( lxfc_ButtonCombo ) Then
     lxfc_ButtonCombo.AutoPlace;
+  awin_Last := Result;
 end;
 
 
@@ -1189,8 +1193,6 @@ end;
 // ab_Column : Second editing column
 procedure TF_XMLForm.p_setFieldComponentTop  ( const awin_Control : TWinControl ; var ab_Column : Boolean );
 begin
-  if awin_Control.Width > CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2  Then
-    awin_Control.Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2;
   if ab_Column and ( awin_Control.Width < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH )  Then
    // Intervalle entre les champs
     awin_Control.Top := gi_LastFormColumnHeight + CST_XML_FIELDS_INTERLEAVING

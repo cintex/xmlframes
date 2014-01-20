@@ -106,6 +106,7 @@ function fgrb_CreateGroupBox ( const awin_Parent : TWinControl ;  const as_Name 
 function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TPanel;
 function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TScrollBox;
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
+procedure p_SetControlAndParentWidth ( const awin_control, awin_parent : TControl );
 procedure p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
 procedure p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
 procedure p_setLabelComponent (const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean);
@@ -118,6 +119,7 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const aal_Align : TAlign
                                ):TControl ;
 function fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ; const acom_Owner : TComponent ): TPageControl;
+procedure p_setControlAndLabelTop ( const acon_control, acon_label, acon_last : TControl ; const ab_Column : Boolean );
 function fscb_CreateTabSheet(
   var apc_PageControl: TPageControl; const awin_ParentPageControl,
   awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
@@ -472,7 +474,8 @@ End;
 function fwin_CreateAFieldComponent ( const afdt_FieldDataType : TFWFieldData ; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
 begin
   Result := nil;
-  if afdt_FieldDataType.Relation.TablesDest.Count > 0 Then
+  if (afdt_FieldDataType.Relation.TablesDest.Count > 0)
+  and not ab_IsLocal Then
    Begin
      Result:=ffc_CreateFillComboButton(acom_Owner);
      (Result as TExtFillCombo).Combo:=TFWDBLookupCombo.Create(acom_Owner);
@@ -794,11 +797,30 @@ End;
 
 procedure p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
 begin
-  if ab_Column then
-    awin_Control.Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
-   Else
-    awin_Control.Left := CST_XML_FIELDS_INTERLEAVING ;
+  with awin_Control do
+    Begin
+      if ab_Column then
+        Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_XML_FIELDS_INTERLEAVING
+       Else
+        Left := CST_XML_FIELDS_INTERLEAVING ;
+      Width := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH - Left -CST_XML_FIELDS_INTERLEAVING*2;
+    end;
 end;
+
+// procedure p_SetControlAndParentWidth
+// Setting parent component width
+procedure p_SetControlAndParentWidth ( const awin_control, awin_parent : TControl );
+Begin
+  with awin_control do
+    Begin
+      if Width > CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2  Then
+        Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2;
+      if Left + Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
+        awin_Parent.ClientWidth := Left + Width + CST_XML_FIELDS_INTERLEAVING;
+      awin_Parent.ClientHeight := Top + Height + CST_XML_FIELDS_INTERLEAVING;
+    end;
+end;
+
 
 
 // procedure p_setLabelComponent
@@ -809,10 +831,13 @@ end;
 procedure p_setLabelComponent (const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean);
 begin
   if assigned ( alab_Label ) then
+   with alab_Label do
     Begin
-      alab_Label.Top  := awin_Control.Top + ( awin_Control.Height - alab_Label.Height ) div 2 ;
-      alab_label.Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
-      p_setComponentLeft  ( alab_Label, ab_Column );
+      Top  := awin_Control.Top + ( awin_Control.Height - Height ) div 2 ;
+      Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
+      if ab_Column
+       then Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_XML_FIELDS_INTERLEAVING
+       else Left := CST_XML_FIELDS_INTERLEAVING;
     End;
 end;
 
@@ -840,6 +865,20 @@ begin
   Result := fscb_CreateScrollBox ( ltbs_Tabsheet, CST_COMPONENTS_TABSHEET_BEGIN +as_Name, acom_Owner, alClient );
 
 end;
+procedure p_setControlAndLabelTop ( const acon_control, acon_label, acon_last : TControl ; const ab_Column : Boolean );
+begin
+  if Assigned(acon_last) Then
+   Begin
+     with acon_last do
+     if ab_Column
+      Then acon_control.Top := Top + CST_XML_FIELDS_INTERLEAVING
+      Else acon_control.Top := Top + Height + CST_XML_FIELDS_INTERLEAVING;
+   end
+  else acon_control.Top := 0;
+  if Assigned(acon_Label) Then
+    acon_Label.Top:=acon_control.Top;
+end;
+
 
 {$IFDEF VERSIONS}
 initialization
