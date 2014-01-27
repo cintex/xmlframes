@@ -496,6 +496,7 @@ begin
                              Begin
                               lfwt_Source2 := ADBSources.Add;
                               lfwt_Source2.Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                              lfwt_Source2.TableKey:= as_Table;
                               lfwt_Source2.IsMain := True
                              end
                             Else lfwt_Source2 := nil;
@@ -504,11 +505,12 @@ begin
                          with lfwt_Source do
                           Begin
                             Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                            TableKey:= as_Table;
                             if ab_createDS Then
                              Begin
                               lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
                               with lds_Connection do
-                                Datasource := fds_CreateDataSourceAndTable ( as_Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
+                                Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
                                                      IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
                              end;
                           end;

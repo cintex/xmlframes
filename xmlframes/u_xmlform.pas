@@ -1071,6 +1071,7 @@ var lnod_FieldProperties : TALXMLNode ;
            with lxfc_ButtonCombo,Combo,lffd_ColumnFieldDef.Relation,TablesDest[0] do
              Begin
                FormRegisteredName:=TableKey;
+               //MyShowMessage(tablekey);
                FormSource:=0;
                {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF} := Datasource;
                p_SetSQLQuery ({$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}.DataSet,FieldsDisplay,FieldsFK,Table);
