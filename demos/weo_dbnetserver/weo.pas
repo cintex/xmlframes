@@ -27,7 +27,7 @@ var
 
 begin
   Application.Initialize;
-  if not fb_ReadServerIni ( FMainIni, Application ) Then
+  if not fb_ReadServerIni ( FIniMain, Application ) Then
    Begin
     ShowMessage ( 'XML file not initalized.' );
    end;

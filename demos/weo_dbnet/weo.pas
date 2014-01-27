@@ -60,7 +60,7 @@ begin
     gb_DicoKeyFormPresent  := True ;
     gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
-    if not fb_ReadIni ( FMainIni ) Then
+    if not fb_ReadIni ( FIniMain ) Then
      Begin
       ShowMessage ( 'XML file not initalized.' );
       Application.Terminate;

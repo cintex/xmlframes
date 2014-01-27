@@ -275,10 +275,10 @@ Begin
   Result := False;
   if  fb_LoadProperties (  fs_getLeonDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + gs_NomApp,  as_little_lang ) then
     Begin
-      if assigned ( FMainIni ) then
+      if assigned ( FIniMain ) then
         Begin
-          FMainIni.WriteString(INISEC_PAR,CST_INI_LANGUAGE,as_little_lang);
-          fb_iniWriteFile( FMainIni, False );
+          FIniMain.WriteString(INISEC_PAR,CST_INI_LANGUAGE,as_little_lang);
+          fb_iniWriteFile( FIniMain, False );
         End;
       Result := True;
     End
@@ -497,8 +497,8 @@ function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
 Begin
   if  ( as_Value <> '' )
   and ( as_Value [1] = '$' )
-  and Assigned(FMainIni)
-   Then Result := FMainIni.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -1 ), as_Value )
+  and Assigned(FIniMain)
+   Then Result := FIniMain.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -1 ), as_Value )
    else Result := as_Value;
 End;
 
@@ -703,13 +703,13 @@ Begin
                        End;
               {$IFDEF DBNET}
               dtDBNet : Begin
-                         if Assigned(FMainIni)
+                         if Assigned(FIniMain)
                            Then Begin
-                                  DataPort     := FMainIni.ReadInteger( INISEC_PAR, 'Port', 8080 );
-                                  DataUser     := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_USER, '' );
-                                  DataPassword := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_password, '' );
-                                  DataURL      := FMainIni.ReadString ( INISEC_PAR, CST_LEON_DATA_URL, '127.0.0.1' );
-                                  DataSecure   := FMainIni.ReadBool   ( INISEC_PAR, 'Secure', False );
+                                  DataPort     := FIniMain.ReadInteger( INISEC_PAR, 'Port', 8080 );
+                                  DataUser     := FIniMain.ReadString ( INISEC_PAR, CST_LEON_DATA_USER, '' );
+                                  DataPassword := FIniMain.ReadString ( INISEC_PAR, CST_LEON_DATA_password, '' );
+                                  DataURL      := FIniMain.ReadString ( INISEC_PAR, CST_LEON_DATA_URL, '127.0.0.1' );
+                                  DataSecure   := FIniMain.ReadBool   ( INISEC_PAR, 'Secure', False );
                                 End
                            else DataPort := 8080;
                          p_setComponentProperty ( Connection, 'Port', DataPort );

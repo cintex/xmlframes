@@ -260,7 +260,7 @@ begin
   {$ENDIF}
   {$ENDIF}
 
-  gs_DefaultUser := FMainIni.Readstring ( INISEC_PAR, INISEC_UTI, '' );
+  gs_DefaultUser := FIniMain.Readstring ( INISEC_PAR, INISEC_UTI, '' );
 
   SvgFormInfoIni.LaFormCreate ( Self );
   // Lecture des infos des composants du fichier INI

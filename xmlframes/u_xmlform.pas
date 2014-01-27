@@ -1138,7 +1138,7 @@ begin
            Begin
              Result.Top:=CST_XML_FIELDS_INTERLEAVING;
              if Assigned(llab_Label) Then
-               llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;  '
+               llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
              p_SetControlAndParentWidth ( Result, awin_parent );
            end
           Else
