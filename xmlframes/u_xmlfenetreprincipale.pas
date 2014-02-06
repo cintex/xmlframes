@@ -205,7 +205,6 @@ var
 implementation
 
 uses
-  U_Splash,
   TypInfo,
 {$IFDEF DBEXPRESS}
   SQLExpr,
@@ -347,8 +346,7 @@ begin
   inherited;
   if ( csDesigning in ComponentState ) Then
     Exit ;
-  F_SplashForm.Free; // Libération de la mémoire
-  F_SplashForm := nil;
+  doCloseWorking; // Libération de la mémoire
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -746,8 +744,7 @@ end;
 procedure TF_FenetrePrincipale.Doshow;
 begin
   inherited Doshow;
-  F_splashForm.Free;
-  F_splashForm := nil ;
+  doCloseWorking;
 end;
 
 

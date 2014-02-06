@@ -9,7 +9,6 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   Interfaces,
   fonctions_init,
   U_XMLFenetrePrincipale,
-  U_Splash,
   LCLType,
   lazextcomponents,
   SysUtils,
@@ -21,6 +20,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   lazmansoft,
   lazxmlframes,
   fonctions_ObjetsXML,
+  fonctions_dialogs,
   Dialogs,
   LResources,
   fonctions_xml,
@@ -69,11 +69,7 @@ begin
   Unique := TUniqueInstance(Application);
   Unique.Identifier := Application.ExeName;
   {$ENDIF}
-  F_SplashForm := TF_SplashForm.Create(nil);
-  F_SplashForm.Label1.Caption := 'GENERIC';
-  F_SplashForm.Label1.Width := F_SplashForm.Width;
-  F_SplashForm.Show;   // Affichage de la fiche
-  F_SplashForm.Update; // Force la fiche à se dessiner complètement
+  doShowWorking(ApplicationName)
 
     try
     gb_DicoKeyFormPresent := True;

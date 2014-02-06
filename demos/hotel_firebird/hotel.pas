@@ -3,8 +3,8 @@ program hotel;
 {$MODE Delphi}
 
 uses
-  Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, U_Splash,
-  LCLType, lazextcomponents, fonctions_ibx,
+  Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale,
+  LCLType, lazextcomponents, fonctions_ibx,  fonctions_dialogs,
   fonctions_system,
   fonctions_xml,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
@@ -48,11 +48,7 @@ begin
 
 	  end;
 
-  F_SplashForm := TF_SplashForm.Create(nil);
-  F_SplashForm.Label1.Caption := 'GENERIC' ;
-  F_SplashForm.Label1.Width   := F_SplashForm.Width ;
-  F_SplashForm.Show;   // Affichage de la fiche
-  F_SplashForm.Update; // Force la fiche à se dessiner complètement
+  doShowWorking(Application.ExeName)
 
   try
     gb_DicoKeyFormPresent  := True ;

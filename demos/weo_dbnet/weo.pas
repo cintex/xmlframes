@@ -7,7 +7,8 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale, U_Splash,
+  fonctions_dialogs,
+  Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale,
   LCLType, lazextcomponents,
   SysUtils, fonctions_dbnet, fonctions_init,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
@@ -50,11 +51,7 @@ begin
 	  begin
 
 	  end;
-  F_SplashForm := TF_SplashForm.Create(nil);
-  F_SplashForm.Label1.Caption := 'GENERIC' ;
-  F_SplashForm.Label1.Width   := F_SplashForm.Width ;
-  F_SplashForm.Show;   // Affichage de la fiche
-  F_SplashForm.Update; // Force la fiche à se dessiner complètement
+  doShowWorking(ApplicationName); // Force la fiche à se dessiner complètement
 
   try
     gb_DicoKeyFormPresent  := True ;
