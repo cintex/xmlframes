@@ -633,6 +633,8 @@ end;
 // Login close event
 procedure TF_XMLForm.p_CloseLoginAction( AObject : TObject; var ACLoseAction : TCloseaction );
 Begin
+  Application.MainForm.WindowState:=wsMaximized;
+  Application.MainForm.BringToFront;
   ACloseAction := caFree;
   gf_users := nil;
 end;

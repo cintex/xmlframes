@@ -48,7 +48,7 @@ begin
 
 	  end;
 
-  doShowWorking(Application.ExeName)
+  doShowWorking(ExtractFileName(Application.ExeName));
 
   try
     gb_DicoKeyFormPresent  := True ;

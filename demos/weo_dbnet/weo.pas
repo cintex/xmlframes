@@ -51,7 +51,7 @@ begin
 	  begin
 
 	  end;
-  doShowWorking(ApplicationName); // Force la fiche à se dessiner complètement
+  doShowWorking(ExtractFileName(Application.ExeName));
 
   try
     gb_DicoKeyFormPresent  := True ;

@@ -69,7 +69,7 @@ begin
   Unique := TUniqueInstance(Application);
   Unique.Identifier := Application.ExeName;
   {$ENDIF}
-  doShowWorking(ApplicationName)
+  doShowWorking(ExtractFileName(Application.ExeName));
 
     try
     gb_DicoKeyFormPresent := True;

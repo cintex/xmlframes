@@ -123,7 +123,6 @@ procedure p_CreeAppliFromNode ( const as_EntityFile : String );
 Begin
   if fb_CreeAppliFromNode ( as_EntityFile ) then
    fxf_ExecuteNoFonction(high ( ga_Functions ), True);
-  Application.MainForm.WindowState:=wsMaximized;
 End;
 
 

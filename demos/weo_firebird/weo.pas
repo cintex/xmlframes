@@ -57,7 +57,7 @@ begin
   {$ENDIF}
   gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
   GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;  
-  doShowWorking(Application.ExeName);
+  doShowWorking(ExtractFileName(Application.ExeName));
 
   try
     gb_DicoKeyFormPresent  := True ;
@@ -69,6 +69,7 @@ begin
       Application.Terminate;
      end;
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
+    F_FenetrePrincipale.Show;
   finally
   end;
   Application.Run;
