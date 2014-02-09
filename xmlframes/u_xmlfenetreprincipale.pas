@@ -178,10 +178,8 @@ type
 {$IFNDEF FPC}
     procedure WMHelp (var Message: TWMHelp); message WM_HELP;
 {$ENDIF}
-  protected
-    procedure Doshow;override;
-
   public
+    procedure Doshow;override;
     procedure p_AccesstoSoft; virtual;
     { Déclarations publiques }
     // Procédures qui sont appelées automatiquement pour l'initialisation et la sauvegarde
@@ -194,7 +192,8 @@ type
     procedure   p_SortieMajNumScroll(const ab_MajEnfoncee, ab_NumEnfoncee,
                         			             ab_ScrollEnfoncee: boolean); override;
     procedure   p_ApresSauvegardeParamIni; override;
-    procedure   p_editionTransfertVariable(as_nom,as_titre,as_chemin:String;ats_edition_nom_params,ats_edition_params,ats_edition_params_values: TStrings);
+    procedure   p_editionTransfertVariable ( const as_nom,as_titre,as_chemin:String;
+                                             const ats_edition_nom_params,ats_edition_params,ats_edition_params_values: TStrings);
   published
     procedure p_ConnectToData;
   end;
@@ -704,8 +703,8 @@ end;
 // procédure qui transfert les données local de l'édition
 // vers les données globales utilisées par le preview
 ////////////////////////////////////////////////////////////////////////////////
-procedure TF_FenetrePrincipale.p_editionTransfertVariable(as_nom, as_titre,
-  as_chemin: String; ats_edition_nom_params, ats_edition_params,
+procedure TF_FenetrePrincipale.p_editionTransfertVariable(const as_nom, as_titre,
+  as_chemin: String; const ats_edition_nom_params, ats_edition_params,
   ats_edition_params_values: TStrings);
 
 var li_i:integer;

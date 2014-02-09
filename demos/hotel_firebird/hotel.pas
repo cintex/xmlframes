@@ -7,17 +7,19 @@ uses
   LCLType, lazextcomponents, fonctions_ibx,  fonctions_dialogs,
   fonctions_system,
   fonctions_xml,
+  sysutils,UniqueInstance,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
-  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
+  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz, uniqueinstance_package;
 
+var
 {$IFNDEF FPC}
 {$R *.res}
 {$R WindowsXP.res}
-var
-	gc_classname: Array[0..255] of char;
-	gi_result: integer;
+    gc_classname: Array[0..255] of char;
+    gi_result: integer;
+{$ELSE}
+    Unique : TUniqueInstance;
 {$ENDIF}
-
 {$IFNDEF FPC}{$R hotel.rc}{$ENDIF}
 
 begin
@@ -43,6 +45,9 @@ begin
       Exit;
     end
   else  // Première création
+  {$ELSE}
+  Unique := TUniqueInstance ( Application );
+  Unique.Identifier:=Application.ExeName;
   {$ENDIF}
 	  begin
 

@@ -107,9 +107,10 @@ type
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
     function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
-                                                     const awin_parent : TWinControl; var awin_last : TWinControl;
-                                                  var  ai_FieldCounter : Longint ;
-                                                  var ab_Column : Boolean ; const afws_Source : TFWSource ):TWinControl; virtual;
+                                                     const awin_parent, awin_last : TWinControl;
+                                                     var  ai_FieldCounter : Longint ;
+                                                     var ab_Column : Boolean ; const afws_Source : TFWSource ;
+                                                     const ab_SeparateIfTooMuch : Boolean = True ):TWinControl; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl;
       const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
     procedure p_SetFieldButtonsProperties(const anod_Action : TALXMLNode;
@@ -153,7 +154,6 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
-     fonctions_dbcomponents,
      fonctions_dialogs,
      Math,
      fonctions_createsql,
@@ -527,14 +527,11 @@ begin
   // Initiate data and showing
   EnableAlign ;
   FormCreate ( Self );
-  Position := poDesktopCenter;
+  Position := poMainFormCenter;
 //  FormStyle:=fsNoStayOnTop;
-  Application.MainForm.WindowState:=wsMinimized;
-  {$IFDEF FPC}
-  Visible := True;
-  {$ELSE}
-  Show;
-  {$ENDIF}
+//  Application.MainForm.WindowState:=wsMinimized;
+  ShowModal;
+//  Application.MainForm.WindowState:=wsMaximized;
 end;
 // procedure p_LoginOKClick
 // Login OK Button event
@@ -633,8 +630,6 @@ end;
 // Login close event
 procedure TF_XMLForm.p_CloseLoginAction( AObject : TObject; var ACLoseAction : TCloseaction );
 Begin
-  Application.MainForm.WindowState:=wsMaximized;
-  Application.MainForm.BringToFront;
   ACloseAction := caFree;
   gf_users := nil;
 end;
@@ -712,9 +707,9 @@ Begin
       for li_i := 0 to Items.Count -1 do
         li_length:=Max(Length(Items [ li_i ]), li_length );
       case li_length of
-       0..1 : Columns:=4;
-       2..3 : Columns:=3;
-       4..7 : Columns:=2;
+       0..2 : Columns:=4;
+       3..5 : Columns:=3;
+       6..9 : Columns:=2;
        else Columns:=1;
       end;
     end;
@@ -923,8 +918,10 @@ end;
 // afws_Source : XML form Column
 // afd_FieldsDefs : Field Definitions
 function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: TALXMLNode;
-                                                             const awin_parent : TWinControl; var awin_last : TWinControl;
-                                                             var  ai_FieldCounter : Longint ; var ab_Column : Boolean ; const afws_Source : TFWSource  ):TWinControl;
+                                                             const awin_parent, awin_last : TWinControl;
+                                                             var  ai_FieldCounter : Longint ;
+                                                             var ab_Column : Boolean ; const afws_Source : TFWSource ;
+                                                             const ab_SeparateIfTooMuch : Boolean = True ):TWinControl;
 var lnod_FieldProperties : TALXMLNode ;
     llab_Label  : TFWLabel;
     lb_IsLocal  : Boolean;
@@ -943,21 +940,19 @@ var lnod_FieldProperties : TALXMLNode ;
         lfwt_Source2 : TFWTable;
         lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
     begin
-      lb_IsLocal := False;
+      lfwt_Source2:=nil;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
       if anod_Field <> lnod_OriginalNode Then
         Begin
          if fb_getOptionalStructTable ( DBSources,afws_Source,lfwt_Source2,lffd_ColumnFieldDef,anod_Field,lnod_OriginalNode )
           Then
             Exit;
-         li_FieldCounter := 0 ;
         end;
 
+      li_FieldCounter := 0 ;
       ls_NodeId := anod_Field.Attributes[CST_LEON_ID];
       Result := fgrb_CreateGroupBox(awin_Parent,CST_COMPONENTS_GROUPBOX_BEGIN + ls_NodeId + IntToStr(ai_FieldCounter),Self,alNone);
-      lb_IsLocal := False;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
-
       if lnod_OriginalNode.HasChildNodes then
         for li_k := 0 to lnod_OriginalNode.ChildNodes.Count - 1 do
           Begin
@@ -977,31 +972,29 @@ var lnod_FieldProperties : TALXMLNode ;
                     for li_l := 0 to lnod_FieldsNode.ChildNodes.Count - 1 do
                       Begin
                         if anod_Field <> lnod_OriginalNode Then
-                          fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
+                          lwin_last:=fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
                                                                    Result, lwin_last,
                                                                    li_FieldCounter,
-                                                                   lb_column, lfwt_Source2 as TFWSource )
+                                                                   lb_column, lfwt_Source2 as TFWSource, False )
                          else
-                          fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
+                          lwin_last:=fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_l ],
                                                                    Result, lwin_last,
                                                                    ai_FieldCounter,
-                                                                   ab_column, afws_Source );
+                                                                   ab_column, afws_Source, False );
                       end;
                   end
                  Else
                   // The parent parameter is a var : so do not want to change it in the function
                   if anod_Field <> lnod_OriginalNode Then
-                    fwin_CreateFieldComponentAndProperties ( lnod_OriginalNode.ChildNodes [ li_k ],
+                    lwin_last:=fwin_CreateFieldComponentAndProperties ( lnod_OriginalNode.ChildNodes [ li_k ],
                                                              Result, lwin_last,
                                                              li_FieldCounter,
-                                                             lb_column, lfwt_Source2 as TFWSource )
+                                                             lb_column, lfwt_Source2 as TFWSource, False )
                    else
-                    fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_k ],
+                    lwin_last:=fwin_CreateFieldComponentAndProperties ( lnod_FieldsNode.ChildNodes [ li_k ],
                                                              Result, lwin_last,
                                                              ai_FieldCounter,
-                                                             ab_column, afws_Source );
-                inc ( li_FieldCounter );
-                lb_IsLocal:=True;
+                                                             ab_column, afws_Source, False );
               end;
           end;
       p_setFieldComponentTop ( Result, ab_Column );
@@ -1086,26 +1079,32 @@ var lnod_FieldProperties : TALXMLNode ;
                Except
                end;
              end;
+           // set name of button
            p_setControl( 'xfc_', lxfc_ButtonCombo, awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
          end;
-
+      // set name of control
       p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
 
-
+      // placing top of control
       p_setFieldComponentTop ( awin_Control, ab_Column );
 
+      // optional data link
       p_setFieldComponentData ( awin_Control, afws_Source, lffd_ColumnFieldDef, lb_IsLocal );
 
+      // adding optional label
       llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, afws_Source.Index, ab_Column, lffd_ColumnFieldDef );
 
+      // placing left of control
       if assigned ( llab_Label ) Then
         p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
        Else
         p_setComponentLeft  ( awin_Control, ab_Column );
       if lb_IsLocal Then
        Begin
+         // setting name of no data control sets text property
          p_SetComponentProperty(awin_Control,CST_PROPERTY_TEXT,'');
-         afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index); // no local definition
+         // no local definition
+         afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
        end;
 
     end;
@@ -1113,7 +1112,8 @@ var lnod_FieldProperties : TALXMLNode ;
 begin
    Result := nil;
    // create eventually a tabsheet if too many controls
-   If  ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT) Then
+   If ab_SeparateIfTooMuch
+   and ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT) Then
      with afws_Source do
        Begin
          gi_LastFormFieldsHeight := 0;
@@ -1133,19 +1133,18 @@ begin
     if assigned ( Result ) Then
       Begin
 
-        p_setControlAndLabelTop ( Result, llab_Label, awin_last, ab_Column );
-        if Assigned(awin_last)
-         Then p_SetControlAndParentWidth ( Result, awin_parent );
+        // setting width of control amd parent
+        p_SetControlAndParentWidth ( Result, awin_parent );
         if ( awin_Parent is TGroupBox )
          Then
            Begin
              Result.Top:=CST_XML_FIELDS_INTERLEAVING;
              if Assigned(llab_Label) Then
                llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
-             p_SetControlAndParentWidth ( Result, awin_parent );
            end
           Else
           Begin
+            // next ab_column
             ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
             if FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
               Width := FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width;
@@ -1160,9 +1159,10 @@ begin
           end ;
 
       end;
+  // there is a routine in FillComboButton to place its button
   if assigned ( lxfc_ButtonCombo ) Then
     lxfc_ButtonCombo.AutoPlace;
-  awin_Last := Result;
+
 end;
 
 

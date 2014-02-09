@@ -987,11 +987,11 @@ Begin
    with afwt_Source.Relations.Add do
      Begin
        TableLinked:=afwt_Source2.Index;
-       FieldsFK.Assign(afwt_Source2.GetKey);
      end;
    with afwt_Source2.Relations.Add do
      Begin
        TableLinked:=afwt_Source.Index;
+       FieldsFK.Assign(afwt_Source.GetKey);
      end;
 End;
 

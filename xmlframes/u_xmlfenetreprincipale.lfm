@@ -1,11 +1,11 @@
-object F_FenetrePrincipale: TF_FenetrePrincipale
-  Left = 684
+inherited F_FenetrePrincipale: TF_FenetrePrincipale
+  Left = 330
   Height = 645
-  Top = 232
+  Top = 105
   Width = 884
   HelpContext = 1400
   HorzScrollBar.Page = 884
-  VertScrollBar.Page = 620
+  VertScrollBar.Page = 621
   Align = alClient
   AutoScroll = True
   AutoSize = True
@@ -14,7 +14,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   ChildSizing.EnlargeVertical = crsHomogenousChildResize
   ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
-  ClientHeight = 620
+  ClientHeight = 621
   ClientWidth = 884
   Color = 13565951
   DefaultMonitor = dmDesktop
@@ -25,9 +25,8 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   OnActivate = F_FormMainIniActivate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  LCLVersion = '1.0.12.0'
   Visible = True
-  object im_appli: TImage
+  object im_appli: TImage[0]
     Left = 248
     Height = 49
     Top = 104
@@ -35,11 +34,11 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_acces: TImage
+  object im_acces: TImage[1]
     Left = 312
-    Height = 32
+    Height = 48
     Top = 104
-    Width = 32
+    Width = 48
     AutoSize = True
     Picture.Data = {
       055449636F6ECE5A00000000010007002020100001000400E802000076000000
@@ -772,7 +771,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_about: TImage
+  object im_about: TImage[2]
     Left = 376
     Height = 49
     Top = 104
@@ -780,19 +779,19 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_led: TPCheck
+  object im_led: TPCheck[3]
     Left = 312
     Height = 19
     Top = 440
     Width = 16
-    Version = 'Version 3.20, Copyright © 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
+    Version = 'Version 3.20, Copyright � 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
     Visible = False
     TabOrder = 0
   end
-  object br_statusbar: TStatusBar
+  object br_statusbar: TStatusBar[4]
     Left = 0
-    Height = 16
-    Top = 604
+    Height = 24
+    Top = 597
     Width = 884
     AutoHint = True
     Panels = <    
@@ -832,7 +831,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end>
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object tbar_outils: TToolBar
+  object tbar_outils: TToolBar[5]
     Left = 0
     Height = 50
     Hint = 'Cliquer sur un bouton pour accÃÂ©der ÃÂ  une fonction'
@@ -970,16 +969,16 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 7
     end
   end
-  object spl_Volet: TSplitter
+  object spl_Volet: TSplitter[6]
     Left = 227
-    Height = 554
+    Height = 547
     Top = 50
     Width = 5
     Visible = False
   end
-  object mtb_CustomizedMenu: TExtMenuToolBar
+  object mtb_CustomizedMenu: TExtMenuToolBar[7]
     Left = 0
-    Height = 554
+    Height = 547
     Top = 50
     Width = 30
     Align = alLeft
@@ -997,14 +996,14 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Menu = mu_MenuIni
     OnClickCustomize = mtb_CustomizedMenuClickCustomize
   end
-  object tbar_volet: TPanel
+  object tbar_volet: TPanel[8]
     Left = 30
-    Height = 554
+    Height = 547
     Top = 50
     Width = 197
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 554
+    ClientHeight = 547
     ClientWidth = 197
     Color = cl3DLight
     ParentColor = False
@@ -1012,13 +1011,13 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
     object scb_Volet: TScrollBox
       Left = 0
-      Height = 554
+      Height = 547
       Hint = 'Cliquez pour accÃ©der aux fonctions'
       Top = 0
       Width = 197
       HelpContext = 1440
       HorzScrollBar.Page = 197
-      VertScrollBar.Page = 554
+      VertScrollBar.Page = 547
       Align = alClient
       BorderStyle = bsNone
       Constraints.MinHeight = 10
@@ -1028,11 +1027,11 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 0
     end
   end
-  object im_quit: TImage
+  object im_quit: TImage[9]
     Left = 432
-    Height = 32
+    Height = 48
     Top = 104
-    Width = 32
+    Width = 48
     AutoSize = True
     Picture.Data = {
       055449636F6EEE1C000000000100030010100000010008006805000036000000
@@ -1270,11 +1269,11 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_aide: TImage
+  object im_aide: TImage[10]
     Left = 488
-    Height = 32
+    Height = 48
     Top = 104
-    Width = 32
+    Width = 48
     AutoSize = True
     Picture.Data = {
       055449636F6EE6740000000001000C00303010000100040068060000C6000000
@@ -2216,7 +2215,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_Liste: TImageList
+  object im_Liste: TImageList[11]
     BkColor = clForeground
     left = 256
     top = 216
@@ -2832,7 +2831,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       00FF000000FF000000FF000000FF
     }
   end
-  object mu_MainMenu: TMainMenu
+  object mu_MainMenu: TMainMenu[12]
     Images = im_Liste
     left = 256
     top = 268
@@ -2931,25 +2930,25 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
   end
-  object ActionList: TActionList
+  object ActionList: TActionList[13]
     Images = im_Liste
     left = 256
     top = 317
   end
-  object Timer: TTimer
+  object Timer: TTimer[14]
     Interval = 60000
     OnTimer = TimerTimer
     left = 256
     top = 367
   end
-  object SvgFormInfoIni: TOnFormInfoIni
+  object SvgFormInfoIni: TOnFormInfoIni[15]
     SaveForm = [sfSavePos, sfSaveSize, sfSaveSizes]
     OnIniLoad = SvgFormInfoIniIniLoad
     OnIniWrite = SvgFormInfoIniIniWrite
     left = 256
     top = 168
   end
-  object im_ListeDisabled: TImageList
+  object im_ListeDisabled: TImageList[16]
     BkColor = clForeground
     left = 388
     top = 216
@@ -3565,13 +3564,12 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       0000000000000000000000000000
     }
   end
-  object mu_MenuIni: TMainMenu
+  object mu_MenuIni: TMainMenu[17]
     Images = im_Liste
     left = 384
     top = 268
   end
-  object mc_Customize: TExtMenuCustomize
-    AutoIni = False
+  object mc_Customize: TExtMenuCustomize[18]
     MenuIni = mu_MenuIni
     MainMenu = mu_MainMenu
     left = 512

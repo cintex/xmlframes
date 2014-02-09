@@ -119,7 +119,6 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const aal_Align : TAlign
                                ):TControl ;
 function fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ; const acom_Owner : TComponent ): TPageControl;
-procedure p_setControlAndLabelTop ( const acon_control, acon_label, acon_last : TControl ; const ab_Column : Boolean );
 function fscb_CreateTabSheet(
   var apc_PageControl: TPageControl; const awin_ParentPageControl,
   awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
@@ -864,19 +863,6 @@ begin
   ltbs_Tabsheet.Caption := fs_getlabelCaption ( as_Caption );
   Result := fscb_CreateScrollBox ( ltbs_Tabsheet, CST_COMPONENTS_TABSHEET_BEGIN +as_Name, acom_Owner, alClient );
 
-end;
-procedure p_setControlAndLabelTop ( const acon_control, acon_label, acon_last : TControl ; const ab_Column : Boolean );
-begin
-  if Assigned(acon_last) Then
-   Begin
-     with acon_last do
-     if ab_Column
-      Then acon_control.Top := Top + CST_XML_FIELDS_INTERLEAVING
-      Else acon_control.Top := Top + Height + CST_XML_FIELDS_INTERLEAVING;
-   end
-  else acon_control.Top := 0;
-  if Assigned(acon_Label) Then
-    acon_Label.Top:=acon_control.Top;
 end;
 
 

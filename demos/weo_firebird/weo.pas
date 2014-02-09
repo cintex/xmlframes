@@ -2,38 +2,32 @@ program weo;
 
 {$MODE Delphi}
 
-
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
-  {$ENDIF}{$ENDIF}
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale,
-  LCLType, lazextcomponents,
-  fonctions_xml,
-  fonctions_dialogs,
+  LCLType, lazextcomponents, fonctions_ibx,  fonctions_dialogs,
   fonctions_system,
-  SysUtils, fonctions_ibx, UniqueInstance,
-  u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
+  fonctions_xml,
+  sysutils,UniqueInstance,
+  u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz, uniqueinstance_package;
 
+var
 {$IFNDEF FPC}
 {$R *.res}
 {$R WindowsXP.res}
-var
-  gc_classname: Array[0..255] of char;
-  gi_result: integer;
-
+    gc_classname: Array[0..255] of char;
+    gi_result: integer;
 {$ELSE}
-var
-  Unique : TUniqueInstance;
+    Unique : TUniqueInstance;
 {$ENDIF}
 
-
-{$IFNDEF FPC}{$R weo.rc}{$ENDIF}
+{$IFNDEF FPC}{$R hotel.rc}{$ENDIF}
 
 begin
   {$I weo.lrs}
   Application.Initialize;
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;
   {$IFNDEF FPC}
   Application.Title := 'Test';
 
@@ -50,13 +44,16 @@ begin
       SetForegroundWindow(gi_result);
       Application.Terminate;
       Exit;
-    end;
+    end
+  else  // Première création
   {$ELSE}
   Unique := TUniqueInstance ( Application );
   Unique.Identifier:=Application.ExeName;
   {$ENDIF}
-  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
-  GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;  
+	  begin
+
+	  end;
+
   doShowWorking(ExtractFileName(Application.ExeName));
 
   try
@@ -69,9 +66,7 @@ begin
       Application.Terminate;
      end;
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
-    F_FenetrePrincipale.Show;
   finally
   end;
   Application.Run;
-  SetHeapTraceOutput (ExtractFilePath (ParamStr (0)) + 'heaptrclog.txt');
 end.
