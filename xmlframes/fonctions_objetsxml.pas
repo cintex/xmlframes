@@ -125,6 +125,7 @@ procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : 
 function fi_FindAction ( const aClep : String ):Longint ;
 function fb_ReadIni ( var amif_Init : TIniFile ) : Boolean;
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
+function  fb_setChoiceProperties ( const anod_FieldProperty : TALXMLNode ; const argr_Control : TCustomRadioGroup ): Boolean;
 procedure p_initialisationSommaire ( const as_SommaireEnCours      : String       );
 procedure p_initialisationBoutons ( const aF_FormParent           : {$IFDEF TNT}TTntForm{$ELSE}TForm{$ENDIF}        ;
                                     const aMen_MenuLanguage       : TMenuItem       ;
@@ -200,6 +201,7 @@ uses SysUtils, Dialogs, fonctions_xml,
      FileUtil,
 {$ENDIF}
      fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
+     fonctions_proprietes,
      Variants, fonctions_Objets_Dynamiques, fonctions_dbcomponents, strutils,
      unite_variables, u_languagevars, Imaging, fonctions_languages;
 
@@ -1597,6 +1599,39 @@ Begin
       end;
 end;
 
+
+
+// function fb_setChoiceProperties
+// After having read child nodes from component node setting the values of choice node
+// anod_FieldProperty : Component Node
+// argr_Control : Choice component
+function fb_setChoiceProperties ( const anod_FieldProperty : TALXMLNode ; const argr_Control : TCustomRadioGroup ): Boolean;
+var li_i : LongInt ;
+    lnod_ChoiceProperty : TALXMLNode ;
+    lstl_Values : TStrings;
+Begin
+  Result := False;
+  if  ( anod_FieldProperty.NodeName = CST_LEON_CHOICE_OPTIONS )
+  and   anod_FieldProperty.HasChildNodes  then
+    for li_i := 0 to anod_FieldProperty.ChildNodes.Count -1 do
+      Begin
+        lnod_ChoiceProperty := anod_FieldProperty.ChildNodes [ li_i ];
+        // optional values
+        lstl_Values := fobj_getComponentObjectProperty(argr_Control,CST_PROPERTY_VALUES) as TStrings;
+        if lnod_ChoiceProperty.NodeName = CST_LEON_CHOICE_OPTION then
+          Begin
+            argr_Control.Items .Add ( fs_getLabelCaption ( lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_NAME ]));
+            if  lnod_ChoiceProperty.HasAttribute(CST_LEON_OPTION_VALUE)
+            and Assigned(lstl_Values) Then
+              lstl_Values.Add ( lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_VALUE ]);
+            if  lnod_ChoiceProperty.HasAttribute(CST_LEON_OPTION_DEFAULT)
+            and (lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_DEFAULT ] = CST_LEON_BOOL_TRUE ) Then
+              argr_Control.ItemIndex:=argr_Control.Items.Count-1;
+            Result := True;
+            Continue;
+          End;
+      End;
+End;
 
 initialization
   GS_SUBDIR_IMAGES_SOFT := DirectorySeparator+'images'+DirectorySeparator;

@@ -552,7 +552,7 @@ Begin
           Then ATemp1:=Name
           Else ATemp1:=AFile;
          if  ( ATemp1 > '' )
-         and ( ACollection.indexOf(ATemp1) = -1 ) Then
+         and ( ACollection.TableByName(ATemp1) = nil ) Then
            p_CreateComponents( ACollection, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
        end;
     FreeAndNil(gxdo_RootXML);
@@ -574,6 +574,7 @@ Begin
   Else
    if Assigned(ge_ExecuteSQLScript)
     Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
+  MyShowMessage('Database created. You should restart.');
 End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );

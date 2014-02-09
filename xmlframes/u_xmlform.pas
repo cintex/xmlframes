@@ -102,8 +102,6 @@ type
     function ffwc_getRelationComponent( const afws_source : TFWSource ; const awin_Parent : TWinControl ;
                                         const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn
                                                 ) : TWinControl; virtual;
-    function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
-      const argr_Control : TDBRadioGroup): Boolean; virtual;
     function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
                                                      const awin_parent, awin_last : TWinControl;
                                                      var  ai_FieldCounter : Longint ;
@@ -714,31 +712,6 @@ Begin
 end;
 
 
-// function fb_setChoiceProperties
-// After having read child nodes from component node setting the values of choice node
-// anod_FieldProperty : Component Node
-// argr_Control : Choice component
-function TF_XMLForm.fb_setChoiceProperties ( const anod_FieldProperty : TALXMLNode ; const argr_Control : TDBRadioGroup ): Boolean;
-var li_i : LongInt ;
-    lnod_ChoiceProperty : TALXMLNode ;
-Begin
-  Result := False;
-  if  ( anod_FieldProperty.NodeName = CST_LEON_CHOICE_OPTIONS )
-  and   anod_FieldProperty.HasChildNodes  then
-    for li_i := 0 to anod_FieldProperty.ChildNodes.Count -1 do
-      Begin
-        lnod_ChoiceProperty := anod_FieldProperty.ChildNodes [ li_i ];
-        if lnod_ChoiceProperty.NodeName = CST_LEON_CHOICE_OPTION then
-          Begin
-            argr_Control.Items .Add ( fs_getLabelCaption ( lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_NAME ]));
-            argr_Control.Values.Add ( lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_VALUE ]);
-            Result := True;
-            Continue;
-          End;
-      End;
-End;
-
-
 // Function flab_setFieldComponentProperties
 // creating the label component and setting the field component from child nodes
 // anod_Field : component node
@@ -764,10 +737,12 @@ Begin
       Begin
         ldo_Temp := 0 ;
         lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
-        if awin_Control is TDBRadioGroup then
+        if awin_Control is TCustomRadioGroup then
           Begin
-            fb_setChoiceProperties ( lnod_FieldProperties, awin_Control as TDBRadioGroup );
+            fb_setChoiceProperties ( lnod_FieldProperties, awin_Control as TCustomRadioGroup );
+            Continue;
           End;
+
         if lnod_FieldProperties.NodeName = CST_LEON_NAME then
           Begin
             if ( awin_Control is TCustomRadioGroup ) Then
