@@ -102,8 +102,6 @@ type
     function ffwc_getRelationComponent( const afws_source : TFWSource ; const awin_Parent : TWinControl ;
                                         const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn
                                                 ) : TWinControl; virtual;
-    procedure p_setFieldComponentTop(const awin_Control: TWinControl;
-      var ab_Column: Boolean);
     function fb_setChoiceProperties(const anod_FieldProperty: TALXMLNode;
       const argr_Control : TDBRadioGroup): Boolean; virtual;
     function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
@@ -997,9 +995,12 @@ var lnod_FieldProperties : TALXMLNode ;
                                                              ab_column, afws_Source, False );
               end;
           end;
-      p_setFieldComponentTop ( Result, ab_Column );
-      p_setComponentLeft  ( Result, ab_Column );
-      p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
+      // set top of groupbox
+      p_setFieldComponentTop ( Result, awin_last, ab_Column );
+      //set left and width
+      p_setComponentLeftWidth  ( Result, ab_Column );
+      with lwin_last do
+       Result.ClientHeight := Top +(Height + CST_CONTROLS_INTERLEAVING)*2; // do not forget groupbox caption
 
     end;
 
@@ -1011,7 +1012,6 @@ var lnod_FieldProperties : TALXMLNode ;
     Begin
       Result := False;
       llab_Label:=nil;
-      lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
       if //( anod_Field.NodeName = CST_LEON_ARRAY ) // to do
        ( anod_Field.NodeName = CST_LEON_STRUCT )
        Then
@@ -1021,6 +1021,8 @@ var lnod_FieldProperties : TALXMLNode ;
           Result := True;
           Exit;
         end;
+      // adding not local field
+      lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
       if not fb_createFieldID ( True, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter )
        Then
         Begin
@@ -1086,7 +1088,9 @@ var lnod_FieldProperties : TALXMLNode ;
       p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
 
       // placing top of control
-      p_setFieldComponentTop ( awin_Control, ab_Column );
+      if awin_parent is TGroupBox // can be a structured field in another table
+       Then p_setFieldComponentTop ( awin_Control, awin_last, ab_Column )
+       Else p_setFieldComponentTop ( awin_Control, gi_LastFormColumnHeight,gi_LastFormFieldsHeight-gi_LastFormColumnHeight, ab_Column );
 
       // optional data link
       p_setFieldComponentData ( awin_Control, afws_Source, lffd_ColumnFieldDef, lb_IsLocal );
@@ -1095,10 +1099,9 @@ var lnod_FieldProperties : TALXMLNode ;
       llab_Label := flab_setFieldComponentProperties ( anod_Field, awin_Control, awin_Parent, afws_Source.Index, ab_Column, lffd_ColumnFieldDef );
 
       // placing left of control
-      if assigned ( llab_Label ) Then
-        p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
-       Else
-        p_setComponentLeft  ( awin_Control, ab_Column );
+      if assigned ( llab_Label )
+       Then p_setLabelComponent ( awin_Control, llab_Label, ab_Column )
+       Else p_setComponentLeftWidth  ( awin_Control, ab_Column );
       if lb_IsLocal Then
        Begin
          // setting name of no data control sets text property
@@ -1135,23 +1138,19 @@ begin
 
         // setting width of control amd parent
         p_SetControlAndParentWidth ( Result, awin_parent );
-        if ( awin_Parent is TGroupBox )
-         Then
-           Begin
-             Result.Top:=CST_XML_FIELDS_INTERLEAVING;
-             if Assigned(llab_Label) Then
-               llab_Label.Top:=CST_XML_FIELDS_INTERLEAVING;
-           end
-          Else
+        // setting parent widths
+        if not ( awin_Parent is TGroupBox ) Then
           Begin
             // next ab_column
             ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
+            // setting form scroll width
             if FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
               Width := FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width;
             gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
             if gi_LastFormFieldsHeight < Result.Top + Result.Height then
               Begin
                 gi_LastFormFieldsHeight := Result.Top + Result.Height ;
+                // setting form scroll height
                 if FMainPanel.Top + FActionPanel.Height + Result.Top + Result.Height > Height then
                   Height := FMainPanel.Top + Result.Top + FActionPanel.Height + Result.Height;
 
@@ -1185,27 +1184,6 @@ begin
                         TOnExecuteNode(p_OncolumnNameNode ));
 end;
 
-
-
-//procedure p_setFieldComponent
-// after having fully read the field nodes last setting of field component
-// awin_Control : Component to set
-// afw_Source : Form Column
-// afw_columnField : Field Column
-// ab_IsLocal : Not linked to data
-// ab_Column : Second editing column
-procedure TF_XMLForm.p_setFieldComponentTop  ( const awin_Control : TWinControl ; var ab_Column : Boolean );
-begin
-  if ab_Column and ( awin_Control.Width < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH )  Then
-   // Intervalle entre les champs
-    awin_Control.Top := gi_LastFormColumnHeight + CST_XML_FIELDS_INTERLEAVING
-   Else
-    Begin
-     awin_Control.Top := gi_LastFormFieldsHeight + CST_XML_FIELDS_INTERLEAVING ;
-     ab_Column:=False;
-    end;
-
-end;
 
 
 // overrided procedure BeforeCreateFrameWork

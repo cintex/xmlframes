@@ -36,7 +36,7 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
       CST_GROUPVIEW_WIDTH               = 200;
       CST_GROUPVIEW_INOUT_WIDTH         = 70;
       CST_GROUPVIEW_BUTTONS_WIDTH       = 80;
-      CST_XML_FIELDS_INTERLEAVING       = 4;
+      CST_CONTROLS_INTERLEAVING       = 4;
       CST_XML_FIELDS_CAPTION_SPACE      = 150;
       CST_XML_SEGUND_COLUMN_MIN_POSWIDTH= 320;
       CST_XML_DETAIL_MINHEIGHT          = 560;
@@ -107,7 +107,7 @@ function fpan_CreatePanel      ( const awin_Parent : TWinControl ; const as_Name
 function fscb_CreateScrollBox ( const awin_Parent : TWinControl ;  const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TScrollBox;
 function fdgv_CreateGroupView ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const aal_Align : TAlign ):TDBGroupView;
 procedure p_SetControlAndParentWidth ( const awin_control, awin_parent : TControl );
-procedure p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
+procedure p_setComponentLeftWidth  ( const awin_Control : TControl ; const ab_Column : Boolean );
 procedure p_setFieldComponentData ( const awin_Control : TWinControl ; const afw_Source : TFWSource ; const afw_columnField : TFWFieldColumn ; const ab_IsLocal : Boolean );
 procedure p_setLabelComponent (const awin_Control : TWinControl ; const alab_Label : TFWLabel; const ab_Column : Boolean);
 function fdbn_CreateNavigation ( const awin_Parent : TWinControl ; const as_Name : String; const acom_Owner : TComponent ; const ab_Edit : Boolean ; const aal_Align : TAlign ):TExtDBNavigator;
@@ -123,6 +123,8 @@ function fscb_CreateTabSheet(
   var apc_PageControl: TPageControl; const awin_ParentPageControl,
   awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
     ): TScrollBox;
+procedure p_setFieldComponentTop  ( const awin_Control : TWinControl; const ai_lastTop, ai_lastHeight : Integer ; var ab_Column : Boolean ); overload;
+procedure p_setFieldComponentTop  ( const awin_Control, awin_last : TWinControl; var ab_Column : Boolean ); overload;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ;
                                       const awin_Parent, awin_Control : TWinControl ;
                                       const afcf_ColumnField : TFWFieldColumn;
@@ -442,7 +444,7 @@ begin
         // Creating and setting buttons
         p_CreateAndSetButtonsActions;
         lpan_PanelActions := fpan_CreatePanel ( lpan_GroupViewRight, CST_COMPONENTS_PANEL_BEGIN + CST_COMPONENTS_MIDDLE + Table, acom_Owner, alLeft );
-        lpan_Panel.width := CST_GROUPVIEW_INOUT_WIDTH + CST_XML_FIELDS_INTERLEAVING * 2;
+        lpan_Panel.width := CST_GROUPVIEW_INOUT_WIDTH + CST_CONTROLS_INTERLEAVING * 2;
         ldgv_GroupViewRight := fdgv_CreateGroupView ( lpan_GroupViewRight, CST_COMPONENTS_GROUPVIEW_BEGIN + Table + CST_COMPONENTS_RIGHT, acom_Owner, alClient );
         p_CreateAndSetButtonsMoving;
         p_setGroupmentfields ( ldgv_GroupViewRight );
@@ -626,7 +628,7 @@ Begin
 //  Result.BevelOuter := bvNone ;
   Result.Name := as_Name;
   Result.Caption := '';
-  Result.Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH-CST_XML_FIELDS_INTERLEAVING * 2;
+  Result.Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH-CST_CONTROLS_INTERLEAVING * 2;
 
 End;
 
@@ -794,15 +796,15 @@ begin
   apan_PanelOrigin.Parent := ltbs_Tabsheet;
 End;
 
-procedure p_setComponentLeft  ( const awin_Control : TControl ; const ab_Column : Boolean );
+procedure p_setComponentLeftWidth  ( const awin_Control : TControl ; const ab_Column : Boolean );
 begin
   with awin_Control do
     Begin
       if ab_Column then
-        Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_XML_FIELDS_INTERLEAVING
+        Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_CONTROLS_INTERLEAVING
        Else
-        Left := CST_XML_FIELDS_INTERLEAVING ;
-      Width := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH - Left -CST_XML_FIELDS_INTERLEAVING*2;
+        Left := CST_CONTROLS_INTERLEAVING ;
+      Width := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH - Left -CST_CONTROLS_INTERLEAVING*2;
     end;
 end;
 
@@ -814,9 +816,9 @@ Begin
     Begin
       if Width > CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2  Then
         Width:=CST_XML_SEGUND_COLUMN_MIN_POSWIDTH * 2;
-      if Left + Width + CST_XML_FIELDS_INTERLEAVING > awin_Parent.ClientWidth Then
-        awin_Parent.ClientWidth := Left + Width + CST_XML_FIELDS_INTERLEAVING;
-      awin_Parent.ClientHeight := Top + Height + CST_XML_FIELDS_INTERLEAVING;
+      if Left + Width + CST_CONTROLS_INTERLEAVING > awin_Parent.ClientWidth Then
+        awin_Parent.ClientWidth := Left + Width + CST_CONTROLS_INTERLEAVING;
+      awin_Parent.ClientHeight := Top + Height + CST_CONTROLS_INTERLEAVING;
     end;
 end;
 
@@ -835,8 +837,8 @@ begin
       Top  := awin_Control.Top + ( awin_Control.Height - Height ) div 2 ;
       Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
       if ab_Column
-       then Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_XML_FIELDS_INTERLEAVING
-       else Left := CST_XML_FIELDS_INTERLEAVING;
+       then Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_CONTROLS_INTERLEAVING
+       else Left := CST_CONTROLS_INTERLEAVING;
     End;
 end;
 
@@ -865,7 +867,28 @@ begin
 
 end;
 
+//procedure p_setFieldComponenttop
+// Set control top
+// awin_Control : Component to set
+// ab_Column : Second editing column
+procedure p_setFieldComponentTop  ( const awin_Control : TWinControl; const ai_lastTop, ai_lastHeight : Integer ; var ab_Column : Boolean );
+begin
+  if ab_Column and ( awin_Control.Width < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH )  Then
+   // Intervalle entre les champs
+    awin_Control.Top := ai_lastTop + CST_CONTROLS_INTERLEAVING
+   Else
+    Begin
+     awin_Control.Top := ai_lastTop + ai_lastHeight  + CST_CONTROLS_INTERLEAVING ;
+     ab_Column:=False;
+    end;
 
+end;
+procedure p_setFieldComponentTop  ( const awin_Control, awin_last : TWinControl; var ab_Column : Boolean );
+begin
+  if awin_last = nil
+    Then p_setFieldComponentTop ( awin_Control, 0,0, ab_Column )
+    Else p_setFieldComponentTop ( awin_Control, awin_last.Top,awin_last.Height, ab_Column )
+end;
 {$IFDEF VERSIONS}
 initialization
   p_ConcatVersion ( gVer_fonctions_autocomponents );
