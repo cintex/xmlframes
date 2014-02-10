@@ -150,6 +150,7 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
+     fonctions_dbcomponents,
      fonctions_dialogs,
      Math,
      fonctions_createsql,
@@ -895,8 +896,7 @@ function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: T
                                                              var  ai_FieldCounter : Longint ;
                                                              var ab_Column : Boolean ; const afws_Source : TFWSource ;
                                                              const ab_SeparateIfTooMuch : Boolean = True ):TWinControl;
-var lnod_FieldProperties : TALXMLNode ;
-    llab_Label  : TFWLabel;
+var llab_Label  : TFWLabel;
     lb_IsLocal  : Boolean;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lnod_OriginalNode : TALXmlNode;
@@ -911,7 +911,7 @@ var lnod_FieldProperties : TALXMLNode ;
         ls_NodeId : String;
         lwin_last : TWinControl;
         lfwt_Source2 : TFWTable;
-        lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
+        lnod_FieldsNode : TALXmlNode;
     begin
       lfwt_Source2:=nil;
       lnod_OriginalNode := fnod_GetNodeFromTemplate(anod_Field);
@@ -987,6 +987,14 @@ var lnod_FieldProperties : TALXMLNode ;
     Begin
       Result := False;
       llab_Label:=nil;
+      // adding not local field
+      lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
+      if not fb_createFieldID ( True, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter )
+       Then
+        Begin
+          afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
+          Exit;
+        end;
       if //( anod_Field.NodeName = CST_LEON_ARRAY ) // to do
        ( anod_Field.NodeName = CST_LEON_STRUCT )
        Then
@@ -994,14 +1002,6 @@ var lnod_FieldProperties : TALXMLNode ;
           p_CreateArrayStructComponents;
           // Quitting because having created component
           Result := True;
-          Exit;
-        end;
-      // adding not local field
-      lffd_ColumnFieldDef := afws_Source.FieldsDefs.Add ;
-      if not fb_createFieldID ( True, anod_Field, lffd_ColumnFieldDef, ai_FieldCounter )
-       Then
-        Begin
-          afws_Source.FieldsDefs.Delete(lffd_ColumnFieldDef.Index);
           Exit;
         end;
       fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,True,Self);
@@ -1052,6 +1052,7 @@ var lnod_FieldProperties : TALXMLNode ;
                {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF} := FieldsDisplay.toString(';');
                {$IFNDEF RXJVCOMBO}KeyField {$ELSE}LookupField  {$ENDIF} := FieldsFK [ 0 ].FieldName;
                try
+//                 MyShowMessage(fs_getSQLQuery(Datasource.DataSet)+#10+FieldsDisplay.toString+#10+FieldsFK.toString);
                  Datasource.DataSet.Open;
                Except
                end;

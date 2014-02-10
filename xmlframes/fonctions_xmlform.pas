@@ -241,8 +241,8 @@ Begin
   for li_k := 0 to anode.ChildNodes.Count - 1 do
   with anode.ChildNodes [ li_k ] do
    if  ( NodeName = CST_LEON_FIELD_F_MARKS )
-   and   HasAttribute(CST_LEON_LOCAL )
-   and ( Attributes[CST_LEON_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
+   and   HasAttribute(CST_LEON_FIELD_LOCAL )
+   and ( Attributes[CST_LEON_FIELD_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
     Begin
      Result := True;
      Exit;

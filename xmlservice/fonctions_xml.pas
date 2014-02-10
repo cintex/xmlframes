@@ -102,7 +102,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_DRIVER_SQLLITE  = 'sqllite' ;
       CST_LEON_DRIVER_ORACLE   = 'oracle-9i' ;
 
-      CST_LEON_LOCAL    = 'local' ;
+      CST_LEON_FIELD_LOCAL    = 'local' ;
 
       CST_LEON_FIELDS = 'FIELDS' ;
       CST_LEON_FIELD_id = 'id' ;
@@ -478,6 +478,7 @@ begin
     try
       if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
         Begin
+          lnod_NodeCrossLink := nil;
           lb_Column := False;
           for li_i := 0 to Result.ChildNodes.Count -1 do
             Begin
@@ -504,7 +505,7 @@ begin
                               lfwt_Source2.TableKey:= as_Table;
                               lfwt_Source2.IsMain := True
                              end
-                             // found : No need to recreate
+                             // found : recreate uneeded
                             Else lfwt_Source2 := nil;
                           End;
                          lfwt_Source := TablesDest.Add;
@@ -531,7 +532,7 @@ begin
                             Begin
                               lnod_id := lnod_ClassProperties.ChildNodes [ li_k ];
                               if ab_FullTable and Assigned(lfwt_Source2) Then
-                               Begin
+                               Begin  // create every tables if demanded
                                 lb_fieldfound := True;
                                 p_OnCreateFieldProperties(ADBSources,lfwt_Source2,lnod_id,lb_fieldfound,lb_Column,li_FullFields);
                                End;
@@ -602,7 +603,7 @@ begin
                       lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];
                       if lnod_ClassNode.NodeName = CST_LEON_CLASS_C_MARKS Then
                        if not ab_ContinueIfLocal Then
-                         if lnod_ClassNode.HasAttribute(CST_LEON_LOCAL) and (lnod_ClassNode.Attributes[CST_LEON_LOCAL]=CST_LEON_BOOL_TRUE)
+                         if lnod_ClassNode.HasAttribute(CST_LEON_FIELD_LOCAL) and (lnod_ClassNode.Attributes[CST_LEON_FIELD_LOCAL]=CST_LEON_BOOL_TRUE)
                           Then
                            Exit;
 
@@ -758,11 +759,20 @@ Begin
       Begin
         lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
         if fb_getNodesField(lnod_FieldProperties) Then
-         lnod_FieldPropertiesTemp:=lnod_FieldProperties;
+         Begin
+          lnod_FieldPropertiesTemp:=lnod_FieldProperties;
+          if Assigned(aff_FieldNodes.FieldByName(lnod_FieldPropertiesTemp.Attributes[CST_LEON_VALUE])) Then
+           Exit;
+         end;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_MARKS then
           Begin
+            if (lnod_FieldPropertiesTemp=nil)
+            and Assigned(aff_FieldNodes.FieldByName(anod_Field.Attributes[CST_LEON_ID])) Then
+              Exit;
             if lnod_FieldProperties.HasAttribute ( as_MarkSearched )
-            and ( lnod_FieldProperties.Attributes [ as_MarkSearched ] <> CST_LEON_BOOL_FALSE )  then
+            and ( lnod_FieldProperties.Attributes [ as_MarkSearched ] <> CST_LEON_BOOL_FALSE )
+            and (  not lnod_FieldProperties.HasAttribute ( CST_LEON_FIELD_LOCAL )
+                  or ( lnod_FieldProperties.Attributes [ CST_LEON_FIELD_LOCAL ] = CST_LEON_BOOL_FALSE )) then
              Begin
                lff_Field := aff_FieldNodes.Add;
                if Assigned(lnod_FieldPropertiesTemp) Then
@@ -969,6 +979,7 @@ function fb_getOptionalStructTable ( const afwt_Sources : TFWTables;
 var li_k : LongInt ;
     lb_column : Boolean;
     lnod_FieldsNode,lnod_FieldsChildNode : TALXmlNode;
+    LField : TFWMiniFieldColumn;
     ls_Table, ls_base : String ;
 Begin
   Result:=False;
@@ -995,7 +1006,13 @@ Begin
     End
     Else
      Begin
-       affd_ColumnFieldDef.Assign(afwt_Source2.FieldsDefs.FieldByName(afwt_Source2.GetKey.Items [0].FieldName));
+       if afwt_Source2.GetKey.Count> 0 Then;
+        Begin
+         LField := afwt_Source2.GetKey.Items [0];
+         if afwt_Source2.FieldsDefs.FieldByName( LField.FieldName ) = nil
+          Then affd_ColumnFieldDef.Assign(LField)
+          Else affd_ColumnFieldDef.Assign(afwt_Source2.FieldsDefs.FieldByName(LField.FieldName));
+        end;
        Result := True;
        Exit;
      end;
@@ -1026,8 +1043,8 @@ begin
     if NodeName = CST_LEON_FIELD_F_MARKS then
       Begin
         Result := True;
-        if HasAttribute ( CST_LEON_LOCAL )
-        and ( Attributes [ CST_LEON_LOCAL ] <> CST_LEON_BOOL_FALSE )  then
+        if HasAttribute ( CST_LEON_FIELD_LOCAL )
+        and ( Attributes [ CST_LEON_FIELD_LOCAL ] <> CST_LEON_BOOL_FALSE )  then
           Begin
            ColSelect:=False;
            ab_isLocal:=True;

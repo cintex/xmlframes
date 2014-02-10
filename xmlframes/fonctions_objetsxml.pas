@@ -1574,8 +1574,8 @@ Begin
         for li_k := 0 to lnode.ChildNodes.Count - 1 do
           with lnode.ChildNodes [ li_k ] do
            if  ( NodeName = CST_LEON_FIELD_F_MARKS )
-           and   HasAttribute(CST_LEON_LOCAL )
-           and ( Attributes[CST_LEON_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
+           and   HasAttribute(CST_LEON_FIELD_LOCAL )
+           and ( Attributes[CST_LEON_FIELD_LOCAL] <> CST_LEON_BOOL_FALSE ) Then
              Exit;
         if as_Fields = '*'
          Then as_Fields := fs_GetIdAttribute ( lnode )
