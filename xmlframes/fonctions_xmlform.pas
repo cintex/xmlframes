@@ -73,8 +73,11 @@ procedure p_ExecuteFonction ( aobj_Sender                  : TObject            
 
 implementation
 
-uses U_FormMainIni, SysUtils, TypInfo, Dialogs, fonctions_xml,
-     fonctions_images , fonctions_init,
+uses U_FormMainIni, SysUtils, TypInfo,
+     fonctions_Dialogs,
+     fonctions_xml,
+     fonctions_images ,
+     fonctions_init,
      Variants, fonctions_proprietes,
      fonctions_Objets_Dynamiques,
      fonctions_dbcomponents,
@@ -111,7 +114,7 @@ Begin
            Exit;
           end
          Else
-          ShowMessage(Gs_NotImplemented);
+          MyShowMessage(Gs_NotImplemented);
        end
       Else
        p_CreeAppliFromNode ( '' );

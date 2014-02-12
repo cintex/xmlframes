@@ -360,7 +360,7 @@ begin
   Self.HelpContext := CST_NUM_AIDE;
 
   // Si le fichier d'aide est introuvable
-  if not FileExistsUTF8(Application.HelpFile) then ShowMessage('Le fichier d''aide est introuvable !');
+  if not FileExistsUTF8(Application.HelpFile) then MyShowMessage('Le fichier d''aide est introuvable !');
   {$ENDIF}
 end;
 

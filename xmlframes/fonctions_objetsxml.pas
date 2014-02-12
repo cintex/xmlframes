@@ -705,7 +705,7 @@ Begin
         for li_j := 0 to lNode.ChildNodes.Count - 1 do
           Begin
              lNodeChild := lNode.ChildNodes [ li_j ];
-      //      ShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
+      //      MyShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
             // Les sous-menus et menus doivent avoir des noms
             if  (  not ( lNodeChild.HasAttribute ( CST_LEON_ID )) // Ou alors pas de sous menu on crée la fonction
                and not ( lNodeChild.HasAttribute ( CST_LEON_ACTION_IDREF ))) // Ou alors pas de sous menu on crée la fonction
@@ -952,7 +952,7 @@ Begin
         for li_j := 0 to lNode.ChildNodes.Count  - 1 do
           Begin
            lNodeChild := lnode.ChildNodes [ li_j ];
-      //      ShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
+      //      MyShowMessage (  axdo_FichierXML.ChildNodes[li_i].LocalName + ' local '+ axdo_FichierXML.ChildNodes[li_i].NodeName + ' local '+ axdo_FichierXML.ChildNodes[li_i].Prefix + ' local '+ axdo_FichierXML.ChildNodes[li_i].Text + ' local '+ axdo_FichierXML.ChildNodes[li_i].XML );
             // Les sous-menus et menus doivent avoir des noms
             if  (  not ( lNodeChild.HasAttribute ( CST_LEON_ID )) // Ou alors pas de sous menu on crée la fonction
                and not ( lNodeChild.HasAttribute ( CST_LEON_ACTION_IDREF ))) // Ou alors pas de sous menu on crée la fonction
@@ -1176,7 +1176,7 @@ Begin
    Then
     Begin
     // PAs de champ trouvé : erreur
-//      ShowMessage ( 'Le champ ' + CST_SOMM_Niveau + ' est Null !' );
+//      MyShowMessage ( 'Le champ ' + CST_SOMM_Niveau + ' est Null !' );
       Exit ;
     End ;
 
@@ -1184,7 +1184,7 @@ Begin
   lb_UtiliseSousMenu := axdo_FichierXML.Fields [ 0 ].AsBoolean ;
 // Requête sommaire
   axdo_FichierXML.Close ;
-//  Showmessage ( axdo_FichierXML.SQL.Text );
+//  MyShowMessage ( axdo_FichierXML.SQL.Text );
   try
     axdo_FichierXML.Open  ;
     // Connecté dans la form

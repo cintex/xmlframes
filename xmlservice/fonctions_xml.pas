@@ -258,11 +258,11 @@ procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass,
                                const ae_onClassNameNode : TOnExecuteNode;
                                const ab_CreateDS : Boolean = True ;
                                const ab_ContinueIfLocal : Boolean = False);
-function fdoc_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_field : TFWFieldColumn ;
+function fb_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_field : TFWFieldColumn ;
                                     const as_FunctionClep :String;
                                     const as_Table : String; const arel_Relation : TFWRelation;
                                     const ab_createDS, ab_FullTable : Boolean;
-                                    const acom_Owner : TComponent ): TALXMLDocument ;
+                                    const acom_Owner : TComponent ): Boolean ;
 function fb_FieldTypeProperties ( const afws_Source : TFWTable ;
                                   const anod_Field,anod_FieldProperties : TALXMLNode;
                                   const af_FieldDefs : TFWFieldColumn; var ab_islarge : Boolean;
@@ -276,7 +276,7 @@ uses fonctions_init,
 {$ELSE}
      Variants, StrUtils,
 {$ENDIF}
-     Dialogs,
+     fonctions_Dialogs,
      ExtCtrls,
      u_multidata,
      u_multidonnees,
@@ -326,7 +326,7 @@ begin
     Except
       On E: Exception do
         Begin
-          ShowMessage ( 'Erreur opening XML Class File : ' + E.Message );
+          MyShowMessage ( 'Erreur opening XML Class File : ' + E.Message );
         End;
     End ;
 
@@ -456,11 +456,11 @@ end;
 // aanod_idRelation   : List to add link
 // anod_NodeCrossLink : linked node in other file
 ////////////////////////////////////////////////////////////////////////////////
-function fdoc_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_field : TFWFieldColumn ;
+function fb_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_field : TFWFieldColumn ;
                                     const as_FunctionClep :String;
                                     const as_Table : String; const arel_Relation : TFWRelation;
                                     const ab_createDS, ab_FullTable : Boolean;
-                                    const acom_Owner : TComponent ): TALXMLDocument ;
+                                    const acom_Owner : TComponent ): Boolean ;
 var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties, lnod_id : TALXMLNode ;
     lnod_Node, lnod_NodeCrossLink : TALXMLNode;
@@ -471,87 +471,94 @@ var li_i , li_j, li_k: Integer ;
     lb_Column,
     lb_fieldfound : Boolean;
     lfwt_Source,lfwt_Source2 : TFWTable;
+    laxd_Document :TALXMLDocument;
 begin
-  Result := TALXMLDocument.Create ( Application );
-  ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
-  If ( FileExistsUTF8 ( ls_ProjectFile )) Then
-    try
-      if fb_LoadXMLFile ( Result, ls_ProjectFile ) Then
-        Begin
-          lnod_NodeCrossLink := nil;
-          lb_Column := False;
-          for li_i := 0 to Result.ChildNodes.Count -1 do
-            Begin
-              lnod_Node := Result.ChildNodes [ li_i ];
-              if not assigned ( lnod_NodeCrossLink )
-              and fb_GetCrossLinkFunction(as_FunctionClep,lnod_Node ) Then
-                lnod_NodeCrossLink := lnod_Node;
-              if lnod_Node.NodeName = CST_LEON_CLASS then
-               with arel_Relation do
-                Begin
-                  for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
-                    Begin
-                      lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
-                      if lnod_ClassProperties.NodeName = CST_LEON_CLASS_C_BIND Then
-                        Begin
-                         if ab_FullTable Then
+  laxd_Document := TALXMLDocument.Create ( Application );
+  try
+    ls_ProjectFile := fs_getProjectDir ( ) + as_Table + CST_LEON_File_Extension;
+    Result := FileExistsUTF8 ( ls_ProjectFile );
+    if Result Then
+      try
+        if fb_LoadXMLFile ( laxd_Document, ls_ProjectFile ) Then
+         with laxd_Document do
+          Begin
+            lnod_NodeCrossLink := nil;
+            lb_Column := False;
+            for li_i := 0 to ChildNodes.Count -1 do
+              Begin
+                lnod_Node := ChildNodes [ li_i ];
+                if not assigned ( lnod_NodeCrossLink )
+                and fb_GetCrossLinkFunction(as_FunctionClep,lnod_Node ) Then
+                  lnod_NodeCrossLink := lnod_Node;
+                if lnod_Node.NodeName = CST_LEON_CLASS then
+                 with arel_Relation do
+                  Begin
+                    for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
+                      Begin
+                        lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
+                        if lnod_ClassProperties.NodeName = CST_LEON_CLASS_C_BIND Then
                           Begin
-                           lfwt_Source2 := ADBSources.TableByName(lnod_ClassProperties.Attributes [ CST_LEON_VALUE ]);
-                           if lfwt_Source2 = nil
-                            Then
-                             Begin // not found : create every tables
-                              lfwt_Source2 := ADBSources.Add;
-                              lfwt_Source2.Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
-                              lfwt_Source2.TableKey:= as_Table;
-                              lfwt_Source2.IsMain := True
-                             end
-                             // found : recreate uneeded
-                            Else lfwt_Source2 := nil;
-                          End;
-                         lfwt_Source := TablesDest.Add;
-                         with lfwt_Source do
-                          Begin
-                            Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
-                            TableKey:= as_Table;
-                            if ab_createDS Then
-                             Begin
-                              lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
-                              with lds_Connection do
-                                Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
-                                                     IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
-                             end;
-                          end;
-                        end;
-                      if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
-                        Begin
-                          lb_Column:=False;
-                          lb_fieldfound:=False;
-                          li_CountFields := 0 ;
-                          li_FullFields:=0;
-                          for li_k := 0 to lnod_ClassProperties.ChildNodes.Count -1 do
+                           if ab_FullTable Then
                             Begin
-                              lnod_id := lnod_ClassProperties.ChildNodes [ li_k ];
-                              if ab_FullTable and Assigned(lfwt_Source2) Then
-                               Begin  // create every tables if demanded
-                                lb_fieldfound := True;
-                                p_OnCreateFieldProperties(ADBSources,lfwt_Source2,lnod_id,lb_fieldfound,lb_Column,li_FullFields);
-                               End;
-                              if fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_id, FieldsFK ) Then
-                                 fb_setFieldType(lfwt_Source, Aff_field, lnod_id, Aff_field.Index,False,ab_FullTable,nil, False );
-                              fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_main, FieldsDisplay );
-                              p_CountMarkFunction(lnod_id, CST_LEON_FIELD_optional, False, li_CountFields );
+                             lfwt_Source2 := ADBSources.TableByName(lnod_ClassProperties.Attributes [ CST_LEON_VALUE ]);
+                             if lfwt_Source2 = nil
+                              Then
+                               Begin // not found : create every tables
+                                lfwt_Source2 := ADBSources.Add;
+                                lfwt_Source2.Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                                lfwt_Source2.TableKey:= as_Table;
+                                lfwt_Source2.IsMain := True
+                               end
+                               // found : recreate uneeded
+                              Else lfwt_Source2 := nil;
                             End;
-                        End;
-                    End;
-                End;
-            End;
-        End;
-    Except
-      On E: Exception do
-        Begin
-          ShowMessage ( 'Erreur : ' + E.Message );
-        End;
-    End ;
+                           lfwt_Source := TablesDest.Add;
+                           with lfwt_Source do
+                            Begin
+                              Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                              TableKey:= as_Table;
+                              if ab_createDS Then
+                               Begin
+                                lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
+                                with lds_Connection do
+                                  Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
+                                                       IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
+                               end;
+                            end;
+                          end;
+                        if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
+                          Begin
+                            lb_Column:=False;
+                            lb_fieldfound:=False;
+                            li_CountFields := 0 ;
+                            li_FullFields:=0;
+                            for li_k := 0 to lnod_ClassProperties.ChildNodes.Count -1 do
+                              Begin
+                                lnod_id := lnod_ClassProperties.ChildNodes [ li_k ];
+                                if ab_FullTable and Assigned(lfwt_Source2) Then
+                                 Begin  // create every tables if demanded
+                                  lb_fieldfound := True;
+                                  p_OnCreateFieldProperties(ADBSources,lfwt_Source2,lnod_id,lb_fieldfound,lb_Column,li_FullFields);
+                                 End;
+                                if fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_id, FieldsFK ) Then
+                                   fb_setFieldType(lfwt_Source, Aff_field, lnod_id, Aff_field.Index,False,ab_FullTable,nil, False );
+                                fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_main, FieldsDisplay );
+                                p_CountMarkFunction(lnod_id, CST_LEON_FIELD_optional, False, li_CountFields );
+                              End;
+                          End;
+                      End;
+                  End;
+              End;
+          End;
+      Except
+        On E: Exception do
+          Begin
+            MyShowMessage ( 'Error : ' + E.Message );
+          End;
+      End;
+  finally
+    laxd_Document.Destroy;
+  end;
 end;
 
 // procedure p_CreateFormComponents
@@ -641,7 +648,7 @@ begin
     Except
       On E: Exception do
         Begin
-          ShowMessage ( 'Erreur : ' + E.Message );
+          MyShowMessage ( 'Erreur : ' + E.Message );
         End;
     End ;
 
@@ -790,7 +797,7 @@ function fb_FieldTypeRelation ( const afws_Source : TFWTable ;
                                 const anod_Field,anod_FieldProperties : TALXMLNode;
                                 const af_FieldDefs : TFWFieldColumn;
                                 const ab_createDS, ab_FullTable : Boolean; const acom_Owner : TComponent):Boolean;
-var ldoc_XMlRelation : TALXMLDocument;
+var lfr_Relation : TFWRelation;
     lnod_FieldProperties : TALXMLNode;
     li_i : Integer;
     ls_ClassLink : String;
@@ -802,6 +809,26 @@ Begin
       Result:=False;
       Exit;
      End;
+  lfr_Relation := nil;
+  if  anod_FieldProperties.NodeName = CST_LEON_RELATION_JOIN Then
+   Begin
+    for li_i := 0 to anod_FieldProperties.ChildNodes.Count-1 do
+      Begin
+        lnod_FieldProperties := anod_FieldProperties.ChildNodes [ li_i ];
+        if lnod_FieldProperties.NodeName = CST_LEON_CLASS_C_BIND Then
+         Begin
+           lfr_Relation := afws_Source.Relations.Add;
+           with lfr_Relation.TablesDest.Add do
+             Begin
+               Table:=fs_GetNodeAttribute( lnod_FieldProperties, CST_LEON_VALUE );
+               TableKey:=Table;
+             end;
+         end;
+        if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_BIND Then
+           lfr_Relation.FieldsFK.Add.FieldName:=fs_GetNodeAttribute( lnod_FieldProperties, CST_LEON_VALUE );
+      end;
+
+   end;
   if (  ( anod_FieldProperties.NodeName = CST_LEON_CLASSES )
      or ( anod_FieldProperties.NodeName = CST_LEON_CLASS ))
    Then
@@ -824,12 +851,9 @@ Begin
               Break;
             end;
          end;
-      ldoc_XMlRelation := fdoc_GetCrossLinkFunction( afws_Source.Collection as TFWTables, af_FieldDefs,'', ls_ClassLink, af_FieldDefs.Relation, ab_createDS, ab_FullTable, acom_Owner );
-      try
-
-      finally
-        ldoc_XMlRelation.Destroy;
-      end;
+      if lfr_Relation = nil Then
+       lfr_Relation := af_FieldDefs.Relation;
+      fb_GetCrossLinkFunction( afws_Source.Collection as TFWTables, af_FieldDefs,'', ls_ClassLink, lfr_Relation, ab_createDS, ab_FullTable, acom_Owner );
    End;
 end;
 
@@ -1252,7 +1276,7 @@ function fb_LoadXMLFile ( const axdo_FichierXML : TALXMLDocument; const as_FileX
     Begin
       if not FileExistsUTF8 ( as_FileXML ) Then
         Begin
-          ShowMessage ( 'File Not Found : ' + as_FileXML );
+          MyShowMessage ( 'File Not Found : ' + as_FileXML );
           Result := False;
           Exit;
         end;

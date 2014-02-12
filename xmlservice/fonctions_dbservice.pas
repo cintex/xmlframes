@@ -19,6 +19,7 @@ uses
   fonctions_version,
   {$ENDIF}
   SysUtils, ALXmlDoc,
+  Forms,
   u_multidata,
   fonctions_manbase,
   fonctions_system,
@@ -124,13 +125,13 @@ Begin
       Begin
         lNode := aNode.ChildNodes [ li_i ];
 //        if (  lNode.IsTextElement ) then
-//          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
+//          MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
         // connects before build
         if ( UpperCase (copy ( lNode.NodeName, 1, 8 )) = CST_LEON_ENTITY )
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
-//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
+//            MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
             Result := lNode.Attributes [ CST_LEON_DUMMY ];
             {$IFDEF WINDOWS}
             Result := fs_RemplaceChar ( Result, '/', '\' );
@@ -147,7 +148,7 @@ Begin
                aopn_OnProjectNode ( Result, lNode );
           End;
 //         else
-//          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
+//          MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
         Result := fs_BuildTreeFromXML ( Level + 1, lNode, aopn_OnProjectNode );
       End;
    lxdo_FichierXML.Free;
@@ -202,7 +203,7 @@ Begin
       Begin
         lNode := aNode.ChildNodes [ li_i ];
 //        if (  lNode.IsTextElement ) then
-//          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
+//          MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.NodeValue)
 //         else
         // connects before build
         if ( lNode.NodeName = CST_LEON_PROJECT ) Then
@@ -213,7 +214,7 @@ Begin
         if ( Uppercase (copy ( lNode.NodeName, 1, 8 )) = CST_LEON_ENTITY )
         and (  lNode.HasAttribute ( CST_LEON_DUMMY ) ) then
           Begin
-//            ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
+//            MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.Attributes [ 'DUMMY' ]);
             Result := lNode.Attributes [ CST_LEON_DUMMY ];
             {$IFDEF WINDOWS}
             Result := fs_RemplaceChar ( Result, '/', '\' );
@@ -235,7 +236,7 @@ Begin
               end;
           End;
 //         else
-//          ShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
+//          MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
         Result := fs_BuildFromXML ( Level + 1, lNode, AApplication );
       End;
    lxdo_FichierXML.Free;
@@ -321,7 +322,7 @@ Begin
           gs_ProjectFile := fs_RemplaceChar ( gs_ProjectFile, '/', '\' );
           {$ENDIF}
           gs_ProjectFile := fs_EraseNameSoft ( gs_NomApp, gs_ProjectFile );
-//          Showmessage ( fs_getLeonDir + gs_ProjectFile );
+//          MyShowMessage ( fs_getLeonDir + gs_ProjectFile );
 
 
         End;
@@ -392,11 +393,11 @@ Begin
       lParam3 := '' ;
       lPrefix := '' ;
 
-//          ShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
+//          MyShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
 
-//          Showmessage ( ano_Node.XML );
+//          MyShowMessage ( ano_Node.XML );
 //          if ano_Node.HasAttribute ( CST_LEON_TEMPLATE ) then
-//              ShowMessage ( ano_Node.XML );
+//              MyShowMessage ( ano_Node.XML );
 
       // On ajoute la fonction complémentaire
       if  ( ano_Node.HasChildNodes ) then
@@ -417,7 +418,7 @@ Begin
            Prefix := lPrefix;
 {                 if (  Name = '' ) then
              Begin
-               ShowMessage (  Gs_EmptyFunctionName +  Clep );
+               MyShowMessage (  Gs_EmptyFunctionName +  Clep );
              End;   }
            if ano_Node.Attributes [ CST_LEON_ACTION_TEMPLATE ] = CST_LEON_TEMPLATE_MULTIPAGETABLE then
              Template := atMultiPageTable ;
@@ -536,15 +537,17 @@ End;
 
 
 function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password, as_host : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ; const ads_connection : TDSSource = nil ):Boolean;
-var li_i : Integer;
-    ACollection : TFWTables;
+var li_i,li_j : Integer;
+    LTables : TFWTables;
+    LTable : TFWTable;
     ATemp1,
     ATemp2 : String;
 Begin
   Result := False;
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
-  ACollection := TFWTables.Create(TFWTable);
+  LTables := TFWTables.Create(TFWTable);
   try
+    // create table objects
     for li_i := 0 to high ( ga_Functions ) do
      with ga_Functions [li_i] do
        Begin
@@ -552,22 +555,58 @@ Begin
           Then ATemp1:=Name
           Else ATemp1:=AFile;
          if  ( ATemp1 > '' )
-         and ( ACollection.TableByName(ATemp1) = nil ) Then
-           p_CreateComponents( ACollection, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
+         and ( LTables.TableByName(ATemp1) = nil ) Then
+           p_CreateComponents( LTables, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
        end;
+    // verify if tables objects of relations have been created
+    for li_i := 0 to LTables.Count -1 do
+     Begin
+       LTable:=LTables [li_i];
+       with LTable do
+        for li_j := 0 to Relations.Count -1 do
+         with Relations [li_j] do
+          if TableLinked = -1 Then
+           Begin
+             if Table = ''
+              Then ATemp1:=TableKey
+              Else ATemp1:=Table;
+             if  ( ATemp1 > '' )
+             and assigned ( LTables.TableByName(ATemp1)) Then
+              with LTables.Add do
+               Begin
+                 Table:=TablesDest [ 0 ].Table;
+                 IsMain:=True;
+                 //MyShowMessage(FieldsFK.toString()+ ' ' +ATemp1);
+                 GetKey.Assign(FieldsFK); // get key form relation-ships
+                 with FieldsDefs.Add do
+                  Begin
+                    // linked table
+                   Assign(LTables.TableByName(ATemp1).FieldsDefs.FieldByName(LTables.TableByName(ATemp1).GetKey [ 0 ].FieldName));
+                   FieldName:=GetKey [ 0 ].FieldName;// get FieldName from relation
+                  end;
+                 with FieldsDefs.Add do
+                  Begin
+                     // owner table
+                    Assign(LTable.FieldsDefs.FieldByName(LTable.GetKey [ 0 ].FieldName));
+                    FieldName:=GetKey [ 1 ].FieldName; // get FieldName from relation;
+                  end;
+               end;
+
+           end;
+     end;
     FreeAndNil(gxdo_RootXML);
     Finalize(ga_Functions);
     ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
     ATemp2:=fs_BeginAlterCreate;
-    for li_i := 0 to ACollection.Count - 1 do
-     with ACollection [ li_i ] do
+    for li_i := 0 to LTables.Count - 1 do
+     with LTables [ li_i ] do
       if IsMain Then
        Begin
          AppendStr(ATemp2,GetSQLCreateCode);
        end;
     AppendStr(ATemp2,fs_EndCreate(as_BaseName,as_user,as_password,as_host));
   finally
-    ACollection.destroy;
+    LTables.destroy;
   end;
   if ab_DoItWithCommandLine Then
     p_ExecuteSQLCommand(ATemp1+ATemp2)

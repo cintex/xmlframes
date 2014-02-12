@@ -29,7 +29,7 @@ begin
   Application.Initialize;
   if not fb_ReadServerIni ( FIniMain, Application ) Then
    Begin
-    ShowMessage ( 'XML file not initalized.' );
+    MyShowMessage ( 'XML file not initalized.' );
    end;
   Application.Run;
 

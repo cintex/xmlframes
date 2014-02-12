@@ -77,7 +77,7 @@ begin
     gb_DicoGroupementMontreCaption := False;
     if not fb_ReadIni(FIniMain) then
       begin
-      ShowMessage('XML file not initalized.');
+      MyShowMessage('XML file not initalized.');
       Application.Terminate;
       end;
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
