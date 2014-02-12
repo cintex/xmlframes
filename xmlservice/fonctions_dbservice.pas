@@ -19,7 +19,6 @@ uses
   fonctions_version,
   {$ENDIF}
   SysUtils, ALXmlDoc,
-  Forms,
   u_multidata,
   fonctions_manbase,
   fonctions_system,
@@ -117,9 +116,7 @@ function fs_BuildTreeFromXML ( Level : Integer ; const aNode : TALXMLNode ;
                                const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
 var li_i : Integer ;
     lNode : TALXMLNode ;
-    lxdo_FichierXML : TALXMLDocument;
 Begin
-   lxdo_FichierXML := nil ;
    if ( aNode.HasChildNodes ) then
      for li_i := 0 to aNode.ChildNodes.Count - 1 do
       Begin
@@ -151,7 +148,6 @@ Begin
 //          MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
         Result := fs_BuildTreeFromXML ( Level + 1, lNode, aopn_OnProjectNode );
       End;
-   lxdo_FichierXML.Free;
 End;
 /////////////////////////////////////////////////////////////////////////
 // procedure p_InitIniProjectFile
@@ -197,7 +193,6 @@ var li_i : Integer ;
     lNode : TALXMLNode ;
     lxdo_FichierXML : TALXMLDocument;
 Begin
-   lxdo_FichierXML := nil ;
    if ( aNode.HasChildNodes ) then
      for li_i := 0 to aNode.ChildNodes.Count - 1 do
       Begin
@@ -225,13 +220,17 @@ Begin
               Begin
                 if  ( pos ( CST_LEON_SYSTEM_LOCATION, Uppercase(lNode.NodeName) ) > 0 ) Then
                  Begin
-                   if lxdo_FichierXML = nil then
-                     lxdo_FichierXML := TALXMLDocument.Create(AApplication);
-                    if fb_LoadXMLFile ( lxdo_FichierXML, Result )
-                     then
-                      Begin
-                       p_LoadData ( lxdo_FichierXML.Node, AApplication );
-                      end;
+                    lxdo_FichierXML := TALXMLDocument.Create(AApplication);
+                    try
+                      if fb_LoadXMLFile ( lxdo_FichierXML, Result )
+                       then
+                        Begin
+                         p_LoadData ( lxdo_FichierXML.Node, AApplication );
+                        end;
+
+                    finally
+                      lxdo_FichierXML.Destroy;
+                    end;
                  End
               end;
           End;
@@ -239,7 +238,6 @@ Begin
 //          MyShowMessage('Level : ' + IntTosTr ( Level ) + 'Name : ' +lNode.NodeName + ' Classe : ' +lNode.ClassName);
         Result := fs_BuildFromXML ( Level + 1, lNode, AApplication );
       End;
-   lxdo_FichierXML.Free;
 End;
 
 
@@ -571,10 +569,13 @@ Begin
               Then ATemp1:=TableKey
               Else ATemp1:=Table;
              if  ( ATemp1 > '' )
-             and assigned ( LTables.TableByName(ATemp1)) Then
+             and assigned ( LTables.TableByName(ATemp1))
+             and( LTables.TableByName(TablesDest [ 0 ].Table)=nil) // relation can be
+              Then
               with LTables.Add do
                Begin
                  Table:=TablesDest [ 0 ].Table;
+                 TableKey:=Table;
                  IsMain:=True;
                  //MyShowMessage(FieldsFK.toString()+ ' ' +ATemp1);
                  GetKey.Assign(FieldsFK); // get key form relation-ships
@@ -594,8 +595,6 @@ Begin
 
            end;
      end;
-    FreeAndNil(gxdo_RootXML);
-    Finalize(ga_Functions);
     ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
     ATemp2:=fs_BeginAlterCreate;
     for li_i := 0 to LTables.Count - 1 do
@@ -613,7 +612,7 @@ Begin
   Else
    if Assigned(ge_ExecuteSQLScript)
     Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
-  MyShowMessage('Database created. You should restart.');
+  //MyShowMessage('Database created. You should restart.');
 End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );

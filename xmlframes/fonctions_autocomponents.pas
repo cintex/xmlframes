@@ -131,7 +131,19 @@ function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ;
                                       const as_Name : String ;
                                       const ai_Counter : Longint ;
                                       const ab_Column : Boolean ):TFWLabel;
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
+function fds_CreateGroupViewDataSource (  const as_Table, as_NameEnd : String  ;
+                                          const alr_relation : TFWRelation ;
+                                          const acom_Owner : TComponent    ): TDatasource;
+function fdbg_GroupViewComponents  ( var FPageControlDetails : TPageControl;
+                                     const afws_sources : TFWSources ;
+                                     const afws_source : TFWSource ;
+                                     const awin_Parent : TWinControl ;
+                                     const ai_Connection : Integer;
+                                     const ads_Connection : TDSSource;
+                                     const afr_relation : TFWRelation;
+                                     const acom_Owner : TComponent;
+                                     const ai_FieldCounter,
+                                           ai_counter     : Integer):TDBGroupView;
 
 implementation
 
@@ -146,7 +158,7 @@ uses JvXPButtons,fonctions_dbcomponents,
      u_fillcombobutton,fonctions_languages;
 
 ////////////////////////////////////////////////////////////////////////////////
-// function fds_CreateDataSourceAndOpenedQuery
+// function fds_CreateGroupViewDataSource
 // create datasource, dataset, setting and open it
 // as_Table      : Table name
 // as_Fields     : List of fields with comma
@@ -154,42 +166,12 @@ uses JvXPButtons,fonctions_dbcomponents,
 // ar_Connection : Connection of table
 // alis_NodeFields : Node of fields' nodes
 ////////////////////////////////////////////////////////////////////////////////
-function fds_CreateDataSourceAndOpenedQuery ( const as_Table, as_NameEnd : String  ; const alr_relation : TFWRelation ; const acom_Owner : TComponent; const afws_SourceAdded : TFWSource ): TDatasource;
-var lfc_Fields : TFWFieldColumns ;
-    li_i : Integer;
+function fds_CreateGroupViewDataSource (  const as_Table, as_NameEnd : String  ;
+                                          const alr_relation : TFWRelation ;
+                                          const acom_Owner : TComponent    ): TDatasource;
 begin
   with alr_relation.TablesDest [ 0 ].Connection do
-    Begin
-      Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
-      lfc_Fields := nil;
-      if assigned ( afws_SourceAdded ) Then
-         with afws_SourceAdded do
-           Begin
-             if GetKeyCount = 0 Then
-              with Indexes.Insert(0) do
-                Begin
-                 IndexKind:=ikPrimary;
-                 lfc_Fields := FieldsDefs;
-                end;
-            Datasource:=Result;
-            Table := as_Table;
-           end;
-
-      with alr_relation,afws_SourceAdded do
-      if DatasetType in [dtCSV{$IFDEF DBNET},dtDBNet{$ENDIF}]
-       Then
-         Begin
-           if DatasetType = dtCSV Then
-             p_setComponentProperty ( Result.Dataset, 'FileName', DataURL + as_Table +GS_Data_Extension );
-           {$IFDEF DBNET}
-           if DatasetType = dtDBNet Then
-             p_SetSQLQuery (Result.DataSet,FieldsDisplay,FieldsFK,Table);
-           {$ENDIF}
-         end
-        else
-        p_SetSQLQuery (Result.DataSet,FieldsDisplay,FieldsFK,Table);
-      Result.DataSet.Open;
-    end;
+    Result := fds_CreateDataSourceAndDataset ( as_Table, as_NameEnd, QueryCopy, acom_Owner );
 end;
 
 /////////////////////////////////////////////////////////////////////////
@@ -272,16 +254,10 @@ var lpan_ParentPanel   : TWinControl;
     Begin
 
       with adgv_GroupView, afws_source, afr_relation do
-        if pos ( Table, FieldsFK [ 0 ].FieldName ) = 0 Then
          Begin
            DataFieldGroup := FieldsFK [ 0 ].FieldName;
            DataFieldUnit  := FieldsFK [ 1 ].FieldName;
          end
-        Else
-        Begin
-          DataFieldGroup := FieldsFK [ 1 ].FieldName;
-          DataFieldUnit  := FieldsFK [ 0 ].FieldName;
-        end
     end;
 
     procedure p_setLeftFromPanel ( const acon_Control : TWinControl );
@@ -435,7 +411,7 @@ begin
   //      lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
   //      lpan_ParentPanel.ShowHint := True;
         Result := fdgv_CreateGroupView ( lpan_ParentPanel, CST_COMPONENTS_GROUPVIEW_BEGIN + Table + CST_COMPONENTS_LEFT, acom_Owner, alLeft );
-        Result.Datasource:=fds_CreateDataSourceAndOpenedQuery ( Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, acom_Owner, afws_sources.Add );
+        Result.Datasource:=fds_CreateGroupViewDataSource ( Table, IntToStr ( ai_FieldCounter ) + '_' + IntToStr ( ai_Counter ), afr_relation, acom_Owner );
         Result.Width := CST_GROUPVIEW_WIDTH;
         p_setGroupmentfields ( Result );
         GroupView := Result ;
@@ -453,6 +429,8 @@ begin
         lcon_Control.Left := Result.Width;
         p_setGroupView ( Result, True );
         p_setGroupView ( ldgv_GroupViewRight, False );
+        with Result do
+          ShowMessage(' f Group '+DataFieldGroup+' f unit '+DataFieldUnit+#10' t group '+DataTableGroup+' t unit '+DataTableUnit+' Owner '+DataTableOwner);
       finally
       {$IFDEF FPC}
         lpan_ParentPanel.EndUpdateBounds;

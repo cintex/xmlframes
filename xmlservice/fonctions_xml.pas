@@ -138,9 +138,6 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_ARRAY          = 'ARRAY' ;
 
       CST_LEON_RELATION       = 'RELATION' ;
-      CST_LEON_RELATION_C_BIND= 'C_BIND' ;
-      CST_LEON_RELATION_F_BIND= 'F_BIND' ;
-      CST_LEON_RELATION_CBIND = 'cbind' ;
       CST_LEON_RELATION_JOIN  = 'JOIN_DAEMON' ;
 
       CST_LEON_FIELDS_DEF  : array [0..6] of string = (CST_LEON_FIELD_NUMBER,CST_LEON_FIELD_DATE,CST_LEON_RELATION,CST_LEON_FIELD_TEXT,CST_LEON_FIELD_CHOICE,CST_LEON_FIELD_FILE,CST_LEON_STRUCT);
@@ -203,7 +200,7 @@ function fs_getProjectDir : String;
 function fs_LeonFilter ( const AString : String ): String;
 function fb_GetMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const aff_FieldNodes : TFWMiniFieldColumns ):Boolean;
 procedure p_CountMarkFunction(const anod_Field :TALXMLNode ; const as_MarkSearched : String ; const ab_IsTrue : Boolean;  var ai_Count : Integer );
-function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
+function fb_GetCrossLinkNode( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
 function fs_GetNodeAttribute( const anod_Node : TALXMLNode ; const as_Attribute : String ) : String ;
 function fnod_GetClassFromRelation( const anod_Node : TALXMLNode ) : TALXMLNode ;
 function fnod_GetNodeFromTemplate( const anod_Node : TALXMLNode ) : TALXMLNode ;
@@ -253,16 +250,18 @@ function fb_createFieldID ( const ab_IsSourceTable : Boolean; const anod_Field: 
 procedure p_SetFieldSelect ( const affd_ColumnFieldDef : TFWFieldColumn; const ab_IsLocal : Boolean  );
 procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass, as_Name : String ;
                                const acom_owner : TComponent; const awin_Parent : TWinControl;
-                               var   axml_SourceFile : TALXMLDocument ;
+                               const axml_SourceFile : TALXMLDocument ;
                                const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
                                const ae_onClassNameNode : TOnExecuteNode;
                                const ab_CreateDS : Boolean = True ;
                                const ab_ContinueIfLocal : Boolean = False);
-function fb_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_field : TFWFieldColumn ;
-                                    const as_FunctionClep :String;
-                                    const as_Table : String; const arel_Relation : TFWRelation;
-                                    const ab_createDS, ab_FullTable : Boolean;
-                                    const acom_Owner : TComponent ): Boolean ;
+function fb_GetCrossLinkFunction( const ADBSources : TFWTables ;
+                                  const ADBSource : TFWTable ;
+                                  const Aff_field : TFWFieldColumn ;
+                                  const as_FunctionClep :String;
+                                  const as_Table : String; const arel_Relation : TFWRelation;
+                                  const ab_createDS, ab_FullTable : Boolean;
+                                  const acom_Owner : TComponent ): Boolean ;
 function fb_FieldTypeProperties ( const afws_Source : TFWTable ;
                                   const anod_Field,anod_FieldProperties : TALXMLNode;
                                   const af_FieldDefs : TFWFieldColumn; var ab_islarge : Boolean;
@@ -456,11 +455,13 @@ end;
 // aanod_idRelation   : List to add link
 // anod_NodeCrossLink : linked node in other file
 ////////////////////////////////////////////////////////////////////////////////
-function fb_GetCrossLinkFunction( const ADBSources : TFWTables ; const Aff_field : TFWFieldColumn ;
-                                    const as_FunctionClep :String;
-                                    const as_Table : String; const arel_Relation : TFWRelation;
-                                    const ab_createDS, ab_FullTable : Boolean;
-                                    const acom_Owner : TComponent ): Boolean ;
+function fb_GetCrossLinkFunction( const ADBSources : TFWTables ;
+                                  const ADBSource : TFWTable ;
+                                  const Aff_field : TFWFieldColumn ;
+                                  const as_FunctionClep :String;
+                                  const as_Table : String; const arel_Relation : TFWRelation;
+                                  const ab_createDS, ab_FullTable : Boolean;
+                                  const acom_Owner : TComponent ): Boolean ;
 var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties, lnod_id : TALXMLNode ;
     lnod_Node, lnod_NodeCrossLink : TALXMLNode;
@@ -488,7 +489,8 @@ begin
               Begin
                 lnod_Node := ChildNodes [ li_i ];
                 if not assigned ( lnod_NodeCrossLink )
-                and fb_GetCrossLinkFunction(as_FunctionClep,lnod_Node ) Then
+                // search cross link node
+                and fb_GetCrossLinkNode(as_FunctionClep,lnod_Node ) Then
                   lnod_NodeCrossLink := lnod_Node;
                 if lnod_Node.NodeName = CST_LEON_CLASS then
                  with arel_Relation do
@@ -512,6 +514,7 @@ begin
                                // found : recreate uneeded
                               Else lfwt_Source2 := nil;
                             End;
+                           // create relation table
                            lfwt_Source := TablesDest.Add;
                            with lfwt_Source do
                             Begin
@@ -541,7 +544,7 @@ begin
                                   p_OnCreateFieldProperties(ADBSources,lfwt_Source2,lnod_id,lb_fieldfound,lb_Column,li_FullFields);
                                  End;
                                 if fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_id, FieldsFK ) Then
-                                   fb_setFieldType(lfwt_Source, Aff_field, lnod_id, Aff_field.Index,False,ab_FullTable,nil, False );
+                                   fb_setFieldType(ADBSource, Aff_field, lnod_id, Aff_field.Index,False,ab_FullTable,nil, False );
                                 fb_GetMarkFunction(lnod_id, CST_LEON_FIELD_main, FieldsDisplay );
                                 p_CountMarkFunction(lnod_id, CST_LEON_FIELD_optional, False, li_CountFields );
                               End;
@@ -569,7 +572,7 @@ end;
 // ai_Counter : The column counter for other XML File
 procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass, as_Name : String ;
                                const acom_owner : TComponent; const awin_Parent : TWinControl;
-                               var   axml_SourceFile : TALXMLDocument ;
+                               const axml_SourceFile : TALXMLDocument ;
                                const ae_OnFieldNode, ae_onActionNode : TOnExecuteFieldNode ;
                                const ae_onClassNameNode : TOnExecuteNode;
                                const ab_CreateDS : Boolean = True ;
@@ -577,6 +580,7 @@ procedure p_CreateComponents ( const ADBSources : TFWTables ; const as_XMLClass,
 var li_i, li_j, li_k, li_NoField : LongInt ;
     lnod_Node, lnod_ClassNode : TALXMLNode ;
     lb_Column, lb_FieldFound, lb_Table : Boolean ;
+    lxml_Class : TALXMLDocument ;
     lfwc_Column : TFWTable ;
   // procedure p_CreateXMLColumn
   // Creates the XML form column
@@ -589,16 +593,16 @@ var li_i, li_j, li_k, li_NoField : LongInt ;
   end;
 
 begin
-  // For actions at the end of xml file
-  If fb_OpenClass ( as_XMLClass, acom_owner, axml_SourceFile ) Then
+  lxml_Class := nil;
+  If fb_OpenClass ( as_XMLClass, acom_owner, lxml_Class ) Then
    // reading the special XML form File
     try
       li_NoField := 0;
       lb_FieldFound := False;
       lb_Column := False;
-      for li_i := 0 to axml_SourceFile.ChildNodes.Count -1 do
+      for li_i := 0 to lxml_Class.ChildNodes.Count -1 do
         Begin
-          lnod_Node := axml_SourceFile.ChildNodes [ li_i ];
+          lnod_Node := lxml_Class.ChildNodes [ li_i ];
           if ( lnod_Node.NodeName = CST_LEON_CLASS  )
           or ( lnod_Node.NodeName = CST_LEON_STRUCT ) then
             Begin
@@ -610,7 +614,8 @@ begin
                       lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];
                       if lnod_ClassNode.NodeName = CST_LEON_CLASS_C_MARKS Then
                        if not ab_ContinueIfLocal Then
-                         if lnod_ClassNode.HasAttribute(CST_LEON_FIELD_LOCAL) and (lnod_ClassNode.Attributes[CST_LEON_FIELD_LOCAL]=CST_LEON_BOOL_TRUE)
+                         if lnod_ClassNode.HasAttribute(CST_LEON_FIELD_LOCAL)
+                         and (lnod_ClassNode.Attributes[CST_LEON_FIELD_LOCAL]=CST_LEON_BOOL_TRUE)
                           Then
                            Exit;
 
@@ -645,11 +650,8 @@ begin
                end;
             End;
         End;
-    Except
-      On E: Exception do
-        Begin
-          MyShowMessage ( 'Erreur : ' + E.Message );
-        End;
+    finally
+      lxml_Class.Destroy;
     End ;
 
 end;
@@ -809,7 +811,11 @@ Begin
       Result:=False;
       Exit;
      End;
+  // when there is no datasource created and no SQL table creation
+//  if not ab_createDS and not ab_FullTable then
+//   Exit; //quit bcause not needed
   lfr_Relation := nil;
+  // miltiple fields relation
   if  anod_FieldProperties.NodeName = CST_LEON_RELATION_JOIN Then
    Begin
     for li_i := 0 to anod_FieldProperties.ChildNodes.Count-1 do
@@ -818,17 +824,25 @@ Begin
         if lnod_FieldProperties.NodeName = CST_LEON_CLASS_C_BIND Then
          Begin
            lfr_Relation := afws_Source.Relations.Add;
+           // grouping table
            with lfr_Relation.TablesDest.Add do
              Begin
                Table:=fs_GetNodeAttribute( lnod_FieldProperties, CST_LEON_VALUE );
+               // table can be on other database
+               ls_ClassLink:=fs_GetNodeAttribute( lnod_FieldProperties, CST_LEON_LOCATION );
+               if ls_ClassLink > ''
+                Then Connection:=DMModuleSources.fds_FindConnection( ls_ClassLink, True )
+                Else Connection:=afws_Source.Connection;
                TableKey:=Table;
              end;
          end;
+        // ordered relation fields
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_F_BIND Then
            lfr_Relation.FieldsFK.Add.FieldName:=fs_GetNodeAttribute( lnod_FieldProperties, CST_LEON_VALUE );
       end;
 
    end;
+  ls_ClassLink:=''; // init
   if (  ( anod_FieldProperties.NodeName = CST_LEON_CLASSES )
      or ( anod_FieldProperties.NodeName = CST_LEON_CLASS ))
    Then
@@ -853,7 +867,7 @@ Begin
          end;
       if lfr_Relation = nil Then
        lfr_Relation := af_FieldDefs.Relation;
-      fb_GetCrossLinkFunction( afws_Source.Collection as TFWTables, af_FieldDefs,'', ls_ClassLink, lfr_Relation, ab_createDS, ab_FullTable, acom_Owner );
+      fb_GetCrossLinkFunction( afws_Source.Collection as TFWTables,afws_Source, af_FieldDefs,'', ls_ClassLink, lfr_Relation, ab_createDS, ab_FullTable, acom_Owner );
    End;
 end;
 
@@ -865,7 +879,8 @@ var ldo_Temp : Double;
 Begin
   with af_FieldDefs do
    Begin
-    if fb_FieldTypeRelation ( afws_Source, anod_Field, anod_FieldProperties, af_FieldDefs, ab_createDS, ab_FullTable, acom_Owner ) Then
+     // recursive ended here for XML Form : Need only near tables
+    if  fb_FieldTypeRelation ( afws_Source, anod_Field, anod_FieldProperties, af_FieldDefs, ab_createDS, ab_FullTable, acom_Owner ) Then
      Begin
       Result:=False;
       Exit;
@@ -948,12 +963,15 @@ begin
      for li_k := 0 to ChildNodes.Count -1 do
       Begin
         lnod_Prop:=ChildNodes [ li_k ];
-        if fb_FieldTypeProperties ( afws_Source, anod_Field,lnod_Prop, af_FieldDefs, lb_isLarge,ab_createDS,ab_FullTable,acom_Owner )
-         then fb_getFieldOptions ( afws_Source,anod_Field,lnod_Prop,af_FieldDefs,Result,ab_isreference);
+        // type properties of field
+        fb_FieldTypeProperties ( afws_Source, anod_Field,lnod_Prop, af_FieldDefs, lb_isLarge,ab_createDS,ab_FullTable,acom_Owner );
+        // options like local
+        fb_getFieldOptions ( afws_Source,anod_Field,lnod_Prop,af_FieldDefs,Result,ab_isreference);
       End;
     if ab_passIfNotId and (afws_Source.GetKey.indexOf(as_FieldName) = -1)
-    or ( NodeName = CST_LEON_RELATION )
+    or ( NodeName = CST_LEON_RELATION ) // relation field set by relation's table
      Then Exit;
+    // data type of field
     FieldType := ftString;
     lb_isLarge:=False;
     if ( NodeName = CST_LEON_FIELD_NUMBER ) then
@@ -1156,7 +1174,7 @@ End;
 // as_ParentClass : Orginal class name
 // anod_FieldProperties : Node field properties
 
-function fb_GetCrossLinkFunction( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
+function fb_GetCrossLinkNode( const as_ParentClass: String ; const anod_FieldProperties :TALXMLNode ): Boolean ;
 var lnod_ClassesProperties : TALXMLNode ;
     li_j : Integer;
 Begin

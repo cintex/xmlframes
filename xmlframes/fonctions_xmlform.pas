@@ -92,7 +92,7 @@ uses U_FormMainIni, SysUtils, TypInfo,
 
 ////////////////////////////////////////////////////////////////////////////////
 // function fb_ReadXMLEntitites
-// destroying and Loading prject xml files
+// destroying and Loading project xml files
 // Résultat : il y a un fichier projet.
 ////////////////////////////////////////////////////////////////////////////////
 function fb_ReadXMLEntitites () : Boolean;

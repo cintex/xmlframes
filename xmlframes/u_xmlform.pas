@@ -78,7 +78,7 @@ type
 
     gfin_FormIni : TOnFormInfoIni ;
     FPageControl : TPageControl ;
-    FMainPanel   ,
+    FPanelMain   ,
     FActionPanel : TPanel;
     gr_Function : TLeonFunction ;
     gfwe_Password, gfwe_Login : TFWEdit;
@@ -141,7 +141,7 @@ type
     property Fonction : TLeonFunction read gr_Function write p_setfunction;
   published
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
-    property MainPanel   : TPanel read FMainPanel write FMainPanel;
+    property PanelMain   : TPanel read FPanelMain write FPanelMain;
     property PageControl : TPageControl read FPageControl write FPageControl;
   end;
 
@@ -195,7 +195,7 @@ Begin
             End
          else
           Begin
-            gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TWinControl, FMainPanel, Name, Name, ADBSources.Owner as TComponent );
+            gwin_Parent := fscb_CreateTabSheet ( FPageControl, ADBSources.Owner as TWinControl, FPanelMain, Name, Name, ADBSources.Owner as TComponent );
             gwin_Parent := fpan_GridNavigationComponents ( gwin_Parent, Name , ADBSource.Index);
           End;
         ab_FieldFound := True;
@@ -320,7 +320,7 @@ begin
   lcon_Control := fspl_CreateSplitter ( lpan_ParentPanel, CST_COMPONENTS_SPLITTER_BEGIN + CST_COMPONENTS_DBGRID + as_Name, Self, alLeft );
   lcon_Control.Left := lpan_Panel.Width;
   if ai_Counter = 0 then
-    FMainPanel := lpan_ParentPanel;
+    FPanelMain := lpan_ParentPanel;
   lpan_ParentPanel := fpan_CreatePanel ( lpan_ParentPanel, CST_COMPONENTS_PANEL_BEGIN + as_Name, Self, alClient );
   lfwc_Column.PanelDetails := lpan_ParentPanel;
   lpan_ParentPanel.Hint := fs_GetLabelCaption ( as_Name );
@@ -1004,7 +1004,7 @@ var llab_Label  : TFWLabel;
           Result := True;
           Exit;
         end;
-      fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,True,Self);
+      fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,False,Self);
 
       lb_IsLocal := False;
 
@@ -1120,15 +1120,15 @@ begin
             // next ab_column
             ab_Column := Result.Width + Result.Left < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH;
             // setting form scroll width
-            if FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
-              Width := FMainPanel.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width;
+            if FPanelMain.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width > Width then
+              Width := FPanelMain.Left + DBSources [ 0 ].Grid.Width + Result.Left + Result.Width;
             gi_LastFormColumnHeight := gi_LastFormFieldsHeight;
             if gi_LastFormFieldsHeight < Result.Top + Result.Height then
               Begin
                 gi_LastFormFieldsHeight := Result.Top + Result.Height ;
                 // setting form scroll height
-                if FMainPanel.Top + FActionPanel.Height + Result.Top + Result.Height > Height then
-                  Height := FMainPanel.Top + Result.Top + FActionPanel.Height + Result.Height;
+                if FPanelMain.Top + FActionPanel.Height + Result.Top + Result.Height > Height then
+                  Height := FPanelMain.Top + Result.Top + FActionPanel.Height + Result.Height;
 
               End;
           end ;
@@ -1148,7 +1148,9 @@ end;
 // awin_Parent : Parent component
 // ai_Counter : The column counter for other XML File
 procedure TF_XMLForm.p_CreateFormComponents ( const as_XMLClass, as_Name : String ; awin_Parent : TWinControl );
-
+var li_i, li_j : Integer;
+    LSource : TFWSource;
+    LRelation : TFWRelation;
 begin
   // For actions at the end of xml file
    gi_LastFormFieldsHeight := 0;
@@ -1158,6 +1160,22 @@ begin
                         TOnExecuteFieldNode(p_OnCreateParentAndFieldsComponent),
                         TOnExecuteFieldNode(p_OnFieldsButtonsComponents),
                         TOnExecuteNode(p_OncolumnNameNode ));
+   for li_i := 0 to DBSources.count-1 do
+    Begin
+     LSource := DBSources [ li_i ];
+     with LSource do
+      if IsMain Then
+        for li_j := 0 to Relations.Count-1 do
+         Begin
+          LRelation:=Relations [li_j];
+          with LRelation do
+           if TableLinked = -1 Then
+            Begin
+              //MyShowMessage(LSource.Table+IntToStr(li_i));
+              fdbg_GroupViewComponents( FPageControl,DBSources,LSource,FPanelMain,-1,Connection,LRelation,Self,li_j,li_i);
+            end;
+         end;
+    End;
 end;
 
 

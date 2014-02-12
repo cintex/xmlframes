@@ -234,6 +234,7 @@ Begin
   lxdoc_Document := nil;
   lnod_FieldsTemp := nil;
   If fb_OpenClass ( as_class, acom_owner, lxdoc_Document ) Then
+    try
    // reading the special XML form File
       for li_k := 0 to lxdoc_Document.ChildNodes.Count -1 do
         Begin
@@ -264,6 +265,9 @@ Begin
                      end;
                 end;
         end;
+    finally
+      lxdoc_Document.Destroy;
+    end;
 End;
 
 
