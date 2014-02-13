@@ -77,7 +77,7 @@ type
     gi_LastFormFieldsHeight, gi_LastFormColumnHeight : Longint;
 
     gfin_FormIni : TOnFormInfoIni ;
-    FPageControl : TPageControl ;
+    FPageControl : TCustomTabControl ;
     FPanelMain   ,
     FActionPanel : TPanel;
     gr_Function : TLeonFunction ;
@@ -94,14 +94,6 @@ type
     gxml_SourceFile : TALXMLDocument ;
     procedure p_ScruteComposantsFiche (); override;
     procedure p_setChoiceComponent( const argr_Control : TCustomRadioGroup );
-    procedure p_setControl ( const as_BeginName : String ;
-                             const awin_Control: TWinControl;
-                             const awin_Parent: TWinControl;
-                             const anod_Field: TALXMLNode;
-                             const ai_FieldCounter, ai_counter: Longint ); virtual;
-    function ffwc_getRelationComponent( const afws_source : TFWSource ; const awin_Parent : TWinControl ;
-                                        const afr_relation : TFWRelation ;const aff_field : TFWFieldColumn
-                                                ) : TWinControl; virtual;
     function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
                                                      const awin_parent, awin_last : TWinControl;
                                                      var  ai_FieldCounter : Longint ;
@@ -142,7 +134,7 @@ type
   published
     property ActionPanel : TPanel read FActionPanel write FActionPanel;
     property PanelMain   : TPanel read FPanelMain write FPanelMain;
-    property PageControl : TPageControl read FPageControl write FPageControl;
+    property PageControl : TCustomTabControl read FPageControl write FPageControl;
   end;
 
 
@@ -150,10 +142,8 @@ implementation
 
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
-     fonctions_dbcomponents,
      fonctions_dialogs,
      Math,
-     fonctions_createsql,
      fonctions_Objets_Dynamiques,
      fonctions_languages,
      u_buttons_defs,
@@ -338,19 +328,6 @@ End;
 // awin_Parent : Parent of created components
 // anod_Field : Node which wants a component
 
-procedure TF_XMLForm.p_setControl  ( const as_BeginName : String ; const awin_Control : TWinControl ; const awin_Parent : TWinControl ; const anod_Field : TALXMLNode ; const ai_FieldCounter, ai_counter : Longint );
-begin
-  awin_Control.Parent := awin_Parent ;
-  awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
-  awin_Control.Tag := ai_FieldCounter + 1;
-End;
-
-function TF_XMLForm.ffwc_getRelationComponent(const afws_source: TFWSource;
-  const awin_Parent: TWinControl; const afr_relation: TFWRelation;
-  const aff_field: TFWFieldColumn): TWinControl;
-begin
-
-end;
 
 // overrided procedure p_AfterColumnFrameShow
 // aFWColumn : abstract Column showing
@@ -897,6 +874,7 @@ function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: T
                                                              var ab_Column : Boolean ; const afws_Source : TFWSource ;
                                                              const ab_SeparateIfTooMuch : Boolean = True ):TWinControl;
 var llab_Label  : TFWLabel;
+    lb_IsRelation,
     lb_IsLocal  : Boolean;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lnod_OriginalNode : TALXmlNode;
@@ -1004,7 +982,8 @@ var llab_Label  : TFWLabel;
           Result := True;
           Exit;
         end;
-      fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,False,Self);
+      lb_IsRelation:=False;
+      fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,False,Self,lb_IsRelation);
 
       lb_IsLocal := False;
 
@@ -1012,16 +991,17 @@ var llab_Label  : TFWLabel;
         for li_k := 0 to anod_Field.ChildNodes.Count -1 do
           Begin
             if fb_getFieldOptions ( afws_Source, anod_Field, anod_Field.ChildNodes [ li_k ], lffd_ColumnFieldDef, lb_IsLocal ) Then
-             Begin
                Break;
-             end;
           End;
 
       p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
-      awin_Control := fwin_CreateAFieldComponent ( lffd_ColumnFieldDef, Self, lb_IsLocal );
+      if lb_IsRelation
+      Then awin_Control := ffwc_getRelationComponent(DBSources,afws_source,awin_parent,lffd_ColumnFieldDef,lxfc_ButtonCombo,anod_Field.Attributes[CST_LEON_ID],lb_IsLocal,Self)
+      Else awin_Control := fwin_CreateAFieldComponent ( lffd_ColumnFieldDef, Self, lb_IsLocal );
 
-      if ( awin_Control = nil ) then
+      if not lb_IsRelation
+      and ( awin_Control = nil ) then
         Begin
           MyShowmessage ( Gs_NoComponentToCreate + lffd_ColumnFieldDef.FieldName +'.' );
           gb_Unload := True;
@@ -1035,33 +1015,8 @@ var llab_Label  : TFWLabel;
 
       Result := True;
 
-      if awin_Control is TXMLFillCombo
-       then
-         Begin
-           lxfc_ButtonCombo := awin_Control as TXMLFillCombo;
-           awin_Control:=lxfc_ButtonCombo.Combo;
-           with lxfc_ButtonCombo,Combo,lffd_ColumnFieldDef.Relation,TablesDest[0] do
-             Begin
-               FormRegisteredName:=TableKey;
-               //MyShowMessage(tablekey);
-               FormSource:=0;
-               {$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF} := Datasource;
-               p_SetSQLQuery ({$IFNDEF RXJVCOMBO}ListSource{$ELSE}LookupSource{$ENDIF}.DataSet,FieldsDisplay,FieldsFK,Table);
-               DisplayAllFields:=True;
-               //MyShowMessage(ListField+#10+fs_getSQLQuery(ListSource.DataSet));
-               {$IFNDEF RXJVCOMBO}ListField{$ELSE}LookupDisplay{$ENDIF} := FieldsDisplay.toString(';');
-               {$IFNDEF RXJVCOMBO}KeyField {$ELSE}LookupField  {$ENDIF} := FieldsFK [ 0 ].FieldName;
-               try
-//                 MyShowMessage(fs_getSQLQuery(Datasource.DataSet)+#10+FieldsDisplay.toString+#10+FieldsFK.toString);
-                 Datasource.DataSet.Open;
-               Except
-               end;
-             end;
-           // set name of button
-           p_setControl( 'xfc_', lxfc_ButtonCombo, awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
-         end;
       // set name of control
-      p_setControl( 'con_', awin_Control,awin_Parent, anod_Field, ai_FieldCounter, afws_Source.Index);
+      p_setControlNameAndTag( awin_Control,'con_'+anod_Field.NodeName, anod_Field.Attributes[CST_LEON_ID], awin_Parent, ai_FieldCounter, afws_Source.Index);
 
       // placing top of control
       if awin_parent is TGroupBox // can be a structured field in another table
@@ -1148,9 +1103,6 @@ end;
 // awin_Parent : Parent component
 // ai_Counter : The column counter for other XML File
 procedure TF_XMLForm.p_CreateFormComponents ( const as_XMLClass, as_Name : String ; awin_Parent : TWinControl );
-var li_i, li_j : Integer;
-    LSource : TFWSource;
-    LRelation : TFWRelation;
 begin
   // For actions at the end of xml file
    gi_LastFormFieldsHeight := 0;
@@ -1160,22 +1112,6 @@ begin
                         TOnExecuteFieldNode(p_OnCreateParentAndFieldsComponent),
                         TOnExecuteFieldNode(p_OnFieldsButtonsComponents),
                         TOnExecuteNode(p_OncolumnNameNode ));
-   for li_i := 0 to DBSources.count-1 do
-    Begin
-     LSource := DBSources [ li_i ];
-     with LSource do
-      if IsMain Then
-        for li_j := 0 to Relations.Count-1 do
-         Begin
-          LRelation:=Relations [li_j];
-          with LRelation do
-           if TableLinked = -1 Then
-            Begin
-              //MyShowMessage(LSource.Table+IntToStr(li_i));
-              fdbg_GroupViewComponents( FPageControl,DBSources,LSource,FPanelMain,-1,Connection,LRelation,Self,li_j,li_i);
-            end;
-         end;
-    End;
 end;
 
 

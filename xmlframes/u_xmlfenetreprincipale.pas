@@ -468,6 +468,10 @@ end;
 procedure TF_FenetrePrincipale.DoClose ( var AAction: TCloseAction );
 begin
    DoCloseFenetrePrincipale ( Self );
+   // gxdo_FichierXML can have no owner
+   FreeAndNil(gxdo_FichierXML);
+   FreeAndNil(gxdo_MenuXML);
+   FreeAndNil(gxdo_RootXML);
    inherited ;
 end;
 

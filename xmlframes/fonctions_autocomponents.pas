@@ -21,6 +21,7 @@ uses
   SysUtils,ComCtrls, TypInfo, Variants,
   U_FormMainIni, u_framework_dbcomponents,
   fonctions_manbase, StdCtrls,
+  u_xmlfillcombobutton,
 {$IFDEF VERSIONS}
   fonctions_version,
 {$ENDIF}
@@ -99,6 +100,11 @@ const
 
 {$ENDIF}
 
+procedure p_setControlNameAndTag  ( const awin_Control : TWinControl ;
+                          const as_BeginName,
+                                as_MiddleName : String ;
+                          const awin_Parent : TWinControl ;
+                          const ai_FieldCounter, ai_counter : Longint );
 function fwin_CreateAEditComponent ( const acom_Owner : TComponent ; const ab_isLarge, ab_IsLocal : Boolean ):TWinControl;
 function fpan_CreateAction ( const abut_Button : TFWXPButton ; const as_name : String ; const acom_Owner : TWinControl ; const apan_ActionPanel : TPanel ):TPanel;
 function fpan_CreateActionPanel ( const awin_Parent : TWinControl ; const acom_Owner : TWinControl ; var apan_ActionPanel : TPanel ):TPanel;
@@ -118,11 +124,22 @@ function fspl_CreateSPlitter ( const awin_Parent : TWinControl ;
                                const acom_Owner : TComponent ;
                                const aal_Align : TAlign
                                ):TControl ;
-function fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ; const acom_Owner : TComponent ): TPageControl;
-function fscb_CreateTabSheet(
-  var apc_PageControl: TPageControl; const awin_ParentPageControl,
-  awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
-    ): TScrollBox;
+function fpc_CreatePageControl ( const awin_Parent : TWinControl ;
+                                 const  as_Name : String;
+                                 const  apan_PanelOrigin : TWinControl ;
+                                 const acom_Owner : TComponent ): TPageControl;
+function fscb_CreateTabSheet (  var   apc_PageControl: TCustomTabControl;
+                                const awin_ParentPageControl, awin_PanelOrigin: TWinControl;
+                                const as_Name, as_Caption: String;
+                                const acom_Owner : TComponent ): TScrollBox;
+function ffwc_getRelationComponent (  const afws_sources : TFWSources ;
+                                      const afws_source  : TFWSource ;
+                                      const awin_Parent  : TWinControl ;
+                                      const aff_field    : TFWFieldColumn ;
+                                      var   afcb_Button  : TXMLFillCombo ;
+                                      const as_MiddleName : String;
+                                      const ab_isLocal   : Boolean ;
+                                      const acom_owner   : TComponent) : TWinControl;
 procedure p_setFieldComponentTop  ( const awin_Control : TWinControl; const ai_lastTop, ai_lastHeight : Integer ; var ab_Column : Boolean ); overload;
 procedure p_setFieldComponentTop  ( const awin_Control, awin_last : TWinControl; var ab_Column : Boolean ); overload;
 function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ;
@@ -134,7 +151,7 @@ function ffwl_CreateALabelComponent ( const acom_Owner : TComponent ;
 function fds_CreateGroupViewDataSource (  const as_Table, as_NameEnd : String  ;
                                           const alr_relation : TFWRelation ;
                                           const acom_Owner : TComponent    ): TDatasource;
-function fdbg_GroupViewComponents  ( var FPageControlDetails : TPageControl;
+function fdbg_GroupViewComponents  ( var FPageControlDetails : TCustomTabControl;
                                      const afws_sources : TFWSources ;
                                      const afws_source : TFWSource ;
                                      const awin_Parent : TWinControl ;
@@ -152,10 +169,12 @@ uses JvXPButtons,fonctions_dbcomponents,
      JvSplitter,
 {$ENDIF}
      U_ExtNumEdits,
+     u_fillcombobutton,
      fonctions_string,
+     fonctions_extdb,
      fonctions_createsql,
      u_buttons_appli, fonctions_proprietes,
-     u_fillcombobutton,fonctions_languages;
+     fonctions_languages;
 
 ////////////////////////////////////////////////////////////////////////////////
 // function fds_CreateGroupViewDataSource
@@ -233,7 +252,7 @@ End;
 // ai_Counter : Column Counter
 // returns the main list
 
-function fdbg_GroupViewComponents  ( var FPageControlDetails : TPageControl;
+function fdbg_GroupViewComponents  ( var FPageControlDetails : TCustomTabControl;
                                      const afws_sources : TFWSources ;
                                      const afws_source : TFWSource ;
                                      const awin_Parent : TWinControl ;
@@ -403,7 +422,7 @@ var lpan_ParentPanel   : TWinControl;
 begin
   with afws_source, afr_relation as TFWRelationGroup do
     Begin
-      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, PanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter ), CST_COMPONENTS_GROUPBOX_BEGIN + TablesDest.toString(False) + IntToStr(ai_counter), acom_Owner  );
+      lpan_ParentPanel := fscb_CreateTabSheet ( FPageControlDetails, PanelDetails, awin_Parent, CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ CST_COMPONENTS_GROUPBOX_BEGIN + TablesDest.toString(False) + IntToStr(ai_counter), RelationName, acom_Owner  );
       {$IFDEF FPC}
       lpan_ParentPanel.BeginUpdateBounds;
       {$ENDIF}
@@ -429,8 +448,6 @@ begin
         lcon_Control.Left := Result.Width;
         p_setGroupView ( Result, True );
         p_setGroupView ( ldgv_GroupViewRight, False );
-        with Result do
-          ShowMessage(' f Group '+DataFieldGroup+' f unit '+DataFieldUnit+#10' t group '+DataTableGroup+' t unit '+DataTableUnit+' Owner '+DataTableOwner);
       finally
       {$IFDEF FPC}
         lpan_ParentPanel.EndUpdateBounds;
@@ -453,13 +470,6 @@ End;
 function fwin_CreateAFieldComponent ( const afdt_FieldDataType : TFWFieldData ; const acom_Owner : TComponent ; const ab_IsLocal : Boolean ):TWinControl;
 begin
   Result := nil;
-  if (afdt_FieldDataType.Relation.TablesDest.Count > 0)
-  and not ab_IsLocal Then
-   Begin
-     Result:=ffc_CreateFillComboButton(acom_Owner);
-     (Result as TExtFillCombo).Combo:=TFWDBLookupCombo.Create(acom_Owner);
-     Exit;
-   end;
   case afdt_FieldDataType.FieldType of
     ftFloat :
      Begin
@@ -542,6 +552,17 @@ Begin
         Result := TFWDBEdit.Create ( acom_Owner );
     End;
 end;
+
+procedure p_setControlNameAndTag  ( const awin_Control : TWinControl ;
+                          const as_BeginName,
+                                as_MiddleName : String ;
+                          const awin_Parent : TWinControl ;
+                          const ai_FieldCounter, ai_counter : Longint );
+begin
+  awin_Control.Parent := awin_Parent ;
+  awin_Control.Name := as_BeginName + IntToStr(ai_counter) + as_MiddleName + IntToStr(ai_FieldCounter);
+  awin_Control.Tag := ai_FieldCounter + 1;
+End;
 
 
 
@@ -758,7 +779,10 @@ End;
 // awin_Parent : Parent component
 // as_Name : name of pagecontrol
 // apan_PanelOrigin : Changing The non pagecontrol panel and adding it to the tabsheet getting 2 tabsheet
-function fpc_CreatePageControl (const awin_Parent : TWinControl ; const  as_Name : String; const  apan_PanelOrigin : TWinControl ; const acom_Owner : TComponent ): TPageControl;
+function fpc_CreatePageControl ( const awin_Parent : TWinControl ;
+                                 const  as_Name : String;
+                                 const  apan_PanelOrigin : TWinControl ;
+                                 const acom_Owner : TComponent ): TPageControl;
 var ltbs_Tabsheet : TTabSheet ;
 begin
   Result := TPageControl.Create ( acom_Owner );
@@ -766,7 +790,7 @@ begin
   Result.Name := CST_COMPONENTS_PAGECONTROL_BEGIN + as_Name;
   Result.Align := alClient;
   ltbs_Tabsheet := TTabSheet.Create ( acom_Owner );
-  ltbs_Tabsheet.PageControl := Result;
+  ltbs_Tabsheet.PageControl := Result as TPageControl;
   ltbs_Tabsheet.Align := alClient;
   ltbs_Tabsheet.Caption := awin_Parent.Hint;
   ltbs_Tabsheet.Name := CST_COMPONENTS_TABSHEET_BEGIN + awin_Parent.Name;
@@ -829,17 +853,17 @@ end;
 // as_Name              : Pagecontrol name
 // as_Caption : old caption
 // ai_Counter : COlumn counter
-function fscb_CreateTabSheet(
-  var apc_PageControl: TPageControl; const awin_ParentPageControl,
-  awin_PanelOrigin: TWinControl; const as_Name, as_Caption: String; const acom_Owner : TComponent
-    ): TScrollBox;
+function fscb_CreateTabSheet (  var   apc_PageControl: TCustomTabControl;
+                                const awin_ParentPageControl, awin_PanelOrigin: TWinControl;
+                                const as_Name, as_Caption: String;
+                                const acom_Owner : TComponent ): TScrollBox;
 var ltbs_Tabsheet : TTabSheet ;
 begin
   if apc_PageControl = nil then
     apc_PageControl := fpc_CreatePageControl ( awin_ParentPageControl, as_Name, awin_PanelOrigin, acom_Owner );
   ltbs_Tabsheet := TTabSheet.Create ( acom_Owner );
   ltbs_Tabsheet.Align := alClient;
-  ltbs_Tabsheet.PageControl := apc_PageControl;
+  ltbs_Tabsheet.PageControl := apc_PageControl as TPageControl;
   ltbs_Tabsheet.Caption := fs_getlabelCaption ( as_Caption );
   Result := fscb_CreateScrollBox ( ltbs_Tabsheet, CST_COMPONENTS_TABSHEET_BEGIN +as_Name, acom_Owner, alClient );
 
@@ -867,6 +891,52 @@ begin
     Then p_setFieldComponentTop ( awin_Control, 0,0, ab_Column )
     Else p_setFieldComponentTop ( awin_Control, awin_last.Top,awin_last.Height, ab_Column )
 end;
+function ffwc_getRelationComponent (  const afws_sources : TFWSources ;
+                                      const afws_source  : TFWSource ;
+                                      const awin_Parent  : TWinControl ;
+                                      const aff_field    : TFWFieldColumn ;
+                                      var   afcb_Button  : TXMLFillCombo ;
+                                      const as_MiddleName : String;
+                                      const ab_isLocal   : Boolean ;
+                                      const acom_owner   : TComponent) : TWinControl;
+var LPageControl:TCustomTabControl;
+begin
+  if (aff_field.Relation.TablesDest.Count > 0) Then
+   begin
+    if not ab_IsLocal Then
+     Begin
+       afcb_Button:=ffc_CreateFillComboButton(acom_Owner) as TXMLFillCombo;
+       afcb_Button.Combo:=TFWDBLookupCombo.Create(acom_Owner);
+       Result:=afcb_Button.Combo;
+       with afcb_Button,Combo,aff_field.Relation,TablesDest[0] do
+         Begin
+           FormRegisteredName:=TableKey;
+           //MyShowMessage(tablekey);
+           FormSource:=0;
+           p_SetSQLQuery (DataSource.DataSet,FieldsDisplay,FieldsFK,Table);
+           p_SetComboProperties ( Result, Datasource, aff_field.Relation );
+           DisplayAllFields:=True;
+           try
+//                 MyShowMessage(fs_getSQLQuery(Datasource.DataSet)+#10+FieldsDisplay.toString+#10+FieldsFK.toString);
+             Datasource.DataSet.Open;
+           Except
+           end;
+         end;
+     // set name of button
+     p_setControlNameAndTag( afcb_Button, 'xfc_1N', as_MiddleName, awin_Parent, aff_field.Index, afws_Source.Index);
+
+     end
+    Else Result:=Nil;
+   End
+  Else
+   with afws_Source,Relations do
+   Begin
+    LPageControl := PageControlDetails;
+    Result:=fdbg_GroupViewComponents( LPageControl,afws_sources,afws_source,awin_Parent,-1,Connection,Items[Count-1],acom_owner,aff_field.Index,Index);
+    PageControlDetails:=LPageControl;
+   end;
+end;
+
 {$IFDEF VERSIONS}
 initialization
   p_ConcatVersion ( gVer_fonctions_autocomponents );

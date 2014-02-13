@@ -119,6 +119,11 @@ procedure p_ModifieXPBar  ( const aF_FormParent       : TCustomForm        ;
                             const abmp_Picture        ,
                                   abmp_DefaultPicture : TBitmap     ;
                             const ab_AjouteEvenement   : Boolean   );
+procedure p_setControl  ( const as_BeginName : String ;
+                          const awin_Control : TWinControl ;
+                          const awin_Parent : TWinControl ;
+                          const anod_Field : TALXMLNode ;
+                          const ai_FieldCounter, ai_counter : Longint );
 procedure p_NavigationTree ( const as_EntityFile : String );
 function fi_FindActionFile ( const afile : String ):Longint ;
 procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWTable ; const acom_owner : TComponent; const ach_FieldDelimiter : Char );
@@ -230,6 +235,7 @@ var  li_k, li_l, li_m, li_n : Longint;
     lnod_FieldProperty, lnod_mark      : TALXMLNode ;
     lfd_Fielddef : TFWFieldColumn;
     lxdoc_Document : TALXMLDocument;
+    lb_isrelation : Boolean;
 Begin
   lxdoc_Document := nil;
   lnod_FieldsTemp := nil;
@@ -259,7 +265,8 @@ Begin
                              fb_setNodeField(lnod_Field,lfd_Fielddef);
                              if assigned(lnod_FieldsTemp)Then
                               p_setNodesField(lnod_FieldsTemp,lfd_Fielddef);
-                             fb_setFieldType(afws_Source,lfd_Fielddef,lnod_FieldProperty,li_m,True,False,acom_owner);
+                             lb_isrelation :=False;
+                             fb_setFieldType(afws_Source,lfd_Fielddef,lnod_FieldProperty,li_m,True,False,acom_owner,lb_isrelation);
                              p_setNodeId ( ChildNodes [ li_n ], afws_Source, lfd_Fielddef );
                            end;
                      end;
@@ -1427,6 +1434,18 @@ Begin
 
  F_FenetrePrincipale.p_AccessToSoft;
 End;
+
+procedure p_setControl  ( const as_BeginName : String ;
+                          const awin_Control : TWinControl ;
+                          const awin_Parent : TWinControl ;
+                          const anod_Field : TALXMLNode ;
+                          const ai_FieldCounter, ai_counter : Longint );
+begin
+  awin_Control.Parent := awin_Parent ;
+  awin_Control.Name := as_BeginName + anod_Field.NodeName + IntToStr(ai_counter) + anod_Field.Attributes[CST_LEON_ID] + IntToStr(ai_FieldCounter);
+  awin_Control.Tag := ai_FieldCounter + 1;
+End;
+
 /////////////////////////////////////////////////////////////////////////
 // function fb_NavigationTree
 // Loading navigation and login
