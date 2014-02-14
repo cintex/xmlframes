@@ -765,6 +765,9 @@ Begin
   Result := TExtDBGrid.create ( acom_Owner );
   Result.parent := awin_Parent;
   Result.Name := as_Name;
+  // form can be packed with autosize
+  Result.Constraints.MinHeight:=200;
+  Result.Constraints.MinWidth :=200;
   Result.Align := alClient ;
   if not ab_Edit then
     Begin
