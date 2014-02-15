@@ -224,13 +224,12 @@ Begin
    end;
   if assigned ( afcf_ColumnField ) Then
     Begin
-      afcf_ColumnField.CaptionName := Result.Caption; //lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]);
+      afcf_ColumnField.CaptionName := Result.Caption;
       afcf_ColumnField.HintName := '| ' + afcf_ColumnField.CaptionName;
     end;
-  if ab_Column then
-    awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE + CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
-   Else
-    awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE ;
+  if ab_Column
+   then awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE + CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
+   Else awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE ;
 
 end;
 
@@ -805,11 +804,10 @@ procedure p_setComponentLeftWidth  ( const awin_Control : TControl ; const ab_Co
 begin
   with awin_Control do
     Begin
-      if ab_Column then
-        Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_CONTROLS_INTERLEAVING
-       Else
-        Left := CST_CONTROLS_INTERLEAVING ;
-      Width := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH - Left -CST_CONTROLS_INTERLEAVING*2;
+      if ab_Column
+       then Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_CONTROLS_INTERLEAVING
+       Else Left := CST_CONTROLS_INTERLEAVING ;
+      Width := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH-CST_CONTROLS_INTERLEAVING*2;
     end;
 end;
 

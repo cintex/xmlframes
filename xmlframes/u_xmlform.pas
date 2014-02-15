@@ -681,9 +681,9 @@ Begin
       for li_i := 0 to Items.Count -1 do
         li_length:=Max(Length(Items [ li_i ]), li_length );
       case li_length of
-       0..2 : Columns:=4;
-       3..5 : Columns:=3;
-       6..9 : Columns:=2;
+       0..3  : Columns:=4;
+       4..8  : Columns:=3;
+       9..13 : Columns:=2;
        else Columns:=1;
       end;
     end;
@@ -717,18 +717,15 @@ Begin
         lnod_FieldProperties := anod_Field.ChildNodes [ li_i ];
         if awin_Control is TCustomRadioGroup then
           Begin
-            fb_setChoiceProperties ( lnod_FieldProperties, awin_Control as TCustomRadioGroup );
-            Continue;
+            if fb_setChoiceProperties ( lnod_FieldProperties, awin_Control as TCustomRadioGroup ) Then
+              Continue;
           End;
 
         if lnod_FieldProperties.NodeName = CST_LEON_NAME then
           Begin
-            if ( awin_Control is TCustomRadioGroup ) Then
-              Begin
-                p_setComponentProperty ( awin_Control, 'Caption', fs_GetLabelCaption(lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]));
-              end
-             Else
-               Result := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );
+            if ( awin_Control is TCustomRadioGroup )
+             Then p_setComponentProperty ( awin_Control, 'Caption', fs_GetLabelCaption(lnod_FieldProperties.Attributes [ CST_LEON_VALUE ]))
+             Else Result := ffwl_CreateALabelComponent ( Self, awin_Parent, awin_Control, afcf_ColumnField, lnod_FieldProperties.Attributes [ CST_LEON_VALUE ], ai_Counter, ab_Column );
             Continue;
           End;
         if lnod_FieldProperties.NodeName = CST_LEON_FIELD_NROWS then

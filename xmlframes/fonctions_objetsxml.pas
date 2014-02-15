@@ -1636,11 +1636,13 @@ Begin
   Result := False;
   if  ( anod_FieldProperty.NodeName = CST_LEON_CHOICE_OPTIONS )
   and   anod_FieldProperty.HasChildNodes  then
+   Begin
+    lstl_Values := fobj_getComponentObjectProperty(argr_Control,CST_PROPERTY_VALUES) as TStrings;
+    Result := True;
     for li_i := 0 to anod_FieldProperty.ChildNodes.Count -1 do
       Begin
         lnod_ChoiceProperty := anod_FieldProperty.ChildNodes [ li_i ];
         // optional values
-        lstl_Values := fobj_getComponentObjectProperty(argr_Control,CST_PROPERTY_VALUES) as TStrings;
         if lnod_ChoiceProperty.NodeName = CST_LEON_CHOICE_OPTION then
           Begin
             argr_Control.Items .Add ( fs_getLabelCaption ( lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_NAME ]));
@@ -1650,10 +1652,10 @@ Begin
             if  lnod_ChoiceProperty.HasAttribute(CST_LEON_OPTION_DEFAULT)
             and (lnod_ChoiceProperty.Attributes [ CST_LEON_OPTION_DEFAULT ] = CST_LEON_BOOL_TRUE ) Then
               argr_Control.ItemIndex:=argr_Control.Items.Count-1;
-            Result := True;
             Continue;
           End;
       End;
+  End;
 End;
 
 initialization
