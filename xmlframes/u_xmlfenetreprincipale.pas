@@ -217,6 +217,7 @@ uses
   TntWindows,
 {$ENDIF}
   fonctions_xml,
+  fonctions_createsql,
   fonctions_dialogs,
   fonctions_xmlform,
   fonctions_FenetrePrincipale,
@@ -496,7 +497,7 @@ begin
   // Fermeture de la connexion principale, init. de la Led et de la barre de status
 {$IFNDEF CSV}
   if assigned ( Connection ) then
-    p_setComponentBoolProperty ( Connection, 'Connected', False );
+    fb_OpenCloseDatabase ( Connection, False );
 {$ENDIF}
   p_SetLedColor ( False );
   br_statusbar.Panels[1].Text := '';
@@ -567,7 +568,7 @@ Begin
      lb_MsgDeconnexion := False ;
 {$IFNDEF CSV}
   if assigned ( Connector ) then
-    p_setComponentBoolProperty ( Connector, 'Connected', False );
+    fb_OpenCloseDatabase ( Connector, False );
 {$ENDIF}
   if not mc_Customize.LoadIni ( gs_user ) then
     mc_Customize.LoadIni;

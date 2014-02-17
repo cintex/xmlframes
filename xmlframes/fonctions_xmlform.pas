@@ -439,8 +439,8 @@ Begin
    Begin
     p_ShowConnectionWindow(Connection,f_GetMemIniFile);
     try
-      p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
-      if not fb_getComponentBoolProperty( Connection, CST_DBPROPERTY_CONNECTED) Then
+      if not fb_OpenCloseDatabase ( Connection, True )
+       Then
         Abort;
     Except
       on e: Exception do

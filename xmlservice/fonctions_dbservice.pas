@@ -82,6 +82,7 @@ implementation
 uses u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
      u_languagevars,
+     unite_variables,
      fonctions_dbcomponents,
      fonctions_createsql,
      FileUtil,
@@ -612,6 +613,7 @@ Begin
   Else
    if Assigned(ge_ExecuteSQLScript)
     Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
+  p_optimiseDatabase(nil,as_BaseName,as_user,as_password,fs_GetIniDir(False));
   //MyShowMessage('Database created. You should restart.');
 End;
 
@@ -691,7 +693,7 @@ Begin
        gbm_DatabaseToGenerate:=bmPostgreSQL;
       end;
      try
-       p_setComponentBoolProperty ( Connection, CST_DBPROPERTY_CONNECTED, True );
+       fb_OpenCloseDatabase ( Connection, True );
      except
        on e: Exception do
          if MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrYes Then

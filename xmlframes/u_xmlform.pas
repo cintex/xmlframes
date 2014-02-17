@@ -679,13 +679,8 @@ Begin
       Height:= Items.Count  * gi_FontHeight + Byte(BorderStyle)  * 2 ;
       li_length := 0;
       for li_i := 0 to Items.Count -1 do
-        li_length:=Max(Length(Items [ li_i ]), li_length );
-      case li_length of
-       0..3  : Columns:=4;
-       4..8  : Columns:=3;
-       9..13 : Columns:=2;
-       else Columns:=1;
-      end;
+        li_length:=Max(Canvas.GetTextWidth(Items [ li_i ]), li_length );
+      Columns := (CST_XML_SEGUND_COLUMN_MIN_POSWIDTH+CST_XML_FIELDS_LABEL_INTERLEAVING*2) div li_length ;
     end;
 end;
 
