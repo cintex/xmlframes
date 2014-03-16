@@ -51,7 +51,7 @@ begin
 	  begin
 
 	  end;
-  doShowWorking(ExtractFileName(Application.ExeName));
+  doShowWorking(fs_GetNameSoft);
 
   try
     gb_DicoKeyFormPresent  := True ;
