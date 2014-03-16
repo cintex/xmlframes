@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="joint_profils_droits">
+	<C_BIND value="joint_profils_droits" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="JOINT_PROFILS_DROITS"/>
+	<GROUP value="GROUP_ADMINISTRATION"/>
+	<PREFIX value="jointure"/>
+	<C_MARKS load='true'/>
+	<FIELDS>
+		<RELATION id="joint_profil" noToolbar='true'>
+			<NAME value="NAME_PROFIL"/>
+			<F_MARKS id='true' create='true' set='true' sort='true' filter='true' find='true'/>
+			<CLASSES idrefs="profils"/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+			<CONSTRAINT type='CAPTION'/>
+		</RELATION>
+
+		<RELATION id="joint_droit" noContext='true' noToolbar='true' direction='FORWARD'>
+			<NAME value="NAME_DROITS"/>
+			<F_MARKS id='true' create='true' set='true' main='true'/>
+			<CLASSES idrefs="droits"/>
+		</RELATION>
+
+		<TEXT id="joint_description" multiple='true'>
+			<IMPORT relation="joint_droit" idref="droit_description"/>
+			<NAME value="JOINT_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' main='true' optional='true'/>
+			<NROWS value="5"/>
+			<NCOLS value="51"/>
+			<NCHARS value='255'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="tva">
+	<C_BIND value="tva" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_TVA"/>
+	<GROUP value="GROUP_TVA"/>
+	<FIELDS>
+		<NUMBER id="tva_id">
+			<NAME value="NAME_TVA_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<TEXT id="tva_nom">
+			<NAME value="NAME_TVA_NOM_NOM"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<MAX value='20'/>
+		</TEXT>
+		<NUMBER id="tva_taux" type='DOUBLE'>
+			<NAME value="NAME_TVA_TAUX"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'/>
+			<MIN value='0.0'/>
+			<PRECISION value='2.0'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+		</NUMBER>
+		<TEXT id="tva_description">
+			<NAME value="NAME_TVA_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<MIN value='0'/>
+			<MAX value='30'/>
+		</TEXT>
+		<TEXT id="tva_compte_compta_vente">
+			<NAME value="NAME_TVA_COMPTE_COMPTA_VENTE"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='1'/>
+			<MAX value='10'/>
+			<DEFAULT value="4457100"/>
+		</TEXT>
+		<TEXT id="tva_compte_compta_achat">
+			<NAME value="NAME_TVA_COMPTE_COMPTA_ACHAT"/>
+			<F_MARKS create='true' set='true' private='true' main='true'/>
+			<MIN value='1'/>
+			<MAX value='10'/>
+			<DEFAULT value="4456100"/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

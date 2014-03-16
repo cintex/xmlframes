@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="create_rec_achat_lignes">
+	<CACHE type='FULL'/>
+	<NAME value="NAME_CMD_ACHAT_LIGNES"/>
+	<PREFIX value="cmdlignes"/>
+	<C_MARKS local='true'/>
+	<FIELDS>
+		<NUMBER id="create_rec_ligne_id">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<RELATION id="create_rec_ligne_commande">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_COMMANDE"/>
+			<F_MARKS name='true' private='true' sort='true' filter='true' find='true' consult='true' load='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="cmd_achat"/>
+		</RELATION>
+		<RELATION id="create_rec_relation_ligne_cmd">
+			<NAME value="NAME_CREATE_LIGNE_BL_RELATION_LIGNE_CMD"/>
+			<F_MARKS private='true' consult='true'/>
+			<CLASSES idrefs="cmd_achat_lignes"/>
+			<CONTEXT_FIELD idref="create_rec_ligne_commande"/>
+		</RELATION>
+		<NUMBER id="create_rec_ligne_ligne">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_LIGNE"/>
+			<F_MARKS hidden='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<RELATION id="create_rec_ligne_produit" noContext='true'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_PRODUIT"/>
+			<F_MARKS name='true' create='true' setConsult='true' set='true' main='true' load='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="produits"/>
+		</RELATION>
+		<TEXT id="create_rec_ligne_description" multiple='true'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<DATE id="create_rec_ligne_delai" type='DATE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_DELAI"/>
+			<F_MARKS create='true' setConsult='true' optional='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+		</DATE>
+		<NUMBER id="create_rec_ligne_qt_cmd" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_QT_CMD_QTE"/>
+			<F_MARKS create='true' setConsult='true' optional='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<NUMBER id="create_rec_ligne_qt_livrai" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_QT_LIVRAI_QTE"/>
+			<F_MARKS createConsult='true' setConsult='true' optional='true' private='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<NUMBER id="create_rec_ligne_ral" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_RAL_RAL"/>
+			<F_MARKS setConsult='true' optional='true' local='true' consult='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="create_rec_ligne_qt_cmd-create_rec_ligne_qt_livrai"/>
+			<TIP value="TIP_CMD_ACHAT_LIGNE_RAL"/>
+		</NUMBER>
+		<NUMBER id="create_rec_ligne_pu" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_PU"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<FORMAT value="#########0.00###"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='5'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<NUMBER id="create_rec_ligne_total" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_TOTAL"/>
+			<F_MARKS optional='true' local='true' consult='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="create_rec_ligne_qt_cmd*create_rec_ligne_pu"/>
+		</NUMBER>
+		<NUMBER id="create_rec_ligne_qt_rec" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_QT_REC"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true' local='true'>
+				<MARK name="REC_CMD_SET"/>
+			</F_MARKS>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<CHOICE id="create_rec_ligne_solde">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_SOLDE"/>
+			<F_MARKS set='true' private='true' status='true' createConsult='true' main='true'>
+				<MARK name="REC_CMD_SET"/>
+			</F_MARKS>
+			<OPTIONS>
+				<OPTION id="create_rec_ligne_solde.non" name="NAME_CMD_ACHAT_LIGNE_SOLDE.NON" value="0" default='true'/>
+				<OPTION id="create_rec_ligne_solde.oui" name="NAME_CMD_ACHAT_LIGNE_SOLDE.OUI" value="1"/>
+			</OPTIONS>
+		</CHOICE>
+		<FIELD_REF idref="userContext"/>
+	</FIELDS>
+	<SORT id="create_rec_lignes_sort">
+		<NAME value="NAME_CMD_ACHAT_LIGNES_SORT"/>
+		<SORT_CRITERIA idref="create_rec_ligne_produit"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>

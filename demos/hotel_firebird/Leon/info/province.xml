@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="province">
+	<C_BIND value="province" location="hotel_db"/>
+	<NAME value="NAME_PROVINCE"/>
+	<PREFIX value="province"/>
+	<FIELDS>
+		<TEXT id="province_id">
+			<NAME value="NAME_PROVINCE_ID"/>
+			<F_MARKS id='true' create='true' hidden='true'/>
+		</TEXT>
+		<TEXT id="province_name">
+			<NAME value="NAME_PROVINCE_NAME"/>
+			<F_MARKS name='true' create='true' set='true' unique='true' main='true'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="routeFromProvinceToEstablishment" target="establishment" bidirectional='true'>
+			<STEP target="city" idrefs="city_province"/>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+		</ROUTE>
+		<ROUTE id="routeFromProvinceToRoom" target="room" bidirectional='true'>
+			<STEP target="city" idrefs="city_province"/>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+			<STEP target="room" idrefs="room_establishment"/>
+		</ROUTE>
+		<ROUTE id="routeFromProvinceToReservation" target="reservation" bidirectional='true'>
+			<STEP target="city" idrefs="city_province"/>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+			<STEP target="room" idrefs="room_establishment"/>
+			<STEP target="reservation" idrefs="reservation_rooms"/>
+		</ROUTE>
+		<ROUTE id="routeFromProvinceToCurrentReservation" target="current_reservation" bidirectional='true'>
+			<STEP target="city" idrefs="city_province"/>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+			<STEP target="room" idrefs="room_establishment"/>
+			<STEP target="current_reservation" idrefs="current_reservation_rooms"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>

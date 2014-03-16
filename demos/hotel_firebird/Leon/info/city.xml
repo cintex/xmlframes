@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<CLASS id="city">
+	<C_BIND value="city" location="hotel_db"/>
+	<NAME value="NAME_CITY"/>
+	<PREFIX value="city"/>
+	<FIELDS>
+		<TEXT id="city_name">
+			<NAME value="NAME_CITY_NOM_NOM"/>
+			<F_MARKS id='true' name='true' create='true' private='true' main='true'/>
+			<NCOLS value='50'/>
+		</TEXT>
+		<RELATION id="city_province">
+			<NAME value="NAME_CITY_PROVINCE_REG"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<CLASSES idrefs="province"/>
+		</RELATION>
+		<NUMBER id="city_x">
+			<NAME value="NAME_CITY_X"/>
+			<F_MARKS create='true' set='true' main='true'/>
+		</NUMBER>
+		<NUMBER id="city_y">
+			<NAME value="NAME_CITY_Y"/>
+			<F_MARKS create='true' set='true' main='true'/>
+		</NUMBER>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="routeFromCityToEstablishment" target="establishment" bidirectional='true'>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+		</ROUTE>
+		<ROUTE id="routeFromCityToRoom" target="room" bidirectional='true'>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+			<STEP target="room" idrefs="room_establishment"/>
+		</ROUTE>
+		<ROUTE id="routeFromCityToReservation" target="reservation" bidirectional='true'>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+			<STEP target="room" idrefs="room_establishment"/>
+			<STEP target="reservation" idrefs="reservation_rooms"/>
+		</ROUTE>
+		<ROUTE id="routeFromCityToCurrentReservation" target="current_reservation" bidirectional='true'>
+			<STEP target="establishment_address" idrefs="address_city"/>
+			<STEP target="establishment" idrefs="establishment_address"/>
+			<STEP target="room" idrefs="room_establishment"/>
+			<STEP target="current_reservation" idrefs="current_reservation_rooms"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>

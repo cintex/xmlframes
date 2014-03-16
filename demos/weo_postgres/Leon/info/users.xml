@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="users"
+		behavior="weo.behavior.UsersClassBehavior">
+	<C_BIND value="users" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_USERS"/>
+	<GROUP value="GROUP_ADMINISTRATION"/>
+	<PREFIX value="user"/>
+	<C_MARKS load='true'/>
+	<FIELDS>
+		<NUMBER id="user_id">
+			<NAME value="NAME_USER_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<TEXT id="user_nom">
+			<NAME value="NAME_USER_NOM"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<MAX value='30'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+			<CONSTRAINT type='CAPTION'/>
+		</TEXT>
+		<TEXT id="user_prenom">
+			<NAME value="NAME_USER_PRENOM"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'/>
+			<MIN value='0'/>
+			<MAX value='30'/>
+		</TEXT>
+		<RELATION id="user_profil">
+			<NAME value="NAME_PROFIL"/>
+			<F_MARKS create='true' set='true' table='true' sort='true' filter='true' find='true'/>
+			<CLASSES idrefs="profils"/>
+		</RELATION>
+		<TEXT id="user_fonction">
+			<NAME value="NAME_USER_FONCTION"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<NCOLS value='30'/>
+			<MIN value='0'/>
+			<MAX value='50'/>
+		</TEXT>
+		<TEXT id="user_mail">
+			<NAME value="NAME_USER_MAIL"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<MAX value='50'/>
+		</TEXT>
+		<TEXT id="user_login">
+			<NAME value="NAME_USER_LOGIN"/>
+			<F_MARKS create='true' set='true' unique='true' private='true'/>
+			<MIN value='3'/>
+			<MAX value='10'/>
+		</TEXT>
+		<TEXT id="user_pass">
+			<NAME value="NAME_USER_PASS"/>
+			<F_MARKS create='true' secret='true' private='true'/>
+			<MIN value='3'/>
+			<MAX value='10'/>
+			<CONSTRAINT/>
+			<CONSTRAINT type='CAPTION'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

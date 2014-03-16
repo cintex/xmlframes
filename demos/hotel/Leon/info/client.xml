@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="client">
+	<C_BIND value="client" location="hotel_db"/>
+	<NAME value="NAME_CLIENT"/>
+	<PREFIX value="client"/>
+	<FIELDS>
+		<NUMBER id="client_number">
+			<NAME value="NAME_CLIENT_NUMBER"/>
+			<ALIAS value="ALIAS_NUMBER"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS id='true' unique='true' private='true' main='true' providerValue='true'/>
+			<MIN value='0'/>
+		</NUMBER>
+		<CHOICE id="client_title">
+			<NAME value="NAME_CLIENT_TITLE"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<OPTIONS>
+				<OPTION id="title_mister" name="NAME_OPT_MR" alias="ALIAS_OPT_MR" value="0" default='true' unknown='true'/>
+				<OPTION id="title_misses" name="NAME_OPT_MLLE" alias="ALIAS_OPT_MLLE" value="1"/>
+				<OPTION id="title_miss" name="NAME_OPT_MME" alias="ALIAS_OPT_MME" value="2"/>
+			</OPTIONS>
+		</CHOICE>
+		<TEXT id="client_name">
+			<NAME value="NAME_CLIENT_NAME"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value='30'/>
+		</TEXT>
+		<TEXT id="client_firstname">
+			<NAME value="NAME_CLIENT_FIRSTNAME"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value='30'/>
+		</TEXT>
+		<STRUCT id="client_address" template="address">
+			<NAME value="NAME_CLIENT_ADDRESS"/>
+		</STRUCT>
+		<ARRAY id="client_tels" cMin='0' cMax='3'>
+			<NAME value="NAME_CLIENT_TELS_TEL"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_COORD"/>
+			<F_MARKS create='true' set='true' optional='true'/>
+			<TEXT id="client_tel">
+				<NAME value="NAME_CLIENT_TEL_TEL_TEL"/>
+				<F_MARKS create='true' set='true'/>
+				<FORMAT value="[0-99] [0-99] [0-99] [0-99] [0-99]"/>
+			</TEXT>
+			<NROWS value='3'/>
+		</ARRAY>
+		<RELATION id="client_reservations" multiple='true'>
+			<REVERSE reverseRelation="reservation_client"/>
+			<NAME value="NAME_CLIENT_RESERVATIONS"/>
+			<TAB value="TAB_HISTO"/>
+			<F_MARKS local='true'/>
+			<CLASSES idrefs="reservation"/>
+		</RELATION>
+		<NUMBER id="client_amount" template="amount" type='DOUBLE'>
+			<IMPORT relation="client_reservations" idref="reservation_amount"/>
+			<NAME value="NAME_CLIENT_AMOUNT"/>
+			<TAB value="TAB_HISTO"/>
+			<F_MARKS optional='true' local='true'/>
+		</NUMBER>
+		<RELATION id="client_managers" multiple='true'>
+			<JOIN_DAEMON>
+				<C_BIND value="manager_client" location="hotel_db"/>
+				<F_BIND value="client_number" cbind="manager_client"/>
+				<F_BIND value="manager_id" cbind="manager_client"/>
+			</JOIN_DAEMON>
+			<NAME value="NAME_CLIENT_MANAGERS"/>
+			<TAB value="TAB_HISTO"/>
+			<F_MARKS local='true'/>
+			<CLASSES idrefs="manager"/>
+		</RELATION>
+	</FIELDS>
+	<SORT>
+		<SORT_CRITERIA id="client_sort_name" idref="client_name"/>
+		<SORT_CRITERIA id="client_sort_firstname" idref="client_firstname"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>

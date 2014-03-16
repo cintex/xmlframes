@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="devis_lignes"
+		behavior="weo.behavior.Devis_lignesClassBehavior">
+	<C_BIND value="devis_lignes" location="weo_db"/>
+	<CACHE type='FULL'/>
+	<NAME value="NAME_DEVIS_CLIENT_LIGNES"/>
+	<PREFIX value="lignes"/>
+	<FIELDS>
+		<NUMBER id="devis_ligne_id">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<RELATION id="devis_ligne_devis">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_COMMANDE"/>
+			<F_MARKS name='true' private='true' sort='true' filter='true' find='true' consult='true' load='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="devis_client"/>
+		</RELATION>
+		<NUMBER id="devis_ligne_ligne">
+			<NAME value="NAME_CMD_ACHAT_LIGNE_LIGNE"/>
+			<F_MARKS hidden='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<RELATION id="devis_ligne_produit" noContext='true'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_PRODUIT"/>
+			<F_MARKS name='true' create='true' set='true' main='true' load='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<CLASSES idrefs="produits"/>
+		</RELATION>
+		<TEXT id="devis_ligne_description" multiple='true'>
+			<NAME value="NAME_CMD_ACHAT_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'>
+				<MARK name="BL_CREATE"/>
+			</F_MARKS>
+			<NROWS value='5'/>
+			<NCOLS value='51'/>
+			<MIN value='0'/>
+			<MAX value='255'/>
+		</TEXT>
+		<DATE id="devis_ligne_delai" type='DATE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_DELAI"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+		</DATE>
+		<NUMBER id="devis_ligne_qt_cmd" type='DOUBLE'>
+			<NAME value="NAME_CMD_VENTE_LIGNE_QT_CMD"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'>
+				<MARK name="REC_CMD_CONSULT"/>
+			</F_MARKS>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<NUMBER id="devis_ligne_pu" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_PU"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<FORMAT value="#########0.00###"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='5'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT/>
+		</NUMBER>
+		<NUMBER id="devis_ligne_total" type='DOUBLE'>
+			<NAME value="NAME_CMD_ACHAT_LIGNE_TOTAL"/>
+			<F_MARKS optional='true' local='true' consult='true' main='true'/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<FORMULA value="devis_ligne_qt_cmd*devis_ligne_pu"/>
+		</NUMBER>
+		<NUMBER id="devis_ligne_stock_dispo" type='DOUBLE'>
+			<IMPORT relation="devis_ligne_produit" idref="produit_disponible"/>
+			<NAME value="PRODUIT_DISPONIBLE"/>
+			<F_MARKS optional='true' table='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<NUMBER id="devis_ligne_stock" type='DOUBLE'>
+			<IMPORT relation="devis_ligne_produit" idref="produit_stock"/>
+			<NAME value="PRODUIT_STOCK"/>
+			<F_MARKS optional='true' table='true' sort='true' filter='true' find='true' local='true' consult='true'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+	</FIELDS>
+	<SORT id="devis_lignes_sort">
+		<NAME value="NAME_CMD_VENTE_LIGNES_SORT"/>
+		<SORT_CRITERIA idref="devis_ligne_produit"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_export"/>
+		<ACTION_REF idref="_import"/>
+	</ACTIONS>
+</CLASS>

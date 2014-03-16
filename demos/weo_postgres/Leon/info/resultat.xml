@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CLASS id="resultat">
+	<CACHE type='FULL'/>
+	<NAME value="RESULTAT"/>
+	<PREFIX value="argent"/>
+	<C_MARKS local='true'/>
+	<FIELDS>
+		<NUMBER id="resultat_id">
+			<NAME value="NAME_FACTURE_ID"/>
+			<F_MARKS id='true' unique='true' private='true' hidden='true'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<DATE id="resultat_date_creation" type='DATE'>
+			<NAME value="NAME_FACTURE_DATE_CREATION"/>
+			<GROUP value="DATE"/>
+			<F_MARKS name='true' create='true' set='true' private='true' main='true'  chart='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+
+		
+<!-- Carnet de Commandes en Cours -->		
+		<NUMBER id="resultat_encrs_cmd_achat_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_HT_ACHAT"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_encrs_cmd_achat_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_TVA_ACHAT"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_encrs_cmd_achat_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_TTC_ACHAT"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_encrs_cmd_vente_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_HT_VENTE"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_encrs_cmd_vente_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_TVA_VENTE"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_encrs_cmd_vente_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_TTC_VENTE"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_encrs_cmd_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_HT_RES"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_encrs_cmd_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_TVA_RES"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_encrs_cmd_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_ENCRS_TTC_RES"/>
+			<GROUP value="GROUP_COMMANDES_EN_COURS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		
+<!-- Commandes Exp/Reçu mais Non Facturé -->		
+		<NUMBER id="resultat_cmd_achat_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_HT_ACHAT"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_cmd_achat_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_TVA_ACHAT"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_cmd_achat_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_TTC_ACHAT"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_cmd_vente_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_HT_VENTE"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_cmd_vente_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_TVA_VENTE"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_cmd_vente_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_TTC_VENTE"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_cmd_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_HT_RES"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_cmd_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_TVA_RES"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_cmd_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_CMD_NF_TTC_RES"/>
+			<GROUP value="GROUP_COMMANDES_NON_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+
+
+<!-- Déja Facturé -->		
+		<NUMBER id="resultat_achat_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_HT_ACHAT"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_achat_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_TVA_ACHAT"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_achat_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_TTC_ACHAT"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_vente_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_HT_VENTE"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_vente_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_TVA_VENTE"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_vente_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_TTC_VENTE"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_ht" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_HT_RES"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ht.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='4' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_tva" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_TVA_RES"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_tva.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+			<CONSTRAINT colSpan='2' hAlign='LEFT'/>
+		</NUMBER>
+		<NUMBER id="resultat_ttc" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_TTC_RES"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_ttc.Unit1_"/>
+			<PITCH value='1.0'/>
+			<DECIMALS value='2'/>
+			<N_DEFAULT value='0.0'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+
+		<NUMBER id="resultat_commission" type='DOUBLE'>
+			<NAME value="NAME_FACTURE_COMMISSION"/>
+			<GROUP value="GROUP_DEJA_FACT"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' main='true'  chart='true'/>
+			<UNIT_REF idref="facture_commission.Unit1_"/>
+			<DECIMALS value='2'/>
+			<FUNCTION value='SUM'/>
+		</NUMBER>
+		<FIELD_REF idref="userContext"/>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_chart"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="chart_facture" template="_graphicalChart" behavior="weo.behavior.ViewChartMargeBehavior">
+			<NAME value="LY_ACTION_CHART"/>
+			<PREFIX value="argent"/>
+			<PARAMETER name="_classInfo" idref="resultat"/>
+			<PARAMETER name="_selectFile" value="$LY_APP_DOC_DIR$/data/chart_13.xml"/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>

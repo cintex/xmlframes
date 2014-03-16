@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+	<L_SQL id="hotel_db"
+			url="jdbc:firebird://localhost/"
+			driver="com.firebird.jdbc.Driver"
+			user="SYSDBA"
+			password="masterkey"
+			dbName="../hotel.fdb"
+			valueSep="&#010;"/>
+
+
+

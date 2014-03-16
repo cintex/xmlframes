@@ -1,0 +1,1722 @@
+<LogicPackage id="emx_1" name="" visibility="private">
+<UnitPackage id="emx_2" name="((Unknown))" visibility="private">
+<Class id="emx_3" name="TExtFillCombo" visibility="private">
+<Class.Descendant>
+</Class.Descendant>
+</Class>
+<DataType id="emx_4" name="TIcon" visibility="private">
+</DataType>
+<Class id="emx_5" name="TF_FormMainDB" visibility="private">
+<Class.Descendant>
+</Class.Descendant>
+</Class>
+<DataType id="emx_6" name="TMenuItem" visibility="private">
+</DataType>
+<DataType id="emx_7" name="TMainMenu" visibility="private">
+</DataType>
+<DataType id="emx_8" name="TActionList" visibility="private">
+</DataType>
+<DataType id="emx_9" name="TPanel" visibility="private">
+</DataType>
+<DataType id="emx_10" name="TJvSplitter" visibility="private">
+</DataType>
+<DataType id="emx_11" name="TTimer" visibility="private">
+</DataType>
+<DataType id="emx_12" name="TOnFormInfoIni" visibility="private">
+</DataType>
+<DataType id="emx_13" name="TImageList" visibility="private">
+</DataType>
+<DataType id="emx_14" name="TStatusBar" visibility="private">
+</DataType>
+<DataType id="emx_15" name="TJvLED" visibility="private">
+</DataType>
+<DataType id="emx_16" name="TImage" visibility="private">
+</DataType>
+<DataType id="emx_17" name="TToolBar" visibility="private">
+</DataType>
+<DataType id="emx_18" name="TJvXPButton" visibility="private">
+</DataType>
+<DataType id="emx_19" name="TExtMenuToolBar" visibility="private">
+</DataType>
+<DataType id="emx_20" name="TExtMenuCustomize" visibility="private">
+</DataType>
+<DataType id="emx_21" name="TScrollBox" visibility="private">
+</DataType>
+<DataType id="emx_22" name="TObject" visibility="private">
+</DataType>
+<DataType id="emx_23" name="TStatusPanel" visibility="private">
+</DataType>
+<DataType id="emx_24" name="TCloseAction" visibility="private">
+</DataType>
+<DataType id="emx_25" name="TCustomInifile" visibility="private">
+</DataType>
+<DataType id="emx_26" name="Boolean" visibility="private">
+</DataType>
+<DataType id="emx_27" name="TRect" visibility="private">
+</DataType>
+<DataType id="emx_28" name="TWMHelp" visibility="private">
+</DataType>
+<DataType id="emx_29" name="TComponent" visibility="private">
+</DataType>
+<DataType id="emx_30" name="TIniFile" visibility="private">
+</DataType>
+<DataType id="emx_31" name="String" visibility="private">
+</DataType>
+<DataType id="emx_32" name="TStrings" visibility="private">
+</DataType>
+<Class id="emx_33" name="TFWSource" visibility="private">
+<Class.Descendant>
+</Class.Descendant>
+</Class>
+<DataType id="emx_34" name="TPageControl" visibility="private">
+</DataType>
+<Class id="emx_35" name="TFWSources" visibility="private">
+<Class.Descendant>
+</Class.Descendant>
+</Class>
+<Class id="emx_36" name="TF_CustomFrameWork" visibility="private">
+<Class.Descendant>
+</Class.Descendant>
+</Class>
+<DataType id="emx_37" name="TFWEdit" visibility="private">
+</DataType>
+<DataType id="emx_38" name="TFWPrintSources" visibility="private">
+</DataType>
+<DataType id="emx_39" name="TWinControl" visibility="private">
+</DataType>
+<DataType id="emx_40" name="TALXMLDocument" visibility="private">
+</DataType>
+<DataType id="emx_41" name="TDBRadioGroup" visibility="private">
+</DataType>
+<DataType id="emx_42" name="TALXMLNode" visibility="private">
+</DataType>
+<DataType id="emx_43" name="Longint" visibility="private">
+</DataType>
+<DataType id="emx_44" name="TDSSource" visibility="private">
+</DataType>
+<DataType id="emx_45" name="TList" visibility="private">
+</DataType>
+<DataType id="emx_46" name="Integer" visibility="private">
+</DataType>
+<DataType id="emx_47" name="TRelationBind" visibility="private">
+</DataType>
+<DataType id="emx_48" name="of String" visibility="private">
+</DataType>
+<DataType id="emx_49" name="TDBGroupView" visibility="private">
+</DataType>
+<DataType id="emx_50" name="TControl" visibility="private">
+</DataType>
+<DataType id="emx_51" name="TFWFieldColumn" visibility="private">
+</DataType>
+<DataType id="emx_52" name="TFWLabel" visibility="private">
+</DataType>
+<DataType id="emx_53" name="Word" visibility="private">
+</DataType>
+<DataType id="emx_54" name="TShiftState" visibility="private">
+</DataType>
+<DataType id="emx_55" name="TDataset" visibility="private">
+</DataType>
+<DataType id="emx_56" name="TStringlist" visibility="private">
+</DataType>
+<DataType id="emx_57" name="Char" visibility="private">
+</DataType>
+<DataType id="emx_58" name="Int64" visibility="private">
+</DataType>
+<DataType id="emx_59" name="TBitmap" visibility="private">
+</DataType>
+<DataType id="emx_60" name="Graphics . TBitmap" visibility="private">
+</DataType>
+</UnitPackage>
+<UnitPackage id="emx_61" name="lazxmlframes" visibility="private">
+</UnitPackage>
+<UnitPackage id="emx_62" name="u_xmlform" visibility="private">
+<Class id="emx_63" name="TFWXMLSource" visibility="public">
+<Feature>
+<Attribute id="emx_64" name="FPageControlDetails" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_34"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_65" name="FPanelDetails" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_66" name="PageControlDetails" visibility="public">
+</Attribute>
+<Attribute id="emx_67" name="PanelDetails" visibility="public">
+</Attribute>
+</Feature>
+<Class.Ancestor>
+</Class.Ancestor>
+</Class>
+<Class id="emx_68" name="TFWXMLColumns" visibility="public">
+<Feature>
+<Operation id="emx_69" name="Add" visibility="public">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<Class idref="emx_63"/>
+</ReturnParameter>
+</Parameters>
+</Operation>
+</Feature>
+<Class.Ancestor>
+</Class.Ancestor>
+</Class>
+<Class id="emx_70" name="TF_XMLForm" visibility="public">
+<Feature>
+<Attribute id="emx_71" name="gfin_FormIni" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_12"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_72" name="FPageControl" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_34"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_73" name="FMainPanel" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_74" name="FActionPanel" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_75" name="gr_Function" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_76"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_77" name="gfwe_Password" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_37"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_78" name="gfwe_Login" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_37"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_79" name="gbtn_PrintButton" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_38"/>
+</TypeClassifier>
+</Attribute>
+<Operation id="emx_80" name="fpc_CreatePageControl" visibility="private">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_34"/>
+</ReturnParameter>
+<Parameter id="emx_81" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_82" name="as_Name" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_83" name="apan_PanelOrigin" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_84" name="fscb_CreateTabSheet" visibility="private">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_21"/>
+</ReturnParameter>
+<Parameter id="emx_85" name="apc_PageControl" visibility="private">
+<Parameter.type>
+<DataType idref="emx_34"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_86" name="awin_ParentPageControl" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_87" name="awin_PanelOrigin" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_88" name="as_Name" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_89" name="as_Caption" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_90" name="p_CloseLoginAction" visibility="private">
+<Parameters>
+<Parameter id="emx_91" name="AObject" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_92" name="ACLoseAction" visibility="private">
+<Parameter.type>
+<DataType idref="emx_24"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_93" name="p_LoginCancelClick" visibility="private">
+<Parameters>
+<Parameter id="emx_94" name="AObject" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_95" name="p_LoginOKClick" visibility="private">
+<Parameters>
+<Parameter id="emx_96" name="AObject" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_97" name="p_setFunction" visibility="private">
+<Parameters>
+<Parameter id="emx_98" name="a_Value" visibility="private">
+<Parameter.type>
+<DataType idref="emx_76"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Attribute id="emx_99" name="gxml_SourceFile" visibility="protected">
+<TypeClassifier>
+<DataType idref="emx_40"/>
+</TypeClassifier>
+</Attribute>
+<Operation id="emx_100" name="p_ScruteComposantsFiche" visibility="protected">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_101" name="p_setChoiceComponent" visibility="protected">
+<Parameters>
+<Parameter id="emx_102" name="argr_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_41"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_103" name="p_setControl" visibility="protected">
+<Parameters>
+<Parameter id="emx_104" name="as_BeginName" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_105" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_106" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_107" name="anod_Field" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_108" name="ai_FieldCounter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_109" name="ai_counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_110" name="fdbc_CreateLookupCombo" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<Class idref="emx_111"/>
+</ReturnParameter>
+<Parameter id="emx_112" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_113" name="ads_Connection" visibility="private">
+<Parameter.type>
+<DataType idref="emx_44"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_114" name="as_Table" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_115" name="as_FieldsID" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_116" name="as_FieldsDisplay" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_117" name="as_Name" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_118" name="alis_IdRelation" visibility="private">
+<Parameter.type>
+<DataType idref="emx_45"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_119" name="alis_DisplayRelation" visibility="private">
+<Parameter.type>
+<DataType idref="emx_45"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_120" name="ai_FieldCounter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_121" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_122" name="OneFieldToFill" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_123" name="fdbg_GroupViewComponents" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_49"/>
+</ReturnParameter>
+<Parameter id="emx_124" name="afws_source" visibility="private">
+<Parameter.type>
+<Class idref="emx_63"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_125" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_126" name="ai_Connection" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_127" name="ads_Connection" visibility="private">
+<Parameter.type>
+<DataType idref="emx_44"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_128" name="as_NameRelation" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_129" name="as_ConnectionBind" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_130" name="as_ClassRelation" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_131" name="as_ClassBind" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_132" name="as_OtherClass" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_133" name="as_fieldsId" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_134" name="as_fieldsDisplay" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_135" name="aa_FieldsBind" visibility="private">
+<Parameter.type>
+<DataType idref="emx_47"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_136" name="alis_IdRelation" visibility="private">
+<Parameter.type>
+<DataType idref="emx_45"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_137" name="alis_DisplayRelation" visibility="private">
+<Parameter.type>
+<DataType idref="emx_45"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_138" name="aa_FieldsDisplayNames" visibility="private">
+<Parameter.type>
+<DataType idref="emx_48"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_139" name="ai_FieldCounter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_140" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_141" name="ffwc_getRelationComponent" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_39"/>
+</ReturnParameter>
+<Parameter id="emx_142" name="afws_source" visibility="private">
+<Parameter.type>
+<Class idref="emx_63"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_143" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_144" name="anod_Field" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_145" name="ai_FieldCounter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_146" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_147" name="p_setComponentLeft" visibility="protected">
+<Parameters>
+<Parameter id="emx_148" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_50"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_149" name="ab_Column" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_150" name="p_setFieldComponentTop" visibility="protected">
+<Parameters>
+<Parameter id="emx_151" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_152" name="ab_Column" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_153" name="p_setFieldComponentData" visibility="protected">
+<Parameters>
+<Parameter id="emx_154" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_155" name="afw_Source" visibility="private">
+<Parameter.type>
+<Class idref="emx_63"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_156" name="afw_columnField" visibility="private">
+<Parameter.type>
+<DataType idref="emx_51"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_157" name="ab_IsLocal" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_158" name="p_setLabelComponent" visibility="protected">
+<Parameters>
+<Parameter id="emx_159" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_160" name="alab_Label" visibility="private">
+<Parameter.type>
+<DataType idref="emx_52"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_161" name="ab_Column" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_162" name="fb_setChoiceProperties" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_26"/>
+</ReturnParameter>
+<Parameter id="emx_163" name="anod_FieldProperty" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_164" name="argr_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_41"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_165" name="CreateSources" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<Class idref="emx_35"/>
+</ReturnParameter>
+</Parameters>
+</Operation>
+<Operation id="emx_166" name="fwin_CreateFieldComponent" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_39"/>
+</ReturnParameter>
+<Parameter id="emx_167" name="afws_Source" visibility="private">
+<Parameter.type>
+<Class idref="emx_63"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_168" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_169" name="anod_Field" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_170" name="ab_isLarge" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_171" name="ab_IsLocal" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_172" name="ai_FieldCounter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_173" name="ai_counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_174" name="fwin_CreateFieldComponentAndProperties" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_39"/>
+</ReturnParameter>
+<Parameter id="emx_175" name="as_Table" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_176" name="anod_Field" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_177" name="ai_FieldCounter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_178" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_179" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_180" name="awin_Last" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_181" name="ab_Column" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_182" name="afws_Source" visibility="private">
+<Parameter.type>
+<Class idref="emx_63"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_183" name="fpan_GridNavigationComponents" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_21"/>
+</ReturnParameter>
+<Parameter id="emx_184" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_185" name="as_Name" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_186" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_187" name="flab_setFieldComponentProperties" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_52"/>
+</ReturnParameter>
+<Parameter id="emx_188" name="anod_Field" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_189" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_190" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_191" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_192" name="ab_Column" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_193" name="afcf_ColumnField" visibility="private">
+<Parameter.type>
+<DataType idref="emx_51"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_194" name="p_SetFieldButtonsProperties" visibility="protected">
+<Parameters>
+<Parameter id="emx_195" name="anod_Action" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_196" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_197" name="p_setControlName" visibility="protected">
+<Parameters>
+<Parameter id="emx_198" name="as_FunctionName" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_199" name="anod_FieldProperty" visibility="private">
+<Parameter.type>
+<DataType idref="emx_42"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_200" name="awin_Control" visibility="private">
+<Parameter.type>
+<DataType idref="emx_50"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_201" name="ai_Counter" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_202" name="fb_ChargementNomCol" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_26"/>
+</ReturnParameter>
+<Parameter id="emx_203" name="AFWColumn" visibility="private">
+<Parameter.type>
+<Class idref="emx_33"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_204" name="ai_NumSource" visibility="private">
+<Parameter.type>
+<DataType idref="emx_46"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_205" name="p_AfterColumnFrameShow" visibility="protected">
+<Parameters>
+<Parameter id="emx_206" name="aFWColumn" visibility="private">
+<Parameter.type>
+<Class idref="emx_33"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_207" name="DoClose" visibility="protected">
+<Parameters>
+<Parameter id="emx_208" name="CloseAction" visibility="private">
+<Parameter.type>
+<DataType idref="emx_24"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_209" name="fb_ChargeDonnees" visibility="protected">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_26"/>
+</ReturnParameter>
+</Parameters>
+</Operation>
+<Operation id="emx_210" name="KeyUp" visibility="protected">
+<Parameters>
+<Parameter id="emx_211" name="Key" visibility="private">
+<Parameter.type>
+<DataType idref="emx_53"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_212" name="Shift" visibility="private">
+<Parameter.type>
+<DataType idref="emx_54"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_213" name="fb_InsereCompteur" visibility="public">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_26"/>
+</ReturnParameter>
+<Parameter id="emx_214" name="adat_Dataset" visibility="private">
+<Parameter.type>
+<DataType idref="emx_55"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_215" name="aslt_Cle" visibility="private">
+<Parameter.type>
+<DataType idref="emx_56"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_216" name="as_ChampCompteur" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_217" name="as_Table" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_218" name="as_PremierLettrage" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_219" name="ach_DebutLettrage" visibility="private">
+<Parameter.type>
+<DataType idref="emx_57"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_220" name="ach_FinLettrage" visibility="private">
+<Parameter.type>
+<DataType idref="emx_57"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_221" name="ali_Debut" visibility="private">
+<Parameter.type>
+<DataType idref="emx_58"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_222" name="ali_LimiteRecherche" visibility="private">
+<Parameter.type>
+<DataType idref="emx_58"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_223" name="DoShow" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_224" name="p_setLogin" visibility="public">
+<Parameters>
+<Parameter id="emx_225" name="axml_Login" visibility="private">
+<Parameter.type>
+<DataType idref="emx_40"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_226" name="axb_ident" visibility="private">
+<Parameter.type>
+<DataType idref="emx_18"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_227" name="amen_MenuIdent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_6"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_228" name="aiml_Images" visibility="private">
+<Parameter.type>
+<DataType idref="emx_13"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_229" name="abmp_DefaultImage" visibility="private">
+<Parameter.type>
+<DataType idref="emx_59"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_230" name="ai_CountImages" visibility="private">
+<Parameter.type>
+<DataType idref="emx_43"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_231" name="BeforeCreateFrameWork" visibility="public">
+<Parameters>
+<Parameter id="emx_232" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_29"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_233" name="DestroyComponents" visibility="public">
+<Parameters>
+<Parameter id="emx_234" name="acom_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_235" name="p_CreateFormComponents" visibility="public">
+<Parameters>
+<Parameter id="emx_236" name="as_XMLClass" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_237" name="as_Name" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_238" name="awin_Parent" visibility="private">
+<Parameter.type>
+<DataType idref="emx_39"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_239" name="Create" visibility="public">
+<Parameters>
+<Parameter id="emx_240" name="AOwner" visibility="private">
+<Parameter.type>
+<DataType idref="emx_29"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Attribute id="emx_241" name="Fonction" visibility="public">
+</Attribute>
+<Attribute id="emx_242" name="ActionPanel" visibility="public">
+</Attribute>
+<Attribute id="emx_243" name="MainPanel" visibility="public">
+</Attribute>
+<Attribute id="emx_244" name="PageControl" visibility="public">
+</Attribute>
+</Feature>
+<Class.Ancestor>
+</Class.Ancestor>
+</Class>
+</UnitPackage>
+<UnitPackage id="emx_245" name="fonctions_xml" visibility="private">
+</UnitPackage>
+<UnitPackage id="emx_246" name="fonctions_autocomponents" visibility="private">
+</UnitPackage>
+<UnitPackage id="emx_247" name="u_xmlfillcombobutton" visibility="private">
+<Class id="emx_111" name="TXMLFillCombo" visibility="public">
+<Feature>
+<Operation id="emx_248" name="CreateForm" visibility="protected">
+<Parameters>
+<Parameter id="emx_249" name="aico_Icon" visibility="private">
+<Parameter.type>
+<DataType idref="emx_4"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+</Feature>
+<Class.Ancestor>
+</Class.Ancestor>
+</Class>
+</UnitPackage>
+<UnitPackage id="emx_250" name="fonctions_ObjetsXML" visibility="private">
+<DataType id="emx_251" name="TActionTemplate" visibility="private">
+</DataType>
+<DataType id="emx_252" name="TLeonFunctionID" visibility="private">
+</DataType>
+<DataType id="emx_253" name="TLeonFunctions" visibility="private">
+</DataType>
+<DataType id="emx_254" name="TStringArray" visibility="private">
+</DataType>
+<DataType id="emx_76" name="TLeonFunction" visibility="private">
+</DataType>
+<DataType id="emx_255" name="TLeonField" visibility="private">
+</DataType>
+<DataType id="emx_256" name="TLeonFields" visibility="private">
+</DataType>
+</UnitPackage>
+<UnitPackage id="emx_257" name="U_XMLFenetrePrincipale" visibility="private">
+<Class id="emx_258" name="TF_FenetrePrincipale" visibility="public">
+<Feature>
+<Attribute id="emx_259" name="mu_apropos" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_260" name="mu_MenuIni" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_7"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_261" name="mu_MainMenu" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_7"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_262" name="mu_file" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_263" name="mu_ouvrir" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_264" name="mu_sep1" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_265" name="mu_quitter" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_266" name="mu_fenetre" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_267" name="mu_reduire" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_268" name="mu_affichage" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_269" name="mu_barreoutils" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_270" name="mu_voletexplore" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_271" name="mu_aide" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_272" name="mu_ouvriraide" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_273" name="mu_sep2" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_274" name="mu_sep3" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_275" name="ActionList" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_8"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_276" name="pa_1" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_277" name="pa_2" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_278" name="pa_3" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_279" name="pa_4" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_280" name="spl_volet" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_10"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_281" name="Timer" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_11"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_282" name="SvgFormInfoIni" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_12"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_283" name="im_Liste" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_13"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_284" name="br_statusbar" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_14"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_285" name="im_led" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_15"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_286" name="mu_identifier" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_287" name="im_appli" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_16"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_288" name="im_acces" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_16"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_289" name="im_about" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_16"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_290" name="mu_langue" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_291" name="tbar_outils" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_17"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_292" name="dbt_ident" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_18"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_293" name="tbsep_1" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_294" name="tbsep_2" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_295" name="dbt_aide" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_18"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_296" name="tbsep_3" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_297" name="dbt_quitter" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_18"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_298" name="mtb_CustomizedMenu" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_19"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_299" name="im_aide" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_16"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_300" name="im_quit" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_16"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_301" name="mc_Customize" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_20"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_302" name="im_ListeDisabled" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_13"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_303" name="mi_CustomizedMenu" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_6"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_304" name="tbar_volet" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_9"/>
+</TypeClassifier>
+</Attribute>
+<Attribute id="emx_305" name="scb_Volet" visibility="public">
+<TypeClassifier>
+<DataType idref="emx_21"/>
+</TypeClassifier>
+</Attribute>
+<Operation id="emx_306" name="mi_CustomizedMenuClick" visibility="public">
+<Parameters>
+<Parameter id="emx_307" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_308" name="mtb_CustomizedMenuClickCustomize" visibility="public">
+<Parameters>
+<Parameter id="emx_309" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_310" name="pa_5Resize" visibility="public">
+<Parameters>
+<Parameter id="emx_311" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_312" name="p_ChargeAide" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_313" name="p_OnClickFonction" visibility="public">
+<Parameters>
+<Parameter id="emx_314" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_315" name="FormCreate" visibility="public">
+<Parameters>
+<Parameter id="emx_316" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_317" name="p_OnClickMenuLang" visibility="public">
+<Parameters>
+<Parameter id="emx_318" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_319" name="p_SetLengthSB" visibility="public">
+<Parameters>
+<Parameter id="emx_320" name="ao_SP" visibility="private">
+<Parameter.type>
+<DataType idref="emx_23"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_321" name="F_FormMainIniActivate" visibility="public">
+<Parameters>
+<Parameter id="emx_322" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_323" name="F_FormMainIniResize" visibility="public">
+<Parameters>
+<Parameter id="emx_324" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_325" name="DoClose" visibility="public">
+<Parameters>
+<Parameter id="emx_326" name="AAction" visibility="private">
+<Parameter.type>
+<DataType idref="emx_24"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_327" name="dbt_identClick" visibility="public">
+<Parameters>
+<Parameter id="emx_328" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_329" name="dbt_aideClick" visibility="public">
+<Parameters>
+<Parameter id="emx_330" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_331" name="dbt_quitterClick" visibility="public">
+<Parameters>
+<Parameter id="emx_332" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_333" name="mu_barreoutilsClick" visibility="public">
+<Parameters>
+<Parameter id="emx_334" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_335" name="mu_voletexploreClick" visibility="public">
+<Parameters>
+<Parameter id="emx_336" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_337" name="mu_aproposClick" visibility="public">
+<Parameters>
+<Parameter id="emx_338" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_339" name="SvgFormInfoIniIniLoad" visibility="public">
+<Parameters>
+<Parameter id="emx_340" name="AInifile" visibility="private">
+<Parameter.type>
+<DataType idref="emx_25"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_341" name="Continue" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_342" name="SvgFormInfoIniIniWrite" visibility="public">
+<Parameters>
+<Parameter id="emx_343" name="AInifile" visibility="private">
+<Parameter.type>
+<DataType idref="emx_25"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_344" name="Continue" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_345" name="TimerTimer" visibility="public">
+<Parameters>
+<Parameter id="emx_346" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_347" name="br_statusbarDrawPanel" visibility="public">
+<Parameters>
+<Parameter id="emx_348" name="StatusBar" visibility="private">
+<Parameter.type>
+<DataType idref="emx_14"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_349" name="Panel" visibility="private">
+<Parameter.type>
+<DataType idref="emx_23"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_350" name="Rect" visibility="private">
+<Parameter.type>
+<DataType idref="emx_27"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_351" name="tbar_voletClose" visibility="public">
+<Parameters>
+<Parameter id="emx_352" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_353" name="tbar_outilsClose" visibility="public">
+<Parameters>
+<Parameter id="emx_354" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_355" name="CloseQuery" visibility="public">
+<Parameters>
+<ReturnParameter>
+<Parameter.kind value="return"/>
+<DataType idref="emx_26"/>
+</ReturnParameter>
+</Parameters>
+</Operation>
+<Operation id="emx_356" name="mu_ReinitiliserpresentationClick" visibility="public">
+<Parameters>
+<Parameter id="emx_357" name="Sender" visibility="private">
+<Parameter.type>
+<DataType idref="emx_22"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Attribute id="emx_358" name="lb_MsgDeconnexion" visibility="private">
+<TypeClassifier>
+<DataType idref="emx_26"/>
+</TypeClassifier>
+</Attribute>
+<Operation id="emx_359" name="mu_voletchange" visibility="private">
+<Parameters>
+<Parameter id="emx_360" name="ab_visible" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_361" name="mu_voletPersonnalisechange" visibility="private">
+<Parameters>
+<Parameter id="emx_362" name="ab_visible" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_363" name="p_SetLedColor" visibility="private">
+<Parameters>
+<Parameter id="emx_364" name="ab_Status" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_365" name="WMHelp" visibility="private">
+<Parameters>
+<Parameter id="emx_366" name="Message" visibility="private">
+<Parameter.type>
+<DataType idref="emx_28"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_367" name="Doshow" visibility="protected">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_368" name="p_AccesstoSoft" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_369" name="Create" visibility="public">
+<Parameters>
+<Parameter id="emx_370" name="AOwner" visibility="private">
+<Parameter.type>
+<DataType idref="emx_29"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_371" name="Destroy" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_372" name="p_PbConnexion" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_373" name="p_Connectee" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_374" name="p_WriteDescendantIni" visibility="public">
+<Parameters>
+<Parameter id="emx_375" name="amif_Init" visibility="private">
+<Parameter.type>
+<DataType idref="emx_30"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_376" name="p_ReadDescendantIni" visibility="public">
+<Parameters>
+<Parameter id="emx_377" name="amif_Init" visibility="private">
+<Parameter.type>
+<DataType idref="emx_30"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_378" name="p_SortieMajNumScroll" visibility="public">
+<Parameters>
+<Parameter id="emx_379" name="ab_MajEnfoncee" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_380" name="ab_NumEnfoncee" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_381" name="ab_ScrollEnfoncee" visibility="private">
+<Parameter.type>
+<DataType idref="emx_26"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_382" name="p_ApresSauvegardeParamIni" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+<Operation id="emx_383" name="p_editionTransfertVariable" visibility="public">
+<Parameters>
+<Parameter id="emx_384" name="as_nom" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_385" name="as_titre" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_386" name="as_chemin" visibility="private">
+<Parameter.type>
+<DataType idref="emx_31"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_387" name="ats_edition_nom_params" visibility="private">
+<Parameter.type>
+<DataType idref="emx_32"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_388" name="ats_edition_params" visibility="private">
+<Parameter.type>
+<DataType idref="emx_32"/>
+</Parameter.type>
+</Parameter>
+<Parameter id="emx_389" name="ats_edition_params_values" visibility="private">
+<Parameter.type>
+<DataType idref="emx_32"/>
+</Parameter.type>
+</Parameter>
+</Parameters>
+</Operation>
+<Operation id="emx_390" name="p_ConnectToData" visibility="public">
+<Parameters>
+</Parameters>
+</Operation>
+</Feature>
+<Class.Ancestor>
+</Class.Ancestor>
+</Class>
+</UnitPackage>
+<UnitPackage id="emx_391" name="fonctions_service" visibility="private">
+</UnitPackage>
+<UnitPackage id="emx_392" name="u_languagevars" visibility="private">
+</UnitPackage>
+<UnitPackage id="emx_393" name="fonctions_leon_format" visibility="private">
+<DataType id="emx_394" name="TArrayStrings" visibility="private">
+</DataType>
+<DataType id="emx_395" name="TInterval" visibility="private">
+</DataType>
+<DataType id="emx_396" name="TArrayIntervals" visibility="private">
+</DataType>
+</UnitPackage>
+</LogicPackage>
