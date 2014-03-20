@@ -1552,19 +1552,35 @@
         <UnitName Value="fonctions_manbase"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
+<<<<<<< local
+        <TopLine Value="2489"/>
+        <CursorPos X="10" Y="2512"/>
+        <UsageCount Value="31"/>
+=======
         <TopLine Value="604"/>
         <CursorPos X="90" Y="612"/>
         <UsageCount Value="32"/>
+>>>>>>> other
         <Loaded Value="True"/>
       </Unit187>
       <Unit188>
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
+<<<<<<< local
+        <IsVisibleTab Value="True"/>
+=======
+>>>>>>> other
         <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
+<<<<<<< local
+        <TopLine Value="503"/>
+        <CursorPos X="97" Y="525"/>
+        <UsageCount Value="31"/>
+=======
         <TopLine Value="654"/>
         <CursorPos X="54" Y="660"/>
         <UsageCount Value="32"/>
+>>>>>>> other
         <Loaded Value="True"/>
       </Unit188>
       <Unit189>
@@ -1604,12 +1620,19 @@
       <Unit193>
         <Filename Value="../../../ibx/runtime/IB.pas"/>
         <UnitName Value="IB"/>
+<<<<<<< local
+=======
         <EditorIndex Value="13"/>
+>>>>>>> other
         <WindowIndex Value="0"/>
         <TopLine Value="346"/>
         <CursorPos X="1" Y="364"/>
+<<<<<<< local
+        <UsageCount Value="13"/>
+=======
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
+>>>>>>> other
       </Unit193>
       <Unit194>
         <Filename Value="../../../Extended/core/fonctions_string.pas"/>
@@ -1720,7 +1743,10 @@
       <Unit207>
         <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
         <UnitName Value="fonctions_createsql"/>
+<<<<<<< local
+=======
         <IsVisibleTab Value="True"/>
+>>>>>>> other
         <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1375"/>
@@ -1997,124 +2023,268 @@
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
+<<<<<<< local
+        <Filename Value="../../../ManFrames/manframes/u_fillcombobutton.pas"/>
+        <Caret Line="118" Column="72" TopLine="100"/>
+=======
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
         <Caret Line="159" Column="31" TopLine="143"/>
+>>>>>>> other
       </Position1>
       <Position2>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
+<<<<<<< local
+        <Caret Line="1107" Column="39" TopLine="1085"/>
+=======
         <Caret Line="951" Column="5" TopLine="933"/>
+>>>>>>> other
       </Position2>
       <Position3>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
+<<<<<<< local
+        <Caret Line="1103" Column="72" TopLine="1086"/>
+=======
         <Caret Line="1100" Column="19" TopLine="1095"/>
+>>>>>>> other
       </Position3>
       <Position4>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
+<<<<<<< local
+        <Caret Line="1104" Column="87" TopLine="1087"/>
+=======
         <Caret Line="1112" Column="50" TopLine="1095"/>
+>>>>>>> other
       </Position4>
       <Position5>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="1110" Column="61" TopLine="1091"/>
+=======
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <Caret Line="530" Column="1" TopLine="504"/>
+>>>>>>> other
       </Position5>
       <Position6>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="1104" Column="124" TopLine="1092"/>
+=======
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <Caret Line="529" Column="81" TopLine="504"/>
+>>>>>>> other
       </Position6>
       <Position7>
+<<<<<<< local
+        <Filename Value="../../../ManFrames/manframes/u_customframework.pas"/>
+        <Caret Line="6020" Column="1" TopLine="6003"/>
+=======
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
         <Caret Line="1107" Column="81" TopLine="1080"/>
+>>>>>>> other
       </Position7>
       <Position8>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
+<<<<<<< local
+        <Caret Line="1101" Column="48" TopLine="1092"/>
+=======
         <Caret Line="1074" Column="41" TopLine="1059"/>
+>>>>>>> other
       </Position8>
       <Position9>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="159" Column="31" TopLine="143"/>
+=======
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <Caret Line="530" Column="131" TopLine="511"/>
+>>>>>>> other
       </Position9>
       <Position10>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="951" Column="5" TopLine="933"/>
+=======
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <Caret Line="278" Column="23" TopLine="262"/>
+>>>>>>> other
       </Position10>
       <Position11>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
+<<<<<<< local
+        <Caret Line="1100" Column="19" TopLine="1095"/>
+=======
         <Caret Line="958" Column="57" TopLine="944"/>
+>>>>>>> other
       </Position11>
       <Position12>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
+<<<<<<< local
+        <Caret Line="1112" Column="50" TopLine="1095"/>
+=======
         <Caret Line="1" Column="1" TopLine="1"/>
+>>>>>>> other
       </Position12>
       <Position13>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="530" Column="1" TopLine="504"/>
+=======
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
         <Caret Line="531" Column="32" TopLine="506"/>
+>>>>>>> other
       </Position13>
       <Position14>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="529" Column="81" TopLine="504"/>
+=======
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
         <Caret Line="533" Column="37" TopLine="507"/>
+>>>>>>> other
       </Position14>
       <Position15>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="1107" Column="81" TopLine="1080"/>
+=======
         <Filename Value="../../../ManFrames/manframes/u_formmaindb.pas"/>
         <Caret Line="52" Column="3" TopLine="36"/>
+>>>>>>> other
       </Position15>
       <Position16>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="1074" Column="41" TopLine="1059"/>
+=======
         <Filename Value="../../../Extended/inicomp/u_formmainini.pas"/>
         <Caret Line="56" Column="3" TopLine="40"/>
+>>>>>>> other
       </Position16>
       <Position17>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="530" Column="131" TopLine="511"/>
+=======
         <Filename Value="weo.pas"/>
         <Caret Line="27" Column="1" TopLine="5"/>
+>>>>>>> other
       </Position17>
       <Position18>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="278" Column="23" TopLine="262"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="163" Column="64" TopLine="154"/>
+>>>>>>> other
       </Position18>
       <Position19>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="958" Column="57" TopLine="944"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="169" Column="89" TopLine="154"/>
+>>>>>>> other
       </Position19>
       <Position20>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="173" Column="104" TopLine="159"/>
+>>>>>>> other
       </Position20>
       <Position21>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="531" Column="32" TopLine="506"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="175" Column="117" TopLine="161"/>
+>>>>>>> other
       </Position21>
       <Position22>
+<<<<<<< local
+        <Filename Value="../../xmlframes/u_xmlform.pas"/>
+        <Caret Line="533" Column="37" TopLine="507"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="314" Column="54" TopLine="298"/>
+>>>>>>> other
       </Position22>
       <Position23>
+<<<<<<< local
+        <Filename Value="../../../ManFrames/manframes/u_formmaindb.pas"/>
+        <Caret Line="52" Column="3" TopLine="36"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="154" Column="79" TopLine="154"/>
+>>>>>>> other
       </Position23>
       <Position24>
+<<<<<<< local
+        <Filename Value="../../../Extended/inicomp/u_formmainini.pas"/>
+        <Caret Line="56" Column="3" TopLine="40"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
+>>>>>>> other
       </Position24>
       <Position25>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="660" Column="54" TopLine="654"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="163" Column="79" TopLine="148"/>
+>>>>>>> other
       </Position25>
       <Position26>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="606" Column="22" TopLine="582"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="169" Column="89" TopLine="154"/>
+>>>>>>> other
       </Position26>
       <Position27>
+<<<<<<< local
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="2557" Column="3" TopLine="2538"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="173" Column="104" TopLine="159"/>
+>>>>>>> other
       </Position27>
       <Position28>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="606" Column="22" TopLine="582"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="175" Column="117" TopLine="161"/>
+>>>>>>> other
       </Position28>
       <Position29>
+<<<<<<< local
+        <Filename Value="../../xmlservice/fonctions_xml.pas"/>
+        <Caret Line="519" Column="60" TopLine="500"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="304" Column="87" TopLine="289"/>
+>>>>>>> other
       </Position29>
       <Position30>
+<<<<<<< local
+        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
+        <Caret Line="2537" Column="3" TopLine="2523"/>
+=======
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <Caret Line="305" Column="105" TopLine="290"/>
+>>>>>>> other
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -2136,6 +2306,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
+        <GenerateDebugInfo Value="False"/>
         <UseHeaptrc Value="True"/>
         <UseValgrind Value="True"/>
       </Debugging>
@@ -2197,4 +2368,7 @@
     </Exceptions>
   </Debugging>
   <EditorMacros Count="0"/>
+<<<<<<< local
+</CONFIG>=======
 </CONFIG>
+>>>>>>> other

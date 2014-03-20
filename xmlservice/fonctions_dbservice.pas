@@ -542,7 +542,6 @@ var li_i,li_j : Integer;
     ATemp1,
     ATemp2 : String;
 Begin
-  Result := False;
   fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
   LTables := TFWTables.Create(TFWTable);
   try
@@ -557,64 +556,30 @@ Begin
          and ( LTables.TableByName(ATemp1) = nil ) Then
            p_CreateComponents( LTables, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
        end;
-    // verify if tables objects of relations have been created
-    for li_i := 0 to LTables.Count -1 do
-     Begin
-       LTable:=LTables [li_i];
-       with LTable do
-        for li_j := 0 to Relations.Count -1 do
-         with Relations [li_j] do
-          if TableLinked = -1 Then
-           Begin
-             if Table = ''
-              Then ATemp1:=TableKey
-              Else ATemp1:=Table;
-             if  ( ATemp1 > '' )
-             and assigned ( LTables.TableByName(ATemp1))
-             and( LTables.TableByName(TablesDest [ 0 ].Table)=nil) // relation can be
-              Then
-              with LTables.Add do
-               Begin
-                 Table:=TablesDest [ 0 ].Table;
-                 TableKey:=Table;
-                 IsMain:=True;
-                 //MyShowMessage(FieldsFK.toString()+ ' ' +ATemp1);
-                 GetKey.Assign(FieldsFK); // get key form relation-ships
-                 with FieldsDefs.Add do
-                  Begin
-                    // linked table
-                   Assign(LTables.TableByName(ATemp1).FieldsDefs.FieldByName(LTables.TableByName(ATemp1).GetKey [ 0 ].FieldName));
-                   FieldName:=GetKey [ 0 ].FieldName;// get FieldName from relation
-                  end;
-                 with FieldsDefs.Add do
-                  Begin
-                     // owner table
-                    Assign(LTable.FieldsDefs.FieldByName(LTable.GetKey [ 0 ].FieldName));
-                    FieldName:=GetKey [ 1 ].FieldName; // get FieldName from relation;
-                  end;
-               end;
-
-           end;
-     end;
     ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
     ATemp2:=fs_BeginAlterCreate;
     for li_i := 0 to LTables.Count - 1 do
      with LTables [ li_i ] do
       if IsMain Then
        Begin
+         //MyShowMessage(Table+#10+GetSQLCreateCode);
          AppendStr(ATemp2,GetSQLCreateCode);
        end;
     AppendStr(ATemp2,fs_EndCreate(as_BaseName,as_user,as_password,as_host));
   finally
     LTables.destroy;
   end;
-  if ab_DoItWithCommandLine Then
-    p_ExecuteSQLCommand(ATemp1+ATemp2)
-  Else
-   if Assigned(ge_ExecuteSQLScript)
-    Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
-  p_optimiseDatabase(nil,as_BaseName,as_user,as_password,fs_GetIniDir(False));
-  //MyShowMessage('Database created. You should restart.');
+  try
+    if ab_DoItWithCommandLine Then
+      p_ExecuteSQLCommand(ATemp1+ATemp2)
+    Else
+     if Assigned(ge_ExecuteSQLScript)
+      Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
+    p_optimiseDatabase(nil,as_BaseName,as_user,as_password,fs_GetIniDir(False));
+    Result := True;
+  except
+    Result := False;
+  end;
 End;
 
 procedure p_LoadConnection ( const aNode : TALXMLNode ; const ads_connection : TDSSource ; const acom_owner : TComponent );
@@ -692,16 +657,10 @@ Begin
        p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_POSTGRES );
        gbm_DatabaseToGenerate:=bmPostgreSQL;
       end;
-     try
-       fb_OpenCloseDatabase ( Connection, True );
-     except
-       on e: Exception do
-         if MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrYes Then
-          Begin
-           if not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection) Then
-            Exit;
-          end;
-     end;
+       if not fb_OpenCloseDatabase ( Connection, True )
+       and ( (MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrNo)
+            or not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection)) Then
+        Abort;
 
    end;
 end;
@@ -790,4 +749,4 @@ initialization
 {$ENDIF}
 
 end.
-
+

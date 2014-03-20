@@ -449,7 +449,10 @@ Begin
     LDataset:=fdat_CloneDatasetWithoutSQL(DMModuleSources.Sources[0].QueryCopy,ads_connection.Connection.Owner);
     try
       p_ExecuteSQLScriptServer(Connection,as_sql1);
-      p_SetComponentProperty(Connection,CST_DB_DATABASE,as_BaseName);
+    finally
+    end;
+    p_SetComponentProperty(Connection,CST_DB_DATABASE,as_BaseName);
+    try
       p_ExecuteSQLScriptServer(Connection,as_sql2);
     finally
       LDataset.Destroy;

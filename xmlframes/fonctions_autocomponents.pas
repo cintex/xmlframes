@@ -918,7 +918,6 @@ begin
            p_SetComboProperties ( Result, Datasource, aff_field.Relation );
            DisplayAllFields:=True;
            try
-//                 MyShowMessage(fs_getSQLQuery(Datasource.DataSet)+#10+FieldsDisplay.toString+#10+FieldsFK.toString);
              Datasource.DataSet.Open;
            Except
            end;

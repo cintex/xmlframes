@@ -493,3 +493,4 @@ CREATE TABLE joint_profils_droits (
 ;
 
 GRANT ALL ON weo.* TO 'demo'@'%' IDENTIFIED BY 'vraduser';
+FLUSH PRIVILEGES;
