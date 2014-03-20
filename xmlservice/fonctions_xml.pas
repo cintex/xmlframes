@@ -260,7 +260,7 @@ function fb_GetCrossLinkFunction( const ADBSources : TFWTables ;
                                   const ADBSource : TFWTable ;
                                   const Aff_field : TFWFieldColumn ;
                                   const as_FunctionClep :String;
-                                  const as_Table : String; const arel_Relation : TFWRelation;
+                                        as_Table : String; const arel_Relation : TFWRelation;
                                   const ab_createDS, ab_FullTable : Boolean;
                                   const acom_Owner : TComponent ): Boolean ;
 function fb_FieldTypeProperties ( const afws_Source : TFWTable ;
@@ -429,7 +429,7 @@ begin
   ab_Column:=False;
   // Creating the properties and setting data link
 
-   lffd_ColumnFieldDef := ADBSource.FieldsDefs.Add ;
+   lffd_ColumnFieldDef := ADBSource.FieldsDefs.Add;
    if //( anod_Field.NodeName = CST_LEON_ARRAY ) // to do
     ( anod_Field.NodeName = CST_LEON_STRUCT )
     Then
@@ -462,13 +462,14 @@ function fb_GetCrossLinkFunction( const ADBSources : TFWTables ;
                                   const ADBSource : TFWTable ;
                                   const Aff_field : TFWFieldColumn ;
                                   const as_FunctionClep :String;
-                                  const as_Table : String; const arel_Relation : TFWRelation;
+                                        as_Table : String; const arel_Relation : TFWRelation;
                                   const ab_createDS, ab_FullTable : Boolean;
                                   const acom_Owner : TComponent ): Boolean ;
 var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties, lnod_id : TALXMLNode ;
     lnod_Node, lnod_NodeCrossLink : TALXMLNode;
-    ls_ProjectFile : String;
+    ls_ProjectFile ,
+    ls_table       : String;
     li_FullFields ,
     li_CountFields : Integer;
     lds_Connection : TDSSource;
@@ -504,14 +505,18 @@ begin
                         lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
                         if lnod_ClassProperties.NodeName = CST_LEON_CLASS_C_BIND Then
                           Begin
+                           ls_table:=trim(lnod_ClassProperties.Attributes [ CST_LEON_VALUE ]);
+                           if ls_table='' Then
+                             ls_table:=as_Table;
                            if ab_FullTable Then
                             Begin
-                             lfwt_Source2 := ADBSources.TableByName(lnod_ClassProperties.Attributes [ CST_LEON_VALUE ]);
+                             lfwt_Source2 := ADBSources.TableByName(ls_table);
                              if lfwt_Source2 = nil
                               Then
                                Begin // not found : create every tables
+                                //      MyShowMessage(ls_Table + ' relation');
                                 lfwt_Source2 := ADBSources.Add;
-                                lfwt_Source2.Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                                lfwt_Source2.Table:= ls_table;
                                 lfwt_Source2.TableKey:= as_Table;
                                 lfwt_Source2.IsMain := True
                                end
@@ -522,16 +527,18 @@ begin
                            lfwt_Source := TablesDest.Add;
                            with lfwt_Source do
                             Begin
-                              Table:= lnod_ClassProperties.Attributes [ CST_LEON_VALUE ];
+                              Table:= ls_table;
                               TableKey:= as_Table;
                               if ab_createDS Then
                                Begin
+                                 MyShowMessage(Table+ '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ));
                                 lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
                                 with lds_Connection do
                                   Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
                                                        IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
                                end;
                             end;
+                           as_Table:=ls_table;
                           end;
                         if  ( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) then
                           Begin
@@ -593,8 +600,12 @@ var li_i, li_j, li_k, li_NoField : LongInt ;
   // as_Connection : Connection name
   procedure p_CreateXMLColumn ( const as_Table, as_TableKey, as_Connection : String );
   Begin
-    lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner, ab_CreateDS );
-    lfwc_Column.IsMain:=True;
+    if ab_CreateDS or not Assigned(ADBSources.TableByName(as_Table)) Then
+     Begin
+     // MyShowMessage(as_Table + ' xmlcolumn');
+      lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner, ab_CreateDS );
+      lfwc_Column.IsMain:=True;
+     end;
   end;
 
 begin
@@ -1067,6 +1078,8 @@ Begin
      if  ( ls_base = '')
      and ( ab_createDS ) Then
       ls_base:=afwt_Source.Connection.PrimaryKey;
+         //  MyShowMessage(ls_Table + ' linked');
+
      afwt_Source2 := ffws_CreateSource( afwt_Sources, ls_base, ls_Table, Null, afwt_Sources.Owner as TComponent, ab_createDS );
      afwt_Source2.IsMain := True;
     End
