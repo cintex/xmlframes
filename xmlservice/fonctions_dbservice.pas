@@ -660,7 +660,7 @@ Begin
        if not fb_OpenCloseDatabase ( Connection, True )
        and ( (MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrNo)
             or not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection)) Then
-        Abort;
+          halt;
 
    end;
 end;
