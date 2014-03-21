@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -58,7 +58,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="393">
+    <Units Count="395">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
@@ -66,7 +66,7 @@
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
-        <CursorPos X="75" Y="36"/>
+        <CursorPos X="58" Y="30"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -2686,8 +2686,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="101"/>
-        <CursorPos X="18" Y="134"/>
+        <TopLine Value="18"/>
+        <CursorPos X="66" Y="25"/>
         <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit325>
@@ -3242,8 +3242,8 @@
         <UnitName Value="fonctions_dbservice"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="41"/>
-        <CursorPos X="8" Y="62"/>
+        <TopLine Value="144"/>
+        <CursorPos X="49" Y="175"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit391>
@@ -3252,132 +3252,148 @@
         <UnitName Value="fonctions_createsql"/>
         <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="88"/>
-        <CursorPos X="142" Y="121"/>
+        <TopLine Value="1434"/>
+        <CursorPos X="99" Y="1462"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit392>
+      <Unit393>
+        <Filename Value="../../../../Lazarus/ccr/components/rx/trunk/rxdbgrid.pas"/>
+        <UnitName Value="rxdbgrid"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="638"/>
+        <CursorPos X="15" Y="659"/>
+        <UsageCount Value="10"/>
+      </Unit393>
+      <Unit394>
+        <Filename Value="/usr/share/lazarus/1.0.14/lcl/dbgrids.pas"/>
+        <UnitName Value="DBGrids"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="391"/>
+        <CursorPos X="48" Y="410"/>
+        <UsageCount Value="10"/>
+      </Unit394>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
-        <Caret Line="125" Column="1" TopLine="96"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="59" Column="35" TopLine="39"/>
       </Position1>
       <Position2>
-        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
-        <Caret Line="132" Column="1" TopLine="99"/>
+        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
+        <Caret Line="453" Column="1" TopLine="422"/>
       </Position2>
       <Position3>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="131" Column="1" TopLine="110"/>
+        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
+        <Caret Line="439" Column="37" TopLine="422"/>
       </Position3>
       <Position4>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="452" Column="1" TopLine="423"/>
+        <Caret Line="449" Column="1" TopLine="422"/>
       </Position4>
       <Position5>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="453" Column="1" TopLine="423"/>
+        <Caret Line="450" Column="1" TopLine="422"/>
       </Position5>
       <Position6>
-        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
-        <Caret Line="573" Column="1" TopLine="545"/>
+        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
+        <Caret Line="451" Column="1" TopLine="422"/>
       </Position6>
       <Position7>
-        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
-        <Caret Line="132" Column="1" TopLine="99"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="122" Column="1" TopLine="89"/>
       </Position7>
       <Position8>
-        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
-        <Caret Line="573" Column="1" TopLine="545"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="123" Column="1" TopLine="90"/>
       </Position8>
       <Position9>
         <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="121" Column="22" TopLine="110"/>
+        <Caret Line="124" Column="1" TopLine="91"/>
       </Position9>
       <Position10>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="59" Column="35" TopLine="39"/>
+        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
+        <Caret Line="158" Column="30" TopLine="129"/>
       </Position10>
       <Position11>
-        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="453" Column="1" TopLine="422"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="100" Column="108" TopLine="92"/>
       </Position11>
       <Position12>
-        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="439" Column="37" TopLine="422"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="59" Column="88" TopLine="31"/>
       </Position12>
       <Position13>
-        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="449" Column="1" TopLine="422"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position13>
       <Position14>
-        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="450" Column="1" TopLine="422"/>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="121" Column="142" TopLine="88"/>
       </Position14>
       <Position15>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="451" Column="1" TopLine="422"/>
+        <Caret Line="449" Column="1" TopLine="422"/>
       </Position15>
       <Position16>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="122" Column="1" TopLine="89"/>
-      </Position16>
-      <Position17>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="123" Column="1" TopLine="90"/>
-      </Position17>
-      <Position18>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="124" Column="1" TopLine="91"/>
-      </Position18>
-      <Position19>
-        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
-        <Caret Line="158" Column="30" TopLine="129"/>
-      </Position19>
-      <Position20>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="100" Column="108" TopLine="92"/>
-      </Position20>
-      <Position21>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="59" Column="88" TopLine="31"/>
-      </Position21>
-      <Position22>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position22>
-      <Position23>
-        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
-        <Caret Line="121" Column="142" TopLine="88"/>
-      </Position23>
-      <Position24>
-        <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
-        <Caret Line="449" Column="1" TopLine="422"/>
-      </Position24>
-      <Position25>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
         <Caret Line="450" Column="1" TopLine="422"/>
-      </Position25>
-      <Position26>
+      </Position16>
+      <Position17>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
         <Caret Line="451" Column="1" TopLine="422"/>
-      </Position26>
-      <Position27>
+      </Position17>
+      <Position18>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
         <Caret Line="454" Column="1" TopLine="422"/>
-      </Position27>
-      <Position28>
+      </Position18>
+      <Position19>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
         <Caret Line="455" Column="1" TopLine="422"/>
-      </Position28>
-      <Position29>
+      </Position19>
+      <Position20>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
         <Caret Line="438" Column="32" TopLine="423"/>
+      </Position20>
+      <Position21>
+        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
+        <Caret Line="102" Column="64" TopLine="91"/>
+      </Position21>
+      <Position22>
+        <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
+        <Caret Line="134" Column="18" TopLine="101"/>
+      </Position22>
+      <Position23>
+        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
+        <Caret Line="175" Column="49" TopLine="144"/>
+      </Position23>
+      <Position24>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="121" Column="142" TopLine="88"/>
+      </Position24>
+      <Position25>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="90" Column="56" TopLine="79"/>
+      </Position25>
+      <Position26>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="100" Column="6" TopLine="80"/>
+      </Position26>
+      <Position27>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="99" Column="23" TopLine="80"/>
+      </Position27>
+      <Position28>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="101" Column="19" TopLine="82"/>
+      </Position28>
+      <Position29>
+        <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
+        <Caret Line="1464" Column="66" TopLine="1434"/>
       </Position29>
       <Position30>
         <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
-        <Caret Line="102" Column="64" TopLine="91"/>
+        <Caret Line="134" Column="18" TopLine="101"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -3447,5 +3463,4 @@
       </Item3>
     </Exceptions>
   </Debugging>
-  <EditorMacros Count="0"/>
 </CONFIG>

@@ -171,7 +171,7 @@ Begin
           Begin
             lstl_FichierIni.Insert(0,'['+INISEC_PAR+']');
             lstl_FichierIni.SaveToFile(fs_getLeonDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI );
-            lstl_FichierIni.Free;
+            lstl_FichierIni.Destroy;
             raise Exception.Create ( 'New INI in '+ fs_getLeonDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI + '.'+#13#10+#13#10 +
                           'Restart.');
             Exit;
