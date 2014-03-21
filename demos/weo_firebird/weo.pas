@@ -66,6 +66,7 @@ begin
       Application.Terminate;
      end;
     Application.CreateForm(TF_FenetrePrincipale, F_FenetrePrincipale);
+    F_FenetrePrincipale.Show;
   finally
   end;
   Application.Run;

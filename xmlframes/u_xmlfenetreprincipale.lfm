@@ -1,4 +1,4 @@
-inherited F_FenetrePrincipale: TF_FenetrePrincipale
+object F_FenetrePrincipale: TF_FenetrePrincipale
   Left = 330
   Height = 645
   Top = 105
@@ -25,8 +25,8 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
   OnActivate = F_FormMainIniActivate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  Visible = True
-  object im_appli: TImage[0]
+  LCLVersion = '1.2.0.3'
+  object im_appli: TImage
     Left = 248
     Height = 49
     Top = 104
@@ -34,7 +34,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_acces: TImage[1]
+  object im_acces: TImage
     Left = 312
     Height = 48
     Top = 104
@@ -771,7 +771,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_about: TImage[2]
+  object im_about: TImage
     Left = 376
     Height = 49
     Top = 104
@@ -779,7 +779,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     AutoSize = True
     Visible = False
   end
-  object im_led: TPCheck[3]
+  object im_led: TPCheck
     Left = 312
     Height = 19
     Top = 440
@@ -788,7 +788,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Visible = False
     TabOrder = 0
   end
-  object br_statusbar: TStatusBar[4]
+  object br_statusbar: TStatusBar
     Left = 0
     Height = 24
     Top = 597
@@ -831,14 +831,14 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end>
     OnDrawPanel = br_statusbarDrawPanel
   end
-  object tbar_outils: TToolBar[5]
+  object tbar_outils: TToolBar
     Left = 0
     Height = 50
-    Hint = 'Cliquer sur un bouton pour accÃÂ©der ÃÂ  une fonction'
+    Hint = 'Cliquer sur un bouton pour accÃƒÂƒÃ‚Â©der ÃƒÂƒÃ‚Â  une fonction'
     Top = 0
     Width = 884
     HelpContext = 1430
-    Caption = 'Barre d''accÃÂ¨s'
+    Caption = 'Barre d''accÃƒÂƒÃ‚Â¨s'
     Color = cl3DLight
     ParentColor = False
     ParentShowHint = False
@@ -936,7 +936,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       object dbt_ident: TJvXPButton
         Left = 9
         Height = 41
-        Hint = 'S''identifier/dÃÂ©connecter'
+        Hint = 'S''identifier/dÃƒÂƒÃ‚Â©connecter'
         Top = 0
         Width = 40
         HelpContext = 1430
@@ -969,14 +969,14 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 7
     end
   end
-  object spl_Volet: TSplitter[6]
+  object spl_Volet: TSplitter
     Left = 227
     Height = 547
     Top = 50
     Width = 5
     Visible = False
   end
-  object mtb_CustomizedMenu: TExtMenuToolBar[7]
+  object mtb_CustomizedMenu: TExtMenuToolBar
     Left = 0
     Height = 547
     Top = 50
@@ -996,7 +996,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     Menu = mu_MenuIni
     OnClickCustomize = mtb_CustomizedMenuClickCustomize
   end
-  object tbar_volet: TPanel[8]
+  object tbar_volet: TPanel
     Left = 30
     Height = 547
     Top = 50
@@ -1012,7 +1012,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     object scb_Volet: TScrollBox
       Left = 0
       Height = 547
-      Hint = 'Cliquez pour accÃ©der aux fonctions'
+      Hint = 'Cliquez pour accÃƒÂ©der aux fonctions'
       Top = 0
       Width = 197
       HelpContext = 1440
@@ -1027,7 +1027,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       TabOrder = 0
     end
   end
-  object im_quit: TImage[9]
+  object im_quit: TImage
     Left = 432
     Height = 48
     Top = 104
@@ -1269,7 +1269,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_aide: TImage[10]
+  object im_aide: TImage
     Left = 488
     Height = 48
     Top = 104
@@ -2215,7 +2215,7 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     }
     Visible = False
   end
-  object im_Liste: TImageList[11]
+  object im_Liste: TImageList
     BkColor = clForeground
     left = 256
     top = 216
@@ -2831,17 +2831,17 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       00FF000000FF000000FF000000FF
     }
   end
-  object mu_MainMenu: TMainMenu[12]
+  object mu_MainMenu: TMainMenu
     Images = im_Liste
     left = 256
     top = 268
     object mu_file: TMenuItem
       Caption = '&Application'
       HelpContext = 1420
-      Hint = 'Fermeture des fenÃÂªtres'
+      Hint = 'Fermeture des fenÃƒÂƒÃ‚Âªtres'
       object mu_identifier: TMenuItem
         Caption = 'S''&identifier'
-        Hint = 'Ouvrir la fenÃÂªtre d''identification'
+        Hint = 'Ouvrir la fenÃƒÂƒÃ‚Âªtre d''identification'
         OnClick = dbt_identClick
       end
       object mu_ouvrir: TMenuItem
@@ -2862,10 +2862,10 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
     object mu_fenetre: TMenuItem
-      Caption = 'Fe&nêtre'
-      Hint = 'Commandes relatives aux fenÃÂªtres'
+      Caption = 'Fe&nÃªtre'
+      Hint = 'Commandes relatives aux fenÃƒÂƒÃ‚Âªtres'
       object mu_Reinitiliserpresentation: TMenuItem
-        Caption = 'Réinitialiser la &présentation'
+        Caption = 'RÃ©initialiser la &prÃ©sentation'
         HelpContext = 1420
         OnClick = mu_ReinitiliserpresentationClick
       end
@@ -2894,19 +2894,19 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_affichage: TMenuItem
       Caption = 'Affichage'
       object mu_barreoutils: TMenuItem
-        Caption = 'Barre d''accès'
+        Caption = 'Barre d''accÃ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_barreoutilsClick
       end
       object mu_voletexplore: TMenuItem
-        Caption = 'Volet d''accès'
+        Caption = 'Volet d''accÃ¨s'
         Checked = True
         HelpContext = 1420
         OnClick = mu_voletexploreClick
       end
       object mi_CustomizedMenu: TMenuItem
-        Caption = 'Volet personnalisé'
+        Caption = 'Volet personnalisÃ©'
         OnClick = mi_CustomizedMenuClick
       end
     end
@@ -2925,30 +2925,30 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       object mu_apropos: TMenuItem
         Caption = '&A propos...'
         HelpContext = 1420
-        Hint = 'A propos|Afficher des informations sur le programme, le numÃÂ©ro de version et le copyright'
+        Hint = 'A propos|Afficher des informations sur le programme, le numÃƒÂƒÃ‚Â©ro de version et le copyright'
         OnClick = mu_aproposClick
       end
     end
   end
-  object ActionList: TActionList[13]
+  object ActionList: TActionList
     Images = im_Liste
     left = 256
     top = 317
   end
-  object Timer: TTimer[14]
+  object Timer: TTimer
     Interval = 60000
     OnTimer = TimerTimer
     left = 256
     top = 367
   end
-  object SvgFormInfoIni: TOnFormInfoIni[15]
+  object SvgFormInfoIni: TOnFormInfoIni
     SaveForm = [sfSavePos, sfSaveSize, sfSaveSizes]
     OnIniLoad = SvgFormInfoIniIniLoad
     OnIniWrite = SvgFormInfoIniIniWrite
     left = 256
     top = 168
   end
-  object im_ListeDisabled: TImageList[16]
+  object im_ListeDisabled: TImageList
     BkColor = clForeground
     left = 388
     top = 216
@@ -3564,12 +3564,12 @@ inherited F_FenetrePrincipale: TF_FenetrePrincipale
       0000000000000000000000000000
     }
   end
-  object mu_MenuIni: TMainMenu[17]
+  object mu_MenuIni: TMainMenu
     Images = im_Liste
     left = 384
     top = 268
   end
-  object mc_Customize: TExtMenuCustomize[18]
+  object mc_Customize: TExtMenuCustomize
     MenuIni = mu_MenuIni
     MainMenu = mu_MainMenu
     left = 512

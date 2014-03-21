@@ -58,15 +58,18 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="264">
+    <Units Count="265">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
-        <CursorPos X="1" Y="72"/>
+        <CursorPos X="50" Y="71"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="../weo/U_ConstMessage.pas"/>
@@ -1540,7 +1543,7 @@
       <Unit186>
         <Filename Value="../../../ManFrames/manregister/fonctions_zeos.pas"/>
         <UnitName Value="fonctions_zeos"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="149"/>
         <CursorPos X="1" Y="152"/>
@@ -1560,7 +1563,7 @@
       <Unit188>
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1079"/>
         <CursorPos X="1" Y="1093"/>
@@ -1580,10 +1583,10 @@
       <Unit190>
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <UnitName Value="fonctions_dbservice"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="547"/>
-        <CursorPos X="10" Y="538"/>
+        <TopLine Value="635"/>
+        <CursorPos X="53" Y="638"/>
         <UsageCount Value="56"/>
         <Loaded Value="True"/>
       </Unit190>
@@ -1592,7 +1595,7 @@
         <UnitName Value="fonctions_ibx"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="275"/>
+        <TopLine Value="78"/>
         <CursorPos X="34" Y="301"/>
         <UsageCount Value="37"/>
         <Loaded Value="True"/>
@@ -1636,11 +1639,10 @@
       <Unit196>
         <Filename Value="../../xmlframes/u_xmlform.pas"/>
         <UnitName Value="u_xmlform"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1086"/>
-        <CursorPos X="27" Y="1102"/>
+        <CursorPos X="98" Y="1102"/>
         <UsageCount Value="57"/>
         <Loaded Value="True"/>
       </Unit196>
@@ -1717,8 +1719,8 @@
         <UnitName Value="fonctions_createsql"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="91"/>
-        <CursorPos X="1" Y="112"/>
+        <TopLine Value="71"/>
+        <CursorPos X="10" Y="87"/>
         <UsageCount Value="54"/>
         <Loaded Value="True"/>
       </Unit206>
@@ -1752,7 +1754,7 @@
       <Unit210>
         <Filename Value="../../xmlframes/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="15"/>
         <WindowIndex Value="0"/>
         <TopLine Value="909"/>
         <CursorPos X="2" Y="918"/>
@@ -1952,11 +1954,17 @@
       </Unit234>
       <Unit235>
         <Filename Value="../../xmlframes/u_xmlfenetreprincipale.pas"/>
+        <ComponentName Value="F_FenetrePrincipale"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="U_XMLFenetrePrincipale"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="562"/>
-        <CursorPos X="39" Y="571"/>
+        <TopLine Value="561"/>
+        <CursorPos X="71" Y="588"/>
         <UsageCount Value="17"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit235>
       <Unit236>
         <Filename Value="../../../ManFrames/manframes/u_formmaindb.pas"/>
@@ -2087,9 +2095,9 @@
       <Unit252>
         <Filename Value="../../../ManFrames/manregister/fonctions_dbnetserver.pas"/>
         <UnitName Value="fonctions_dbnetserver"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="59"/>
+        <TopLine Value="57"/>
         <CursorPos X="1" Y="76"/>
         <UsageCount Value="17"/>
         <Loaded Value="True"/>
@@ -2180,6 +2188,16 @@
         <CursorPos X="15" Y="148"/>
         <UsageCount Value="10"/>
       </Unit263>
+      <Unit264>
+        <Filename Value="../../../ManFrames/manregister/u_register_forms.pas"/>
+        <UnitName Value="u_register_forms"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="28"/>
+        <CursorPos X="29" Y="31"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit264>
     </Units>
     <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
@@ -2336,7 +2354,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="2">
+    <BreakPoints Count="3">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
@@ -2351,6 +2369,13 @@
         <Source Value="../../../Extended/extcomp/u_extdbnavigator.pas"/>
         <Line Value="950"/>
       </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="../../xmlservice/fonctions_dbservice.pas"/>
+        <Line Value="660"/>
+      </Item3>
     </BreakPoints>
     <Exceptions Count="3">
       <Item1>
@@ -2365,4 +2390,4 @@
     </Exceptions>
   </Debugging>
   <EditorMacros Count="0"/>
-</CONFIG>
+</CONFIG>
