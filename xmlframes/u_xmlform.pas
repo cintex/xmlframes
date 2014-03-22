@@ -975,29 +975,27 @@ var llab_Label  : TFWLabel;
           Exit;
         end;
       lb_IsRelation:=False;
-      fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,False,Self,lb_IsRelation);
-
-      lb_IsLocal := False;
-
-      if anod_Field.HasChildNodes then
-        for li_k := 0 to anod_Field.ChildNodes.Count -1 do
-          Begin
-            if fb_getFieldOptions ( afws_Source, anod_Field, anod_Field.ChildNodes [ li_k ], lffd_ColumnFieldDef, lb_IsLocal ) Then
-               Break;
-          End;
+      lb_IsLocal := fb_setFieldType(afws_Source,lffd_ColumnFieldDef,anod_Field,ai_FieldCounter,True,False,Self,lb_IsRelation);
 
       p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
+      with lffd_ColumnFieldDef do
+       if ColUnique
+       and ( ColPrivate or ColHidden )
+        Then
+         Exit;
+
       if lb_IsRelation
       Then awin_Control := ffwc_getRelationComponent(DBSources,afws_source,awin_parent,lffd_ColumnFieldDef,lxfc_ButtonCombo,anod_Field.Attributes[CST_LEON_ID],lb_IsLocal,Self)
-      Else awin_Control := fwin_CreateAFieldComponent ( lffd_ColumnFieldDef, Self, lb_IsLocal );
-
-      if not lb_IsRelation
-      and ( awin_Control = nil ) then
-        Begin
-          MyShowmessage ( Gs_NoComponentToCreate + lffd_ColumnFieldDef.FieldName +'.' );
-          gb_Unload := True;
-        End;
+      Else
+       Begin
+         awin_Control := fwin_CreateAFieldComponent ( lffd_ColumnFieldDef, Self, lb_IsLocal );
+         if  ( awin_Control = nil ) then
+           Begin
+             MyShowmessage ( Gs_NoComponentToCreate + lffd_ColumnFieldDef.FieldName +'.' );
+             gb_Unload := True;
+           End;
+       End;
 
       if not assigned ( awin_Control )
       or ( awin_Control is TDBGroupView ) then

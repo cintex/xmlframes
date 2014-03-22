@@ -469,7 +469,8 @@ var li_i , li_j, li_k: Integer ;
     lnod_ClassProperties, lnod_id : TALXMLNode ;
     lnod_Node, lnod_NodeCrossLink : TALXMLNode;
     ls_ProjectFile ,
-    ls_table       : String;
+    ls_table       ,
+    ls_temp        : String;
     li_FullFields ,
     li_CountFields : Integer;
     lds_Connection : TDSSource;
@@ -531,11 +532,10 @@ begin
                               TableKey:= as_Table;
                               if ab_createDS Then
                                Begin
-//                                 MyShowMessage(Table+ '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ));
                                 lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
                                 with lds_Connection do
-                                  Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
-                                                       IntToStr ( ADBSources.Count - 1 ), DatasetType, QueryCopy, acom_Owner);
+                                  Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSource.Index ) +'_' + IntToStr ( arel_Relation.Index )+'_' + IntToStr ( Aff_field.Index ),
+                                                       IntToStr ( ADBSource.index ), DatasetType, QueryCopy, acom_Owner);
                                end;
                             end;
                            as_Table:=ls_table;
