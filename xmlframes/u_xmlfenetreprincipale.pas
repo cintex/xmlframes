@@ -144,7 +144,6 @@ type
     procedure p_SetLengthSB(ao_SP: TStatusPanel);
     procedure F_FormMainIniActivate(Sender: TObject);
     procedure F_FormMainIniResize(Sender: TObject);
-    procedure DoClose ( var AAction: TCloseAction ); override;
 
     procedure dbt_identClick(Sender: TObject);
     procedure dbt_aideClick(Sender: TObject);
@@ -217,6 +216,7 @@ uses
   TntWindows,
 {$ENDIF}
   fonctions_xml,
+  u_multidonnees,
   fonctions_createsql,
   fonctions_dialogs,
   fonctions_xmlform,
@@ -327,6 +327,7 @@ Destructor TF_FenetrePrincipale.Destroy;
 begin
   if not ( csDesigning in ComponentState ) Then
     Begin
+      FreeAndNil(gxdo_FichierXML);
       Timer.Enabled := False ;
       try
           p_DetruitTout ( False );
@@ -344,9 +345,6 @@ begin
     End ;
 
   inherited;
-  if ( csDesigning in ComponentState ) Then
-    Exit ;
-  doCloseWorking; // Libération de la mémoire
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -466,17 +464,6 @@ begin
 //  F_FormResize ( Self, tbar_outils,pa_2, tbsep_2, br_statusbar, im_led);
 end;
 
-procedure TF_FenetrePrincipale.DoClose ( var AAction: TCloseAction );
-begin
-   DoCloseFenetrePrincipale ( Self );
-   // gxdo_FichierXML can have no owner
-   FreeAndNil(gxdo_FichierXML);
-   FreeAndNil(gxdo_MenuXML);
-   FreeAndNil(gxdo_RootXML);
-   inherited ;
-end;
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Gestion des boutons de la barre d'outils
@@ -493,6 +480,11 @@ begin
   gi_NbSeparateurs := 3; // Le nombre initial de séparateur dans la barre d'outils
   F_FormMainIniResize(Self);
   pa_2.Refresh;
+
+  if not assigned ( Connection ) then
+   with DMModuleSources do
+    if Sources.Count > 0 then
+      Connection:=Sources [ 0 ].Connection;
 
   // Fermeture de la connexion principale, init. de la Led et de la barre de status
 {$IFNDEF CSV}
@@ -811,4 +803,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+
