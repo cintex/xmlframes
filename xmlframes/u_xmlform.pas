@@ -94,11 +94,11 @@ type
     gxml_SourceFile : TALXMLDocument ;
     procedure p_ScruteComposantsFiche (); override;
     procedure p_setChoiceComponent( const argr_Control : TCustomRadioGroup );
-    function  fwin_CreateFieldComponentAndProperties(const anod_Field: TALXMLNode;
-                                                     const awin_parent, awin_last : TWinControl;
-                                                     var  ai_FieldCounter : Longint ;
-                                                     var ab_Column : Boolean ; const afws_Source : TFWSource ;
-                                                     const ab_SeparateIfTooMuch : Boolean = True ):TWinControl; virtual;
+    function  fwin_CreateFieldComponentAndProperties( const anod_Field: TALXMLNode;
+                                                            awin_parent, awin_last : TWinControl;
+                                                      var   ai_FieldCounter : Longint ;
+                                                      var  ab_Column : Boolean ; const afws_Source : TFWSource ;
+                                                      const ab_SeparateIfTooMuch : Boolean = True ):TWinControl; virtual;
     function flab_setFieldComponentProperties( const anod_Field: TALXMLNode; const awin_Control, awin_Parent : TWinControl;
       const ai_Counter: Integer ; const ab_Column : Boolean; const afcf_ColumnField : TFWFieldColumn ): TFWLabel; virtual;
     procedure p_SetFieldButtonsProperties(const anod_Action : TALXMLNode;
@@ -861,9 +861,9 @@ end;
 // afws_Source : XML form Column
 // afd_FieldsDefs : Field Definitions
 function TF_XMLForm.fwin_CreateFieldComponentAndProperties ( const anod_Field: TALXMLNode;
-                                                             const awin_parent, awin_last : TWinControl;
-                                                             var  ai_FieldCounter : Longint ;
-                                                             var ab_Column : Boolean ; const afws_Source : TFWSource ;
+                                                                   awin_parent, awin_last : TWinControl;
+                                                             var   ai_FieldCounter : Longint ;
+                                                             var  ab_Column : Boolean ; const afws_Source : TFWSource ;
                                                              const ab_SeparateIfTooMuch : Boolean = True ):TWinControl;
 var llab_Label  : TFWLabel;
     lb_IsRelation,
@@ -871,6 +871,7 @@ var llab_Label  : TFWLabel;
     lffd_ColumnFieldDef : TFWFieldColumn;
     lnod_OriginalNode : TALXmlNode;
     lxfc_ButtonCombo : TXMLFillCombo;
+    FPage : TCustomTabControl;
 
 
     // procedure p_CreateArrayStructComponents
@@ -1001,6 +1002,25 @@ var llab_Label  : TFWLabel;
       or ( awin_Control is TDBGroupView ) then
         Exit;
 
+      // create eventually a tabsheet if too many controls
+      If ab_SeparateIfTooMuch
+      and ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT) Then
+        with afws_Source do
+          Begin
+            gi_LastFormFieldsHeight := 0;
+            gi_LastFormColumnHeight := 0;
+            gwin_Last := nil;
+            awin_last := nil;
+            ab_Column:=False;
+            FPage := PageControlDetails;
+            gwin_Parent := fscb_CreateTabSheet ( FPage, PanelDetails, gwin_Parent,
+                             CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( afws_Source.Index ),
+                             {$IFNDEF FPC}UTF8Decode{$ENDIF}( Gs_DetailsSheet ),Self);
+            PageControlDetails:=FPage;
+            awin_parent:=gwin_Parent;
+            afws_Source.Panels.add.Panel := gwin_Parent;
+          End;
+
       // The created control must be set and placed
 
       Result := True;
@@ -1032,24 +1052,8 @@ var llab_Label  : TFWLabel;
        end;
 
     end;
-
 begin
    Result := nil;
-   // create eventually a tabsheet if too many controls
-   If ab_SeparateIfTooMuch
-   and ( gi_LastFormFieldsHeight > CST_XML_DETAIL_MINHEIGHT) Then
-     with afws_Source do
-       Begin
-         gi_LastFormFieldsHeight := 0;
-         gi_LastFormColumnHeight := 0;
-         gwin_Last := nil;
-         ab_Column:=False;
-         gwin_Parent := fscb_CreateTabSheet ( FPageControl, PanelDetails, gwin_Parent,
-                          CST_COMPONENTS_DETAILS + IntToStr ( ai_FieldCounter )+ '_' +IntToStr ( afws_Source.Index ),
-                          {$IFNDEF FPC}UTF8Decode{$ENDIF}( Gs_DetailsSheet ),Self);
-         afws_Source.Panels.add.Panel := gwin_Parent;
-       End;
-
   // Initing fb_CreateComponents
   lxfc_ButtonCombo := nil;
   // Placing the created control
