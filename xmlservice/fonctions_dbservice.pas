@@ -588,6 +588,7 @@ var li_Pos : LongInt ;
 Begin
   with ads_connection do
    Begin
+    DataLocal:=False;
     DataURL := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_URL ]);
     li_Pos := pos ( '//', DataURL );
     DataURL := copy ( DataURL , li_pos + 2, length ( DataURL ) - li_pos - 1 );
@@ -610,6 +611,7 @@ Begin
     DataPassword :=fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_Password ]);
     Database := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DATABASE ]);
     DataDriver := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DRIVER ]);
+    InitConnection;
      p_setComponentProperty ( Connection, 'User', DataUser );
      p_setComponentProperty ( Connection, 'Password', DataPassword );
      p_setComponentProperty ( Connection, 'Hostname', DataURL );
@@ -638,8 +640,7 @@ Begin
             DataBase := StringReplace(DataBase,'..'+DirectorySeparator,ExtractSubDir(fs_getAppDir)+DirectorySeparator,[]);
            if ( pos ( '.'+DirectorySeparator, DataBase ) = 1 ) Then
             DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getAppDir,[]);
-           if not FileExistsUTF8(DataBase) Then
-             fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, DataURL, True, acom_owner );
+           DataLocal:=True;
           end;
        p_setComponentProperty ( Connection, 'DatabaseName', Database );
       end
@@ -657,6 +658,9 @@ Begin
        p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_POSTGRES );
        gbm_DatabaseToGenerate:=bmPostgreSQL;
       end;
+     if DataLocal Then
+       if not FileExistsUTF8(DataBase) Then
+         fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, DataURL, True, acom_owner );
        if not fb_OpenCloseDatabase ( Connection, True )
        and ( (MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrNo)
             or not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection)) Then
@@ -737,6 +741,7 @@ Begin
               {$ENDIF}
               else
                 p_LoadConnection ( lNode , lds_connection, acom_owner );
+
             end;
          End;
        end;
