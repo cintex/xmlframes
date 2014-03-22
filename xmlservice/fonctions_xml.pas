@@ -531,7 +531,7 @@ begin
                               TableKey:= as_Table;
                               if ab_createDS Then
                                Begin
-                                 MyShowMessage(Table+ '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ));
+//                                 MyShowMessage(Table+ '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ));
                                 lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
                                 with lds_Connection do
                                   Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSources.Count - 1 ) +'_' + IntToStr ( arel_Relation.Index ),
