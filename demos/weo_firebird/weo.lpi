@@ -58,7 +58,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="291">
+    <Units Count="293">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
@@ -1548,11 +1548,10 @@
       <Unit187>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
         <UnitName Value="fonctions_manbase"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="790"/>
-        <CursorPos X="29" Y="578"/>
+        <TopLine Value="1943"/>
+        <CursorPos X="51" Y="1977"/>
         <UsageCount Value="52"/>
         <Loaded Value="True"/>
       </Unit187>
@@ -1575,10 +1574,12 @@
       <Unit190>
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <UnitName Value="fonctions_dbservice"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="571"/>
-        <CursorPos X="1" Y="592"/>
+        <TopLine Value="549"/>
+        <CursorPos X="26" Y="561"/>
         <UsageCount Value="60"/>
+        <Loaded Value="True"/>
       </Unit190>
       <Unit191>
         <Filename Value="../../../ManFrames/manregister/fonctions_ibx.pas"/>
@@ -1703,10 +1704,10 @@
       <Unit206>
         <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
         <UnitName Value="fonctions_createsql"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1409"/>
-        <CursorPos X="2" Y="1423"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="30"/>
         <UsageCount Value="58"/>
         <Loaded Value="True"/>
       </Unit206>
@@ -1865,10 +1866,12 @@
       <Unit226>
         <Filename Value="../../../Extended/btncomp/fonctions_dialogs.pas"/>
         <UnitName Value="fonctions_dialogs"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="120"/>
-        <CursorPos X="1" Y="161"/>
+        <TopLine Value="18"/>
+        <CursorPos X="72" Y="42"/>
         <UsageCount Value="19"/>
+        <Loaded Value="True"/>
       </Unit226>
       <Unit227>
         <Filename Value="/lazarus/lcl/dialogs.pp"/>
@@ -2377,127 +2380,148 @@
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
       </Unit290>
+      <Unit291>
+        <Filename Value="../../../ManFrames/manbase/unite_variables.pas"/>
+        <UnitName Value="unite_variables"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="165"/>
+        <CursorPos X="31" Y="199"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit291>
+      <Unit292>
+        <Filename Value="../../../../../../lazarus/lcl/lclproc.pas"/>
+        <UnitName Value="LCLProc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="840"/>
+        <CursorPos X="56" Y="848"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit292>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="499" Column="33" TopLine="487"/>
+        <Caret Line="577" Column="21" TopLine="544"/>
       </Position1>
       <Position2>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1804" Column="12" TopLine="1800"/>
+        <Caret Line="1365" Column="39" TopLine="1332"/>
       </Position2>
       <Position3>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1918" Column="19" TopLine="1884"/>
+        <Caret Line="1367" Column="25" TopLine="1334"/>
       </Position3>
       <Position4>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1932" Column="19" TopLine="1898"/>
+        <Caret Line="1368" Column="70" TopLine="1335"/>
       </Position4>
       <Position5>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1937" Column="19" TopLine="1903"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position5>
       <Position6>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="512" Column="21" TopLine="471"/>
+        <Caret Line="577" Column="26" TopLine="544"/>
       </Position6>
       <Position7>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="577" Column="21" TopLine="544"/>
+        <Caret Line="1365" Column="39" TopLine="1332"/>
       </Position7>
       <Position8>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1365" Column="39" TopLine="1332"/>
+        <Caret Line="1367" Column="25" TopLine="1334"/>
       </Position8>
       <Position9>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1367" Column="25" TopLine="1334"/>
+        <Caret Line="1368" Column="70" TopLine="1335"/>
       </Position9>
       <Position10>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1368" Column="70" TopLine="1335"/>
+        <Caret Line="1369" Column="25" TopLine="1336"/>
       </Position10>
       <Position11>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="1370" Column="70" TopLine="1337"/>
       </Position11>
       <Position12>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="577" Column="26" TopLine="544"/>
+        <Caret Line="1371" Column="25" TopLine="1338"/>
       </Position12>
       <Position13>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1365" Column="39" TopLine="1332"/>
+        <Caret Line="1412" Column="25" TopLine="1379"/>
       </Position13>
       <Position14>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1367" Column="25" TopLine="1334"/>
+        <Caret Line="1975" Column="45" TopLine="1941"/>
       </Position14>
       <Position15>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1368" Column="70" TopLine="1335"/>
+        <Caret Line="578" Column="63" TopLine="557"/>
       </Position15>
       <Position16>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1369" Column="25" TopLine="1336"/>
+        <Caret Line="1809" Column="22" TopLine="1775"/>
       </Position16>
       <Position17>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1370" Column="70" TopLine="1337"/>
+        <Caret Line="1917" Column="22" TopLine="1883"/>
       </Position17>
       <Position18>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1371" Column="25" TopLine="1338"/>
+        <Caret Line="1931" Column="22" TopLine="1897"/>
       </Position18>
       <Position19>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1412" Column="25" TopLine="1379"/>
+        <Caret Line="1936" Column="22" TopLine="1902"/>
       </Position19>
       <Position20>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1975" Column="45" TopLine="1941"/>
+        <Caret Line="491" Column="41" TopLine="470"/>
       </Position20>
       <Position21>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="578" Column="63" TopLine="557"/>
+        <Caret Line="578" Column="29" TopLine="545"/>
       </Position21>
       <Position22>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1809" Column="22" TopLine="1775"/>
+        <Caret Line="1422" Column="43" TopLine="1389"/>
       </Position22>
       <Position23>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1917" Column="22" TopLine="1883"/>
+        <Caret Line="1424" Column="59" TopLine="1391"/>
       </Position23>
       <Position24>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1931" Column="22" TopLine="1897"/>
+        <Caret Line="1977" Column="51" TopLine="1943"/>
       </Position24>
       <Position25>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1936" Column="22" TopLine="1902"/>
+        <Filename Value="../../../Extended/btncomp/fonctions_dialogs.pas"/>
+        <Caret Line="77" Column="37" TopLine="70"/>
       </Position25>
       <Position26>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="491" Column="41" TopLine="470"/>
+        <Filename Value="../../../Extended/btncomp/fonctions_dialogs.pas"/>
+        <Caret Line="32" Column="87" TopLine="1"/>
       </Position26>
       <Position27>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="578" Column="29" TopLine="545"/>
+        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
+        <Caret Line="592" Column="1" TopLine="634"/>
       </Position27>
       <Position28>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1422" Column="43" TopLine="1389"/>
+        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
+        <Caret Line="551" Column="37" TopLine="517"/>
       </Position28>
       <Position29>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1424" Column="59" TopLine="1391"/>
+        <Filename Value="../../../ManFrames/manbase/unite_variables.pas"/>
+        <Caret Line="143" Column="3" TopLine="122"/>
       </Position29>
       <Position30>
-        <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
-        <Caret Line="1977" Column="51" TopLine="1943"/>
+        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
+        <Caret Line="561" Column="26" TopLine="549"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -2518,9 +2542,6 @@
       </Optimizations>
     </CodeGeneration>
     <Linking>
-      <Debugging>
-        <UseHeaptrc Value="True"/>
-      </Debugging>
       <LinkSmart Value="True"/>
       <Options>
         <Win32>

@@ -542,43 +542,49 @@ var li_i,li_j : Integer;
     ATemp1,
     ATemp2 : String;
 Begin
-  fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
-  LTables := TFWTables.Create(TFWTable);
+  doShowWorking(gs_Message_Creating_database);
   try
-    // create table objects
-    for li_i := 0 to high ( ga_Functions ) do
-     with ga_Functions [li_i] do
-       Begin
-         if AFile = ''
-          Then ATemp1:=Name
-          Else ATemp1:=AFile;
-         if  ( ATemp1 > '' )
-         and ( LTables.TableByName(ATemp1) = nil ) Then
-           p_CreateComponents( LTables, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
-       end;
-    ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
-    ATemp2:=fs_BeginAlterCreate;
-    for li_i := 0 to LTables.Count - 1 do
-     with LTables [ li_i ] do
-      if IsMain Then
-       Begin
-         //MyShowMessage(Table+#10+GetSQLCreateCode);
-         AppendStr(ATemp2,GetSQLCreateCode);
-       end;
-    AppendStr(ATemp2,fs_EndCreate(as_BaseName,as_user,as_password,as_host));
+    fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectInitNode ) ) ;
+    LTables := TFWTables.Create(TFWTable);
+    try
+      // create table objects
+      for li_i := 0 to high ( ga_Functions ) do
+       with ga_Functions [li_i] do
+         Begin
+           if AFile = ''
+            Then ATemp1:=Name
+            Else ATemp1:=AFile;
+           if  ( ATemp1 > '' )
+           and ( LTables.TableByName(ATemp1) = nil ) Then
+             p_CreateComponents( LTables, ATemp1, Name, acom_owner, nil, gxdo_FichierXML, TOnExecuteFieldNode ( p_OnCreateFieldProperties), nil, nil, False, False );
+         end;
+      ATemp1:=fs_BeginAlterCreate+fs_CreateDatabase(as_BaseName,as_user,as_password, as_host);
+      ATemp2:=fs_BeginAlterCreate;
+      for li_i := 0 to LTables.Count - 1 do
+       with LTables [ li_i ] do
+        if IsMain Then
+         Begin
+           //MyShowMessage(Table+#10+GetSQLCreateCode);
+           AppendStr(ATemp2,GetSQLCreateCode);
+         end;
+      AppendStr(ATemp2,fs_EndCreate(as_BaseName,as_user,as_password,as_host));
+    finally
+      LTables.destroy;
+    end;
+    try
+      if ab_DoItWithCommandLine Then
+        p_ExecuteSQLCommand(ATemp1+ATemp2)
+      Else
+       if Assigned(ge_ExecuteSQLScript)
+        Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
+      p_optimiseDatabase(nil,as_BaseName,as_user,as_password,fs_GetIniDir(False));
+      Result := True;
+    except
+      Result := False;
+    end;
+
   finally
-    LTables.destroy;
-  end;
-  try
-    if ab_DoItWithCommandLine Then
-      p_ExecuteSQLCommand(ATemp1+ATemp2)
-    Else
-     if Assigned(ge_ExecuteSQLScript)
-      Then ge_ExecuteSQLScript ( as_BaseName, as_user, as_password,as_host, ATemp1, ATemp2, ads_connection );
-    p_optimiseDatabase(nil,as_BaseName,as_user,as_password,fs_GetIniDir(False));
-    Result := True;
-  except
-    Result := False;
+    doCloseWorking;
   end;
 End;
 
@@ -754,4 +760,4 @@ initialization
 {$ENDIF}
 
 end.
-
+
