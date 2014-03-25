@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <path id="application.directoryclasspath">
+        <pathelement path="${application.basedir}"/>
+    </path>
+    <path id="application.classpath">
+        <pathelement path="${application.basedir}/${application.package}/lib/activation.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/addsOnLeon.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/avalon-framework.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/batik-all.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-collections.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-io.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-lang.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-logging.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/fop.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/jcommon.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/jfreechart.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/jms.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/leon.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/log4j.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/mail.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/mvel2.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.asm.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.beans.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.context.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.context.support.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.core.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.expression.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.web.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.web.portlet.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.web.servlet.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/serializer.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/velocity-tools.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/velocity.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/xalan.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/xercesImpl.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/xml-apis-ext.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/xml-apis.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/xmlgraphics-commons.jar"/>
+    </path>
+    <path id="application.web.classpath">
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-beanutils.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-digester.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-fileupload.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-validator.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/struts-legacy.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/struts.jar"/>
+    </path>
+    <path id="application.jquery.classpath">
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-collections.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-fileupload.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-lang.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/commons-logging.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/log4j.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.asm.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.beans.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.context.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.context.support.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.core.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.expression.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.web.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.web.portlet.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/org.springframework.web.servlet.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/velocity-tools.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/velocity.jar"/>
+    </path>
+    <path id="application.swing.classpath">
+        <pathelement path="${application.basedir}/${application.package}/lib/miglayout-swing.jar"/>
+    </path>
+    <path id="application.swt.classpath"/>
+    <path id="application.skins">
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_aqua.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_nautilus.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_poppei.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_w4.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_w4light.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_w4lightblue.jar"/>
+        <pathelement path="${application.basedir}/${application.package}/lib/skin_w4lightgrey.jar"/>
+    </path>
+    <path id="application.webservices.classpath"/>
+    <property environment="env"/>
+</project>

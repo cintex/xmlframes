@@ -1,0 +1,16 @@
+﻿#
+# Class "hotel_db#city"
+#
+@w4hotelCityName|w4hotelCityProvince|w4hotelCityX|w4hotelCityY|w4hotelCityLongitude|w4hotelCityLatitude
+Ajaccio|corse|212|217|8.717|41.917
+Bastia|corse|230|173|9.433|42.683
+Bordeaux|aquitaine|-87|45|-0.567|44.883
+Lille|nord_pas_de_calais|39|-259|3.083|50.650
+Limoges|limousin|-21|15|1.250|45.833
+Lyon|rhone_alpes|120|-7|4.833|45.767
+Marseille|paca|145|139|5.367|43.300
+Massy|ile_de_france|32|-133|2.271|48.731
+Paris|ile_de_france|27|-163|2.333|48.833
+Rennes|bretagne|-120|-125|-1.667|48.100
+Strasbourg|alsace|218|-144|7.750|48.583
+# 	--------- END OF FILE -----------   #

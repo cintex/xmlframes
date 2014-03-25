@@ -1,0 +1,10 @@
+﻿#
+# Class "hotel_db#manager"
+#
+@w4hotelManagerId|w4hotelManagerPassword|w4hotelManagerName|w4hotelManagerFirstname|w4hotelManagerPicture|w4hotelManagerDate
+adm|adm|Vatier|Alain|\alain_vatier.jpg|12/01/2005 00:00:00
+ich|ich|Chapuis|Isabelle|\isabelle_chapuis.jpg|23/11/2002 00:00:00
+lbo|lbo|Borrel|Luc|\luc_borrel.jpg|02/02/2005 00:00:00
+mdu|mdu|Durand|Mathieu|\mathieu_durand.jpg|20/08/2004 00:00:00
+sha|sha|Hamon|Sara|\sara_hamon.gif|08/06/2004 00:00:00
+# 	--------- END OF FILE -----------   #

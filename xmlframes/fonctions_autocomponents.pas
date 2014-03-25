@@ -481,10 +481,7 @@ begin
        else
         Result := TExtDBNumEdit.Create ( acom_Owner );
      end;
-  ftMemo :
-    Begin
-        Result := fwin_CreateAEditComponent ( acom_Owner, True, ab_IsLocal );
-    End;
+  ftMemo : Result := fwin_CreateAEditComponent ( acom_Owner, True, ab_IsLocal );
   ftString:
     Begin
       if foFile in afdt_FieldDataType.Options Then

@@ -160,13 +160,13 @@ Begin
   if ( gs_ProjectFile = '' ) then
     Begin
       lstl_FichierIni := TStringList.Create ;
-      if not FileExistsUTF8(fs_getLeonDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
+      if not FileExistsUTF8(fs_getLeonDir +  fs_GetNameSoft+ DirectorySeparator +fs_GetNameSoft + CST_EXTENSION_INI) Then
         Begin
           raise Exception.Create ( 'No ini file of LEONARDI project !' );
           Exit;
         end;
       try
-        lstl_FichierIni.LoadFromFile( fs_getLeonDir + fs_GetNameSoft + CST_EXTENSION_INI);
+        lstl_FichierIni.LoadFromFile( fs_getLeonDir +  fs_GetNameSoft+ DirectorySeparator +fs_GetNameSoft + CST_EXTENSION_INI);
         if ( pos ( INISEC_PAR, lstl_FichierIni [ 0 ] ) <= 0 ) Then
           Begin
             lstl_FichierIni.Insert(0,'['+INISEC_PAR+']');
@@ -301,8 +301,8 @@ Begin
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
   if not assigned ( amif_Init ) then
-    if FileExistsUTF8(fs_getLeonDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
-      Then amif_Init := TIniFile.Create(fs_getLeonDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+    if FileExistsUTF8(fs_getLeonDir + fs_GetNameSoft+ DirectorySeparator +CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+      Then amif_Init := TIniFile.Create(fs_getLeonDir +  fs_GetNameSoft+ DirectorySeparator +CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
       Else p_InitIniProjectFile;
   if assigned ( amif_Init ) Then
     Begin
@@ -315,16 +315,6 @@ Begin
       if not assigned ( gxdo_FichierXML ) then
         gxdo_FichierXML := TALXMLDocument.Create ( AApplication );
       Result := gs_ProjectFile <> '';
-      if result Then
-        Begin
-          {$IFDEF WINDOWS}
-          gs_ProjectFile := fs_RemplaceChar ( gs_ProjectFile, '/', '\' );
-          {$ENDIF}
-          gs_ProjectFile := fs_EraseNameSoft ( gs_NomApp, gs_ProjectFile );
-//          MyShowMessage ( fs_getLeonDir + gs_ProjectFile );
-
-
-        End;
   End;
 End;
 
@@ -495,10 +485,10 @@ end;
 /////////////////////////////////////////////////////////////////////////
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
 Begin
-  if  ( as_Value <> '' )
+  if  ( as_Value > '' )
   and ( as_Value [1] = '$' )
   and Assigned(FIniMain)
-   Then Result := FIniMain.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -1 ), as_Value )
+   Then Result := FIniMain.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -2 ), as_Value )
    else Result := as_Value;
 End;
 
@@ -603,18 +593,20 @@ Begin
     // Récupération du port
     if li_Pos > 0 Then
       try
-        if pos ( '/', DataURL ) > 0 Then
-          DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
-         Else
-          DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
+        if pos ( '/', DataURL ) > 0
+         Then DataPort := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
+         Else DataPort := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
         // Finition de l'URL : Elle ne contient que l'adresse du serveur
         DataURL := copy ( DataURL , 1, li_Pos - 1 );
       Except
       end;
     if ( DataURL [ length ( DataURL )] = '/' ) Then
       DataURL := copy ( DataURL , 1, length ( DataURL ) - 1 );
-    DataUser := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_USER ]);
-    DataPassword :=fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_Password ]);
+    if aNode.Attributes [ CST_LEON_DATA_USER ] <> Null Then
+     Begin
+      DataUser := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_USER ]);
+      DataPassword :=fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_Password ]);
+     end;
     Database := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DATABASE ]);
     DataDriver := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DRIVER ]);
     InitConnection;
@@ -632,6 +624,11 @@ Begin
      else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
       Begin
         AParams := fobj_getComponentObjectProperty(Connection,'Params') as TStrings;
+        if DataUser='' Then
+         Begin
+          DataUser:='SYSDBA';
+          DataPassword:='masterkey';
+         End;
         with AParams do
           Begin
            Add('user_name='+DataUser);
@@ -760,4 +757,4 @@ initialization
 {$ENDIF}
 
 end.
-
+

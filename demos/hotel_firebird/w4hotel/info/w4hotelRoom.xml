@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelRoom">
+	<C_BIND value="room" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_ROOM"/>
+	<PREFIX value="CLS_IMG_ROOM"/>
+	<FIELDS>
+		<NUMBER id="w4hotelRoomId">
+			<NAME value="FLD_NAME_ROOM_ID"/>
+			<F_MARKS id='true' hidden='true' providerValue='true'/>
+		</NUMBER>
+		<RELATION id="w4hotelRoomEstablishment">
+			<REVERSE reverseRelation="w4hotelEstablishmentRooms"/>
+			<NAME value="FLD_NAME_ROOM_ESTABLISHMENT"/>
+			<GROUP value="GROUP_DESCRIPTION"/>
+			<F_MARKS name='true' local='true'/>
+			<CLASSES idrefs="w4hotelEstablishment"/>
+		</RELATION>
+		<NUMBER id="w4hotelRoomNumber">
+			<NAME value="FLD_NAME_ROOM_NUMBER"/>
+			<ALIAS value="FLD_ALIAS_ROOM_NUMBER"/>
+			<GROUP value="GROUP_DESCRIPTION"/>
+			<F_MARKS name='true' create='true' main='true' complexTable='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+			<MIN value='0'/>
+			<PITCH value='1'/>
+		</NUMBER>
+		<CHOICE id="w4hotelRoomType">
+			<NAME value="FLD_NAME_ROOM_TYPE"/>
+			<GROUP value="GROUP_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' main='true' complexTable='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+			<OPTIONS>
+				<OPTION id="w4hotelRoomTypeSimple" name="OPT_NAME_ROOM_TYPE_SIMPLE" value="0" default='true' unknown='true'/>
+				<OPTION id="w4hotelRoomTypeDouble" name="OPT_NAME_ROOM_TYPE_DOUBLE" value="1"/>
+				<OPTION id="w4hotelRoomTypeSuite" name="OPT_NAME_ROOM_TYPE_SUITE" value="2"/>
+			</OPTIONS>
+		</CHOICE>
+		<NUMBER id="w4hotelRoomRate" template="w4hotelAmount" type='DOUBLE'>
+			<NAME value="FLD_NAME_ROOM_RATE"/>
+			<GROUP value="GROUP_DESCRIPTION"/>
+			<F_MARKS create='true' set='true' main='true' complexTable='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+		</NUMBER>
+		<CHOICE id="w4hotelRoomSmoking" type='BOOLEAN'>
+			<NAME value="FLD_NAME_ROOM_SMOKING"/>
+			<GROUP value="GROUP_DETAILS"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<OPTIONS>
+				<OPTION id="w4hotelRoomSmokingNo" name="OPT_NAME_NO" value="0" default='true' unknown='true'/>
+				<OPTION id="w4hotelRoomSmokingYes" name="OPT_NAME_YES" value="1"/>
+			</OPTIONS>
+		</CHOICE>
+		<CHOICE id="w4hotelRoomBath">
+			<NAME value="FLD_NAME_ROOM_BATH"/>
+			<GROUP value="GROUP_DETAILS"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<OPTIONS>
+				<OPTION id="w4hotelRoomBathShower" name="OPT_NAME_ROOM_BATH_SHOWER" value="0" default='true' unknown='true'/>
+				<OPTION id="w4hotelRoomBathBath" name="OPT_NAME_ROOM_BATH_BATH" value="1"/>
+			</OPTIONS>
+		</CHOICE>
+		<CHOICE id="w4hotelRoomEquipments" multiple='true'>
+			<NAME value="FLD_NAME_ROOM_EQUIPMENTS"/>
+			<GROUP value="GROUP_DETAILS"/>
+			<F_MARKS create='true' set='true' optional='true'/>
+			<OPTIONS>
+				<OPTION id="w4hotelRoomEquipmentsAc" name="OPT_NAME_ROOM_EQUIPMENTS_AC" value="0"/>
+				<OPTION id="w4hotelRoomEquipmentsBar" name="OPT_NAME_ROOM_EQUIPMENTS_BAR" value="1"/>
+				<OPTION id="w4hotelRoomEquipmentsWifi" name="OPT_NAME_ROOM_EQUIPMENTS_WIFI" value="2"/>
+				<OPTION id="w4hotelRoomEquipmentsTv" name="OPT_NAME_ROOM_EQUIPMENTS_TV" value="3"/>
+			</OPTIONS>
+		</CHOICE>
+		<FILE id="w4hotelRoomPicture" mimeTypes="image" directory="$LY_APP_DOC_DIR$\images\rooms">
+			<NAME value="FLD_NAME_ROOM_PICTURE"/>
+			<GROUP value="GROUP_PICTURE"/>
+			<F_MARKS create='true' set='true' optional='true' table='true'/>
+		</FILE>
+	</FIELDS>
+	<SORT id="_w4hotelRoom.Sort10_">
+		<SORT_CRITERIA idref="w4hotelRoomNumber"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="w4hotelRoomReserveRooms" template="w4hotelEstablishmentReserveRoom">
+			<NAME value="ACT_NAME_ROOM_RESERVE_ROOMS"/>
+			<MAX value='5'/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>

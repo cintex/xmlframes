@@ -1,0 +1,116 @@
+﻿#
+# Class "hotel_db#address"
+#
+@w4hotelAddressId|w4hotelAddressStreet|w4hotelAddressZipCode|w4hotelAddressCity
+1000|34 place de la Glacière|59000|Lille
+1001|38 avenue Celony|13009|Marseille
+1002|111 impasse des Ecoles|75008|Paris
+1003|71 impasse de l'Etoile|91741|Massy
+1004|135 impasse Carnot|67000|Strasbourg
+1005|50 impasse Carnot|35000|Rennes
+1006|44 boulevard de l'Etoile|33000|Bordeaux
+1007|149 place Méjanes|20220|Ajaccio
+1008|40 avenue des Ecoles|20345|Bastia
+1009|127 impasse Carnot|69005|Lyon
+1010|129 impasse de Rome|87000|Limoges
+1011|72 impasse de Rome|75008|Paris
+1012|33 place de Rome|75008|Paris
+1013|140 avenue des Ecoles|20220|Ajaccio
+1014|107 avenue Pierre et Marie Curie|33000|Bordeaux
+1015|41 place Méjanes|59000|Lille
+1016|32 rue de l'Arche|20220|Ajaccio
+1017|18 avenue Pierre et Marie Curie|13008|Marseille
+1018|88 impasse Pierre et Marie Curie|69005|Lyon
+1019|39 place des Bernardines|75008|Paris
+1020|94 avenue Carnot|87000|Limoges
+1021|126 rue de Rome|35000|Rennes
+1022|100 avenue de Rome|33000|Bordeaux
+1023|87 place de l'Etoile|35000|Rennes
+1024|33 boulevard de Rome|75008|Paris
+1025|30 impasse de Rome|33000|Bordeaux
+1026|57 place Pierre et Marie Curie|75008|Paris
+1027|42 impasse de l'Arche|20345|Bastia
+1028|132 avenue de Moscou|35000|Rennes
+1029|102 avenue des Bernardines|35000|Rennes
+1030|138 rue de l'Arche|87000|Limoges
+1031|117 avenue Pierre et Marie Curie|35000|Rennes
+1032|138 rue des Bernardines|59000|Lille
+1033|129 boulevard de Moscou|13008|Marseille
+1034|25 rue Celony|33000|Bordeaux
+1035|105 impasse de l'Arche|75008|Paris
+1036|68 avenue Pierre et Marie Curie|75008|Paris
+1037|106 rue Victor Hugo|59000|Lille
+1038|83 impasse de l'Arche|91741|Massy
+1039|66 place de Rome|13008|Marseille
+1040|134 boulevard de la Glacière|91741|Massy
+1041|15 avenue de Moscou|75008|Paris
+1042|83 boulevard Victor Hugo|91741|Massy
+1043|54 boulevard Pierre et Marie Curie|67000|Strasbourg
+1044|6 avenue Pierre et Marie Curie|35000|Rennes
+1045|2 boulevard des Bernardines|75008|Paris
+1046|82 rue de l'Arche|87000|Limoges
+1047|55 rue Celony|87000|Limoges
+1048|56 place Carnot|35000|Rennes
+1049|40 place de l'Etoile|91741|Massy
+1050|46 boulevard de la Glacière|20220|Ajaccio
+1051|82 rue de Rome|91741|Massy
+1052|139 rue Méjanes|75008|Paris
+1053|78 place Carnot|69005|Lyon
+1054|96 rue Victor Hugo|20220|Ajaccio
+1055|20 impasse de l'Etoile|91741|Massy
+1056|39 impasse Méjanes|67000|Strasbourg
+1057|122 rue de Rome|33000|Bordeaux
+1058|119 impasse de Moscou|20220|Ajaccio
+1059|138 place Pierre et Marie Curie|67000|Strasbourg
+1060|129 place Pierre et Marie Curie|33000|Bordeaux
+1061|126 rue de Rome|20345|Bastia
+1062|56 impasse Victor Hugo|67000|Strasbourg
+1063|146 avenue de la Glacière|35000|Rennes
+1064|91 avenue des Ecoles|20345|Bastia
+1065|78 place des Bernardines|13008|Marseille
+1066|17 rue de la Glacière|33000|Bordeaux
+1067|140 boulevard des Ecoles|20345|Bastia
+1068|114 impasse des Ecoles|91741|Massy
+1069|65 impasse des Bernardines|91741|Massy
+1070|92 impasse Celony|20220|Ajaccio
+1071|68 place Victor Hugo|59000|Lille
+1072|62 boulevard de la Glacière|20220|Ajaccio
+1073|129 avenue Carnot|75008|Paris
+1074|6 impasse de Moscou|20220|Ajaccio
+1075|101 boulevard Pierre et Marie Curie|87000|Limoges
+1076|25 place des Bernardines|91741|Massy
+1077|3 place Méjanes|69005|Lyon
+1078|56 boulevard Carnot|20220|Ajaccio
+1079|132 impasse Pierre et Marie Curie|20220|Ajaccio
+1080|57 rue de la Glacière|67000|Strasbourg
+1081|121 impasse de Moscou|59000|Lille
+1082|99 avenue Pierre et Marie Curie|13008|Marseille
+1083|79 impasse Celony|20345|Bastia
+1084|92 place Celony|35000|Rennes
+1085|29 boulevard des Ecoles|69005|Lyon
+1086|49 impasse des Bernardines|67000|Strasbourg
+1087|147 avenue Méjanes|20345|Bastia
+1088|10 impasse des Ecoles|20345|Bastia
+1089|139 avenue Celony|20220|Ajaccio
+1090|0 boulevard Victor Hugo|13008|Marseille
+1091|96 rue de l'Arche|35000|Rennes
+1092|15 place Celony|69005|Lyon
+1093|119 place Victor Hugo|91741|Massy
+1094|66 place de Moscou|20345|Bastia
+1095|115 impasse des Ecoles|91741|Massy
+1096|24 impasse de l'Arche|13008|Marseille
+1097|8 place Victor Hugo|91741|Massy
+1098|128 avenue de Moscou|75008|Paris
+1099|85 avenue Carnot|20220|Ajaccio
+1100|111 impasse Celony|35000|Rennes
+1101|33 impasse de l'Etoile|67000|Strasbourg
+1102|82 avenue Celony|13008|Marseille
+1103|8 impasse de la Glacière|33000|Bordeaux
+1104|123 impasse de Rome|20220|Ajaccio
+1105|52 avenue de la Glacière|20220|Ajaccio
+1106|85 place de Rome|35000|Rennes
+1107|46 avenue Carnot|75008|Paris
+1108|37 impasse Pierre et Marie Curie|75008|Paris
+1109|34 boulevard de l'Arche|67000|Strasbourg
+1110|46 place des Bernardines|91741|Massy
+# 	--------- END OF FILE -----------   #

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE TREEMAP_CONFIGURATION SYSTEM 'leon/conf/dtd/leon.dtd'>
+<TREEMAP_CONFIGURATION id='_treemap_configuration3fb53eb9a7325f80'
+ idref='w4hotelReservationTreemap'
+ hierarchyFields='w4hotelReservationEstablishment'
+ hierarchyLevels='2'
+ sizeField='w4hotelCurrentReservationAmount'
+ colorField='w4hotelCurrentReservationNightAmount'
+ aggregationField='w4hotelCurrentReservationAmount'
+ aggregationType='BALANCED'
+ filterActive='true'
+ filterShowAll='true'
+ minColor='IndianRed2'
+ maxColor='CornflowerBlue'
+ borderSizes='3 1'
+ labelStyles='TOPLEFT NONE'
+ name='_last_configuration_w4hotelReservationTreemap_w4hotelManager\adm' user='w4hotelManager\adm'>
+<EXTERN id='w4hotelReservationTreemap'/>
+<EXTERN id='w4hotelReservationEstablishment'/>
+<EXTERN id='w4hotelCurrentReservationAmount'/>
+<EXTERN id='w4hotelCurrentReservationNightAmount'/>
+</TREEMAP_CONFIGURATION>

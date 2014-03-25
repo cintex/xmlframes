@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE AREA SYSTEM 'leon/conf/dtd/views.dtd'>
+	<AREA scrolling='NO' id='areaform'>
+		<TITLEBAR centerLabel="ACT_NAME_DASHBOARD"/>
+		<FORM id="form_id" border="true" align='CENTER'>
+			<FIELD id="icon" editable="false">
+				<ICON label="label checked" image="appli.gif"/>
+				<CONSTRAINT remainder="false" colSpan="1"/>
+			</FIELD>
+			<FIELD id="area" optional="true" enabled="true" editable="false">
+				<AREA>
+					<FORM id="idform" border="false">
+						<FIELD id="_login" optional="false" editable="true">
+							<CAPTION label="LY_LOGIN_USER"/>
+							<TEXT nCols='20'/>
+						</FIELD>
+						<FIELD id="_password" optional='false' editable="true">
+							<CAPTION label="LY_LOGIN_PASSWORD"/>
+							<TEXT secret='true' nCols='20'/>
+						</FIELD>
+					</FORM>
+				</AREA>
+				<CONSTRAINT vAlign="MIDDLE"/>
+			</FIELD>
+			<FIELD id="info_area" optional="true" enabled="true" editable="false">
+				<AREA>
+					<FORM id="idinfo" border="false">
+						<FIELD id="login_info" optional="false" editable="false">
+							<CAPTION label="HOTEL_LOGIN_INFO" colon="false"/>
+							<LABEL label=""/>
+						</FIELD>
+					</FORM>
+				</AREA>
+				<CONSTRAINT vAlign="MIDDLE"/>
+			</FIELD>
+			<FIELD id="offset_icon" editable="false">
+				<ICON label="" image="transparent_background.gif"/>
+				<CONSTRAINT remainder="false" colSpan="1"/>
+			</FIELD>
+			<FIELD id="data_area" optional="true" enabled="true" editable="false">
+				<AREA>
+					<FORM id="iddata" border="false" align="CENTER">
+						<FIELD id="login_data" optional='true' editable="false">
+							<CAPTION label="LY_LOGIN_USER = HOTEL_LOGIN_USER_VALUE" colon="false"/>
+							<LABEL label=""/>
+						</FIELD>
+						<FIELD id="password_data" optional='true' editable="false">
+							<CAPTION label="LY_LOGIN_PASSWORD = HOTEL_LOGIN_PASSWORD_VALUE" colon="false"/>
+							<LABEL label=""/>
+						</FIELD>
+					</FORM>
+				</AREA>
+			</FIELD>
+		</FORM>
+		<COMMANDS>
+			<COMMAND id='_validate' label='LY_VALIDATE' action='SUBMIT'/>
+			<COMMAND id='_close' label='LY_CANCEL' action='CANCEL'/>
+		</COMMANDS>
+	</AREA>

@@ -1004,7 +1004,7 @@ var llab_Label  : TFWLabel;
         Exit;
 
       if ( awin_Control is TExtDBFileEdit ) then
-       ( awin_Control as TExtDBFileEdit ).FilesDir:=fs_getLeonDir+afws_Source.Table+DirectorySeparator+lffd_ColumnFieldDef.FieldName;
+       ( awin_Control as TExtDBFileEdit ).FilesDir:=fs_LeonFilter(anod_Field.Attributes[CST_LEON_FIELD_FILE_DIR]);
 
       // create eventually a tabsheet if too many controls
       If ab_SeparateIfTooMuch

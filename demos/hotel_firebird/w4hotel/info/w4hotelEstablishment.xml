@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelEstablishment">
+	<C_BIND value="establishment" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_ESTABLISHMENT"/>
+	<PREFIX value="CLS_IMG_ESTABLISHMENT"/>
+	<FIELDS>
+		<NUMBER id="w4hotelEstablishmentId">
+			<NAME value="FLD_NAME_ESTABLISHMENT_ID"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS id='true' hidden='true' providerValue='true'/>
+			<MIN value='0'/>
+		</NUMBER>
+		<TEXT id="w4hotelEstablishmentName">
+			<NAME value="FLD_NAME_ESTABLISHMENT_NAME"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS name='true' create='true' set='true' unique='true' private='true' main='true' complexTable='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+			<MAX value='60'/>
+		</TEXT>
+		<CHOICE id="w4hotelEstablishmentCategory">
+			<NAME value="FLD_NAME_ESTABLISHMENT_CATEGORY"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS create='true' set='true' main='true' complexTable='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+			<OPTIONS>
+				<OPTION id="w4hotelEstablishmentCategoryOne" name="OPT_NAME_ESTABLISHMENT_CATEGORY1" value="1" default='true' unknown='true'/>
+				<OPTION id="w4hotelEstablishmentCategoryTwo" name="OPT_NAME_ESTABLISHMENT_CATEGORY2" value="2"/>
+				<OPTION id="w4hotelEstablishmentCategoryThree" name="OPT_NAME_ESTABLISHMENT_CATEGORY3" value="3"/>
+				<OPTION id="w4hotelEstablishmentCategoryFour" name="OPT_NAME_ESTABLISHMENT_CATEGORY4" value="4"/>
+			</OPTIONS>
+		</CHOICE>
+		<RELATION id="w4hotelEstablishmentManager">
+			<NAME value="FLD_NAME_ESTABLISHMENT_MANAGER"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS create='true' set='true' main='true' load='true'/>
+			<CLASSES idrefs="w4hotelManager"/>
+		</RELATION>
+		<STRUCT id="w4hotelEstablishmentAddress" template="w4hotelAddress">
+			<C_BIND value="address" location="w4hotelDb"/>
+			<NAME value="FLD_NAME_ESTABLISHMENT_ADDRESS"/>
+		</STRUCT>
+		<TEXT id="w4hotelEstablishmentTel">
+			<NAME value="FLD_NAME_ESTABLISHMENT_TEL"/>
+			<ALIAS value="FLD_ALIAS_ESTABLISHMENT_TEL"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_COORD"/>
+			<F_MARKS create='true' set='true' optional='true'/>
+			<FORMAT value="[0-99] [0-99] [0-99] [0-99] [0-99]"/>
+		</TEXT>
+		<TEXT id="w4hotelEstablishmentDescription" multiple='true' type='RICH'>
+			<NAME value="FLD_NAME_ESTABLISHMENT_DESCRIPTION"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_OVERVIEW"/>
+			<F_MARKS create='true' set='true' optional='true'/>
+			<NROWS value='10'/>
+			<NCOLS value='80'/>
+		</TEXT>
+		<FILE id="w4hotelEstablishmentPicture" mimeTypes="image" directory="$LY_APP_DOC_DIR$\images\establishments">
+			<NAME value="FLD_NAME_ESTABLISHMENT_PICTURE"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_OVERVIEW"/>
+			<F_MARKS create='true' set='true' optional='true' private='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+		</FILE>
+		<NUMBER id="w4hotelEstablishmentRoomsNumber">
+			<IMPORT relation="w4hotelEstablishmentRooms" idref="w4hotelRoomType"/>
+			<NAME value="FLD_NAME_ESTABLISHMENT_ROOMS_NUMBER"/>
+			<TAB value="TAB_ROOMS"/>
+			<F_MARKS optional='true' local='true' consult='true' main='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+		</NUMBER>
+		<RELATION id="w4hotelEstablishmentRooms" multiple='true' type='COMPOSITION'>
+			<NAME value="FLD_NAME_ESTABLISHMENT_ROOMS"/>
+			<TAB value="TAB_ROOMS"/>
+			<F_MARKS create='true' set='true' optional='true' private='true' load='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+			<CLASSES idrefs="w4hotelRoom"/>
+			<CONSTRAINT type='CAPTION' colSpan='2' remainder='true' hAlign='LEFT'/>
+			<CONSTRAINT colSpan='2' remainder='true' hAlign='LEFT'/>
+		</RELATION>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="w4hotelEstablishmentReserveRoom">
+			<NAME value="ACT_NAME_ESTABLISHMENT_RESERVE_ROOM"/>
+			<ALIAS value="ACT_ALIAS_ESTABLISHMENT_RESERVE_ROOM"/>
+			<PREFIX value="ACT_IMG_ESTABLISHMENT_RESERVE_ROOM"/>
+			<MIN value='1'/>
+			<MAX value='1'/>
+			<A_MARKS tool='true' form='true' dialog='true'/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>

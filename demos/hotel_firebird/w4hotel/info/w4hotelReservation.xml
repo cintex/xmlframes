@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelReservation"
+		behavior="w4hotel.behavior.ReservationClassBehavior">
+	<C_BIND value="reservation" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_RESERVATION"/>
+	<PREFIX value="CLS_IMG_RESERVATION"/>
+	<FIELDS>
+		<NUMBER id="w4hotelReservationNumber">
+			<NAME value="FLD_NAME_RESERVATION_NUMBER"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_NUMBER"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS id='true' name='true' setConsult='true' main='true' hidden='true' providerValue='true'/>
+			<MIN value='0'/>
+		</NUMBER>
+		<CHOICE id="w4hotelReservationState">
+			<NAME value="FLD_NAME_RESERVATION_STATE"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS notNull='true' set='true' status='true' sort='true' filter='true' find='true'/>
+			<OPTIONS>
+				<OPTION id="w4hotelReservationStateWaiting" name="OPT_NAME_RESERVATION_STATE_WAITING" value="0" default='true' unknown='true'>
+					<RULE idref="w4hotelReservationClient" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationCheckIn" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationCheckOut" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationNights" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationEstablishment" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationRooms" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationAdults" operation='SET_EDITABLE'/>
+					<RULE idref="w4hotelReservationChildren" operation='SET_EDITABLE'/>
+				</OPTION>
+				<OPTION id="w4hotelReservationStateConfirmed" name="OPT_NAME_RESERVATION_STATE_CONFIRMED" value="1"/>
+				<OPTION id="w4hotelReservationStateTerminated" name="OPT_NAME_RESERVATION_STATE_TERMINATED" value="2"/>
+			</OPTIONS>
+		</CHOICE>
+		<DATE id="w4hotelReservationDate" type='DATE'>
+			<NAME value="FLD_NAME_RESERVATION_DATE"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS consult='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="w4hotelReservationClient" noContext='true'>
+			<NAME value="FLD_NAME_RESERVATION_CLIENT"/>
+			<GROUP value="GROUP_BOOK"/>
+			<F_MARKS name='true' create='true' main='true' load='true'/>
+			<CLASSES idrefs="w4hotelClient"/>
+		</RELATION>
+		<DATE id="w4hotelReservationCheckIn" type='DATE'>
+			<NAME value="FLD_NAME_RESERVATION_CHECK_IN"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_CHECK_IN"/>
+			<GROUP value="GROUP_DATES"/>
+			<F_MARKS create='true' set='true' needPost='true' main='true'>
+				<MARK name="TREEMAP_TOOLTIP"/>
+			</F_MARKS>
+		</DATE>
+		<DATE id="w4hotelReservationCheckOut" type='DATE'>
+			<NAME value="FLD_NAME_RESERVATION_CHECK_OUT"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_CHECK_OUT"/>
+			<GROUP value="GROUP_DATES"/>
+			<F_MARKS create='true' set='true' needPost='true' main='true'>
+				<MARK name="TREEMAP_TOOLTIP"/>
+			</F_MARKS>
+		</DATE>
+		<NUMBER id="w4hotelReservationNights">
+			<NAME value="FLD_NAME_RESERVATION_NIGHTS"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_NIGHTS"/>
+			<GROUP value="GROUP_DATES"/>
+			<F_MARKS create='true' set='true' readOnly='true'/>
+		</NUMBER>
+		<RELATION id="w4hotelReservationEstablishment">
+			<NAME value="FLD_NAME_RESERVATION_ESTABLISHMENT"/>
+			<GROUP value="GROUP_ROOMS"/>
+			<F_MARKS create='true' set='true' main='true'>
+				<MARK name="TREEMAP_TOOLTIP"/>
+			</F_MARKS>
+			<CLASSES idrefs="w4hotelEstablishment"/>
+		</RELATION>
+		<RELATION id="w4hotelReservationRooms" multiple='true' noContext='true'>
+			<NAME value="FLD_NAME_RESERVATION_ROOMS"/>
+			<GROUP value="GROUP_ROOMS"/>
+			<F_MARKS create='true' set='true' needPost='true'/>
+			<CLASSES idrefs="w4hotelRoom"/>
+			<CONTEXT_FIELD idref="w4hotelReservationEstablishment"/>
+		</RELATION>
+		<NUMBER id="w4hotelReservationAdults">
+			<NAME value="FLD_NAME_RESERVATION_ADULTS"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_ADULTS"/>
+			<GROUP value="GROUP_PEOPLE"/>
+			<F_MARKS create='true' set='true' table='true'/>
+			<MIN value='0'/>
+			<MAX value='4'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='1'/>
+		</NUMBER>
+		<NUMBER id="w4hotelReservationChildren">
+			<NAME value="FLD_NAME_RESERVATION_CHILDREN"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_CHILDREN"/>
+			<GROUP value="GROUP_PEOPLE"/>
+			<F_MARKS create='true' set='true' table='true'/>
+			<MIN value='0'/>
+			<MAX value='4'/>
+			<PITCH value='1'/>
+			<N_DEFAULT value='0'/>
+		</NUMBER>
+		<NUMBER id="w4hotelReservationNightAmount" template="w4hotelAmount" type='DOUBLE'>
+			<IMPORT relation="w4hotelReservationRooms" idref="w4hotelRoomRate"/>
+			<NAME value="FLD_NAME_RESERVATION_NIGHT_AMOUNT"/>
+			<GROUP value="GROUP_PRICE"/>
+			<F_MARKS optional='true' filter='true' local='true' consult='true' complexTable='true'/>
+			<DECIMALS value='0'/>
+		</NUMBER>
+		<NUMBER id="w4hotelReservationAmount" template="w4hotelAmount" type='DOUBLE'>
+			<NAME value="FLD_NAME_RESERVATION_AMOUNT"/>
+			<ALIAS value="FLD_ALIAS_RESERVATION_AMOUNT"/>
+			<GROUP value="GROUP_PRICE"/>
+			<F_MARKS optional='true' local='true' consult='true' main='true'/>
+			<DECIMALS value='0'/>
+			<FORMULA value="w4hotelReservationNightAmount * w4hotelReservationNights"/>
+		</NUMBER>
+	</FIELDS>
+	<SORT id="_w4hotelReservation.Sort14_">
+		<SORT_CRITERIA idref="w4hotelReservationCheckIn"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION id="w4hotelReservationPrintModel" template="_printModel"
+				behavior="w4hotel.behavior.PrintReservationBehavior">
+			<NAME value="ACT_NAME_RESERVATION_PRINT_MODEL"/>
+			<PARAMETER name="_synchronous" value="true"/>
+			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/print/reservation.rtf"/>
+			<PARAMETER name="_output" value="$LY_APP_DOC_DIR$/print/Facture.rtf"/>
+		</ACTION>
+		<ACTION id="w4hotelReservationChangeState" template="_activate">
+			<NAME value="ACT_NAME_RESERVATION_CHANGE_STATE"/>
+			<PREFIX value="ACT_IMG_RESERVATION_CHANGE_STATE"/>
+			<PARAMETER name="_fieldInfo" idref="w4hotelReservationState"/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>

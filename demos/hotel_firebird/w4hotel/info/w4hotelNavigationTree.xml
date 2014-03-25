@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Navigation Tree -->
+<ACTION id="w4hotelLogin" template="_login" view="w4hotel/view/login.xml"
+		target="_none">
+	<NAME value="ACT_NAME_LOGIN"/>
+	<PARAMETER name="_allowReconnect" value="false"/>
+	<PARAMETER name="_loginFieldInfo" idref="w4hotelManagerId"/>
+	<PARAMETER name="_passwordFieldInfo" idref="w4hotelManagerPassword"/>
+	<PARAMETER name="_userClassInfo" idref="w4hotelManager"/>
+	<ACTIONS>
+		<ACTION id="w4hotelDashboard" template="_dashboard"
+				target="hotelDashboardZone">
+			<NAME value="ACT_NAME_DASHBOARD"/>
+			<PREFIX value="ACT_IMG_DASHBOARD"/>
+			<TIP value="ACT_TIP_DASHBOARD"/>
+			<ACTIONS>
+				<ACTION id="w4hotelManagerList" template="_complexTable"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_MANAGER_LIST"/>
+					<GROUP value="GROUP_GEST"/>
+					<PREFIX value="ACT_IMG_MANAGER_LIST"/>
+					<TIP value="ACT_TIP_MANAGER_LIST"/>
+					<PARAMETER name="_classInfo" idref="w4hotelManager"/>
+				</ACTION>
+				<COMPOUND_ACTION id="w4hotelEstablishmentTreeMapList" style='VERTICAL' sizes="60 40"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_ESTABLISHMENT_TREE_MAP_LIST"/>
+					<GROUP value="GROUP_GEST"/>
+					<PREFIX value="ACT_IMG_ESTABLISHMENT_TREE_MAP_LIST"/>
+					<COMPOUND_ACTION id="w4hotelEstablishmentTreeMap" sizes="30 70">
+						<NAME value="ACT_NAME_ESTABLISHMENT_TREE_MAP"/>
+						<ACTION id="w4hotelEstablishmentTree" template="_tree">
+							<NAME value="ACT_NAME_ESTABLISHMENT_TREE"/>
+							<PREFIX value="ACT_IMG_ESTABLISHMENT_TREE"/>
+							<PARAMETER name="_classInfo" idref="w4hotelProvince"/>
+							<PARAMETER name="_classInfo1" idref="w4hotelCity"/>
+							<PARAMETER name="_classInfo11" idref="w4hotelEstablishment"/>
+							<RESOURCE name="LY_DIR_CLOSED" type='IMAGE' value="map.gif"/>
+							<RESOURCE name="LY_DIR_OPEN" type='IMAGE' value="map.gif"/>
+							<RESOURCE name="LY_TREE_ROOT" type='STRING' value="France"/>
+						</ACTION>
+						<ACTION id="w4hotelEstablishmentMap" template="_googleMap"
+								behavior="w4hotel.behavior.ProvinceMapBehavior">
+							<NAME value="ACT_NAME_ESTABLISHMENT_MAP"/>
+							<PREFIX value="ACT_IMG_ESTABLISHMENT_MAP"/>
+							<PARAMETER name="_classInfo" idref="w4hotelEstablishment"/>
+							<RESOURCE name="LY_MAP_BACKGROUND" type='COLOR' value="17 111 183"/>
+						</ACTION>
+					</COMPOUND_ACTION>
+					<ACTION id="w4hotelEstablishmentList" template="_complexTable"
+							behavior="w4hotel.behavior.EstablishmentComplexListBehavior">
+						<NAME value="ACT_NAME_ESTABLISHMENT_LIST"/>
+						<PREFIX value="ACT_IMG_ESTABLISHMENT_LIST"/>
+						<TIP value="ACT_TIP_ESTABLISHMENT_LIST"/>
+						<PARAMETER name="_fieldMarks">
+							<F_MARKS>
+								<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+							</F_MARKS>
+						</PARAMETER>
+						<PARAMETER name="_expandable" value="true"/>
+						<PARAMETER name="_classInfo" idref="w4hotelEstablishment"/>
+						<ACTIONS>
+							<ACTION_REF idref="_table" class="w4hotelProvince"/>
+							<ACTION_REF idref="_table" class="w4hotelCity"/>
+						</ACTIONS>
+					</ACTION>
+				</COMPOUND_ACTION>
+				<COMPOUND_ACTION id="w4hotelClientListConsult" sizes="55 45"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_CLIENT_LIST_CONSULT"/>
+					<GROUP value="GROUP_GEST_BOOKING"/>
+					<PREFIX value="ACT_IMG_CLIENT_LIST_CONSULT"/>
+					<ACTION id="w4hotelClientList" template="_editTable">
+						<NAME value="ACT_NAME_CLIENT_LIST"/>
+						<PREFIX value="ACT_IMG_CLIENT_LIST"/>
+						<TIP value="ACT_TIP_CLIENT_LIST"/>
+						<PARAMETER name="_displayPagesNumber" value="false"/>
+						<PARAMETER name="_classInfo" idref="w4hotelClient"/>
+						<PARAMETER name="_viewLimit" value="10"/>
+					</ACTION>
+					<ACTION id="w4hotelClientConsult" template="_consult">
+						<NAME value="ACT_NAME_CLIENT_CONSULT"/>
+						<A_MARKS noTitlebar='true' noToolbar='true'/>
+						<PARAMETER name="_classInfo" idref="w4hotelClient"/>
+					</ACTION>
+				</COMPOUND_ACTION>
+				<COMPOUND_ACTION id="w4hotelTerminatedReservationFilterList" style='VERTICAL' sizes="170px 45"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_TERMINATED_RESERVATION_FILTER_LIST"/>
+					<GROUP value="GROUP_HISTO"/>
+					<PREFIX value="ACT_IMG_TERMINATED_RESERVATION_FILTER_LIST"/>
+					<ACTION id="w4hotelReservationFilter" template="__filter_new"
+							target="_north">
+						<TIP value="ACT_TIP_RESERVATION_FILTER"/>
+						<PARAMETER name="_classInfo" idref="w4hotelReservation"/>
+					</ACTION>
+					<ACTION id="w4hotelReservationHistory" template="_multiPageTable">
+						<NAME value="ACT_NAME_RESERVATION_HISTORY"/>
+						<PREFIX value="ACT_IMG_RESERVATION_HISTORY"/>
+						<A_MARKS noToolbar='true'/>
+						<PARAMETER name="_classFilter" idref="w4hotelTerminatedReservationFilter"/>
+						<PARAMETER name="_classInfo" idref="w4hotelReservation"/>
+					</ACTION>
+				</COMPOUND_ACTION>
+				<ACTION id="w4hotelUserManual"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_USER_MANUAL"/>
+					<GROUP value="GROUP_HELP"/>
+					<PREFIX value="ACT_IMG_USER_MANUAL"/>
+					<PARAMETER_DECL name="_url" required='true'/>
+					<PARAMETER name="_url" value="HOTEL_HELP_FILE"/>
+				</ACTION>
+				<ACTION id="w4hotelReservationEstablishmentChart" template="_graphicalChart">
+					<NAME value="ACT_NAME_RESERVATION_ESTABLISHMENT_CHART"/>
+					<ALIAS value="ACT_ALIAS_RESERVATION_ESTABLISHMENT_CHART"/>
+					<GROUP value="GROUP_HISTO"/>
+					<PREFIX value="ACT_IMG_RESERVATION_ESTABLISHMENT_CHART"/>
+					<MIN value='0'/>
+					<A_MARKS operation='CLEAR' dialog='true'/>
+					<PARAMETER name="_chartInfo">
+						<CHART id="w4hotelReservationEstablishmentChartChart" name="CHART_NAME_CA_BY_EST" xField="w4hotelReservationEstablishment" typeVarY='NUMBER' graphType='BAR' yVal='SUM_REAL' xTitle="NAME_ESTABLISHMENT" yTitle="NAME_TOTAL_AMOUNT" yAxisMin="0" xVerticalLabels='true' showLegend='false' showTips='true'>
+							<YFIELD value="w4hotelCurrentReservationAmount"/>
+						</CHART>
+					</PARAMETER>
+					<PARAMETER name="_classInfo" idref="w4hotelCurrentReservation"/>
+				</ACTION>
+				<ACTION id="w4hotelReservationMonthChart" template="_graphicalChart">
+					<NAME value="ACT_NAME_RESERVATION_MONTH_CHART"/>
+					<ALIAS value="ACT_ALIAS_RESERVATION_MONTH_CHART"/>
+					<GROUP value="GROUP_HISTO"/>
+					<PREFIX value="ACT_IMG_RESERVATION_MONTH_CHART"/>
+					<MIN value='0'/>
+					<A_MARKS operation='CLEAR' dialog='true'/>
+					<PARAMETER name="_chartInfo">
+						<CHART id="w4hotelReservationMonthChartChart" name="CHART_NAME_RES_MONTH" typeVarY='DATE' graphType='BAR' yVal='COUNT_INTERVAL' yIntsBegin="01/01/2011 00:00:00" yIntsLength="1" yIntsUnit="1" yTitle="NAME_CHECK_IN" yAxisMin="0" showTips='true'>
+							<YFIELD value="w4hotelReservationCheckIn"/>
+						</CHART>
+					</PARAMETER>
+					<PARAMETER name="_classInfo" idref="w4hotelReservation"/>
+				</ACTION>
+				<COMPOUND_ACTION id="w4hotelReservationListPlanning" style='VERTICAL' sizes="55 45"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_RESERVATION_LIST_PLANNING"/>
+					<ALIAS value="ACT_ALIAS_RESERVATION_LIST_PLANNING"/>
+					<GROUP value="GROUP_GEST_BOOKING"/>
+					<PREFIX value="ACT_IMG_RESERVATION_LIST_PLANNING"/>
+					<ACTION id="w4hotelReservationPlanning" template="_gantt" defaultAction="_consult"
+							behavior="w4hotel.behavior.ReservationGanttBehavior">
+						<NAME value="ACT_NAME_RESERVATION_PLANNING"/>
+						<ALIAS value="Planning"/>
+						<PREFIX value="ACT_IMG_RESERVATION_PLANNING"/>
+						<TIP value="ACT_TIP_RESERVATION_PLANNING"/>
+						<PARAMETER_DECL name="_classInfo1" type='CLASS'/>
+						<PARAMETER name="_beginDateFieldInfo" idref="w4hotelReservationCheckIn"/>
+						<PARAMETER name="_classInfo" idref="w4hotelEstablishment"/>
+						<PARAMETER name="_classInfo1" idref="w4hotelRoom"/>
+						<PARAMETER name="_currentDateRefreshPeriod" value="60"/>
+						<PARAMETER name="_endDateFieldInfo" idref="w4hotelReservationCheckOut"/>
+						<RESOURCE name="LY_WRITE_TOOL_LABEL" value="false"/>
+					</ACTION>
+					<ACTION id="w4hotelReservationList" template="_multiPageTable">
+						<NAME value="ACT_NAME_RESERVATION_LIST"/>
+						<PREFIX value="ACT_IMG_RESERVATION_LIST"/>
+						<PARAMETER name="_classInfo" idref="w4hotelCurrentReservation"/>
+					</ACTION>
+				</COMPOUND_ACTION>
+				<ACTION id="w4hotelReservationTreemap" template="_treemap"
+						target="hotelPrincipalZone">
+					<NAME value="ACT_NAME_RESERVATION_TREEMAP"/>
+					<ALIAS value="ACT_ALIAS_RESERVATION_TREEMAP"/>
+					<GROUP value="GROUP_GEST_BOOKING"/>
+					<PREFIX value="ACT_IMG_RESERVATION_TREEMAP"/>
+					<TIP value="ACT_TIP_RESERVATION_TREEMAP"/>
+					<PARAMETER name="_useGlobalConfiguration" value="true"/>
+					<PARAMETER name="_chooseHierarchyFields" value="true"/>
+					<PARAMETER name="_chooseHierarchyLevels" value="true"/>
+					<PARAMETER name="_chooseAggregationType" value="true"/>
+					<PARAMETER name="_chooseThresholdColors" value="true"/>
+					<PARAMETER name="_selectBorderSize" value="2"/>
+					<PARAMETER name="_classInfo" idref="w4hotelCurrentReservation"/>
+					<PARAMETER name="_hierarchyFieldInfo1" idref="w4hotelReservationEstablishment"/>
+					<PARAMETER name="_sizeFieldInfo" idref="w4hotelCurrentReservationAmount"/>
+					<PARAMETER name="_colorFieldInfo" idref="w4hotelCurrentReservationNightAmount"/>
+					<PARAMETER name="_borderSizes" value="3 1"/>
+					<PARAMETER name="_labelStyles" value="TOPLEFT NONE"/>
+					<PARAMETER name="_tooltipFieldMarks">
+						<F_MARKS>
+							<MARK name="TREEMAP_TOOLTIP"/>
+						</F_MARKS>
+					</PARAMETER>
+					<RESOURCE name="LY_MAP_BACKGROUND" type='COLOR' value="Gray80"/>
+					<RESOURCE name="LY_MAP_FONT_COLOR" type='COLOR' value="46 54 77"/>
+					<RESOURCE name="LY_MAP_OUTLINE_COLOR" type='COLOR' value="92 108 154"/>
+					<RESOURCE name="LY_MAPNODE_FONT" type='FONT' value="Arial-bold-11"/>
+					<RESOURCE name="LY_TREEMAP_MIN_COLOR_CODE" type='STRING' value="IndianRed2"/>
+					<RESOURCE name="LY_TREEMAP_MAX_COLOR_CODE" type='STRING' value="CornflowerBlue"/>
+					<RESOURCE name="w4hotelReservationStateConfirmed" type='IMAGE' value=" "/>
+				</ACTION>
+				<ACTION id="w4hotelCreateSticker" template="_createSticker">
+					<GROUP value="GROUP_HELP"/>
+				</ACTION>
+			</ACTIONS>
+			<RESOURCE name="LY_DEFAULT_IMAGE_HEIGHT" value="25"/>
+			<RESOURCE name="LY_TITLEBAR_BACKGROUND_IMAGE" type='IMAGE' value="blue_background.gif"/>
+		</ACTION>
+	</ACTIONS>
+	<RESOURCE name="LY_AREA_BACKGROUND_IMAGE" type='IMAGE' value="blue_background.gif"/>
+	<RESOURCE name="LY_COMMANDS_BACKGROUND_IMAGE" type='IMAGE' value="blue_background.gif"/>
+	<RESOURCE name="LY_DEFAULT_BACKGROUND" type='COLOR' value="225 226 240"/>
+	<RESOURCE name="LY_LABEL_NORMAL_STATE" type='COLOR' value="White"/>
+</ACTION>

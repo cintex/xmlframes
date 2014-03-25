@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE PROJECT SYSTEM 'leon/conf/dtd/leon.dtd'
+[
+	<!-- Standard includes -->
+	<!ENTITY LEON SYSTEM 'leon/conf/xml/leon.xml'>
+
+	<!-- Root include -->
+	<!ENTITY ROOT SYSTEM 'w4hotel/info/w4hotelRootEntities.xml'>
+	<!ENTITY LOCATION SYSTEM 'w4hotel/info/w4hotelLocation.xml'>
+	<!ENTITY NAVIGATION SYSTEM 'w4hotel/info/w4hotelNavigationTree.xml'>
+
+	<!-- Classes includes -->
+	<!ENTITY w4hotelCity SYSTEM 'w4hotel/info/w4hotelCity.xml'>
+	<!ENTITY w4hotelClient SYSTEM 'w4hotel/info/w4hotelClient.xml'>
+	<!ENTITY w4hotelCurrentReservation SYSTEM 'w4hotel/info/w4hotelCurrentReservation.xml'>
+	<!ENTITY w4hotelEstablishment SYSTEM 'w4hotel/info/w4hotelEstablishment.xml'>
+	<!ENTITY w4hotelManager SYSTEM 'w4hotel/info/w4hotelManager.xml'>
+	<!ENTITY w4hotelProvince SYSTEM 'w4hotel/info/w4hotelProvince.xml'>
+	<!ENTITY w4hotelReservation SYSTEM 'w4hotel/info/w4hotelReservation.xml'>
+	<!ENTITY w4hotelRoom SYSTEM 'w4hotel/info/w4hotelRoom.xml'>
+]>
+
+<PROJECT id="w4hotel" name="W4HOTEL" prefix="PRJ_IMG_W4HOTEL" rootAction="w4hotelLogin"
+		sessionBehavior="w4hotel.behavior.SessionBehavior">
+	<!-- Standard Leonardi declarations -->
+	&LEON;
+
+	<!-- Root declarations -->
+	&ROOT;
+
+	<!-- Locations -->
+	<!--L_FILE id="w4hotelDb"
+			url="$LY_DATA_DIR$" type='CSV'/>
+
+	<!-- Classes declarations -->
+	&w4hotelCity;
+	&w4hotelClient;
+	&w4hotelReservation;
+	&w4hotelCurrentReservation;
+	&w4hotelEstablishment;
+	&w4hotelManager;
+	&w4hotelProvince;
+	&w4hotelRoom;
+
+	<!-- Navigation Tree -->
+	&NAVIGATION;
+</PROJECT>

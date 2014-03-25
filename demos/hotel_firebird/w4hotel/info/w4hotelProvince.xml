@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelProvince">
+	<C_BIND value="province" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_PROVINCE"/>
+	<PREFIX value="CLS_IMG_PROVINCE"/>
+	<FIELDS>
+		<TEXT id="w4hotelProvinceId">
+			<NAME value="FLD_NAME_PROVINCE_ID"/>
+			<F_MARKS id='true' create='true' hidden='true'/>
+		</TEXT>
+		<TEXT id="w4hotelProvinceName">
+			<NAME value="FLD_NAME_PROVINCE_NAME"/>
+			<F_MARKS name='true' create='true' set='true' unique='true' main='true'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="w4hotelProvinceToEstablishment" target="w4hotelEstablishment" bidirectional='true'>
+			<STEP target="w4hotelCity" idrefs="w4hotelCityProvince"/>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+		</ROUTE>
+		<ROUTE id="w4hotelProvinceToRoom" target="w4hotelRoom" bidirectional='true'>
+			<STEP target="w4hotelCity" idrefs="w4hotelCityProvince"/>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+			<STEP target="w4hotelRoom" idrefs="w4hotelRoomEstablishment"/>
+		</ROUTE>
+		<ROUTE id="w4hotelProvinceToReservation" target="w4hotelReservation" bidirectional='true'>
+			<STEP target="w4hotelCity" idrefs="w4hotelCityProvince"/>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+			<STEP target="w4hotelRoom" idrefs="w4hotelRoomEstablishment"/>
+			<STEP target="w4hotelReservation" idrefs="w4hotelReservationRooms"/>
+		</ROUTE>
+		<ROUTE id="w4hotelProvinceToCurrentReservation" target="w4hotelCurrentReservation" bidirectional='true'>
+			<STEP target="w4hotelCity" idrefs="w4hotelCityProvince"/>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+			<STEP target="w4hotelRoom" idrefs="w4hotelRoomEstablishment"/>
+			<STEP target="w4hotelCurrentReservation" idrefs="w4hotelCurrentReservationRooms"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>

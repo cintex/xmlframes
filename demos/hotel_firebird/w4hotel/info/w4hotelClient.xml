@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelClient">
+	<C_BIND value="client" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_CLIENT"/>
+	<PREFIX value="CLS_IMG_CLIENT"/>
+	<FIELDS>
+		<NUMBER id="w4hotelClientNumber">
+			<NAME value="FLD_NAME_CLIENT_NUMBER"/>
+			<ALIAS value="FLD_ALIAS_CLIENT_NUMBER"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS id='true' unique='true' private='true' main='true' providerValue='true'/>
+			<MIN value='0'/>
+		</NUMBER>
+		<CHOICE id="w4hotelClientTitle">
+			<NAME value="FLD_NAME_CLIENT_TITLE"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<OPTIONS>
+				<OPTION id="w4hotelClientTitleMister" name="OPT_NAME_CLIENT_TITLE_MISTER" alias="OPT_ALIAS_CLIENT_TITLE_MISTER" value="0" default='true' unknown='true'/>
+				<OPTION id="w4hotelClientTitleMisses" name="OPT_NAME_CLIENT_TITLE_MISSES" alias="OPT_ALIAS_CLIENT_TITLE_MISSES" value="1"/>
+				<OPTION id="w4hotelClientTitleMiss" name="OPT_NAME_CLIENT_TITLE_MISS" alias="OPT_ALIAS_CLIENT_TITLE_MISS" value="2"/>
+			</OPTIONS>
+		</CHOICE>
+		<TEXT id="w4hotelClientName">
+			<NAME value="FLD_NAME_CLIENT_NAME"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value='30'/>
+		</TEXT>
+		<TEXT id="w4hotelClientFirstname">
+			<NAME value="FLD_NAME_CLIENT_FIRSTNAME"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_IDENTIFICATION"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<NCOLS value='30'/>
+		</TEXT>
+		<STRUCT id="w4hotelClientAddress" template="w4hotelAddress">
+			<C_BIND value="address" location="w4hotelDb"/>
+			<NAME value="FLD_NAME_CLIENT_ADDRESS"/>
+		</STRUCT>
+		<ARRAY id="w4hotelClientTels" cMin='0' cMax='3'>
+			<NAME value="FLD_NAME_CLIENT_TELS"/>
+			<TAB value="TAB_DESCRIPTION"/>
+			<GROUP value="GROUP_COORD"/>
+			<F_MARKS create='true' set='true' optional='true'/>
+			<TEXT id="w4hotelClientTelsTel">
+				<NAME value="FLD_NAME_CLIENT_TELS_TEL"/>
+				<F_MARKS create='true' set='true'/>
+				<FORMAT value="[0-99] [0-99] [0-99] [0-99] [0-99]"/>
+			</TEXT>
+			<NROWS value='3'/>
+		</ARRAY>
+		<RELATION id="w4hotelClientReservations" multiple='true'>
+			<REVERSE reverseRelation="w4hotelReservationClient"/>
+			<NAME value="FLD_NAME_CLIENT_RESERVATIONS"/>
+			<TAB value="TAB_HISTO"/>
+			<F_MARKS local='true'/>
+			<CLASSES idrefs="w4hotelReservation"/>
+		</RELATION>
+		<NUMBER id="w4hotelClientAmount" template="w4hotelAmount" type='DOUBLE'>
+			<IMPORT relation="w4hotelClientReservations" idref="w4hotelReservationAmount"/>
+			<NAME value="FLD_NAME_CLIENT_AMOUNT"/>
+			<TAB value="TAB_HISTO"/>
+			<F_MARKS optional='true' local='true'/>
+		</NUMBER>
+		<RELATION id="w4hotelClientManagers" multiple='true'>
+			<JOIN_DAEMON>
+				<C_BIND value="w4hotelManagerClient" location="w4hotelDb"/>
+				<F_BIND value="w4hotelClientNumber" cbind="client"/>
+				<F_BIND value="w4hotelManagerId" cbind="client"/>
+			</JOIN_DAEMON>
+			<NAME value="FLD_NAME_CLIENT_MANAGERS"/>
+			<TAB value="TAB_HISTO"/>
+			<F_MARKS local='true'/>
+			<CLASSES idrefs="w4hotelManager"/>
+		</RELATION>
+	</FIELDS>
+	<SORT id="_w4hotelClient.Sort10_">
+		<SORT_CRITERIA idref="w4hotelClientName"/>
+		<SORT_CRITERIA idref="w4hotelClientFirstname"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>

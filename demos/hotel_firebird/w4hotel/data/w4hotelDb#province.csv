@@ -1,0 +1,14 @@
+﻿#
+# Class "hotel_db#province"
+#
+@w4hotelProvinceId|w4hotelProvinceName
+alsace|Alsace
+aquitaine|Aquitaine
+bretagne|Bretagne
+corse|Corse
+ile_de_france|Ile-de-France
+limousin|Limousin
+nord_pas_de_calais|Nord-Pas-de-Calais
+paca|Provence-Alpes-Côte d'Azur
+rhone_alpes|Rhône-Alpes
+# 	--------- END OF FILE -----------   #

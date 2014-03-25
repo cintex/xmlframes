@@ -77,6 +77,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_SYSTEM_NAVIGATION = 'NAVIGATION SYSTEM';
 
       CST_LEON_DIR           = '$LY_APP_DIR$';
+      CST_LEON_DOC_DIR       = '$LY_APP_DOC_DIR$';
       CST_IMAGES_DIR         = 'images/';
 
       CST_LEON_DATA_FILE     = 'L_FILE' ;
@@ -134,6 +135,7 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_FIELD_TEXT     = 'TEXT' ;
       CST_LEON_FIELD_CHOICE   = 'CHOICE' ;
       CST_LEON_FIELD_FILE     = 'FILE' ;
+      CST_LEON_FIELD_FILE_DIR = 'directory' ;
       CST_LEON_STRUCT         = 'STRUCT' ;
       CST_LEON_ARRAY          = 'ARRAY' ;
 

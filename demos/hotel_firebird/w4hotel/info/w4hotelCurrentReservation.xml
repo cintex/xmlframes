@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelCurrentReservation"
+		behavior="w4hotel.behavior.ReservationClassBehavior">
+	<C_BIND value="reservation" location="w4hotelDb">
+		<FILTER_REF idref="w4hotelCurrentReservationFilter"/>
+	</C_BIND>
+	<NAME value="CLS_NAME_CURRENT_RESERVATION"/>
+	<PREFIX value="CLS_IMG_CURRENT_RESERVATION"/>
+	<FIELDS>
+		<FIELD_REF idref="w4hotelReservationNumber"/>
+		<FIELD_REF idref="w4hotelReservationState"/>
+		<FIELD_REF idref="w4hotelReservationDate"/>
+		<FIELD_REF idref="w4hotelReservationClient"/>
+		<FIELD_REF idref="w4hotelReservationCheckIn"/>
+		<FIELD_REF idref="w4hotelReservationCheckOut"/>
+		<FIELD_REF idref="w4hotelReservationNights"/>
+		<FIELD_REF idref="w4hotelReservationEstablishment"/>
+		<RELATION id="w4hotelCurrentReservationRooms" template="w4hotelReservationRooms" multiple='true' noContext='true'/>
+		<FIELD_REF idref="w4hotelReservationAdults"/>
+		<FIELD_REF idref="w4hotelReservationChildren"/>
+		<NUMBER id="w4hotelCurrentReservationNightAmount" template="w4hotelReservationNightAmount" type='DOUBLE'>
+			<IMPORT relation="w4hotelCurrentReservationRooms" idref="w4hotelRoomRate"/>
+		</NUMBER>
+		<NUMBER id="w4hotelCurrentReservationAmount" template="w4hotelReservationAmount" type='DOUBLE'>
+			<FORMULA value="w4hotelCurrentReservationNightAmount * w4hotelReservationNights"/>
+		</NUMBER>
+	</FIELDS>
+	<SORT id="_w4hotelCurrentReservation.Sort4_">
+		<SORT_CRITERIA idref="w4hotelReservationCheckIn"/>
+	</SORT>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION id="w4hotelCurrentReservationPrintModel" template="w4hotelReservationPrintModel">
+			<PARAMETER name="_model" value="$LY_APP_DOC_DIR$/print/reservation_model.rtf"/>
+		</ACTION>
+		<ACTION_REF idref="w4hotelReservationChangeState"/>
+	</ACTIONS>
+</CLASS>

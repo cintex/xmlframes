@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelManager">
+	<C_BIND value="manager" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_MANAGER"/>
+	<PREFIX value="CLS_IMG_MANAGER"/>
+	<FIELDS>
+		<TEXT id="w4hotelManagerId">
+			<NAME value="FLD_NAME_MANAGER_ID"/>
+			<GROUP_REF idref="w4hotelIdentificationGroup"/>
+			<F_MARKS id='true' create='true'/>
+		</TEXT>
+		<TEXT id="w4hotelManagerPassword">
+			<NAME value="FLD_NAME_MANAGER_PASSWORD"/>
+			<GROUP_REF idref="w4hotelIdentificationGroup"/>
+			<F_MARKS create='true' set='true' secret='true' private='true'/>
+		</TEXT>
+		<TEXT id="w4hotelManagerName">
+			<NAME value="FLD_NAME_MANAGER_NAME"/>
+			<GROUP_REF idref="w4hotelIdentificationGroup"/>
+			<F_MARKS name='true' create='true' set='true' main='true' complexTable='true'/>
+		</TEXT>
+		<TEXT id="w4hotelManagerFirstname">
+			<NAME value="FLD_NAME_MANAGER_FIRSTNAME"/>
+			<GROUP_REF idref="w4hotelIdentificationGroup"/>
+			<F_MARKS name='true' create='true' set='true' main='true' complexTable='true'/>
+		</TEXT>
+		<FILE id="w4hotelManagerPicture" mimeTypes="image" directory="$LY_APP_DOC_DIR$/images/managers">
+			<NAME value="_null"/>
+			<ALIAS value="FLD_ALIAS_MANAGER_PICTURE"/>
+			<GROUP_REF idref="w4hotelPictureGroup"/>
+			<F_MARKS create='true' set='true' optional='true' main='true' complexTable='true'/>
+		</FILE>
+		<DATE id="w4hotelManagerDate" type='DATE'>
+			<NAME value="FLD_NAME_MANAGER_DATE"/>
+			<GROUP_REF idref="w4hotelDataGroup"/>
+			<F_MARKS create='true' set='true' main='true' complexTable='true'/>
+			<DEFAULT value="_now"/>
+		</DATE>
+		<RELATION id="w4hotelManagerEstablishments" multiple='true'>
+			<REVERSE reverseRelation="w4hotelEstablishmentManager"/>
+			<NAME value="FLD_NAME_MANAGER_ESTABLISHMENTS"/>
+			<GROUP_REF idref="w4hotelDataGroup"/>
+			<F_MARKS local='true' complexTable='true'/>
+			<CLASSES idrefs="w4hotelEstablishment"/>
+		</RELATION>
+		<RELATION id="w4hotelManagerClients" multiple='true'>
+			<JOIN_DAEMON>
+				<C_BIND value="manager_client" location="w4hotelDb"/>
+				<F_BIND value="w4hotelManagerId" cbind="manager_client"/>
+				<F_BIND value="w4hotelClientNumber" cbind="manager_client"/>
+			</JOIN_DAEMON>
+			<NAME value="FLD_NAME_MANAGER_CLIENTS"/>
+			<GROUP_REF idref="w4hotelDataGroup"/>
+			<F_MARKS local='true'/>
+			<CLASSES idrefs="w4hotelClient"/>
+		</RELATION>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+		<ACTION id="w4hotelManagerPrintXslfoForm" template="_printXSLFOForm">
+			<NAME value="ACT_NAME_MANAGER_PRINT_XSLFO_FORM"/>
+			<PREFIX value="ACT_IMG_MANAGER_PRINT_XSLFO_FORM"/>
+		</ACTION>
+	</ACTIONS>
+</CLASS>

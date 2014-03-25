@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extra infos -->
+<GROUP id="w4hotelIdentificationGroup" value="GROUP_IDENTIFICATION" state='OPENED'>
+	<CONSTRAINT colSpan='1' fill='BOTH'/>
+</GROUP>
+<GROUP id="w4hotelDataGroup" value="GROUP_DATA" state='OPENED'>
+	<CONSTRAINT colSpan='2' fill='BOTH'/>
+</GROUP>
+<GROUP id="w4hotelPictureGroup" value="GROUP_PICTURE" state='OPENED'>
+	<CONSTRAINT colSpan='1' remainder='true' fill='VERTICAL'/>
+</GROUP>
+
+<!-- Fields -->
+<NUMBER id="w4hotelAmount" type='DOUBLE'>
+	<NAME value="FLD_NAME_AMOUNT"/>
+	<MIN value='0.0'/>
+	<UNITS id="w4hotelAmountUnits" name="w4hotelAmountUnits">
+		<UNIT id="w4hotelAmountEuros" name="UNIT_NAME_AMOUNT_EUROS"/>
+		<UNIT id="w4hotelAmountDollars" name="UNIT_NAME_AMOUNT_DOLLARS" factor='0.763'/>
+	</UNITS>
+	<PITCH value='10.0'/>
+	<DECIMALS value='2'/>
+	<FUNCTION value='SUM'/>
+</NUMBER>
+<STRUCT id="w4hotelAddress">
+	<C_BIND value="address" location="w4hotelDb"/>
+	<NAME value="STR_NAME_ADDRESS"/>
+	<TAB value="TAB_DESCRIPTION"/>
+	<GROUP value="GROUP_COORD"/>
+	<F_MARKS create='true' set='true' private='true'/>
+	<FIELDS>
+		<NUMBER id="w4hotelAddressId">
+			<NAME value="FLD_NAME_ADDRESS_ID"/>
+			<F_MARKS id='true' hidden='true' providerValue='true'/>
+			<MIN value='0'/>
+		</NUMBER>
+		<TEXT id="w4hotelAddressStreet">
+			<NAME value="FLD_NAME_ADDRESS_STREET"/>
+			<F_MARKS create='true' set='true'/>
+			<NCOLS value='30'/>
+		</TEXT>
+		<TEXT id="w4hotelAddressZipCode">
+			<NAME value="FLD_NAME_ADDRESS_ZIP_CODE"/>
+			<ALIAS value="FLD_ALIAS_ADDRESS_ZIP_CODE"/>
+			<F_MARKS create='true' set='true'/>
+			<FORMAT value="FLD_FORMAT_ADDRESS_ZIP_CODE"/>
+		</TEXT>
+		<RELATION id="w4hotelAddressCity">
+			<NAME value="FLD_NAME_ADDRESS_CITY"/>
+			<F_MARKS create='true' set='true'>
+				<MARK name="ESTABLISHMENT_COMPLEX_LIST"/>
+			</F_MARKS>
+			<CLASSES idrefs="w4hotelCity"/>
+		</RELATION>
+	</FIELDS>
+</STRUCT>
+
+
+<!-- Filters -->
+<FILTER id="w4hotelCurrentReservationFilter" type='OR'>
+	<NAME value="(state == waiting OR confirmed)"/>
+	<EXP idref="w4hotelReservationState" value="w4hotelReservationStateWaiting"/>
+	<EXP idref="w4hotelReservationState" value="w4hotelReservationStateConfirmed"/>
+</FILTER>
+<FILTER id="w4hotelTerminatedReservationFilter" type='OR'>
+	<NAME value="(state == terminated)"/>
+	<EXP idref="w4hotelReservationState" value="w4hotelReservationStateTerminated"/>
+</FILTER>
+
+<!-- Actions -->
+<ACTION id="w4hotelOutline" template="_outline"
+		target="hotelOutlineZone">
+</ACTION>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<L_SQL id="w4hotelDb"
+		url="jdbc:firebird=w4hotel/database/w4hotel.fdb"
+		driver="com.lutris.instantdb.firebird.idbDriver"
+		dbName="w4hotel" />
+
+<!--L_SQL id="w4hotelDb"
+		url="jdbc:idb=w4hotel/database/w4hotel.prp"
+		driver="com.lutris.instantdb.jdbc.idbDriver"
+		dbName="w4hotel"/-->
+
+<!--L_SQL id="w4hotelDb"
+		url="jdbc:mysql://localhost/w4hotel"
+		driver="com.mysql.jdbc.Driver"
+		user="root"
+		dbName="w4hotel"
+		valueSep="&#010;"/-->

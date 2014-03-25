@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="compile_application" name="Build Application">
+    <property location=".." name="application.basedir"/>
+    <property name="application.prefix" value="w4hotel"/>
+    <property name="application.package" value="w4hotel"/>
+    <property name="application.id" value="w4hotel"/>
+    <property name="application.name" value="w4hotel"/>
+    <property name="application.web.inifile" value="struts_w4hotel.ini"/>
+    <property name="application.web.jquery.inifile" value="jquery_w4hotel.ini"/>
+    <property name="application.webservice.inifile" value="webservice_w4hotel.ini"/>
+    <property name="extbus.dir" value=""/>
+    <property name="application.jar.file" value="${application.prefix}.jar"/>
+    <property name="application.war.file" value="${application.prefix}.war"/>
+    <property name="application.webservice.war.file" value="${application.prefix}_webservice.war"/>
+    <property name="application.ear.file" value="${application.prefix}.ear"/>
+    <property name="application.output.dir" value="${application.basedir}/${application.package}"/>
+    <property name="application.lib.dir" value="${application.basedir}/${application.package}/lib"/>
+    <property name="temp.dir" value="${java.io.tmpdir}/${application.prefix}"/>
+    <property name="studio.tmp.dir" value="${application.basedir}"/>
+    <property name="application.servlet.class" value="leon.view.web.struts.LyStrutsServlet"/>
+    <import file="libraries.xml"/>
+    <property name="dir.java.home" value="${env.JAVA_HOME}"/>
+    <property name="file.javac.exe" value="${dir.java.home}/bin/javac"/>
+    <property name="java.version" value="1.5"/>
+    <target description="Clean all class files" name="clean_application">
+        <delete verbose="true">
+            <fileset dir="${application.basedir}/${application.package}/">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+    </target>
+    <target description="Compile the source files" name="compile_application">
+        <javac debug="true" encoding="ISO-8859-1"
+            executable="${file.javac.exe}" failonerror="true" fork="yes"
+            memorymaximumsize="512m" source="${java.version}"
+            srcdir="${application.basedir}" target="${java.version}">
+            <include name="${application.package}/**/*.java"/>
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.swing.classpath"/>
+                <path refid="application.swt.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+            </classpath>
+        </javac>
+    </target>
+    <target name="jar_condition_manifest">
+        <condition property="jar.with.main">
+            <and>
+                <isset property="application.main.class"/>
+                <not>
+                    <istrue value="${generating.war}"/>
+                </not>
+            </and>
+        </condition>
+        <echo message="jar with main = ${jar.with.main}"/>
+        <antcall target="generate_manifest_with_main"/>
+        <antcall target="generate_manifest_without_main"/>
+    </target>
+    <target name="jar_condition_inifile">
+        <condition property="jar.with.ini">
+            <or>
+                <istrue value="${generating.extbus}"/>
+                <and>
+                    <isset property="application.main.class"/>
+                    <not>
+                        <istrue value="${generating.war}"/>
+                    </not>
+                </and>
+            </or>
+        </condition>
+        <echo message="jar with ini = ${jar.with.ini}"/>
+        <antcall target="update_jar_with_ini_file"/>
+    </target>
+    <target name="generate_manifest_without_main" unless="jar.with.main">
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${jar.output.dir}"/>
+        <manifest file="${temp.dir}/MANIFEST.MF">
+            <attribute name="Built-By" value="${user.name}"/>
+            <attribute name="Created-By" value="${java.version} (${java.vendor})"/>
+        </manifest>
+    </target>
+    <target name="copy_libs">
+        <copy flatten="true" todir="${jar.output.dir}/lib">
+            <path refid="application.skins"/>
+            <path refid="application.classpath"/>
+            <path refid="application.swing.classpath"/>
+            <path refid="application.swt.classpath"/>
+        </copy>
+    </target>
+    <target if="jar.with.main" name="generate_manifest_with_main">
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${jar.output.dir}"/>
+        <!-- We are creating an autoexecutable jar, copy all needed libs -->
+        <antcall target="copy_libs"/>
+        <manifestclasspath
+            jarfile="${jar.output.dir}/${application.jar.file}" property="jar.classpath">
+            <classpath>
+                <fileset dir="${jar.output.dir}/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </manifestclasspath>
+        <echo message="classpath = ${jar.classpath}"/>
+        <manifest file="${temp.dir}/MANIFEST.MF">
+            <attribute name="Built-By" value="${user.name}"/>
+            <attribute name="Created-By" value="${java.version} (${java.vendor})"/>
+            <attribute name="Main-Class" value="${application.main.class}"/>
+            <attribute name="Class-Path" value="${jar.classpath}"/>
+        </manifest>
+    </target>
+    <target if="jar.with.ini" name="update_jar_with_ini_file">
+        <jar destfile="${jar.output.dir}/${application.jar.file}" update="true">
+            <fileset dir="${studio.tmp.dir}/${application.package}/">
+                <include name="**/*.ini"/>
+            </fileset>
+            <fileset dir="${application.basedir}/${application.package}/">
+                <include name="data/**/*.*"/>
+            </fileset>
+        </jar>
+    </target>
+    <target depends="compile_application" name="build_application_jar">
+        <delete dir="${jar.output.dir}/${application.jar.file}" quiet="true"/>
+        <antcall target="jar_condition_manifest"/>
+        <!-- First we need to merge properties -->
+        <copy failonerror="false" overwrite="false" todir="${studio.tmp.dir}/${application.package}/properties">
+            <fileset dir="${application.basedir}/${application.package}/properties">
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+        <jar destfile="${jar.output.dir}/${application.jar.file}" manifest="${temp.dir}/MANIFEST.MF">
+            <fileset dir="${application.basedir}/">
+                <exclude name="${application.package}/_studio/**/*.*"/>
+                <exclude name="${application.package}/**/*.bak"/>
+                <exclude name="${application.package}/data/**/*.*"/>
+                <exclude name="${application.package}/info/**/*.xml"/>
+                <include name="${application.package}/**/*.class"/>
+                <include name="${application.package}/**/*.xml"/>
+                <include name="${application.package}/**/*.jpg"/>
+                <include name="${application.package}/**/*.png"/>
+                <include name="${application.package}/**/*.gif"/>
+                <include name="${application.package}/**/*.properties"/>
+                <include name="${application.package}/**/*.ini"/>
+                <include name="${application.package}/diagram/**/*.di"/>
+                <exclude name="${application.package}/properties/**/*.properties"/>
+            </fileset>
+            <fileset dir="${studio.tmp.dir}/">
+                <include name="${application.package}/info/**/*.xml"/>
+                <include name="${application.package}/properties/**/*.properties"/>
+            </fileset>
+        </jar>
+        <antcall target="jar_condition_inifile"/>
+    </target>
+    <target description="Build the jar file" name="generate_application_jar">
+        <property name="jar.output.dir" value="${application.output.dir}"/>
+        <antcall target="build_application_jar"/>
+    </target>
+    <target description="Build the jar file and deploy it in extbus" name="deploy_jar_in_extbus">
+        <mkdir dir="${extbus.dir}/${application.prefix}"/>
+        <property name="generating.extbus" value="true"/>
+        <property name="jar.output.dir" value="${extbus.dir}/${application.prefix}"/>
+        <antcall target="build_application_jar"/>
+        <!-- We need the libs -->
+        <antcall target="copy_libs"/>
+    </target>
+    <target description="Build the war file" name="generate_application_war">
+        <property name="generating.war" value="true"/>
+        <antcall target="generate_application_jar"/>
+        <delete dir="${temp.dir}" quiet="true"/>
+        <mkdir dir="${temp.dir}/lib"/>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.skins"/>
+        </copy>
+        <!-- first extract leon.jar in a temp directory -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/leon.jar"/>
+        <!-- unjar all skin files -->
+        <unjar dest="${temp.dir}" overwrite="true">
+            <fileset dir="${temp.dir}/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </unjar>
+        <!-- Extract the addsOnLeon.jar in the same directory -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/addsOnLeon.jar"/>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.classpath"/>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.web.classpath"/>
+        </copy>
+        <copy failonerror="false" file="${application.web.xml}"
+            flatten="true" overwrite="true" todir="${temp.dir}/leon/view/web/struts/WEB-INF"/>
+        <copy failonerror="false"
+            file="${application.struts-config.xml}" flatten="true"
+            overwrite="true" todir="${temp.dir}/leon/view/web/struts/WEB-INF"/>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/struts-config.xml"
+            token="LEONARDI_APPLI_ID" value="${application.id}"/>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/struts-config.xml"
+            token="LEONARDI_APPLI_INI_FILE" value="${application.web.inifile}"/>
+        <replace file="${temp.dir}/leon/view/web/struts/WEB-INF/web.xml"
+            token="LEONARDI_SERVLET" value="${application.servlet.class}"/>
+        <war
+            destfile="${application.output.dir}/${application.war.file}" needxmlfile="false">
+            <zipfileset dir="${temp.dir}/leon/view/web/struts/WEB-INF" prefix="WEB-INF">
+                <include name="web.xml"/>
+                <include name="struts-config.xml"/>
+            </zipfileset>
+            <lib file="${application.output.dir}/${application.jar.file}"/>
+            <lib dir="${temp.dir}/lib">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </lib>
+            <zipfileset
+                file="${application.basedir}/${application.package}/${application.web.inifile}" prefix="WEB-INF/classes"/>
+            <zipfileset
+                dir="${application.basedir}/${application.package}/" prefix="WEB-INF/classes">
+                <include name="data/**/*.*"/>
+            </zipfileset>
+            <fileset dir="${temp.dir}">
+                <include name="leon/**/*.png"/>
+                <include name="leon/**/*.cur"/>
+                <include name="leon/**/*.gif"/>
+                <include name="leon/**/*.jpeg"/>
+                <include name="leon/**/*.jpg"/>
+                <include name="leon/**/*.css"/>
+                <include name="leon/**/*.ico"/>
+                <include name="leon/scripts/**/*.js"/>
+                <include name="leon/scripts/**/*.jsp"/>
+                <include name="leon/scripts/**/*.html"/>
+            </fileset>
+            <fileset dir="${application.basedir}/${application.package}/">
+                <include name="**/*.png"/>
+                <include name="**/*.gif"/>
+                <include name="**/*.jpeg"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.css"/>
+                <include name="**/*.ico"/>
+                <include name="**/*.cur"/>
+                <include name="**/*.js"/>
+                <include name="**/*.jsp"/>
+                <include name="**/*.html"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.vm"/>
+                <include name="**/*.rtf"/>
+                <exclude name="**/_studio/*"/>
+                <exclude name="**/info/**/*"/>
+                <exclude name="WEB-INF/web.xml"/>
+                <exclude name="WEB-INF/struts-config.xml"/>
+                <exclude name="build.xml"/>
+                <exclude name="libraries.xml"/>
+            </fileset>
+        </war>
+        <!-- Clean temporary files (application jar, leonardi directory...) -->
+        <delete file="${application.output.dir}/${application.jar.file}"/>
+        <delete dir="${temp.dir}"/>
+    </target>
+    <target description="Update a previously generated war file" name="update_application_war">
+        <condition property="war.already.exists">
+            <and>
+                <available file="${application.output.dir}/${application.war.file}"/>
+            </and>
+        </condition>
+        <echo message="Updating war file = ${war.already.exists}"/>
+        <antcall target="generateWarSubTarget"/>
+        <antcall target="updateWarSubTarget"/>
+    </target>
+    <target name="generateWarSubTarget" unless="war.already.exists">
+        <echo message="Generating war file"/>
+        <antcall target="generate_application_war"/>
+    </target>
+    <target if="war.already.exists" name="updateWarSubTarget">
+        <echo message="Updating war file"/>
+        <delete dir="${temp.dir}"/>
+        <mkdir dir="${temp.dir}"/>
+        <!-- first regenerate a jar file -->
+        <property name="generating.war" value="true"/>
+        <antcall target="generate_application_jar"/>
+        <echo message="jar generated"/>
+        <unwar dest="${temp.dir}/war" src="${application.output.dir}/${application.war.file}"/>
+        <copy file="${application.output.dir}/${application.jar.file}"
+            flatten="true" todir="${temp.dir}/war/WEB-INF/lib"/>
+        <zip destfile="${application.output.dir}/${application.war.file}">
+            <fileset dir="${temp.dir}/war/">
+                <include name="**/*.*"/>
+            </fileset>
+        </zip>
+    </target>
+    <target description="Build the ear file" name="generate_application_ear">
+        <echo message="Generating ear file"/>
+        <antcall target="generate_application_war"/>
+        <!-- extract the application.xml file from leonardi jars -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/leon.jar">
+            <patternset>
+                <include name="**/application.xml"/>
+            </patternset>
+        </unjar>
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/addsOnLeon.jar">
+            <patternset>
+                <include name="**/application.xml"/>
+            </patternset>
+        </unjar>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/application.xml"
+            token="LEONARDI_APPLI_ID" value="${application.id}"/>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/application.xml"
+            token="WAR_FILE" value="${application.war.file}"/>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/application.xml"
+            token="CONTEXT_ROOT" value="${application.prefix}"/>
+        <ear
+            appxml="${temp.dir}/leon/view/web/struts/WEB-INF/application.xml" destfile="${application.output.dir}/${application.ear.file}">
+            <fileset dir="${application.output.dir}/">
+                <include name="${application.war.file}"/>
+            </fileset>
+        </ear>
+    </target>
+    <target description="Generate the javadoc for the webservice" name="generate_ws_javadoc">
+        <javadoc access="public" author="true"
+            destdir="${application.basedir}/${application.package}/webservice/javadoc"
+            executable="${dir.java.home}/bin/javadoc" use="true" version="true">
+            <fileset defaultexcludes="yes" dir="${application.basedir}/${application.package}/srcws">
+                <include name="*.java"/>
+            </fileset>
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+                <path refid="application.swing.classpath"/>
+                <path refid="application.swt.classpath"/>
+            </classpath>
+        </javadoc>
+    </target>
+    <target description="Compile the classes needed for the apt process" name="compile-server">
+        <echo message="Compiling server classes"/>
+        <javac debug="true"
+            destdir="${application.basedir}/${application.package}/webservice/target/classes"
+            encoding="ISO-8859-1" executable="${file.javac.exe}"
+            failonerror="true" fork="yes" memorymaximumsize="512m"
+            source="${java.version}" srcdir="${application.basedir}" target="${java.version}">
+            <include name="${application.package}/**/*.java"/>
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+                <path refid="application.swing.classpath"/>
+                <path refid="application.swt.classpath"/>
+            </classpath>
+        </javac>
+    </target>
+    <target depends="compile-server"
+        description="analyze the annotations and generate the corresponding files" name="compile_ws">
+        <taskdef classname="com.sun.tools.ws.ant.Apt" name="apt">
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+            </classpath>
+        </taskdef>
+        <echo message="Generating webservice"/>
+        <apt
+            destdir="${application.basedir}/${application.package}/webservice/target/classes"
+            encoding="ISO-8859-1" fork="true"
+            sourcedestdir="${application.basedir}/${application.package}/webservice/main/generated/server"
+            sourcepath="${application.basedir}/${application.package}/srcws" target="1.5">
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+            </classpath>
+            <source dir="${application.basedir}">
+                <include name="${application.package}/srcws/*.java"/>
+                <exclude name="WSDL_2_Java.java"/>
+            </source>
+        </apt>
+    </target>
+    <target depends="compile_ws"
+        description="Generate the wsdl file for the service" name="wsgen">
+        <taskdef classname="com.sun.tools.ws.ant.WsGen" name="wsgen">
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+            </classpath>
+        </taskdef>
+        <wsgen
+            destdir="${application.basedir}/${application.package}/webservice/target/classes"
+            fork="true" genwsdl="true" keep="true"
+            resourcedestdir="${application.basedir}/${application.package}/webservice/webapp/WEB-INF/wsdl"
+            sei="${application.id}.srcws.Web_serv" sourcedestdir="${application.basedir}/${application.package}/webservice/main/generated/server">
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+                <pathelement path="${application.basedir}/${application.package}/webservice/target/classes"/>
+            </classpath>
+        </wsgen>
+    </target>
+    <target depends="wsgen"
+        description="Compile the classes generated for the server" name="build-server">
+        <javac debug="true"
+            destdir="${application.basedir}/${application.package}/webservice/target/classes"
+            encoding="ISO-8859-1" executable="${file.javac.exe}"
+            failonerror="true" fork="yes" memorymaximumsize="512m"
+            source="${java.version}" target="${java.version}">
+            <src path="${application.basedir}/${application.package}/webservice/main/generated/server/${application.package}/srcws/jaxws"/>
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+            </classpath>
+        </javac>
+        <javac debug="true"
+            destdir="${application.basedir}/${application.package}/webservice/target/classes"
+            encoding="ISO-8859-1" executable="${file.javac.exe}"
+            failonerror="true" fork="yes" memorymaximumsize="512m"
+            source="${java.version}" target="${java.version}">
+            <src path="${application.basedir}/${application.package}/srcws"/>
+            <classpath>
+                <path refid="application.directoryclasspath"/>
+                <path refid="application.classpath"/>
+                <path refid="application.web.classpath"/>
+                <path refid="application.webservices.classpath"/>
+                <pathelement path="${dir.java.home}/lib/tools.jar"/>
+            </classpath>
+        </javac>
+    </target>
+    <target description="Build the webservices war file" name="generate_application_ws_war">
+        <property name="generating.war" value="true"/>
+        <antcall target="generate_application_jar"/>
+        <mkdir dir="${application.basedir}/${application.package}/webservice/target"/>
+        <mkdir dir="${application.basedir}/${application.package}/webservice/webapp"/>
+        <mkdir dir="${application.basedir}/${application.package}/webservice/main/generated/server"/>
+        <mkdir dir="${application.basedir}/${application.package}/webservice/target/classes"/>
+        <mkdir dir="${application.basedir}/${application.package}/webservice/webapp/WEB-INF/wsdl"/>
+        <mkdir dir="${application.basedir}/${application.package}/webservice/install/lib"/>
+        <antcall target="generate_ws_javadoc"/>
+        <antcall target="build-server"/>
+        <delete dir="${temp.dir}" quiet="true"/>
+        <!-- first extract leon.jar in a temp directory -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/leon.jar"/>
+        <!-- Extract the addsOnLeon.jar in the same directory -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/addsOnLeon.jar"/>
+        <copy flatten="true" todir="${temp.dir}/lib">
+            <path refid="application.classpath"/>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.web.classpath"/>
+        </copy>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/struts-config.xml"
+            token="LEONARDI_APPLI_ID" value="${application.id}"/>
+        <replace
+            file="${temp.dir}/leon/view/web/struts/WEB-INF/struts-config.xml"
+            token="LEONARDI_APPLI_INI_FILE" value="${application.webservice.inifile}"/>
+        <copy failonerror="true" overwrite="true" todir="${application.basedir}/${application.package}/webservice/webapp/WEB-INF">
+            <fileset dir="${temp.dir}/leon/view/web/struts/WEB-INF">
+                <include name="struts-config.xml"/>
+            </fileset>
+        </copy>
+        <copy flatten="true" todir="${temp.dir}/lib">
+            <path refid="application.webservices.classpath"/>
+        </copy>
+        <copy failonerror="true" overwrite="true" todir="${application.basedir}/${application.package}/webservice/webapp/WEB-INF">
+            <fileset dir="${temp.dir}/leon/view/web/webservice">
+                <include name="web.xml"/>
+                <include name="sun-jaxws.xml"/>
+                <include name="struts-config.xml"/>
+            </fileset>
+        </copy>
+        <replace
+            dir="${application.basedir}/${application.package}/webservice/webapp/WEB-INF"
+            token="$LY_APPLICATION_NAME$" value="${application.id}">
+            <include name="*.xml"/>
+        </replace>
+        <war
+            destfile="${application.output.dir}/${application.webservice.war.file}" needxmlfile="false">
+            <zipfileset
+                dir="${application.basedir}/${application.package}/webservice/webapp/WEB-INF" prefix="WEB-INF">
+                <include name="web.xml"/>
+                <include name="sun-jaxws.xml"/>
+                <include name="struts-config.xml"/>
+            </zipfileset>
+            <lib file="${application.output.dir}/${application.jar.file}"/>
+            <lib dir="${temp.dir}/lib">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </lib>
+            <webinf
+                file="${application.basedir}/${application.package}/webservice/webapp/WEB-INF/web.xml" prefix="WEB-INF"/>
+            <zipfileset file="${application.struts-config.xml}" prefix="WEB-INF"/>
+            <zipfileset
+                file="${application.basedir}/${application.package}/${application.webservice.inifile}" prefix="WEB-INF/classes"/>
+            <zipfileset
+                dir="${application.basedir}/${application.package}/" prefix="WEB-INF/classes">
+                <include name="data/**/*.*"/>
+            </zipfileset>
+            <classes dir="${application.basedir}/${application.package}/">
+                <include name="info/**/*.xml"/>
+                <include name="view/*.xml"/>
+                <include name="properties/*.properties"/>
+            </classes>
+            <classes dir="${application.basedir}/${application.package}/webservice/target/classes"/>
+            <fileset dir="${application.basedir}/${application.package}/webservice/">
+                <include name="javadoc"/>
+                <include name="javadoc/*.*"/>
+                <include name="javadoc/*"/>
+                <include name="javadoc/**"/>
+                <include name="javadoc/**/*"/>
+            </fileset>
+        </war>
+        <!-- Clean temporary files (application jar, leonardi directory...) -->
+        <delete file="${application.output.dir}/${application.jar.file}"/>
+        <delete dir="${temp.dir}"/>
+        <delete dir="${application.basedir}/${application.id}/srcws"/>
+        <delete dir="${application.basedir}/${application.id}/webservice"/>
+    </target>
+    <target if="app_model_jar_available" name="extract_w4_model">
+        <mkdir dir="${temp.dir}/w4appmodel"/>
+        <unjar dest="${temp.dir}/w4appmodel" overwrite="true" src="${application.lib.dir}/w4_appmodel.jar">
+            <patternset>
+                <include name="**/WEB-INF/**/*.*"/>
+            </patternset>
+        </unjar>
+        <copy failonerror="false"
+            file="${temp.dir}/w4appmodel/eu/w4/leon/appmodel/appdefault/WEB-INF/web.xml"
+            flatten="true" overwrite="true" todir="${temp.dir}/leon/view/web/jquery/WEB-INF"/>
+    </target>
+    <target if="wf_model_jar_available" name="extract_wf_model">
+        <mkdir dir="${temp.dir}/w4wfmodel"/>
+        <unjar dest="${temp.dir}/w4wfmodel" overwrite="true" src="${application.lib.dir}/w4_wfmodel.jar">
+            <patternset>
+                <include name="**/WEB-INF/**/*.*"/>
+            </patternset>
+        </unjar>
+        <copy failonerror="false"
+            file="${temp.dir}/w4wfmodel/eu/w4/model/wf/WEB-INF/web.xml"
+            flatten="true" overwrite="true" todir="${temp.dir}/leon/view/web/jquery/WEB-INF"/>
+    </target>
+    <target if="bpmn_model_jar_available" name="extract_bpmn_model">
+        <mkdir dir="${temp.dir}/bpmnappmodel"/>
+        <unjar dest="${temp.dir}/bpmnappmodel" overwrite="true" src="${application.lib.dir}/w4_bpmnmodel.jar">
+            <patternset>
+                <include name="**/WEB-INF/**/*.*"/>
+            </patternset>
+        </unjar>
+        <copy failonerror="false"
+            file="${temp.dir}/bpmnappmodel/eu/w4/model/engine/bpmn/WEB-INF/web.xml"
+            flatten="true" overwrite="true" todir="${temp.dir}/leon/view/web/jquery/WEB-INF"/>
+    </target>
+    <target name="extract_app_model">
+        <antcall target="extract_w4_model"/>
+        <antcall target="extract_wf_model"/>
+        <antcall target="extract_bpmn_model"/>
+    </target>
+    <target
+        description="Update a previously generated war file with JQuery viewer" name="update_application_war_jquery">
+        <condition property="war.already.exists">
+            <and>
+                <available file="${application.output.dir}/${application.war.file}"/>
+            </and>
+        </condition>
+        <echo message="Updating war file (JQuery viewer) = ${war.already.exists}"/>
+    </target>
+    <target description="Build the war for web deployment" name="generate_application_war_jquery">
+        <property name="generating.war" value="true"/>
+        <antcall target="generate_application_jar"/>
+        <delete dir="${temp.dir}" quiet="true"/>
+        <mkdir dir="${temp.dir}/lib"/>
+        <mkdir dir="${temp.dir}/leon/scripts/jquery"/>
+        <available file="${application.lib.dir}/w4_appmodel.jar"
+            property="app_model_jar_available" type="file"/>
+        <available file="${application.lib.dir}/w4_wfmodel.jar"
+            property="wf_model_jar_available" type="file"/>
+        <available file="${application.lib.dir}/w4_bpmnmodel.jar"
+            property="bpmn_model_jar_available" type="file"/>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.skins"/>
+        </copy>
+        <!-- first extract leon.jar in a temp directory -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/leon.jar"/>
+        <!-- unjar all skin files -->
+        <unjar dest="${temp.dir}" overwrite="true">
+            <fileset dir="${temp.dir}/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </unjar>
+        <!-- Extract the addsOnLeon.jar in the same directory -->
+        <unjar dest="${temp.dir}" overwrite="true" src="${application.lib.dir}/addsOnLeon.jar"/>
+        <antcall target="extract_app_model"/>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.classpath"/>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.jquery.classpath"/>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${temp.dir}/lib">
+            <path refid="application.web.classpath"/>
+        </copy>
+        <antcall target="prepare_web_xml_files">
+            <param name="xml_files_dir" value="${temp.dir}"/>
+        </antcall>
+        <war
+            destfile="${application.output.dir}/${application.war.file}" needxmlfile="false">
+            <zipfileset dir="${temp.dir}/leon/view/web/jquery/WEB-INF" prefix="WEB-INF">
+                <include name="web.xml"/>
+                <include name="portlet.xml"/>
+                <include name="liferay-portlet.xml"/>
+                <include name="liferay-display.xml"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/view/web/struts/WEB-INF" prefix="WEB-INF">
+                <include name="struts-config.xml"/>
+            </zipfileset>
+            <zipfileset
+                dir="${temp.dir}/leon/view/web/jquery/WEB-INF/context" prefix="WEB-INF/context">
+                <include name="applicationContext.xml"/>
+                <include name="ae-servlet.xml"/>
+            </zipfileset>
+            <zipfileset
+                dir="${temp.dir}/leon/view/web/jquery/WEB-INF/classes" prefix="WEB-INF/classes">
+                <include name="log4j.properties"/>
+            </zipfileset>
+            <lib file="${application.output.dir}/${application.jar.file}"/>
+            <lib dir="${temp.dir}/lib">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </lib>
+            <zipfileset
+                file="${application.basedir}/${application.package}/${application.web.jquery.inifile}" prefix="WEB-INF/classes"/>
+            <zipfileset
+                dir="${application.basedir}/${application.package}/" prefix="WEB-INF/classes">
+                <include name="data/**/*.*"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/view/web/jquery/pages" prefix="leon/pages">
+                <include name="**/*.*"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/view/web/jquery/pages" prefix="">
+                <include name="index.jsp"/>
+                <include name="loadingApplication.jsp"/>
+                <include name="invoke.jsp"/>
+            </zipfileset>
+            <zipfileset
+                dir="${temp.dir}/leon/view/web/jquery/scripts/jquery/portlet" prefix="">
+                <include name="configuration.jsp"/>
+                <include name="portlet_error.jsp"/>
+                <include name="portletRedirect.jsp"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/view/web/jquery/css" prefix="leon/css">
+                <include name="**/*.*"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/css" prefix="leon/css">
+                <include name="**/*.*"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/view/web/jquery/scripts" prefix="leon/scripts">
+                <include name="**/*.*"/>
+            </zipfileset>
+            <zipfileset dir="${temp.dir}/leon/scripts/jquery" prefix="leon/scripts/jquery">
+                <include name="**/*.*"/>
+            </zipfileset>
+            <fileset dir="${temp.dir}">
+                <include name="leon/images/**/*.png"/>
+                <include name="leon/images/**/*.gif"/>
+                <include name="leon/images/**/*.jpeg"/>
+                <include name="leon/images/**/*.jpg"/>
+                <include name="leon/images/**/*.ico"/>
+                <include name="leon/images/**/*.cur"/>
+            </fileset>
+            <fileset dir="${temp.dir}">
+                <include name="leon/**/*.png"/>
+                <include name="leon/**/*.cur"/>
+                <include name="leon/**/*.gif"/>
+                <include name="leon/**/*.jpeg"/>
+                <include name="leon/**/*.jpg"/>
+                <include name="leon/**/*.css"/>
+                <include name="leon/**/*.ico"/>
+                <include name="leon/scripts/**/*.js"/>
+                <include name="leon/scripts/**/*.jsp"/>
+                <include name="leon/scripts/**/*.html"/>
+            </fileset>
+            <zipfileset
+                dir="${temp.dir}/w4appmodel/eu/w4/leon/appmodel/appdefault/jquery"
+                erroronmissingdir="false" prefix="jquery">
+                <include name="*.jsp"/>
+            </zipfileset>
+            <fileset dir="${application.basedir}/${application.package}/">
+                <include name="**/*.png"/>
+                <include name="**/*.gif"/>
+                <include name="**/*.jpeg"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.css"/>
+                <include name="**/*.ico"/>
+                <include name="**/*.cur"/>
+                <include name="**/*.js"/>
+                <include name="**/*.jsp"/>
+                <include name="**/*.html"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.vm"/>
+                <include name="**/*.rtf"/>
+                <exclude name="**/_studio/*"/>
+                <exclude name="**/info/**/*"/>
+                <exclude name="WEB-INF/web.xml"/>
+                <exclude name="WEB-INF/struts-config.xml"/>
+                <exclude name="WEB-INF-JQuery/web.xml"/>
+                <exclude name="WEB-INF-JQuery/context/ae-servlet.xml"/>
+                <exclude name="WEB-INF-JQuery/context/applicationContext.xml"/>
+                <exclude name="build.xml"/>
+                <exclude name="libraries.xml"/>
+            </fileset>
+        </war>
+        <!-- Clean temporary files (application jar, leonardi directory...) -->
+        <delete file="${application.output.dir}/${application.jar.file}"/>
+        <!--delete dir="${temp.dir}" /-->
+    </target>
+    <target description="Create the webapp for web execution" name="create_webapp_jquery">
+        <antcall target="generate_application_jar"/>
+        <delete dir="${webapp.dir}" quiet="true"/>
+        <delete file="${application.output.dir}/${application.war.file}"/>
+        <available file="${application.lib.dir}/w4_appmodel.jar"
+            property="app_model_jar_available" type="file"/>
+        <available file="${application.lib.dir}/w4_wfmodel.jar"
+            property="wf_model_jar_available" type="file"/>
+        <available file="${application.lib.dir}/w4_bpmnmodel.jar"
+            property="bpmn_model_jar_available" type="file"/>
+        <copy flatten="true" overwrite="true" todir="${webapp.dir}/WEB-INF/lib">
+            <path refid="application.skins"/>
+        </copy>
+        <!-- first extract web resources from leon.jar in a temp directory -->
+        <unjar dest="${webapp.dir}" overwrite="true" src="${application.lib.dir}/leon.jar">
+            <patternset>
+                <include name="leon/view/web/struts/WEB-INF/**/*.*"/>
+                <include name="leon/view/web/jquery/WEB-INF/**/*.*"/>
+                <include name="leon/view/web/jquery/pages/**/*.*"/>
+                <include name="leon/view/web/jquery/scripts/**/*.*"/>
+                <include name="leon/view/web/jquery/css/**/*.*"/>
+                <include name="leon/css/**/*.*"/>
+                <include name="leon/scripts/**/*.*"/>
+                <include name="leon/images/**/*.*"/>
+                <include name="leon/**/*.png"/>
+                <include name="leon/**/*.cur"/>
+                <include name="leon/**/*.gif"/>
+                <include name="leon/**/*.jpeg"/>
+                <include name="leon/**/*.jpg"/>
+                <include name="leon/**/*.css"/>
+                <include name="leon/**/*.ico"/>
+            </patternset>
+        </unjar>
+        <!-- unjar all skin files -->
+        <unjar dest="${webapp.dir}" overwrite="true">
+            <fileset dir="${webapp.dir}/WEB-INF/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </unjar>
+        <delete dir="${webapp.dir}/META-INF" quiet="true"/>
+        <delete file="${webapp.dir}/skin.properties" quiet="true"/>
+        <antcall target="extract_app_model"/>
+        <copy flatten="true" overwrite="true" todir="${webapp.dir}/WEB-INF/lib">
+            <path refid="application.classpath"/>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${webapp.dir}/WEB-INF/lib">
+            <path refid="application.jquery.classpath"/>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${webapp.dir}/WEB-INF/lib">
+            <path refid="application.web.classpath"/>
+        </copy>
+        <copy failonerror="false"
+            file="${temp.dir}/leon/view/web/jquery/WEB-INF/web.xml"
+            flatten="true" overwrite="true" todir="${webapp.dir}/leon/view/web/jquery/WEB-INF"/>
+        <antcall target="prepare_web_xml_files">
+            <param name="xml_files_dir" value="${webapp.dir}"/>
+        </antcall>
+        <copy toDir="${webapp.dir}/WEB-INF">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/WEB-INF">
+                <include name="web.xml"/>
+                <include name="portlet.xml"/>
+                <include name="liferay-portlet.xml"/>
+                <include name="liferay-display.xml"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/WEB-INF">
+            <fileset dir="${webapp.dir}/leon/view/web/struts/WEB-INF">
+                <include name="struts-config.xml"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/WEB-INF/context">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/WEB-INF/context">
+                <include name="applicationContext.xml"/>
+                <include name="ae-servlet.xml"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/WEB-INF/classes">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/WEB-INF/classes">
+                <include name="log4j.properties"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/leon/pages">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/pages">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/pages">
+                <include name="index.jsp"/>
+                <include name="loadingApplication.jsp"/>
+                <include name="invoke.jsp"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/scripts/jquery/portlet">
+                <include name="configuration.jsp"/>
+                <include name="portlet_error.jsp"/>
+                <include name="portletRedirect.jsp"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/leon/css">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/css">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/leon/css">
+            <fileset dir="${webapp.dir}/leon/css">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/leon/scripts">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/scripts">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/leon/scripts/jquery">
+            <fileset dir="${webapp.dir}/leon/scripts/jquery">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy file="${application.output.dir}/${application.jar.file}" toFile="${webapp.dir}/WEB-INF/lib/${application.jar.file}"/>
+        <copy
+            file="${application.basedir}/${application.package}/${application.web.jquery.inifile}" toFile="${webapp.dir}/WEB-INF/classes/${application.web.jquery.inifile}"/>
+        <copy toDir="${webapp.dir}/WEB-INF/classes/data">
+            <fileset dir="${application.basedir}/${application.package}/data">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}">
+            <fileset dir="${application.basedir}/${application.package}/">
+                <include name="**/*.png"/>
+                <include name="**/*.gif"/>
+                <include name="**/*.jpeg"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.css"/>
+                <include name="**/*.ico"/>
+                <include name="**/*.cur"/>
+                <include name="**/*.js"/>
+                <include name="**/*.jsp"/>
+                <include name="**/*.html"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.vm"/>
+                <include name="**/*.rtf"/>
+                <exclude name="**/_studio/*"/>
+                <exclude name="**/info/**/*"/>
+                <exclude name="WEB-INF/web.xml"/>
+                <exclude name="WEB-INF/struts-config.xml"/>
+                <exclude name="WEB-INF-JQuery/web.xml"/>
+                <exclude name="WEB-INF-JQuery/context/ae-servlet.xml"/>
+                <exclude name="WEB-INF-JQuery/context/applicationContext.xml"/>
+                <exclude name="build.xml"/>
+                <exclude name="libraries.xml"/>
+            </fileset>
+        </copy>
+        <delete file="${application.output.dir}/${application.jar.file}"/>
+    </target>
+    <target description="Update the webapp for web execution" name="update_webapp_jquery">
+        <antcall target="generate_application_jar"/>
+        <available file="${application.lib.dir}/w4_appmodel.jar"
+            property="app_model_jar_available" type="file"/>
+        <available file="${application.lib.dir}/w4_wfmodel.jar"
+            property="wf_model_jar_available" type="file"/>
+        <available file="${application.lib.dir}/w4_bpmnmodel.jar"
+            property="bpmn_model_jar_available" type="file"/>
+        <antcall target="extract_app_model"/>
+        <copy failonerror="false"
+            file="${temp.dir}/leon/view/web/jquery/WEB-INF/web.xml"
+            flatten="true" overwrite="true" todir="${webapp.dir}/leon/view/web/jquery/WEB-INF"/>
+        <antcall target="prepare_web_xml_files">
+            <param name="xml_files_dir" value="${webapp.dir}"/>
+        </antcall>
+        <copy toDir="${webapp.dir}/WEB-INF">
+            <fileset dir="${webapp.dir}/leon/view/web/jquery/WEB-INF">
+                <include name="web.xml"/>
+                <include name="portlet.xml"/>
+                <include name="liferay-portlet.xml"/>
+                <include name="liferay-display.xml"/>
+            </fileset>
+        </copy>
+        <copy toDir="${webapp.dir}/jquery">
+            <fileset
+                dir="${temp.dir}/w4appmodel/eu/w4/leon/appmodel/appdefault/jquery" erroronmissingdir="false">
+                <include name="*.jsp"/>
+            </fileset>
+        </copy>
+        <copy file="${application.output.dir}/${application.jar.file}" toFile="${webapp.dir}/WEB-INF/lib/${application.jar.file}"/>
+        <copy
+            file="${application.basedir}/${application.package}/${application.web.jquery.inifile}" toFile="${webapp.dir}/WEB-INF/classes/${application.web.jquery.inifile}"/>
+        <copy toDir="${webapp.dir}/WEB-INF/classes/data">
+            <fileset dir="${application.basedir}/${application.package}/data">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>
+        <copy flatten="true" overwrite="true" todir="${webapp.dir}/WEB-INF/lib">
+            <path refid="application.classpath"/>
+        </copy>
+        <copy toDir="${webapp.dir}">
+            <fileset dir="${application.basedir}/${application.package}/">
+                <include name="**/*.png"/>
+                <include name="**/*.gif"/>
+                <include name="**/*.jpeg"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.css"/>
+                <include name="**/*.ico"/>
+                <include name="**/*.cur"/>
+                <include name="**/*.js"/>
+                <include name="**/*.jsp"/>
+                <include name="**/*.html"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.vm"/>
+                <include name="**/*.rtf"/>
+                <exclude name="**/_studio/*"/>
+                <exclude name="**/info/**/*"/>
+                <exclude name="WEB-INF/web.xml"/>
+                <exclude name="WEB-INF/struts-config.xml"/>
+                <exclude name="WEB-INF-JQuery/web.xml"/>
+                <exclude name="WEB-INF-JQuery/context/ae-servlet.xml"/>
+                <exclude name="WEB-INF-JQuery/context/applicationContext.xml"/>
+                <exclude name="build.xml"/>
+                <exclude name="libraries.xml"/>
+            </fileset>
+        </copy>
+        <delete file="${application.output.dir}/${application.jar.file}"/>
+    </target>
+    <target name="prepare_web_xml_files">
+        <copy failonerror="false" file="${application.web.xml}"
+            flatten="true" overwrite="true" todir="${xml_files_dir}/leon/view/web/struts/WEB-INF"/>
+        <copy failonerror="false" file="${application.jquery.web.xml}"
+            flatten="true" overwrite="true" todir="${xml_files_dir}/leon/view/web/jquery/WEB-INF"/>
+        <copy failonerror="false"
+            file="${application.struts-config.xml}" flatten="true"
+            overwrite="true" todir="${xml_files_dir}/leon/view/web/struts/WEB-INF"/>
+        <replace dir="${xml_files_dir}/leon/view/web/struts/WEB-INF"
+            token="LEONARDI_APPLI_ID" value="${application.id}">
+            <include name="**/*.xml"/>
+        </replace>
+        <replace dir="${xml_files_dir}/leon/view/web/struts/WEB-INF"
+            token="LEONARDI_APPLI_INI_FILE" value="${application.web.jquery.inifile}">
+            <include name="**/*.xml"/>
+        </replace>
+        <replace dir="${xml_files_dir}/leon/view/web/jquery/WEB-INF"
+            token="LEONARDI_APPLI_ID" value="${application.id}">
+            <include name="**/*.properties"/>
+            <include name="**/*.xml"/>
+        </replace>
+        <replace dir="${xml_files_dir}/leon/view/web/jquery/WEB-INF"
+            token="LEONARDI_APPLI_INI_FILE" value="${application.web.jquery.inifile}">
+            <include name="**/*.properties"/>
+            <include name="**/*.xml"/>
+        </replace>
+        <replace dir="${xml_files_dir}/leon/view/web/jquery/WEB-INF"
+            token="LEONARDI_APPLI_NAME" value="${application.name}">
+            <include name="**/*.properties"/>
+            <include name="**/*.xml"/>
+        </replace>
+        <replace dir="${xml_files_dir}/leon/view/web/jquery/WEB-INF"
+            token="LEONARDI_SERVLET" value="${application.servlet.class}">
+            <include name="**/*.properties"/>
+            <include name="**/*.xml"/>
+        </replace>
+    </target>
+</project>

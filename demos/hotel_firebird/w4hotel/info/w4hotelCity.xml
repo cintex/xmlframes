@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="w4hotelCity">
+	<C_BIND value="city" location="w4hotelDb"/>
+	<NAME value="CLS_NAME_CITY"/>
+	<PREFIX value="CLS_IMG_CITY"/>
+	<FIELDS>
+		<TEXT id="w4hotelCityName">
+			<NAME value="FLD_NAME_CITY_NAME"/>
+			<F_MARKS id='true' name='true' create='true' private='true' main='true'/>
+			<NCOLS value='50'/>
+		</TEXT>
+		<RELATION id="w4hotelCityProvince">
+			<NAME value="FLD_NAME_CITY_PROVINCE"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<CLASSES idrefs="w4hotelProvince"/>
+		</RELATION>
+		<NUMBER id="w4hotelCityX">
+			<NAME value="FLD_NAME_CITY_X"/>
+			<F_MARKS create='true' set='true' main='true'/>
+		</NUMBER>
+		<NUMBER id="w4hotelCityY">
+			<NAME value="FLD_NAME_CITY_Y"/>
+			<F_MARKS create='true' set='true' main='true'/>
+		</NUMBER>
+		<NUMBER id="w4hotelCityLongitude" type='FLOAT'>
+			<NAME value="FLD_NAME_CITY_LONGITUDE"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<DECIMALS value='6'/>
+		</NUMBER>
+		<NUMBER id="w4hotelCityLatitude" type='FLOAT'>
+			<NAME value="FLD_NAME_CITY_LATITUDE"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<DECIMALS value='6'/>
+		</NUMBER>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+	</ACTIONS>
+	<ROUTES>
+		<ROUTE id="w4hotelCityToEstablishment" target="w4hotelEstablishment" bidirectional='true'>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+		</ROUTE>
+		<ROUTE id="w4hotelCityToRoom" target="w4hotelRoom" bidirectional='true'>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+			<STEP target="w4hotelRoom" idrefs="w4hotelRoomEstablishment"/>
+		</ROUTE>
+		<ROUTE id="w4hotelCityToReservation" target="w4hotelReservation" bidirectional='true'>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+			<STEP target="w4hotelRoom" idrefs="w4hotelRoomEstablishment"/>
+			<STEP target="w4hotelReservation" idrefs="w4hotelReservationRooms"/>
+		</ROUTE>
+		<ROUTE id="w4hotelCityToCurrentReservation" target="w4hotelCurrentReservation" bidirectional='true'>
+			<STEP target="w4hotelEstablishmentAddress" idrefs="w4hotelAddressCity"/>
+			<STEP target="w4hotelEstablishment" idrefs="w4hotelEstablishmentAddress"/>
+			<STEP target="w4hotelRoom" idrefs="w4hotelRoomEstablishment"/>
+			<STEP target="w4hotelCurrentReservation" idrefs="w4hotelCurrentReservationRooms"/>
+		</ROUTE>
+	</ROUTES>
+</CLASS>
