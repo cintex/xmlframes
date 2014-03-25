@@ -145,6 +145,7 @@ uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_dialogs,
      Math,
      fonctions_Objets_Dynamiques,
+     u_extfilecomp,
      fonctions_languages,
      u_buttons_defs,
      fonctions_xmlform,
@@ -1001,6 +1002,9 @@ var llab_Label  : TFWLabel;
       if not assigned ( awin_Control )
       or ( awin_Control is TDBGroupView ) then
         Exit;
+
+      if ( awin_Control is TExtDBFileEdit ) then
+       ( awin_Control as TExtDBFileEdit ).FilesDir:=fs_getLeonDir+afws_Source.Table+DirectorySeparator+lffd_ColumnFieldDef.FieldName;
 
       // create eventually a tabsheet if too many controls
       If ab_SeparateIfTooMuch

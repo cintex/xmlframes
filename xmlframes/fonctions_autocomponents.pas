@@ -170,6 +170,7 @@ uses JvXPButtons,fonctions_dbcomponents,
 {$ENDIF}
      U_ExtNumEdits,
      u_fillcombobutton,
+     u_extfilecomp,
      fonctions_string,
      fonctions_extdb,
      fonctions_createsql,
@@ -488,10 +489,9 @@ begin
     Begin
       if foFile in afdt_FieldDataType.Options Then
        Begin
-        if ab_IsLocal then
-          Result := TFWFileEdit.Create ( acom_Owner )
-         else
-          Result := TFWDBFileEdit.Create ( acom_Owner );
+        if ab_IsLocal
+          then Result := TFWFileEdit.Create ( acom_Owner )
+          else Result := TExtDBFileEdit.Create ( acom_Owner );
        end
       else
         if foChoice in afdt_FieldDataType.Options Then
