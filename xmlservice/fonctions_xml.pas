@@ -648,6 +648,10 @@ begin
                   if not lb_Table Then
                     fb_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], lnod_Node.Attributes [ CST_LEON_ID ], '' );
                 end;
+              if  not Assigned(ae_onActionNode)
+              and not Assigned(ae_onClassNameNode)
+              and not Assigned(ae_OnFieldNode) Then
+                Exit;
               for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
                Begin
                 lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];

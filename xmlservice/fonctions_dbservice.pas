@@ -88,6 +88,7 @@ uses u_multidonnees, fonctions_xml,
      fonctions_file,
      FileUtil,
      Controls,
+     strutils,
      {$IFDEF FPC}
      LazFileUtils,
      {$ENDIF}
@@ -616,8 +617,11 @@ Begin
     if ( li_Pos > 1 )
      Then
       Begin
-       li_Pos:=pos ( '/', DataURL );
-       DataBase:=fs_getLeonDir+fs_GetCorrectPath(copy(DataURL,li_Pos+1,Length(DataURL)-li_Pos));
+       if pos ( fs_GetNameSoft, DataURL ) = li_pos+1 Then
+         li_Pos:=posEx ( '/', DataURL, li_pos );
+       DataBase:=fs_GetCorrectPath(copy(DataURL,li_Pos+1,Length(DataURL)-li_Pos));
+       if not fb_IsFullPath(DataBase) Then
+         DataBase:=fs_getLeonDir+DataBase;
        if not fb_CreateDirectoryStructure(ExtractFilePath(DataBase)) Then
         Begin
          MyShowMessage(fs_RemplaceMsg(GS_CANNOT_CREATE_DIR_EXITING,[ExtractFilePath(DataBase)]));

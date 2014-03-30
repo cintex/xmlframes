@@ -143,6 +143,7 @@ implementation
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
      fonctions_dialogs,
+     fonctions_dbcomponents,
      Math,
      fonctions_Objets_Dynamiques,
      fonctions_languages,
@@ -368,7 +369,8 @@ procedure TF_XMLForm.p_setLogin(const axml_Login: TALXMLDocument;
 var
     li_i, li_j, li_Counter : Longint;
     lnod_Node, lnod_NodeChild : TALXMLNode ;
-    ls_location   : String;
+    gxmd_xmlSource : TALXMLDocument;
+    ls_class   : String;
     lwin_Control  : TWinControl;
     lfwl_Label    : TFWLabel;
     lfwc_Column   : TFWSource ;
@@ -401,12 +403,13 @@ begin
               and ( lnod_NodeChild.Attributes [ CST_LEON_PARAMETER_NAME ] = CST_LEON_USER_CLASS )
                Then
                  Begin
-                   if lnod_NodeChild.HasAttribute ( CST_LEON_LOCATION ) Then
-                     ls_location := lnod_NodeChild.Attributes [ CST_LEON_LOCATION ]
-                    else
-                     ls_location := '';
+                   if lnod_NodeChild.HasAttribute ( CST_LEON_IDREF )
+                    Then ls_class := lnod_NodeChild.Attributes [ CST_LEON_IDREF ]
+                    else Application.Terminate;
 
-                   lfwc_Column := TFWSource ( ffws_CreateSource ( DBSOurces, ConnectionName, lnod_NodeChild.Attributes [ CST_LEON_IDREF ], ls_location, Self ));
+                   gxmd_xmlSource := nil;
+                   p_CreateComponents ( DBSources, ls_class, ls_class, Self, nil, gxmd_xmlSource, nil, nil, nil );
+                   lfwc_Column := DBSources[0];
                    {$IFDEF DBNET}
                      If ( lfwc_Column.Connection.DatasetType = dtDBNet ) Then
                       Begin
