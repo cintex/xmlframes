@@ -85,9 +85,9 @@ uses u_multidonnees, fonctions_xml,
      unite_variables,
      fonctions_dbcomponents,
      fonctions_createsql,
+     fonctions_file,
      FileUtil,
      Controls,
-     fonctions_file,
      {$IFDEF FPC}
      LazFileUtils,
      {$ENDIF}
@@ -160,13 +160,13 @@ Begin
   if ( gs_ProjectFile = '' ) then
     Begin
       lstl_FichierIni := TStringList.Create ;
-      if not FileExistsUTF8(fs_getLeonDir +  fs_GetNameSoft+ DirectorySeparator +fs_GetNameSoft + CST_EXTENSION_INI) Then
+      if not FileExistsUTF8(fs_getLeonDir + fs_GetNameSoft + CST_EXTENSION_INI) Then
         Begin
           raise Exception.Create ( 'No ini file of LEONARDI project !' );
           Exit;
         end;
       try
-        lstl_FichierIni.LoadFromFile( fs_getLeonDir +  fs_GetNameSoft+ DirectorySeparator +fs_GetNameSoft + CST_EXTENSION_INI);
+        lstl_FichierIni.LoadFromFile( fs_getLeonDir + fs_GetNameSoft + CST_EXTENSION_INI);
         if ( pos ( INISEC_PAR, lstl_FichierIni [ 0 ] ) <= 0 ) Then
           Begin
             lstl_FichierIni.Insert(0,'['+INISEC_PAR+']');
@@ -301,8 +301,8 @@ Begin
   gs_Language := 'en';
   gs_NomApp := fs_GetNameSoft;
   if not assigned ( amif_Init ) then
-    if FileExistsUTF8(fs_getLeonDir + fs_GetNameSoft+ DirectorySeparator +CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
-      Then amif_Init := TIniFile.Create(fs_getLeonDir +  fs_GetNameSoft+ DirectorySeparator +CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+    if FileExistsUTF8(fs_getLeonDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
+      Then amif_Init := TIniFile.Create(fs_getLeonDir + CST_INI_SOFT + fs_GetNameSoft+ CST_EXTENSION_INI)
       Else p_InitIniProjectFile;
   if assigned ( amif_Init ) Then
     Begin
@@ -315,6 +315,16 @@ Begin
       if not assigned ( gxdo_FichierXML ) then
         gxdo_FichierXML := TALXMLDocument.Create ( AApplication );
       Result := gs_ProjectFile <> '';
+      if result Then
+        Begin
+          {$IFDEF WINDOWS}
+          gs_ProjectFile := fs_RemplaceChar ( gs_ProjectFile, '/', '\' );
+          {$ENDIF}
+          gs_ProjectFile := fs_EraseNameSoft ( gs_NomApp, gs_ProjectFile );
+//          MyShowMessage ( fs_getLeonDir + gs_ProjectFile );
+
+
+        End;
   End;
 End;
 
@@ -485,10 +495,10 @@ end;
 /////////////////////////////////////////////////////////////////////////
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
 Begin
-  if  ( as_Value > '' )
+  if  ( as_Value <> '' )
   and ( as_Value [1] = '$' )
   and Assigned(FIniMain)
-   Then Result := FIniMain.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -2 ), as_Value )
+   Then Result := FIniMain.ReadString( INISEC_PAR, copy ( as_Value, 2, Length(as_Value) -1 ), as_Value )
    else Result := as_Value;
 End;
 
@@ -526,9 +536,8 @@ End;
 
 
 function fb_AutoCreateDatabase ( const as_BaseName, as_user, as_password, as_host : String ; const ab_DoItWithCommandLine : Boolean ; const acom_owner : TComponent ; const ads_connection : TDSSource = nil ):Boolean;
-var li_i,li_j : Integer;
+var li_i : Integer;
     LTables : TFWTables;
-    LTable : TFWTable;
     ATemp1,
     ATemp2 : String;
 Begin
@@ -590,30 +599,49 @@ Begin
     DataURL := copy ( DataURL , li_pos + 2, length ( DataURL ) - li_pos - 1 );
     DataPort := 0;
     li_Pos := pos ( ':', DataURL );
+    if li_Pos > 0 Then
+      DataURL := copy ( DataURL , li_pos + 1, length ( DataURL ) - li_pos );
+    li_Pos := pos ( ':', DataURL );
     // Récupération du port
     if li_Pos > 0 Then
       try
         if pos ( '/', DataURL ) > 0
-         Then DataPort := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
-         Else DataPort := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
+         Then  DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, pos ( '/', DataURL ) - li_pos - 1 ))
+         Else  DataPort    := StrToInt ( copy ( DataURL, li_Pos + 1, length ( DataURL ) - li_pos ));
         // Finition de l'URL : Elle ne contient que l'adresse du serveur
         DataURL := copy ( DataURL , 1, li_Pos - 1 );
       Except
       end;
+    li_Pos:=pos ( '=', DataURL );
+    if ( li_Pos > 1 )
+     Then
+      Begin
+       li_Pos:=pos ( '/', DataURL );
+       DataBase:=fs_getLeonDir+fs_GetCorrectPath(copy(DataURL,li_Pos+1,Length(DataURL)-li_Pos));
+       if not fb_CreateDirectoryStructure(ExtractFilePath(DataBase)) Then
+        Begin
+         MyShowMessage(fs_RemplaceMsg(GS_CANNOT_CREATE_DIR_EXITING,[ExtractFilePath(DataBase)]));
+         Exit;
+        End;
+       DataLocal:=True;
+      end
+     else
+        Database := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DATABASE ]);
     if ( DataURL [ length ( DataURL )] = '/' ) Then
       DataURL := copy ( DataURL , 1, length ( DataURL ) - 1 );
-    if aNode.Attributes [ CST_LEON_DATA_USER ] <> Null Then
+    if aNode.HasAttribute( CST_LEON_DATA_USER ) then
      Begin
       DataUser := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_USER ]);
       DataPassword :=fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_Password ]);
      end;
-    Database := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DATABASE ]);
     DataDriver := fs_getIniOrNotIniValue ( aNode.Attributes [ CST_LEON_DATA_DRIVER ]);
     InitConnection;
      p_setComponentProperty ( Connection, 'User', DataUser );
      p_setComponentProperty ( Connection, 'Password', DataPassword );
-     p_setComponentProperty ( Connection, 'Hostname', DataURL );
+     if not DataLocal Then
+       p_setComponentProperty ( Connection, 'Hostname', DataURL );
      p_setComponentProperty ( Connection, CST_DB_DATABASE, Database );
+     p_setComponentProperty ( Connection, 'DatabaseName', Database );
      if DataPort > 0 Then
        p_setComponentProperty ( Connection, 'Port', DataPort );
      if ( pos ( CST_LEON_DATA_MYSQL, DataDriver ) > 0 ) Then
@@ -624,9 +652,9 @@ Begin
      else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
       Begin
         AParams := fobj_getComponentObjectProperty(Connection,'Params') as TStrings;
-        if DataUser='' Then
+        if DataUser = '' Then
          Begin
-          DataUser:='SYSDBA';
+          DataUser := 'SYSDBA';
           DataPassword:='masterkey';
          End;
         with AParams do
@@ -634,18 +662,6 @@ Begin
            Add('user_name='+DataUser);
            Add('password='+DataPassword);
           end;
-        if ( pos ( '.', DataBase ) = 1 )
-        or ( pos ( {$IFDEF WINDOWS}':', DataBase ) = 2{$ELSE}DirectorySeparator, DataBase ) = 1{$ENDIF} )
-         Then
-          Begin
-           DataBase:=fs_GetCorrectPath (DataBase);
-           if ( pos ( '..'+DirectorySeparator, DataBase ) = 1 ) Then
-            DataBase := StringReplace(DataBase,'..'+DirectorySeparator,ExtractSubDir(fs_getAppDir)+DirectorySeparator,[]);
-           if ( pos ( '.'+DirectorySeparator, DataBase ) = 1 ) Then
-            DataBase := StringReplace(DataBase,'.'+DirectorySeparator,fs_getAppDir,[]);
-           DataLocal:=True;
-          end;
-       p_setComponentProperty ( Connection, 'DatabaseName', Database );
       end
      else if ( pos ( CST_LEON_DATA_SQLLITE, DataDriver ) > 0 ) Then
       Begin
@@ -664,9 +680,9 @@ Begin
      if DataLocal Then
        if not FileExistsUTF8(DataBase) Then
          fb_AutoCreateDatabase ( DataBase, DataUser, DataPassword, DataURL, True, acom_owner );
-       if not fb_OpenCloseDatabase ( Connection, True )
-       and ( (MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrNo)
-            or not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection)) Then
+     if not fb_OpenCloseDatabase ( Connection, True )
+     and ( (MyMessageDlg('SQL',fs_RemplaceMsg(gs_Could_not_connect_Seems_you_have_not_created_database_Do_you,[fs_getComponentProperty(Connection,CST_DB_DATABASE),fs_getComponentProperty(Connection,'User')]),mtWarning,mbYesNo) = mrNo)
+          or not fb_AutoCreateDatabase(DataBase,DataUser,DataPassword,DataURL,False,acom_owner,ads_connection)) Then
           halt;
 
    end;
@@ -757,4 +773,4 @@ initialization
 {$ENDIF}
 
 end.
-
+

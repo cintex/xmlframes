@@ -77,7 +77,6 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_SYSTEM_NAVIGATION = 'NAVIGATION SYSTEM';
 
       CST_LEON_DIR           = '$LY_APP_DIR$';
-      CST_LEON_DOC_DIR       = '$LY_APP_DOC_DIR$';
       CST_IMAGES_DIR         = 'images/';
 
       CST_LEON_DATA_FILE     = 'L_FILE' ;
@@ -135,7 +134,6 @@ const CST_LEON_File_Extension = '.xml';
       CST_LEON_FIELD_TEXT     = 'TEXT' ;
       CST_LEON_FIELD_CHOICE   = 'CHOICE' ;
       CST_LEON_FIELD_FILE     = 'FILE' ;
-      CST_LEON_FIELD_FILE_DIR = 'directory' ;
       CST_LEON_STRUCT         = 'STRUCT' ;
       CST_LEON_ARRAY          = 'ARRAY' ;
 
@@ -600,9 +598,10 @@ var li_i, li_j, li_k, li_NoField : LongInt ;
   // Creates the XML form column
   // as_Table : Table name
   // as_Connection : Connection name
-  procedure p_CreateXMLColumn ( const as_Table, as_TableKey, as_Connection : String );
+  function fb_CreateXMLColumn ( const as_Table, as_TableKey, as_Connection : String ):Boolean;
   Begin
-    if ab_CreateDS or not Assigned(ADBSources.TableByName(as_Table)) Then
+    Result:=not Assigned(ADBSources.TableByName(as_Table));
+    if ab_CreateDS or Result Then
      Begin
      // MyShowMessage(as_Table + ' xmlcolumn');
       lfwc_Column := ffws_CreateSource ( ADBSources, as_Connection, as_Table, as_Connection, acom_owner, ab_CreateDS );
@@ -640,13 +639,14 @@ begin
                       if lnod_ClassNode.NodeName = CST_LEON_CLASS_C_BIND Then
                        with lnod_ClassNode do
                         Begin
-                          p_CreateXMLColumn (Attributes [ CST_LEON_VALUE ], lnod_Node.Attributes [ CST_LEON_ID ], Attributes [ CST_LEON_LOCATION ]);
-                          lb_Table := True;
+                          if fb_CreateXMLColumn (Attributes [ CST_LEON_VALUE ], lnod_Node.Attributes [ CST_LEON_ID ], Attributes [ CST_LEON_LOCATION ])
+                           Then lb_Table := True
+                           Else Exit;
                           Break;
                         end;
                     end;
                   if not lb_Table Then
-                    p_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], lnod_Node.Attributes [ CST_LEON_ID ], '' );
+                    fb_CreateXMLColumn ( lnod_Node.Attributes [ CST_LEON_ID ], lnod_Node.Attributes [ CST_LEON_ID ], '' );
                 end;
               for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
                Begin
