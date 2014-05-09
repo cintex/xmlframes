@@ -205,7 +205,9 @@ Begin
         // connects before build
         if ( lNode.NodeName = CST_LEON_PROJECT ) Then
           Begin
-            gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
+            gNod_Classes:=lNode;
+            if lNode.Attributes[CST_LEON_ROOT_ACTION] <> Null Then
+              gs_RootAction := lNode.Attributes[CST_LEON_ROOT_ACTION];
             p_LoadData ( lNode, AApplication );
           end;
         if ( Uppercase (copy ( lNode.NodeName, 1, 8 )) = CST_LEON_ENTITY )
@@ -307,7 +309,7 @@ Begin
       Else p_InitIniProjectFile;
   if assigned ( amif_Init ) Then
     Begin
-      gs_ProjectFile := amif_Init.ReadString(INISEC_PAR,CST_INI_PROJECT_FILE,'');
+      gs_ProjectFile := amif_Init.ReadString(INISEC_PAR,CST_INI_PROJECT_FILE,gs_ProjectFile);
       gs_Language    := amif_Init.ReadString(INISEC_PAR,CST_INI_LANGUAGE,'en');
       fb_ReadLanguage ( gs_Language );
 
@@ -468,7 +470,8 @@ var li_i, li_j  : LongInt ;
     lNode : TALXMLNode ;
 
 Begin
-  if ano_Node.HasChildNodes Then
+  if gs_RootAction > '' Then
+   if ano_Node.HasChildNodes Then
     for li_i := 0 to ano_Node.ChildNodes.Count - 1 do
       Begin
         lNode := ano_Node.ChildNodes [ li_i ];
@@ -487,6 +490,7 @@ Begin
           End;
         p_LoadNodesEntities ( lNode, nil, -1 );
       end;
+
 
 end;
 /////////////////////////////////////////////////////////////////////////
@@ -777,4 +781,4 @@ initialization
 {$ENDIF}
 
 end.
-
+

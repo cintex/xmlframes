@@ -28,6 +28,7 @@ type
   var gs_ProjectFile  : String;
       gs_RootEntities : String ;
       gNod_DashBoard  : TALXMLNode = nil;
+      gNod_Classes    : TALXMLNode = nil;
       gNod_RootAction : TALXMLNode = nil;
       gxdo_FichierXML : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
       gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
@@ -494,6 +495,7 @@ begin
             for li_i := 0 to ChildNodes.Count -1 do
               Begin
                 lnod_Node := ChildNodes [ li_i ];
+                ls_table:='';
                 if not assigned ( lnod_NodeCrossLink )
                 // search cross link node
                 and fb_GetCrossLinkNode(as_FunctionClep,lnod_Node ) Then
@@ -504,9 +506,11 @@ begin
                     for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
                       Begin
                         lnod_ClassProperties := lnod_Node.ChildNodes [ li_j ];
-                        if lnod_ClassProperties.NodeName = CST_LEON_CLASS_C_BIND Then
+                        if ( lnod_ClassProperties.NodeName = CST_LEON_CLASS_C_BIND)
+                        or (( lnod_ClassProperties.NodeName = CST_LEON_FIELDS ) and ( ls_table = ''))  then
                           Begin
-                           ls_table:=trim(lnod_ClassProperties.Attributes [ CST_LEON_VALUE ]);
+                           if ( lnod_ClassProperties.NodeName = CST_LEON_CLASS_C_BIND) Then
+                            ls_table:=trim(lnod_ClassProperties.Attributes [ CST_LEON_VALUE ]);
                            if ls_table='' Then
                              ls_table:=as_Table;
                            if ab_FullTable Then

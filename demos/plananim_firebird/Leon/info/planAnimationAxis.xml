@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="planAnimationAxis">
+	<CACHE type='AUTO'/>
+	<NAME value="CLS_NAME_AXIS"/>
+	<FIELDS>
+		<NUMBER id="axCode">
+			<F_BIND value="AXCODE" cbind="AXIS"/>
+			<NAME value="FLD_NAME_AX_CODE"/>
+			<F_MARKS id='true' hidden='true' providerValue='true'/>
+		</NUMBER>
+		<TEXT id="axName">
+			<F_BIND value="AXNAME" cbind="AXIS"/>
+			<NAME value="FLD_NAME_AX_NAME"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>

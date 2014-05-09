@@ -174,7 +174,17 @@ function  fi_CreeSommaire (         const aF_FormMain             : TCustomForm 
                                     const ab_GestionGlobale       : Boolean      ) : Integer ;
 function  fi_CreeSommaireBlank : Integer ;}
 
-function fb_CreeXPButtons ( const as_SommaireEnCours      ,
+function fb_CreateXPButtonsFromProject ( const as_SommaireEnCours      ,
+              			    as_LeMenu               : String      ;
+                        		const aF_FormParent           ,
+                       			    af_FormEnfant           : TCustomForm       ;
+                        		const aCon_ParentContainer    : TScrollingWinControl ;
+                        		const aMen_MenuVolet          : TMenuItem   ;
+                        		const aBmp_DefaultPicture     : TBitmap     ;
+                        		const ab_AjouteEvenement      : Boolean     ;
+                        		const aIma_ImagesXPBars       : TImageList  ): Boolean;
+
+function fb_CreateXPButtonsFromDashBoard ( const as_SommaireEnCours      ,
                         			    as_LeMenu               : String      ;
                         		const aF_FormParent           ,
                         			    af_FormEnfant           : TCustomForm       ;
@@ -194,7 +204,8 @@ function fb_CreeMenu (              const aF_FormParent           : TForm       
                                     const aIma_ImagesMenus        : TImageList   ;
                                     const ai_FinCompteurImages    : Integer      ;
                                     var   ab_UtiliseSousMenu      : Boolean      ): Boolean ;
-function fb_CreeLeMenu : Boolean ;
+function fb_CreateMenuFromDashBoard : Boolean ;
+function fb_CreateMenuFromProject ( ): Boolean ;
 
 procedure p_getNomImageToBitmap ( const as_Nom : String; const abmp_Bitmap : TBitmap ) ;
 procedure p_RegisterSomeLanguages;
@@ -504,7 +515,7 @@ Begin
   gBmp_DefaultAcces.Assign(aPic_DefaultAcces.Bitmap);
 End ;
 /////////////////////////////////////////////////////////////////////////
-// function fb_CreeXPButtons
+// function fb_CreateXPButtonsFromDashBoard
 // building XP Bar menu
 // Création des composant XPBar en fonction :
 // as_SommaireEnCours      : Le Sommaire en cours
@@ -529,8 +540,8 @@ End ;
 // ai_FinCompteurImages    : Counter of images list
 /////////////////////////////////////////////////////////////////////////
 
-function fb_CreeXPButtons ( const as_SommaireEnCours      ,
-                        			    as_LeMenu               : String      ;
+function fb_CreateXPButtonsFromDashBoard ( const as_SommaireEnCours      ,
+              			    as_LeMenu               : String      ;
                         		const aF_FormParent           ,
                        			    af_FormEnfant           : TCustomForm       ;
                         		const aCon_ParentContainer    : TScrollingWinControl ;
@@ -540,7 +551,7 @@ function fb_CreeXPButtons ( const as_SommaireEnCours      ,
                         		const aIma_ImagesXPBars       : TImageList  ): Boolean;
 var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     li_i, li_j,
-    li_Action           : LongInt;
+    li_Action           : Integer;
     li_Compteur         ,
     li_CompteurFonctions: Integer ; // Compteur fonctions
     lr_Function         ,
@@ -815,12 +826,168 @@ Begin
    // Libération de l'icône
 End ;
 
+function fb_CreateXPButtonsFromProject ( const as_SommaireEnCours      ,
+              			    as_LeMenu               : String      ;
+                        		const aF_FormParent           ,
+                       			    af_FormEnfant           : TCustomForm       ;
+                        		const aCon_ParentContainer    : TScrollingWinControl ;
+                        		const aMen_MenuVolet          : TMenuItem   ;
+                        		const aBmp_DefaultPicture     : TBitmap     ;
+                        		const ab_AjouteEvenement      : Boolean     ;
+                        		const aIma_ImagesXPBars       : TImageList  ): Boolean;
+var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
+    li_i,
+    li_Action           : Integer;
+    lr_FunctionOld      : TLeonFunction;
+    ls_MenuClep         ,
+    ls_MenuClep2        : String;
+    ls_MenuLabel        : WideString ;// Sous Menu en cours
+//    lbmp_BitmapOrigine  : TBitmap ;  // bitmap en cours
+    lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
+    li_TopXPBar         : Integer ;
+    aIma_ImagesTempo    : TImageList ;
+    procedure p_SetOneFunctiontoBar ( const AFunction : TLeonFunction );
+    Begin
+        // Si une fonction dans le dernier enregistrement affectation dans l'ancienne xpbar
+       if ( ls_MenuClep2 <> '' )
+       and ( lr_FunctionOld.Groupe <> AFunction.Groupe )
+       and ( li_Action = 0 )
+        Then
+         Begin
+           ls_MenuLabel := fs_GetLabelCaption ( lr_FunctionOld.Name );
+           fb_getImageToBitmap ( lr_FunctionOld.Prefix,  lbmp_FonctionImage );
+           p_ModifieXPBar( aF_FormParent       ,
+                           ldx_WinXpBar        ,
+                           ls_MenuClep2        ,
+                           ls_MenuLabel        ,
+                           lr_FunctionOld.Value,
+                           ''                  ,
+                           lr_FunctionOld.Name ,
+                           aIma_ImagesTempo    ,
+                           lbmp_FonctionImage  ,
+                           aBmp_DefaultPicture ,
+                           ab_AjouteEvenement  );
+         end;
+
+    end;
+  var lxdoc_Project : TALXMLDocument;
+      lst_Classes : TStringList;
+Begin
+// un noeud et la main form doivent exister
+  Result := False ;
+  if not assigned ( aF_FormParent                   )
+  or not assigned ( aCon_ParentContainer            )
+  or (gNod_Classes = nil)
+   Then
+    Exit ;
+   // destruction des composants du container
+  p_DetruitXPBar ( aCon_ParentContainer );
+  aIma_ImagesXPBars.Clear ;
+// Initialisation
+  ldx_WinXpBar       := nil ;
+{  if lb_UtiliseSMenu
+   Then li_CompteurMenus     := fi_ChercheMenu ( as_LeMenu )
+   Else li_CompteurMenus     := 0 ;}
+  lr_Functionold.Groupe  := '' ;
+  ls_MenuClep            := '' ;
+  li_TopXPBar          := 1 ;
+//  lico_IconMenu        := nil ;
+  lbmp_FonctionImage   := TBitmap.Create ; // A libérer à la fin
+  lbmp_FonctionImage.Handle := 0 ;
+  aIma_ImagesTempo     := TImageList.Create ( af_FormParent );
+  aIma_ImagesTempo     .Width  := 32 ;
+  aIma_ImagesTempo     .Height := 32 ;
+  ls_MenuClep2 := '';
+  li_Action:=-1;
+
+  // Premier enregistrement
+  // Création des XPBars
+  // Rien alors pas de menu
+  lxdoc_Project:=nil;
+  lst_Classes := TStringList.Create;
+  try
+    lst_Classes.Text:=gNod_Classes.Attributes[CST_LEON_DUMMY];
+    for li_i := 0 to lst_Classes.Count -1 do
+      Begin
+        ls_MenuClep:=trim(lst_Classes [ li_i ]);
+        if pos( '&', ls_MenuClep ) = 1 Then
+         Begin
+          inc(li_Action);
+          ls_MenuClep:=copy(ls_MenuClep,2,Length(ls_MenuClep)-1);
+          ls_MenuLabel  := fs_GetLabelCaption ( ls_MenuClep );
+          Result := True ;
+          SetLength(ga_Functions,high(ga_Functions)+2);
+          // A chaque fonction création d'une action dans la bar XP
+          with ga_Functions [li_Action] do
+           Begin
+            Clep:=ls_MenuClep;
+            Name:=ls_MenuClep;
+            if    assigned ( ldx_WinXpBar )
+            and (    ( ls_Menuclep <> '' ))
+      //            or  (       not assigned ( axdo_FichierXML )
+      //                  and ( gT_TableauMenus [ li_CompteurMenus ].Fonction <> '' ))
+             Then
+              Begin
+                if ( li_Action > 0 ) // Ajoute si plus d'une fonction
+                 Then
+                  Begin
+                    // fonction dans la file d'attente
+                    fb_getImageToBitmap ( Prefix,  lbmp_FonctionImage );
+                    fdxi_AddItemXPBar  ( aF_FormParent       ,
+                                        ldx_WinXpBar        ,
+                                        ls_MenuClep         ,
+                                        ls_MenuLabel        ,
+                                        Value        ,
+                                        ''                  ,
+                                        Name         ,
+                                        aIma_ImagesXPBars   ,
+                                        lbmp_FonctionImage  ,
+                                        aBmp_DefaultPicture ,
+                                        li_Action     );
+                  End ;
+              End ;
+           end;
+         end;
+      End ;
+     if high(ga_Functions)>0 Then
+       p_SetOneFunctiontoBar(ga_Functions[High(ga_Functions)]);
+     if assigned ( aMen_MenuVolet )
+      Then
+       if Result
+       Then
+        Begin
+          aMen_MenuVolet.Enabled := True ;
+          if gb_FirstAcces Then
+            aMen_MenuVolet.Checked := True;
+        End
+       Else
+        Begin
+          if aMen_MenuVolet.Checked Then
+            aMen_MenuVolet.Checked := False;
+          aMen_MenuVolet.Enabled := False ;
+        End ;
+     try
+       aIma_ImagesTempo.Clear;
+       aIma_ImagesTempo.Free ;
+     Finally
+     End ;
+     try
+       lbmp_FonctionImage.Free ;
+     Finally
+     End ;
+     // Libération de l'icône
+
+  finally
+    lst_Classes.Destroy;
+  end;
+End ;
+
 /////////////////////////////////////////////////////////////////////////
-// function fb_CreeLeMenu
+// function fb_CreateMenuFromDashBoard
 // creating the menus from global variables
 // Result to false = error
 /////////////////////////////////////////////////////////////////////////
-function fb_CreeLeMenu ( ): Boolean ;
+function fb_CreateMenuFromDashBoard ( ): Boolean ;
 Begin
   Result := False;
   if assigned ( gMen_MenuVolet ) Then
@@ -833,9 +1000,33 @@ Begin
                                gIma_ImagesMenus        ,
                                gi_FinCompteurImages    ,
                                gb_UtiliseSMenu         );
-      Result := fb_CreeXPButtons ( '', '', gF_FormParent, gF_FormParent, gWin_ParentContainer, gMen_Menuvolet, gBmp_DefaultPicture  , True, gIma_ImagesXPBars   ) and Result;
+      Result := fb_CreateXPButtonsFromDashBoard ( '', '', gF_FormParent, gF_FormParent, gWin_ParentContainer, gMen_Menuvolet, gBmp_DefaultPicture  , True, gIma_ImagesXPBars   ) and Result;
     end;
 End ;
+
+/////////////////////////////////////////////////////////////////////////
+// function fb_CreeLeMenu
+// creating the menus from global variables
+// Result to false = error
+/////////////////////////////////////////////////////////////////////////
+function fb_CreateMenuFromProject ( ): Boolean ;
+Begin
+  Result := False;
+  if assigned ( gMen_MenuVolet ) Then
+    Begin
+      Result := fb_CreeMenu (  gF_FormParent           ,
+                               gs_SommaireEnCours      ,
+                               gBmp_DefaultPicture     ,
+                               gMen_MenuParent         ,
+                               gMen_MenuVolet          ,
+                               gIma_ImagesMenus        ,
+                               gi_FinCompteurImages    ,
+                               gb_UtiliseSMenu         );
+      Result := fb_CreateXPButtonsFromProject ( '', '', gF_FormParent, gF_FormParent, gWin_ParentContainer, gMen_Menuvolet, gBmp_DefaultPicture  , True, gIma_ImagesXPBars   ) and Result;
+    end;
+End ;
+
+
 
 /////////////////////////////////////////////////////////////////////////
 // function fb_CreeMenu
@@ -1323,7 +1514,7 @@ Begin
     if not lb_UtiliseSousMenu  // Si on n'utilise  pas les sous menus
      Then
       Begin
-        fb_CreeXPButtons ( as_SommaireEnCours, '', aF_FormParent, aF_FormParent, gWin_ParentContainer, gMen_Menuvolet, aBmp_DefaultPicture  , True, gIma_ImagesXPBars   );
+        fb_CreateXPButtonsFromDashBoard ( as_SommaireEnCours, '', aF_FormParent, aF_FormParent, gWin_ParentContainer, gMen_Menuvolet, aBmp_DefaultPicture  , True, gIma_ImagesXPBars   );
       End
     Else
      gMen_MenuVolet.Enabled := False ;
@@ -1418,19 +1609,9 @@ End;
 /////////////////////////////////////////////////////////////////////////
 function fb_CreeAppliFromNode ( const as_EntityFile : String ):Boolean;
 Begin
- if not assigned ( gNod_DashBoard ) then
-   Begin
-     SetLength( ga_Functions, high ( ga_Functions ) +2  );
-     with ( ga_Functions [ high ( ga_Functions ) ] ) do
-       Begin
-         Clep  := fs_ExtractFileNameOnlyWithoutExt ( as_EntityFile );
-         AFile := Clep;
-         Name  := fs_GetNameSoft;
-         Mode  := Byte(fsMDIChild);
-       end;
-   End
- Else
-  fb_CreeLeMenu ( );
+ if assigned ( gNod_DashBoard )
+  then fb_CreateMenuFromDashBoard
+  Else fb_CreateMenuFromProject;
 
  F_FenetrePrincipale.p_AccessToSoft;
 End;
@@ -1491,7 +1672,7 @@ Begin
     Begin
       Result := True;
       // La fenêtre n'est peut-être pas encore complètement créée
-      fb_CreeLeMenu;
+      fb_CreateMenuFromDashBoard;
       gchar_DecimalSeparator := ',' ;
       DecimalSeparator := gchar_DecimalSeparator ;
       fs_BuildFromXML ( 0, gxdo_FichierXML.Node, Application ) ;

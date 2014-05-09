@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="planAnimationPlaceholder">
+	<CACHE type='AUTO'/>
+	<NAME value="CLS_NAME_PLACEHOLDER"/>
+	<FIELDS>
+		<NUMBER id="phCod">
+			<F_BIND value="PHCOD" cbind="PLACEHOLDER"/>
+			<NAME value="FLD_NAME_PH_COD"/>
+			<F_MARKS id='true' hidden='true' providerValue='true'/>
+		</NUMBER>
+		<TEXT id="phName">
+			<F_BIND value="PHNAME" cbind="PLACEHOLDER"/>
+			<NAME value="FLD_NAME_PH_NAME"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+		</TEXT>
+		<TEXT id="phDetails">
+			<F_BIND value="PHDETAILS" cbind="PLACEHOLDER"/>
+			<NAME value="FLD_NAME_PH_DETAILS"/>
+			<F_MARKS create='true' set='true' main='true'/>
+		</TEXT>
+		<NUMBER id="phPrice">
+			<F_BIND value="PHPRICE" cbind="PLACEHOLDER"/>
+			<NAME value="FLD_NAME_PH_PRICE"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<CONSTRAINT colSpan='1'/>
+		</NUMBER>
+		<NUMBER id="phMultiBrand">
+			<F_BIND value="PHMULTIBRAND" cbind="PLACEHOLDER"/>
+			<NAME value="FLD_NAME_PH_MULTI_BRAND"/>
+			<F_MARKS create='true' set='true' main='true'/>
+		</NUMBER>
+		<CHOICE id="phIsUnique">
+			<F_BIND value="PHISUNIQUE" cbind="PLACEHOLDER"/>
+			<NAME value="FLD_NAME_PH_IS_UNIQUE"/>
+			<F_MARKS create='true' set='true' main='true'/>
+			<OPTIONS>
+				<OPTION id="phisunique.yes" name="OPT_NAME_PHISUNIQUE_YES" alias="OPT_ALIAS_PHISUNIQUE_YES" value="Yes"/>
+				<OPTION id="phisunique.no" name="OPT_NAME_PHISUNIQUE_NO" alias="OPT_ALIAS_PHISUNIQUE_NO" value="No"/>
+			</OPTIONS>
+		</CHOICE>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>

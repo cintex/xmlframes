@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Extra infos -->
+<GROUP id="fld_group_placement" value="FLD_GROUP_PLACEMENT" state='OPENED'/>
+<GROUP id="fld_group_the_brand" value="FLD_GROUP_THE_BRAND" state='OPENED'/>
+<GROUP id="fld_group_price_status" value="FLD_GROUP_PRICE_STATUS" state='OPENED'/>
+<GROUP id="fld_group_test" value="FLD_GROUP_TEST" state='OPENED'/>
+<GROUP id="fld_group_placement_1" value="FLD_GROUP_PLACEMENT_1" state='OPENED'/>
+<GROUP id="fld_group_the_brand_1" value="FLD_GROUP_THE_BRAND_1" state='OPENED'/>
+<GROUP id="fld_group_prices_status" value="FLD_GROUP_PRICES_STATUS" state='OPENED'/>
+

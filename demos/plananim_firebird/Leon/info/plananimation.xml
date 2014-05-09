@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE PROJECT SYSTEM 'leon/conf/dtd/leon.dtd'
+[
+	<!-- Standard includes -->
+	<!ENTITY LEON SYSTEM 'leon/conf/xml/leon.xml'>
+
+	<!-- Root include -->
+	<!ENTITY ROOT SYSTEM 'planAnimation/info/rootEntities.xml'>
+	<!ENTITY LOCATION SYSTEM 'planAnimation/info/planAnimationLocation.xml'>
+
+	<!-- Classes includes -->
+	<!ENTITY planAnimationAnimation SYSTEM 'planAnimation/info/planAnimationAnimation.xml'>
+	<!ENTITY planAnimationArea SYSTEM 'planAnimation/info/planAnimationArea.xml'>
+	<!ENTITY planAnimationAxis SYSTEM 'planAnimation/info/planAnimationAxis.xml'>
+	<!ENTITY planAnimationBrand SYSTEM 'planAnimation/info/planAnimationBrand.xml'>
+	<!ENTITY planAnimationMarket SYSTEM 'planAnimation/info/planAnimationMarket.xml'>
+	<!ENTITY planAnimationMegaplan SYSTEM 'planAnimation/info/planAnimationMegaplan.xml'>
+	<!ENTITY planAnimationMetaplanNature SYSTEM 'planAnimation/info/planAnimationMetaplanNature.xml'>
+	<!ENTITY planAnimationPlaceholder SYSTEM 'planAnimation/info/planAnimationPlaceholder.xml'>
+]>
+
+<PROJECT id="planAnimationRoot" name="PRJ_NAME_ROOT">
+	<!-- Standard Leonardi declarations -->
+	&LEON;
+
+	<!-- Root declarations -->
+	&ROOT;
+
+	<!-- Classes declarations -->
+	&planAnimationAnimation;
+	&planAnimationArea;
+	&planAnimationAxis;
+	&planAnimationBrand;
+	&planAnimationMarket;
+	&planAnimationPlaceholder;
+	&planAnimationMegaplan;
+	&planAnimationMetaplanNature;
+</PROJECT>

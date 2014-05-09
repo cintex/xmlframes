@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="planAnimationMegaplan">
+	<CACHE type='AUTO'/>
+	<NAME value="CLS_NAME_MEGAPLAN"/>
+	<FIELDS>
+		<NUMBER id="planAnimationMegaplanId">
+			<NAME value="FLD_NAME_MEGAPLAN_ID"/>
+			<F_MARKS id='true' hidden='true'/>
+		</NUMBER>
+		<TEXT id="planAnimationMegaplanName">
+			<NAME value="FLD_NAME_MEGAPLAN_NAME"/>
+			<F_MARKS name='true'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>

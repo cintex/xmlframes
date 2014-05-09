@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CLASS id="planAnimationAnimation">
+	<CACHE type='AUTO'/>
+	<NAME value="CLS_NAME_ANIMATION"/>
+	<FIELDS>
+		<RELATION id="anPlaceHolder">
+			<F_BIND value="ANPLACEHOLDER" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_PLACE_HOLDER"/>
+			<GROUP_REF idref="fld_group_placement_1"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<CLASSES idrefs="planAnimationPlaceholder"/>
+		</RELATION>
+		<NUMBER id="anCode">
+			<F_BIND value="ANCODE" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_CODE"/>
+			<F_MARKS id='true' hidden='true' providerValue='true'/>
+		</NUMBER>
+		<RELATION id="anBrand">
+			<F_BIND value="ANBRAND" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_BRAND"/>
+			<GROUP_REF idref="fld_group_the_brand_1"/>
+			<F_MARKS name='true' create='true' set='true' main='true'/>
+			<CLASSES idrefs="planAnimationBrand"/>
+			<CONSTRAINT colSpan='-1'/>
+		</RELATION>
+		<NUMBER id="anComputedPrices" type='DOUBLE'>
+			<F_BIND value="ANCOMPUTEDPRICES" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_COMPUTED_PRICES"/>
+			<GROUP_REF idref="fld_group_prices_status"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<PRECISION value='2.0'/>
+			<DECIMALS value='2'/>
+		</NUMBER>
+		<NUMBER id="anNegotiatedPrices" type='DOUBLE'>
+			<F_BIND value="ANNEGOTIATEDPRICES" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_NEGOTIATED_PRICES"/>
+			<GROUP_REF idref="fld_group_prices_status"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<PRECISION value='2.0'/>
+			<DECIMALS value='2'/>
+		</NUMBER>
+		<TEXT id="anComments" multiple='true'>
+			<F_BIND value="ANCOMMENTS" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_COMMENTS"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+		</TEXT>
+		<RELATION id="anAxis">
+			<F_BIND value="ANAXIS" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_AXIS"/>
+			<GROUP_REF idref="fld_group_the_brand_1"/>
+			<F_MARKS create='true' set='true' optional='true' main='true'/>
+			<CLASSES idrefs="planAnimationAxis"/>
+			<CONSTRAINT colSpan='-1'/>
+		</RELATION>
+		<CHOICE id="anConcernedStores">
+			<F_BIND value="ANCONCERNEDSTORES" cbind="ANIMATION"/>
+			<NAME value="FLD_NAME_AN_CONCERNED_STORES"/>
+			<GROUP_REF idref="fld_group_test"/>
+			<F_MARKS create='true' set='true' optional='true' main='true' noCaption='true'/>
+			<OPTIONS>
+				<OPTION id="concernedstores.all" name="OPT_NAME_CONCERNEDSTORES_ALL" alias="OPT_ALIAS_CONCERNEDSTORES_ALL" value="All"/>
+				<OPTION id="concernedstores.specific" name="OPT_NAME_CONCERNEDSTORES_SPECIFIC" alias="OPT_ALIAS_CONCERNEDSTORES_SPECIFIC" value="Specific"/>
+			</OPTIONS>
+			<NCOLS value='1'/>
+			<CONSTRAINT colSpan='-1'/>
+		</CHOICE>
+		<TEXT id="anFiller">
+			<NAME value="FLD_NAME_ANIMATION_TEXT"/>
+			<GROUP_REF idref="fld_group_test"/>
+			<F_MARKS optional='true' local='true' consult='true' noCaption='true'/>
+			<NCOLS value='5'/>
+			<DEFAULT value="        "/>
+			<CONSTRAINT colSpan='1'/>
+		</TEXT>
+	</FIELDS>
+	<ACTIONS>
+		<ACTION_REF idref="_consult"/>
+		<ACTION_REF idref="_create"/>
+		<ACTION_REF idref="_clone"/>
+		<ACTION_REF idref="_set"/>
+		<ACTION_REF idref="_delete"/>
+		<ACTION_REF idref="_print"/>
+	</ACTIONS>
+</CLASS>
