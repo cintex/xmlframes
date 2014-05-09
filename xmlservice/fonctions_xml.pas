@@ -34,7 +34,6 @@ type
       gxdo_MenuXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
       gxdo_RootXML    : TALXMLDocument = nil;// Lecture de Document XML   initialisé  au create
       gs_entities     : String  = 'rootEntities' ;
-      gs_Encoding     : String = 'ISO-8859-1';
       gs_LeonardiSubDir : String = '';
 
 const CST_LEON_File_Extension = '.xml';
@@ -536,7 +535,9 @@ begin
                               TableKey:= as_Table;
                               if ab_createDS Then
                                Begin
-                                lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
+                                if lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ] = Null
+                                 Then lds_Connection:=DMModuleSources.fds_FindConnection( '', True )
+                                 Else lds_Connection:=DMModuleSources.fds_FindConnection( lnod_ClassProperties.Attributes [ CST_LEON_LOCATION ], True );
                                 with lds_Connection do
                                   Datasource := fds_CreateDataSourceAndTable ( Table, '_' +IntToStr ( ADBSource.Index ) +'_' + IntToStr ( arel_Relation.Index )+'_' + IntToStr ( Aff_field.Index ),
                                                        IntToStr ( ADBSource.index ), DatasetType, QueryCopy, acom_Owner);
@@ -1308,7 +1309,7 @@ end;
 
 function fs_getLeonInfo : String;
 Begin
-  Result := fs_getLeonFiles + 'info' + DirectorySeparator ;
+  Result := fs_getLeonDir + 'info' + DirectorySeparator ;
 End;
 
 // function fs_getLeonFiles

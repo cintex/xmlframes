@@ -539,6 +539,65 @@ End ;
 // ab_AjouteEvenement      : Adding event to xp menus
 // ai_FinCompteurImages    : Counter of images list
 /////////////////////////////////////////////////////////////////////////
+procedure p_CreateXPBar(var ldx_WinXpBar : TJvXpBar; var li_TopXPBar : Integer; const lr_Function : TLeonFunction ; const af_FormEnfant : TComponent ; const aCon_ParentContainer : TWinControl; const aIma_ImagesXPBars : TImageList ;const lbmp_FonctionImage,abmp_DefaultPicture : TBitmap;const aF_FormParent : TCustomForm; const aIma_ImagesTempo : TImageList);
+Begin
+   // création d''une xpbar
+   if assigned ( ldx_WinXpBar )
+    Then
+     Begin
+       ldx_WinXpBar.Refresh ;
+       li_TopXPBar := ldx_WinXpBar.Top + ldx_WinXpBar.Height + 1 ;
+     End ;
+   ldx_WinXpBar := TJvXpBar.Create ( af_FormEnfant );//aF_FormParent );
+
+   // Affectation des valeurs
+   //Gestion des raccourcis d'aide
+   ldx_WinXpBar.HelpType    := aCon_ParentContainer.HelpType ;
+   ldx_WinXpBar.HelpKeyword := aCon_ParentContainer.HelpKeyword ;
+   ldx_WinXpBar.HelpContext := aCon_ParentContainer.HelpContext ;
+
+   // Aligne en haut
+   ldx_WinXpBar.Top   := li_TopXPBar ;
+   ldx_WinXpBar.ImageList := aIma_ImagesXPBars ;
+   ldx_WinXpBar.Align := alTop ;
+
+   // Couleurs originelles
+   ldx_WinXpBar.Colors.BodyColor := $00F7DFD6 ;
+   ldx_WinXpBar.Colors.CheckedColor := $00D9C1BB;
+   ldx_WinXpBar.Colors.CheckedFrameColor := clHighlight ;
+   ldx_WinXpBar.Colors.FocusedColor := $00D8ACB0 ;
+   ldx_WinXpBar.Colors.FocusedFrameColor := clHotLight ;
+   ldx_WinXpBar.Colors.GradientFrom := clWhite ;
+   ldx_WinXpBar.Colors.GradientTo := $00F7D7C6 ;
+   ldx_WinXpBar.Colors.SeparatorColor := $00F7D7C6 ;
+
+   // Fontes
+   ldx_WinXpBar.Font.Size := 10 ;
+   ldx_WinXpBar.HeaderFont.Size := 10 ;
+
+    // affectation du compteur de nom
+//                           p_setComponentName ( ldx_WinXpBar, lr_Function.Groupe );
+   // Parent
+
+
+   ldx_WinXpBar.Parent := aCon_ParentContainer ;
+   fb_getImageToBitmap ( lr_Function.Prefix, lbmp_FonctionImage );
+         // affectation du libellé du menu
+    // Gestion sans base de données
+   p_ModifieXPBar  ( aF_FormParent       ,
+                         ldx_WinXpBar        ,
+                         lr_Function.Groupe        ,
+                         fs_GetLabelCaption ( lr_Function.Groupe ),
+                         ''                  ,
+                         ''                  ,
+                         lr_Function.Groupe        ,
+                         aIma_ImagesTempo    ,
+                         lbmp_FonctionImage    ,
+                         abmp_DefaultPicture ,
+//                                       li_Compteur         ,
+                         False  );
+
+end;
 
 function fb_CreateXPButtonsFromDashBoard ( const as_SommaireEnCours      ,
               			    as_LeMenu               : String      ;
@@ -590,101 +649,42 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     end;
 
     procedure p_MenuGrouping;
-    Begin
-
+     Begin
       // SI les sous-menus ou menus sont différents ou pas de sous menu alors création d''une xpbar
       // SI les sous-menus ou menus sont différents ou pas de sous menu alors création d''une xpbar
       if  ( lr_Function    .Groupe <> '' )
        Then
         Begin
           if ( lr_Function.Groupe <> lr_Functionold.Groupe )
-{                     or (     lb_UtiliseSMenu
-                       and (    ( gT_TableauMenus [ li_CompteurMenus ].SousMenu <> ls_SMenu )
-                             or ( gT_TableauMenus [ li_CompteurMenus ].SousMenu = ''        )))))}
             Then
-             Begin
-               // création d''une xpbar
-               if assigned ( ldx_WinXpBar )
-                Then
-                 Begin
-                   ldx_WinXpBar.Refresh ;
-                   li_TopXPBar := ldx_WinXpBar.Top + ldx_WinXpBar.Height + 1 ;
-                 End ;
-               ldx_WinXpBar := TJvXpBar.Create ( af_FormEnfant );//aF_FormParent );
-
-               // Affectation des valeurs
-               //Gestion des raccourcis d'aide
-               ldx_WinXpBar.HelpType    := aCon_ParentContainer.HelpType ;
-               ldx_WinXpBar.HelpKeyword := aCon_ParentContainer.HelpKeyword ;
-               ldx_WinXpBar.HelpContext := aCon_ParentContainer.HelpContext ;
-
-               // Aligne en haut
-               ldx_WinXpBar.Top   := li_TopXPBar ;
-               ldx_WinXpBar.ImageList := aIma_ImagesXPBars ;
-               ldx_WinXpBar.Align := alTop ;
-
-               // Couleurs originelles
-               ldx_WinXpBar.Colors.BodyColor := $00F7DFD6 ;
-               ldx_WinXpBar.Colors.CheckedColor := $00D9C1BB;
-               ldx_WinXpBar.Colors.CheckedFrameColor := clHighlight ;
-               ldx_WinXpBar.Colors.FocusedColor := $00D8ACB0 ;
-               ldx_WinXpBar.Colors.FocusedFrameColor := clHotLight ;
-               ldx_WinXpBar.Colors.GradientFrom := clWhite ;
-               ldx_WinXpBar.Colors.GradientTo := $00F7D7C6 ;
-               ldx_WinXpBar.Colors.SeparatorColor := $00F7D7C6 ;
-
-               // Fontes
-               ldx_WinXpBar.Font.Size := 10 ;
-               ldx_WinXpBar.HeaderFont.Size := 10 ;
-
-                // affectation du compteur de nom
-//                           p_setComponentName ( ldx_WinXpBar, lr_Function.Groupe );
-               // Parent
-
-
-               ldx_WinXpBar.Parent := aCon_ParentContainer ;
-               fb_getImageToBitmap ( lr_Function.Prefix, lbmp_FonctionImage );
-                     // affectation du libellé du menu
-                // Gestion sans base de données
-               p_ModifieXPBar  ( aF_FormParent       ,
-                                     ldx_WinXpBar        ,
-                                     lr_Function.Groupe        ,
-                                     fs_GetLabelCaption ( lr_Function.Groupe )        ,
-                                     ''                  ,
-                                     ''                  ,
-                                     lr_Function.Groupe        ,
-                                     aIma_ImagesTempo    ,
-                                     lbmp_FonctionImage    ,
-                                     abmp_DefaultPicture ,
-//                                       li_Compteur         ,
-                                     False  );
-
-                // On remet le compteur des fonctions à 0
+             begin
+               p_CreateXPBar ( ldx_WinXpBar, li_TopXPBar, lr_Function, af_FormEnfant, aCon_ParentContainer, aIma_ImagesXPBars, lbmp_FonctionImage,abmp_DefaultPicture, aF_FormParent, aIma_ImagesTempo );
+               // On remet le compteur des fonctions à 0
                li_CompteurFonctions := 0 ;
+             end;
 
-             End
-            else
-            // Si une fonction dans l'enregistrement précédent affectation dans l'ancienne xpbar
-             if ( li_CompteurFonctions = 1 )
-              Then
-                Begin
-                  fb_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
-                // fonction dans la file d'attente
-                  fdxi_AddItemXPBar ( aF_FormParent       ,
-                                      ldx_WinXpBar        ,
-                                      ls_MenuClep         ,
-                                      ls_MenuLabel        ,
-                                      lr_Function.Value        ,
-                                      ''                  ,
-                                      lr_Function.Name         ,
-                                      aIma_ImagesXPBars   ,
-                                      lbmp_FonctionImage  ,
-                                      aBmp_DefaultPicture ,
-                                      li_Compteur - 1     );
+        End
+       else
+       // Si une fonction dans l'enregistrement précédent affectation dans l'ancienne xpbar
+        if ( li_CompteurFonctions = 1 )
+         Then
+           Begin
+             fb_getImageToBitmap ( lr_Function.Prefix,  lbmp_FonctionImage );
+           // fonction dans la file d'attente
+             fdxi_AddItemXPBar ( aF_FormParent       ,
+                                 ldx_WinXpBar        ,
+                                 ls_MenuClep         ,
+                                 ls_MenuLabel        ,
+                                 lr_Function.Value        ,
+                                 ''                  ,
+                                 lr_Function.Name         ,
+                                 aIma_ImagesXPBars   ,
+                                 lbmp_FonctionImage  ,
+                                 aBmp_DefaultPicture ,
+                                 li_Compteur - 1     );
 
-                end;
-        End;
-    end;
+           end;
+    End;
 
 Begin
 // un noeud et la main form doivent exister
@@ -827,16 +827,17 @@ Begin
 End ;
 
 function fb_CreateXPButtonsFromProject ( const as_SommaireEnCours      ,
-              			    as_LeMenu               : String      ;
-                        		const aF_FormParent           ,
-                       			    af_FormEnfant           : TCustomForm       ;
-                        		const aCon_ParentContainer    : TScrollingWinControl ;
-                        		const aMen_MenuVolet          : TMenuItem   ;
-                        		const aBmp_DefaultPicture     : TBitmap     ;
-                        		const ab_AjouteEvenement      : Boolean     ;
-                        		const aIma_ImagesXPBars       : TImageList  ): Boolean;
+              	                  	       as_LeMenu               : String      ;
+                        		 const aF_FormParent           ,
+                       			       af_FormEnfant           : TCustomForm       ;
+                        		 const aCon_ParentContainer    : TScrollingWinControl ;
+                        		 const aMen_MenuVolet          : TMenuItem   ;
+                        		 const aBmp_DefaultPicture     : TBitmap     ;
+                        		 const ab_AjouteEvenement      : Boolean     ;
+                        		 const aIma_ImagesXPBars       : TImageList  ): Boolean;
 var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     li_i,
+    li_pos,
     li_Action           : Integer;
     lr_FunctionOld      : TLeonFunction;
     ls_MenuClep         ,
@@ -846,32 +847,9 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
     li_TopXPBar         : Integer ;
     aIma_ImagesTempo    : TImageList ;
-    procedure p_SetOneFunctiontoBar ( const AFunction : TLeonFunction );
-    Begin
-        // Si une fonction dans le dernier enregistrement affectation dans l'ancienne xpbar
-       if ( ls_MenuClep2 <> '' )
-       and ( lr_FunctionOld.Groupe <> AFunction.Groupe )
-       and ( li_Action = 0 )
-        Then
-         Begin
-           ls_MenuLabel := fs_GetLabelCaption ( lr_FunctionOld.Name );
-           fb_getImageToBitmap ( lr_FunctionOld.Prefix,  lbmp_FonctionImage );
-           p_ModifieXPBar( aF_FormParent       ,
-                           ldx_WinXpBar        ,
-                           ls_MenuClep2        ,
-                           ls_MenuLabel        ,
-                           lr_FunctionOld.Value,
-                           ''                  ,
-                           lr_FunctionOld.Name ,
-                           aIma_ImagesTempo    ,
-                           lbmp_FonctionImage  ,
-                           aBmp_DefaultPicture ,
-                           ab_AjouteEvenement  );
-         end;
-
-    end;
-  var lxdoc_Project : TALXMLDocument;
-      lst_Classes : TStringList;
+    lxdoc_Project : TALXMLDocument;
+    lst_Classes   : TStringList;
+    gb_IsFirst    : Boolean;
 Begin
 // un noeud et la main form doivent exister
   Result := False ;
@@ -906,52 +884,52 @@ Begin
   lxdoc_Project:=nil;
   lst_Classes := TStringList.Create;
   try
-    lst_Classes.Text:=gNod_Classes.Attributes[CST_LEON_DUMMY];
+    lst_Classes.Text:=gNod_Classes.XML;
+    gb_IsFirst := True;
     for li_i := 0 to lst_Classes.Count -1 do
       Begin
         ls_MenuClep:=trim(lst_Classes [ li_i ]);
         if pos( '&', ls_MenuClep ) = 1 Then
          Begin
           inc(li_Action);
-          ls_MenuClep:=copy(ls_MenuClep,2,Length(ls_MenuClep)-1);
+          li_pos:=pos( '&#38;', ls_MenuClep );
+          if li_pos = 1
+           Then ls_MenuClep:=copy(ls_MenuClep,6,Length(ls_MenuClep)-6)
+           Else ls_MenuClep:=copy(ls_MenuClep,2,Length(ls_MenuClep)-2);
           ls_MenuLabel  := fs_GetLabelCaption ( ls_MenuClep );
           Result := True ;
-          SetLength(ga_Functions,high(ga_Functions)+2);
+          p_AddFunction ( ls_MenuClep, fs_GetNameSoft, ls_MenuClep, ls_MenuClep, '', '', Null );
           // A chaque fonction création d'une action dans la bar XP
           with ga_Functions [li_Action] do
            Begin
-            Clep:=ls_MenuClep;
-            Name:=ls_MenuClep;
-            if    assigned ( ldx_WinXpBar )
-            and (    ( ls_Menuclep <> '' ))
-      //            or  (       not assigned ( axdo_FichierXML )
-      //                  and ( gT_TableauMenus [ li_CompteurMenus ].Fonction <> '' ))
+            if ( ls_Menuclep <> '' )
+            and FileExistsUTF8(fs_getLeonInfo +ls_MenuClep+CST_LEON_File_Extension)
              Then
               Begin
-                if ( li_Action > 0 ) // Ajoute si plus d'une fonction
-                 Then
-                  Begin
-                    // fonction dans la file d'attente
-                    fb_getImageToBitmap ( Prefix,  lbmp_FonctionImage );
-                    fdxi_AddItemXPBar  ( aF_FormParent       ,
-                                        ldx_WinXpBar        ,
-                                        ls_MenuClep         ,
-                                        ls_MenuLabel        ,
-                                        Value        ,
-                                        ''                  ,
-                                        Name         ,
-                                        aIma_ImagesXPBars   ,
-                                        lbmp_FonctionImage  ,
-                                        aBmp_DefaultPicture ,
-                                        li_Action     );
-                  End ;
+                if gb_IsFirst Then
+                 Begin
+                  p_CreateXPBar ( ldx_WinXpBar, li_TopXPBar, ga_Functions [li_Action], af_FormEnfant, aCon_ParentContainer, aIma_ImagesXPBars, lbmp_FonctionImage, abmp_DefaultPicture, aF_FormParent, aIma_ImagesTempo );
+                  gb_IsFirst := False;
+                 end;
+                // fonction dans la file d'attente
+                fb_getImageToBitmap ( Prefix, lbmp_FonctionImage );
+                fdxi_AddItemXPBar ( aF_FormParent       ,
+                                    ldx_WinXpBar        ,
+                                    ls_MenuClep         ,
+                                    ls_MenuLabel        ,
+                                    Value               ,
+                                    ''                  ,
+                                    Name                ,
+                                    aIma_ImagesXPBars   ,
+                                    lbmp_FonctionImage  ,
+                                    aBmp_DefaultPicture ,
+                                    li_Action           );
               End ;
            end;
          end;
       End ;
-     if high(ga_Functions)>0 Then
-       p_SetOneFunctiontoBar(ga_Functions[High(ga_Functions)]);
-     if assigned ( aMen_MenuVolet )
+
+    if assigned ( aMen_MenuVolet )
       Then
        if Result
        Then

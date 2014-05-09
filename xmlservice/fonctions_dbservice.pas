@@ -69,6 +69,7 @@ function fs_BuildFromXML ( Level : Integer ; const aNode : TALXMLNode ; const AA
 procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destination : TLeonFunction );
 procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
 procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
+procedure p_AddFunction (const AClep,AGroup,AName,AFileName,APrefix,AMode:String;const ATemplate : Variant);
 function fs_BuildTreeFromXML ( Level : Integer ; const aNode : TALXMLNode ;
                                const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
 var
@@ -106,6 +107,32 @@ procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
 Begin
   p_LoadRootAction ( axdo_FichierXML.node );
 End;
+
+
+procedure p_AddFunction (const AClep,AGroup,AName,AFileName,APrefix,AMode:String;const ATemplate : Variant);
+Begin
+  SetLength ( ga_Functions, high ( ga_Functions ) + 2 );
+  with ga_Functions [ high ( ga_Functions )] do
+    Begin
+      Clep   := AClep;
+      Groupe := AGroup;
+      Name   := AName;
+      AFile  := AFileName;
+      Prefix := APrefix;
+{                 if (  Name = '' ) then
+        Begin
+          MyShowMessage (  Gs_EmptyFunctionName +  Clep );
+        End;   }
+      if ATemplate = CST_LEON_TEMPLATE_MULTIPAGETABLE then
+        Template := atMultiPageTable ;
+      finalize ( Functions );
+      if AMode =' '
+        Then Mode := Byte(fsStayOnTop)
+        Else if AMode = ' '
+          Then Mode := Byte(fsNormal)
+          Else Mode := Byte(fsMDIChild);
+    End;
+end;
 
 /////////////////////////////////////////////////////////////////////////
 // procedure p_BuildFromXML
@@ -276,7 +303,7 @@ End;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 Begin
   Result := False;
-  if  fb_LoadProperties (  fs_getLeonDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + gs_NomApp,  as_little_lang ) then
+  if  fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + copy(gs_ProjectFile, 1, pos ( DirectorySeparator, gs_ProjectFile )-1),  as_little_lang ) then
     Begin
       if assigned ( FIniMain ) then
         Begin
@@ -285,7 +312,7 @@ Begin
         End;
       Result := True;
     End
-  else fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + gs_NomApp + GS_EXT_LANGUAGES );
+  else fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + copy(gs_ProjectFile, 1, pos ( DirectorySeparator, gs_ProjectFile )-1) + GS_EXT_LANGUAGES );
 End;
 
 
