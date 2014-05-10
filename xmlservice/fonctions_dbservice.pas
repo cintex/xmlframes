@@ -70,6 +70,7 @@ procedure p_CopyLeonFunction ( const ar_Source : TLeonFunction ; var ar_Destinat
 procedure p_LoadRootAction ( const ano_Node : TALXMLNode );
 procedure p_LoadEntitites ( const axdo_FichierXML : TALXMLDocument );
 procedure p_AddFunction (const AClep,AGroup,AName,AFileName,APrefix,AMode:String;const ATemplate : Variant);
+function fs_getClassCaption ( const AClass : String ) : String;
 function fs_BuildTreeFromXML ( Level : Integer ; const aNode : TALXMLNode ;
                                const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
 var
@@ -271,6 +272,40 @@ Begin
       End;
 End;
 
+function fs_getClassCaption ( const AClass : String ) : String;
+var lxdoc_Class   : TALXMLDocument;
+    lNodeBase,lNodeClass   : TALXMLNode;
+    li_i, li_j : Integer;
+Begin
+  lxdoc_Class:=TALXMLDocument.Create(nil);
+  Result:='';
+  try
+    if fb_LoadXMLFile(lxdoc_Class,fs_getLeonInfo +AClass+CST_LEON_File_Extension)
+     Then
+      for li_i := 0 to lxdoc_Class.ChildNodes.Count-1 do
+       Begin
+         lNodeBase:=lxdoc_Class.ChildNodes[li_i];
+         if lNodeBase.NodeName=CST_LEON_CLASS Then
+          Begin
+           for li_j := 0 to lNodeBase.ChildNodes.Count-1 do
+            Begin
+              lNodeClass:=lNodeBase.ChildNodes[li_i];
+              if lNodeClass.NodeName=CST_LEON_NAME Then
+               Begin
+                Result:=fs_GetLabelCaption ( lNodeClass.Attributes[CST_LEON_VALUE] );
+                Break;
+               end;
+
+            end;
+           Break;
+          end;
+       end;
+  finally
+   lxdoc_Class.Destroy;
+  end;
+  if Result=''
+   Then Result:=AClass;
+end;
 
 /////////////////////////////////////////////////////////////////////////
 // function fb_ReadServerIni

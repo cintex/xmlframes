@@ -847,7 +847,6 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
     li_TopXPBar         : Integer ;
     aIma_ImagesTempo    : TImageList ;
-    lxdoc_Project : TALXMLDocument;
     lst_Classes   : TStringList;
     gb_IsFirst    : Boolean;
 Begin
@@ -881,7 +880,6 @@ Begin
   // Premier enregistrement
   // Création des XPBars
   // Rien alors pas de menu
-  lxdoc_Project:=nil;
   lst_Classes := TStringList.Create;
   try
     lst_Classes.Text:=gNod_Classes.XML;
@@ -896,7 +894,6 @@ Begin
           if li_pos = 1
            Then ls_MenuClep:=copy(ls_MenuClep,6,Length(ls_MenuClep)-6)
            Else ls_MenuClep:=copy(ls_MenuClep,2,Length(ls_MenuClep)-2);
-          ls_MenuLabel  := fs_GetLabelCaption ( ls_MenuClep );
           Result := True ;
           p_AddFunction ( ls_MenuClep, fs_GetNameSoft, ls_MenuClep, ls_MenuClep, '', '', Null );
           // A chaque fonction création d'une action dans la bar XP
@@ -906,6 +903,7 @@ Begin
             and FileExistsUTF8(fs_getLeonInfo +ls_MenuClep+CST_LEON_File_Extension)
              Then
               Begin
+                ls_MenuLabel  := fs_getClassCaption ( ls_MenuClep );
                 if gb_IsFirst Then
                  Begin
                   p_CreateXPBar ( ldx_WinXpBar, li_TopXPBar, ga_Functions [li_Action], af_FormEnfant, aCon_ParentContainer, aIma_ImagesXPBars, lbmp_FonctionImage, abmp_DefaultPicture, aF_FormParent, aIma_ImagesTempo );
@@ -924,6 +922,7 @@ Begin
                                     lbmp_FonctionImage  ,
                                     aBmp_DefaultPicture ,
                                     li_Action           );
+
               End ;
            end;
          end;
