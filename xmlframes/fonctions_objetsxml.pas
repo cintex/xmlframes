@@ -626,7 +626,7 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     procedure p_SetOneFunctiontoBar;
     Begin
         // Si une fonction dans le dernier enregistrement affectation dans l'ancienne xpbar
-       if ( ls_MenuClep2 <> '' )
+       if  ( ls_MenuClep2 <> '' )
        and ( lr_FunctionOld.Groupe <> lr_Function.Groupe )
        and ( li_CompteurFonctions = 1 )
         Then
@@ -743,10 +743,9 @@ Begin
             Result := True ;
             ls_MenuClep2 := ls_MenuClep;
             lr_FunctionOld := lr_Function;
-            if lNodeChild.HasAttribute(CST_LEON_ACTION_IDREF) then
-              ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ]
-             Else
-              ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ID ];
+            if lNodeChild.HasAttribute(CST_LEON_ACTION_IDREF)
+             then ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ACTION_IDREF ]
+             Else ls_MenuClep := lNodeChild.Attributes [ CST_LEON_ID ];
             lr_Function.Name   := '' ;
             lr_Function.Groupe  := '' ;
             lr_Function.Value  := '' ;
@@ -758,10 +757,13 @@ Begin
                   li_Action := fi_FindAction ( ls_MenuClep );
                   if li_Action = -1 then
                     Continue;
-                  lr_Function.Prefix := ga_Functions [ li_Action ].Prefix ;
-                  lr_Function.Name   := ga_Functions [ li_Action ].Name   ;
-                  lr_Function.Value  := ga_Functions [ li_Action ].Value  ;
-                  lr_Function.Groupe  := ga_Functions [ li_Action ].Groupe ;
+                  with ga_Functions [ li_Action ] do
+                   Begin
+                    lr_Function.Prefix := Prefix ;
+                    lr_Function.Name   := Name   ;
+                    lr_Function.Value  := Value  ;
+                    lr_Function.Groupe := Groupe ;
+                   end;
                   if ( lr_Function.Name = '' ) then
                      Continue;
                  ls_MenuLabel  := fs_GetLabelCaption ( lr_Function.Name );
@@ -775,7 +777,7 @@ Begin
                    Then
                     Begin
                       inc ( li_Compteur          );
-                      if ( li_CompteurFonctions > 1 ) // Ajoute si plus d'une fonction
+                      if ( li_CompteurFonctions > 0 ) // Ajoute si plus d'une fonction
                        Then
                         Begin
                           // fonction dans la file d'attente
@@ -795,7 +797,6 @@ Begin
                     End ;
                     // Au suivant !
               End ;
-             p_SetOneFunctiontoBar;
             End ;
           End;
    p_SetOneFunctiontoBar;

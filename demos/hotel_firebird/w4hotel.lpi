@@ -1548,11 +1548,11 @@
       <Unit187>
         <Filename Value="../../../ManFrames/manbase/fonctions_manbase.pas"/>
         <UnitName Value="fonctions_manbase"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="861"/>
         <CursorPos X="1" Y="878"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="50"/>
         <Loaded Value="True"/>
       </Unit187>
       <Unit188>
@@ -1566,11 +1566,11 @@
       <Unit189>
         <Filename Value="../../xmlservice/fonctions_xml.pas"/>
         <UnitName Value="fonctions_xml"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="580"/>
         <CursorPos X="11" Y="585"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit189>
       <Unit190>
@@ -1592,11 +1592,11 @@
       <Unit192>
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <UnitName Value="fonctions_dbservice"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="543"/>
-        <CursorPos X="14" Y="559"/>
-        <UsageCount Value="57"/>
+        <TopLine Value="142"/>
+        <CursorPos X="44" Y="166"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
       </Unit192>
       <Unit193>
@@ -1606,7 +1606,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="45" Y="31"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="39"/>
         <Loaded Value="True"/>
       </Unit193>
       <Unit194>
@@ -1628,10 +1628,12 @@
       <Unit196>
         <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
         <UnitName Value="fonctions_ObjetsXML"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1633"/>
-        <CursorPos X="80" Y="1633"/>
+        <TopLine Value="631"/>
+        <CursorPos X="1" Y="655"/>
         <UsageCount Value="41"/>
+        <Loaded Value="True"/>
       </Unit196>
       <Unit197>
         <Filename Value="../../xmlframes/fonctions_xmlform.pas"/>
@@ -1646,9 +1648,9 @@
         <UnitName Value="u_xmlform"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="979"/>
-        <CursorPos X="28" Y="993"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="277"/>
+        <CursorPos X="1" Y="301"/>
+        <UsageCount Value="59"/>
         <Loaded Value="True"/>
       </Unit198>
       <Unit199>
@@ -1656,9 +1658,9 @@
         <UnitName Value="u_customframework"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3625"/>
-        <CursorPos X="1" Y="3641"/>
-        <UsageCount Value="48"/>
+        <TopLine Value="3072"/>
+        <CursorPos X="1" Y="3096"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit199>
       <Unit200>
@@ -1759,11 +1761,11 @@
       <Unit212>
         <Filename Value="../../xmlframes/fonctions_autocomponents.pas"/>
         <UnitName Value="fonctions_autocomponents"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="887"/>
-        <CursorPos X="21" Y="892"/>
-        <UsageCount Value="50"/>
+        <TopLine Value="835"/>
+        <CursorPos X="1" Y="860"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit212>
       <Unit213>
@@ -1790,12 +1792,11 @@
       <Unit216>
         <Filename Value="../../../ManFrames/manbase/u_multidata.pas"/>
         <UnitName Value="u_multidata"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="123"/>
         <CursorPos X="47" Y="150"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
       </Unit216>
       <Unit217>
@@ -2119,10 +2120,13 @@
       <Unit257>
         <Filename Value="../../../ibx/runtime/IBCustomDataSet.pas"/>
         <UnitName Value="IBCustomDataSet"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2476"/>
-        <CursorPos X="1" Y="2491"/>
+        <CursorPos X="1" Y="2487"/>
         <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit257>
       <Unit258>
         <Filename Value="../../../ManFrames/manbase/u_multidonnees.pas"/>
@@ -2221,131 +2225,135 @@
       <Unit270>
         <Filename Value="../../../Extended/copy/u_extractfile.pas"/>
         <UnitName Value="u_extractfile"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="21" Y="19"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit270>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="302" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="757" Column="1" TopLine="731"/>
       </Position1>
       <Position2>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="303" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="763" Column="43" TopLine="731"/>
       </Position2>
       <Position3>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="304" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="762" Column="1" TopLine="728"/>
       </Position3>
       <Position4>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="305" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="763" Column="1" TopLine="728"/>
       </Position4>
       <Position5>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="306" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="764" Column="1" TopLine="728"/>
       </Position5>
       <Position6>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="307" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="765" Column="1" TopLine="728"/>
       </Position6>
       <Position7>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="308" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="766" Column="1" TopLine="728"/>
       </Position7>
       <Position8>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="309" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="769" Column="1" TopLine="729"/>
       </Position8>
       <Position9>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="310" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="770" Column="1" TopLine="730"/>
       </Position9>
       <Position10>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="311" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="773" Column="1" TopLine="733"/>
       </Position10>
       <Position11>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="312" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="774" Column="1" TopLine="734"/>
       </Position11>
       <Position12>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="313" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="779" Column="1" TopLine="739"/>
       </Position12>
       <Position13>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="314" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="729" Column="1" TopLine="705"/>
       </Position13>
       <Position14>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="315" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="655" Column="1" TopLine="631"/>
       </Position14>
       <Position15>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="316" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="729" Column="1" TopLine="705"/>
       </Position15>
       <Position16>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="317" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="655" Column="1" TopLine="631"/>
       </Position16>
       <Position17>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="318" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="729" Column="1" TopLine="705"/>
       </Position17>
       <Position18>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="319" Column="1" TopLine="292"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="655" Column="1" TopLine="631"/>
       </Position18>
       <Position19>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="320" Column="1" TopLine="294"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="729" Column="1" TopLine="705"/>
       </Position19>
       <Position20>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="321" Column="1" TopLine="295"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="655" Column="1" TopLine="631"/>
       </Position20>
       <Position21>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="322" Column="1" TopLine="296"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="729" Column="1" TopLine="705"/>
       </Position21>
       <Position22>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="323" Column="1" TopLine="297"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="655" Column="1" TopLine="631"/>
       </Position22>
       <Position23>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="324" Column="1" TopLine="298"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="729" Column="1" TopLine="705"/>
       </Position23>
       <Position24>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="184" Column="1" TopLine="167"/>
+        <Filename Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Caret Line="655" Column="1" TopLine="631"/>
       </Position24>
       <Position25>
-        <Filename Value="../../xmlframes/fonctions_autocomponents.pas"/>
-        <Caret Line="426" Column="39" TopLine="419"/>
+        <Filename Value="../../../ManFrames/manframes/u_customframework.pas"/>
+        <Caret Line="6021" Column="1" TopLine="5996"/>
       </Position25>
       <Position26>
-        <Filename Value="../../xmlframes/u_xmlform.pas"/>
-        <Caret Line="185" Column="1" TopLine="167"/>
+        <Filename Value="../../xmlframes/fonctions_autocomponents.pas"/>
+        <Caret Line="425" Column="1" TopLine="401"/>
       </Position26>
       <Position27>
-        <Filename Value="../../../ManFrames/manregister/fonctions_ibx.pas"/>
-        <Caret Line="153" Column="77" TopLine="130"/>
+        <Filename Value="../../xmlframes/fonctions_autocomponents.pas"/>
+        <Caret Line="860" Column="1" TopLine="835"/>
       </Position27>
       <Position28>
-        <Filename Value="../../../ManFrames/manregister/fonctions_ibx.pas"/>
-        <Caret Line="203" Column="53" TopLine="201"/>
+        <Filename Value="../../../ManFrames/manframes/u_customframework.pas"/>
+        <Caret Line="3478" Column="1" TopLine="3454"/>
       </Position28>
       <Position29>
-        <Filename Value="../../../ManFrames/manbase/u_multidata.pas"/>
-        <Caret Line="125" Column="20" TopLine="120"/>
+        <Filename Value="../../../ManFrames/manframes/u_customframework.pas"/>
+        <Caret Line="3423" Column="1" TopLine="3399"/>
       </Position29>
+      <Position30>
+        <Filename Value="../../../ManFrames/manframes/u_customframework.pas"/>
+        <Caret Line="3096" Column="1" TopLine="3072"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2366,7 +2374,6 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
         <UseHeaptrc Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
@@ -2384,98 +2391,35 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="13">
+    <BreakPoints Count="4">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="3096"/>
+        <Line Value="2282"/>
       </Item1>
       <Item2>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="2282"/>
+        <Line Value="3454"/>
       </Item2>
       <Item3>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="3454"/>
+        <Line Value="6389"/>
       </Item3>
       <Item4>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="6019"/>
+        <Source Value="../../xmlframes/fonctions_objetsxml.pas"/>
+        <Line Value="729"/>
       </Item4>
-      <Item5>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="6389"/>
-      </Item5>
-      <Item6>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="3478"/>
-      </Item6>
-      <Item7>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../../ManFrames/manframes/u_customframework.pas"/>
-        <Line Value="3422"/>
-      </Item7>
-      <Item8>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../xmlservice/fonctions_dbservice.pas"/>
-        <Line Value="164"/>
-      </Item8>
-      <Item9>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../xmlframes/fonctions_autocomponents.pas"/>
-        <Line Value="860"/>
-      </Item9>
-      <Item10>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../xmlframes/u_xmlform.pas"/>
-        <Line Value="189"/>
-      </Item10>
-      <Item11>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../xmlframes/u_xmlform.pas"/>
-        <Line Value="183"/>
-      </Item11>
-      <Item12>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../xmlframes/fonctions_autocomponents.pas"/>
-        <Line Value="425"/>
-      </Item12>
-      <Item13>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="../../xmlframes/u_xmlform.pas"/>
-        <Line Value="301"/>
-      </Item13>
     </BreakPoints>
     <Exceptions Count="3">
       <Item1>
