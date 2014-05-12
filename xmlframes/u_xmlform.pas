@@ -22,7 +22,7 @@ uses
  Windows,
  {$ENDIF}
   Controls, Classes, DB,
-  U_ExtDBNavigator, Forms, DBCtrls,
+  U_ExtDBNavigator, Forms,
   ComCtrls, SysUtils,
   U_CustomFrameWork, U_OnFormInfoIni,
   fonctions_string, ALXmlDoc, fonctions_xml, ExtCtrls,
@@ -30,7 +30,6 @@ uses
   fonctions_dbservice,
   fonctions_manbase,
 {$IFDEF RX}
-  rxdbgrid,
 {$ENDIF}
 {$IFDEF VERSIONS}
   fonctions_version,
@@ -143,7 +142,6 @@ implementation
 uses u_languagevars, fonctions_proprietes, U_ExtNumEdits,
      fonctions_autocomponents,
      fonctions_dialogs,
-     fonctions_dbcomponents,
      Math,
      fonctions_Objets_Dynamiques,
      fonctions_languages,
@@ -957,8 +955,7 @@ var llab_Label  : TFWLabel;
     // Creating the component and setting data link
 
     function fb_CreateComponents ( var awin_Control : TWinControl ) : Boolean ;
-    var li_k : LongInt ;
-    Begin
+     Begin
       Result := False;
       llab_Label:=nil;
       // adding not local field
