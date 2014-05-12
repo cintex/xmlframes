@@ -85,7 +85,6 @@ uses u_multidonnees, fonctions_xml,
      fonctions_init, fonctions_proprietes,
      u_languagevars,
      unite_variables,
-     fonctions_dbcomponents,
      fonctions_createsql,
      fonctions_file,
      FileUtil,
@@ -338,7 +337,7 @@ End;
 function fb_ReadLanguage (const as_little_lang : String ) : Boolean;
 Begin
   Result := False;
-  if  fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + copy(gs_ProjectFile, 1, pos ( DirectorySeparator, gs_ProjectFile )-1),  as_little_lang ) then
+  if  fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE, CST_SUBFILE_LANGUAGE + copy(gs_ProjectFile, 1, pos ( '/', gs_ProjectFile )-1),  as_little_lang ) then
     Begin
       if assigned ( FIniMain ) then
         Begin
@@ -347,7 +346,7 @@ Begin
         End;
       Result := True;
     End
-  else fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + copy(gs_ProjectFile, 1, pos ( DirectorySeparator, gs_ProjectFile )-1) + GS_EXT_LANGUAGES );
+  else fb_LoadProperties ( fs_getLeonDir + CST_DIR_LANGUAGE + CST_SUBFILE_LANGUAGE + copy(gs_ProjectFile, 1, pos ( '/', gs_ProjectFile )-1) + GS_EXT_LANGUAGES );
 End;
 
 
@@ -843,4 +842,4 @@ initialization
 {$ENDIF}
 
 end.
-
+
