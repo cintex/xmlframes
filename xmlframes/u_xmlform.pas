@@ -981,7 +981,7 @@ var llab_Label  : TFWLabel;
       p_SetFieldSelect ( lffd_ColumnFieldDef, lb_IsLocal );
 
       with lffd_ColumnFieldDef do
-       if ColUnique
+       if ColUnique and AutoIncField
        and ( ColPrivate or ColHidden )
         Then
          Exit;

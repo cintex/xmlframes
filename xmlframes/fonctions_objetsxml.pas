@@ -243,7 +243,7 @@ End;
 procedure p_FindAndSetSourceKey ( const as_Class : String ; const afws_Source : TFWTable ; const acom_owner : TComponent ; const ach_FieldDelimiter : Char );
 var  li_k, li_l, li_m, li_n : Longint;
     lnod_NodeClass, lnod_Field, lnod_FieldsTemp,
-    lnod_FieldProperty, lnod_mark      : TALXMLNode ;
+    lnod_FieldProperty      : TALXMLNode ;
     lfd_Fielddef : TFWFieldColumn;
     lxdoc_Document : TALXMLDocument;
     lb_isrelation : Boolean;
@@ -840,9 +840,7 @@ var ldx_WinXpBar        : TJvXpBar ;  // Nouvelle barre xp
     li_i,
     li_pos,
     li_Action           : Integer;
-    lr_FunctionOld      : TLeonFunction;
-    ls_MenuClep         ,
-    ls_MenuClep2        : String;
+    ls_MenuClep         : String;
     ls_MenuLabel        : WideString ;// Sous Menu en cours
 //    lbmp_BitmapOrigine  : TBitmap ;  // bitmap en cours
     lbmp_FonctionImage  : TBitmap ;  // Icône de la Fonction en cours
@@ -863,10 +861,6 @@ Begin
   aIma_ImagesXPBars.Clear ;
 // Initialisation
   ldx_WinXpBar       := nil ;
-{  if lb_UtiliseSMenu
-   Then li_CompteurMenus     := fi_ChercheMenu ( as_LeMenu )
-   Else li_CompteurMenus     := 0 ;}
-  lr_Functionold.Groupe  := '' ;
   ls_MenuClep            := '' ;
   li_TopXPBar          := 1 ;
 //  lico_IconMenu        := nil ;
@@ -875,7 +869,6 @@ Begin
   aIma_ImagesTempo     := TImageList.Create ( af_FormParent );
   aIma_ImagesTempo     .Width  := 32 ;
   aIma_ImagesTempo     .Height := 32 ;
-  ls_MenuClep2 := '';
   li_Action:=-1;
 
   // Premier enregistrement
@@ -1745,14 +1738,12 @@ end;
 
 procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
 var li_i, li_k : Integer;
-    lb_Found : Boolean;
     lnode : TALXMLNode;
 Begin
   if assigned ( alis_NodeFields ) Then
     for li_i := 0 to alis_NodeFields.Count - 1 do
       Begin
         lnode := TALXMLNode (alis_NodeFields [li_i]);
-        lb_Found := False;
         for li_k := 0 to lnode.ChildNodes.Count - 1 do
           with lnode.ChildNodes [ li_k ] do
            if  ( NodeName = CST_LEON_FIELD_F_MARKS )

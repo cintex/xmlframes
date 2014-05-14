@@ -5,7 +5,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   Width = 884
   HelpContext = 1400
   HorzScrollBar.Page = 884
-  VertScrollBar.Page = 621
+  VertScrollBar.Page = 618
   Align = alClient
   AutoScroll = True
   AutoSize = True
@@ -14,7 +14,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   ChildSizing.EnlargeVertical = crsHomogenousChildResize
   ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
-  ClientHeight = 621
+  ClientHeight = 618
   ClientWidth = 884
   Color = 13565951
   DefaultMonitor = dmDesktop
@@ -25,7 +25,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   OnActivate = F_FormMainIniActivate
   OnResize = F_FormMainIniResize
   Position = poDesktopCenter
-  LCLVersion = '1.2.0.3'
+  LCLVersion = '1.2.1.0'
   object im_appli: TImage
     Left = 248
     Height = 49
@@ -784,13 +784,13 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     Height = 19
     Top = 440
     Width = 16
-    Version = 'Version 3.20, Copyright � 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
+    Version = 'Version 3.20, Copyright © 2000-2001 by Peric, E-mail: pericddn@ptt.yu'
     Visible = False
     TabOrder = 0
   end
   object br_statusbar: TStatusBar
     Left = 0
-    Height = 24
+    Height = 21
     Top = 597
     Width = 884
     AutoHint = True
@@ -834,11 +834,11 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
   object tbar_outils: TToolBar
     Left = 0
     Height = 50
-    Hint = 'Cliquer sur un bouton pour accÃƒÂƒÃ‚Â©der ÃƒÂƒÃ‚Â  une fonction'
+    Hint = 'Cliquer sur un bouton pour accÃÆÃÆÃâÃÂ©der ÃÆÃÆÃâÃÂ  une fonction'
     Top = 0
     Width = 884
     HelpContext = 1430
-    Caption = 'Barre d''accÃƒÂƒÃ‚Â¨s'
+    Caption = 'Barre d''accÃÆÃÆÃâÃÂ¨s'
     Color = cl3DLight
     ParentColor = False
     ParentShowHint = False
@@ -936,7 +936,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       object dbt_ident: TJvXPButton
         Left = 9
         Height = 41
-        Hint = 'S''identifier/dÃƒÂƒÃ‚Â©connecter'
+        Hint = 'S''identifier/dÃÆÃÆÃâÃÂ©connecter'
         Top = 0
         Width = 40
         HelpContext = 1430
@@ -1012,7 +1012,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     object scb_Volet: TScrollBox
       Left = 0
       Height = 547
-      Hint = 'Cliquez pour accÃƒÂ©der aux fonctions'
+      Hint = 'Cliquez pour accÃÆÃÂ©der aux fonctions'
       Top = 0
       Width = 197
       HelpContext = 1440
@@ -2838,10 +2838,10 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_file: TMenuItem
       Caption = '&Application'
       HelpContext = 1420
-      Hint = 'Fermeture des fenÃƒÂƒÃ‚Âªtres'
+      Hint = 'Fermeture des fenÃÆÃÆÃâÃÂªtres'
       object mu_identifier: TMenuItem
         Caption = 'S''&identifier'
-        Hint = 'Ouvrir la fenÃƒÂƒÃ‚Âªtre d''identification'
+        Hint = 'Ouvrir la fenÃÆÃÆÃâÃÂªtre d''identification'
         OnClick = dbt_identClick
       end
       object mu_ouvrir: TMenuItem
@@ -2862,10 +2862,10 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       end
     end
     object mu_fenetre: TMenuItem
-      Caption = 'Fe&nÃªtre'
-      Hint = 'Commandes relatives aux fenÃƒÂƒÃ‚Âªtres'
+      Caption = 'Fe&nêtre'
+      Hint = 'Commandes relatives aux fenÃÆÃÆÃâÃÂªtres'
       object mu_Reinitiliserpresentation: TMenuItem
-        Caption = 'RÃ©initialiser la &prÃ©sentation'
+        Caption = 'Réinitialiser la &présentation'
         HelpContext = 1420
         OnClick = mu_ReinitiliserpresentationClick
       end
@@ -2894,19 +2894,19 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
     object mu_affichage: TMenuItem
       Caption = 'Affichage'
       object mu_barreoutils: TMenuItem
-        Caption = 'Barre d''accÃ¨s'
+        Caption = 'Barre d''accès'
         Checked = True
         HelpContext = 1420
         OnClick = mu_barreoutilsClick
       end
       object mu_voletexplore: TMenuItem
-        Caption = 'Volet d''accÃ¨s'
+        Caption = 'Volet d''accès'
         Checked = True
         HelpContext = 1420
         OnClick = mu_voletexploreClick
       end
       object mi_CustomizedMenu: TMenuItem
-        Caption = 'Volet personnalisÃ©'
+        Caption = 'Volet personnalisé'
         OnClick = mi_CustomizedMenuClick
       end
     end
@@ -2925,7 +2925,7 @@ object F_FenetrePrincipale: TF_FenetrePrincipale
       object mu_apropos: TMenuItem
         Caption = '&A propos...'
         HelpContext = 1420
-        Hint = 'A propos|Afficher des informations sur le programme, le numÃƒÂƒÃ‚Â©ro de version et le copyright'
+        Hint = 'A propos|Afficher des informations sur le programme, le numÃÆÃÆÃâÃÂ©ro de version et le copyright'
         OnClick = mu_aproposClick
       end
     end

@@ -16,10 +16,10 @@ interface
 {$ENDIF}
 
 uses
-  Controls, Classes, Dialogs, DB,
-  U_ExtDBNavigator, Buttons, Forms, DBCtrls,
-  SysUtils,ComCtrls, TypInfo, Variants,
-  U_FormMainIni, u_framework_dbcomponents,
+  Controls, Classes, DB,
+  U_ExtDBNavigator, Forms, DBCtrls,
+  SysUtils,ComCtrls,
+  u_framework_dbcomponents,
   fonctions_manbase, StdCtrls,
   u_xmlfillcombobutton,
 {$IFDEF VERSIONS}
@@ -164,7 +164,7 @@ function fdbg_GroupViewComponents  ( var FPageControlDetails : TCustomTabControl
 
 implementation
 
-uses JvXPButtons,fonctions_dbcomponents,
+uses fonctions_dbcomponents,
 {$IFNDEF FPC}
      JvSplitter,
 {$ENDIF}
@@ -174,7 +174,7 @@ uses JvXPButtons,fonctions_dbcomponents,
      fonctions_string,
      fonctions_extdb,
      fonctions_createsql,
-     u_buttons_appli, fonctions_proprietes,
+     u_buttons_appli,
      fonctions_languages;
 
 ////////////////////////////////////////////////////////////////////////////////

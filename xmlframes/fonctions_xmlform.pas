@@ -27,13 +27,13 @@ No XMLForm please
 
 }
 
-uses Forms, JvXPBar, JvXPContainer,
+uses Forms, JvXPBar,
 {$IFDEF FPC}
-   LCLIntf, LCLType,
+   LCLType,
 {$ELSE}
    Windows, ToolWin,
 {$ENDIF}
-  Controls, Classes, JvXPButtons, ExtCtrls,
+  Controls, Classes, JvXPButtons,
   Menus, DB,
 {$IFDEF VERSIONS}
   fonctions_version,
@@ -41,11 +41,8 @@ uses Forms, JvXPBar, JvXPContainer,
   ALXmlDoc, Graphics,
   u_multidonnees,
   u_xmlform,
-  fonctions_manbase,
-  ComCtrls,
   fonctions_ObjetsXML,
   fonctions_dbservice,
-  fonctions_system, u_customframework,
   u_multidata;
 
 {$IFDEF VERSIONS}
@@ -73,7 +70,7 @@ procedure p_ExecuteFonction ( aobj_Sender                  : TObject            
 
 implementation
 
-uses U_FormMainIni, SysUtils, TypInfo,
+uses SysUtils, TypInfo,
      fonctions_Dialogs,
      fonctions_xml,
      fonctions_images ,
@@ -81,11 +78,9 @@ uses U_FormMainIni, SysUtils, TypInfo,
      Variants, fonctions_proprietes,
      fonctions_Objets_Dynamiques,
      fonctions_dbcomponents,
-     unite_variables, u_languagevars, Imaging,
-     u_framework_dbcomponents,
+     u_languagevars, Imaging,
      u_connection,
      fonctions_createsql,
-     fonctions_languages,
      u_xmlfillcombobutton,
      u_fillcombobutton,
      fonctions_forms;
@@ -96,14 +91,13 @@ uses U_FormMainIni, SysUtils, TypInfo,
 // Résultat : il y a un fichier projet.
 ////////////////////////////////////////////////////////////////////////////////
 function fb_ReadXMLEntitites () : Boolean;
-var ls_entityFile : String ;
 Begin
   Result := gs_ProjectFile <> '';
   FreeAndNil(gxdo_RootXML);
   FreeAndNil(gxdo_MenuXML);
   if result Then
     Begin
-      ls_entityFile := fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node ,TOnExecuteProjectNode ( p_onProjectNode ) ) ;
+      fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node ,TOnExecuteProjectNode ( p_onProjectNode ) ) ;
       if  assigned ( gNod_RootAction )
       and ( gNod_RootAction <> gNod_DashBoard ) Then
        Begin
@@ -180,7 +174,6 @@ End ;
 function fs_GetStringFields  ( const alis_NodeFields : TList ; const as_Empty : String ; const ab_AddOne : Boolean ):String;
 var
     li_i, li_j : Integer ;
-    lb_IsLarge : Boolean;
     lnode  : TALXMLNode;
 Begin
   Result := as_Empty;
@@ -255,7 +248,7 @@ end;
 // procedure p_AddFieldsToString
 // used to create a combo
 procedure p_AddFieldsToString ( var as_Fields : String; const alis_NodeFields : TList );
-var li_i, li_k : Integer;
+var li_i : Integer;
     lnode : TALXMLNode;
 Begin
   if assigned ( alis_NodeFields ) Then

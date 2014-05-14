@@ -456,12 +456,6 @@ Begin
       lParam3 := '' ;
       lPrefix := '' ;
 
-//          MyShowMessage ( ano_Node.NodeName + ' ' + ano_Node.Attributes [ CST_LEON_ID ] );
-
-//          MyShowMessage ( ano_Node.XML );
-//          if ano_Node.HasAttribute ( CST_LEON_TEMPLATE ) then
-//              MyShowMessage ( ano_Node.XML );
-
       // On ajoute la fonction complémentaire
       if  ( ano_Node.HasChildNodes ) then
         for  li_j := 0 to ano_Node.ChildNodes.count - 1 do
@@ -842,4 +836,4 @@ initialization
 {$ENDIF}
 
 end.
-
+

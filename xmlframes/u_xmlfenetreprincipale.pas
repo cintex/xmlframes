@@ -203,12 +203,10 @@ var
 implementation
 
 uses
-  TypInfo,
 {$IFDEF DBEXPRESS}
   SQLExpr,
 {$ENDIF}
 {$IFDEF FPC}
-  FileUtil,
 {$ELSE}
   fonctions_aide,
 {$ENDIF}
@@ -222,9 +220,8 @@ uses
   fonctions_xmlform,
   fonctions_FenetrePrincipale,
   unite_variables, unite_messages,
-  fonctions_system, U_FormMainIni,
+  fonctions_system,
   fonctions_forms,
-  fonctions_proprietes,
   fonctions_dbservice,
   fonctions_languages ;
 

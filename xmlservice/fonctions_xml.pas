@@ -218,7 +218,7 @@ function fb_getOptionalStructTable ( const afwt_Sources : TFWTables;
                                      const anod_Field,anod_OriginalNode : TALXMLNode;
                                      const ab_createDS : Boolean = True ): Boolean;
 function  fb_setFieldType ( const afws_Source : TFWTable ;
-                            const af_FieldDefs : TFWFieldColumn;
+                            const af_FieldDef : TFWFieldColumn;
                             const anod_Field : TALXMLNode;
                             const ai_counter : Integer;
                             const ab_createDS : Boolean;
@@ -266,7 +266,7 @@ function fb_GetCrossLinkFunction( const ADBSources : TFWTables ;
 function fb_FieldTypeProperties ( const afws_Source : TFWTable ;
                                   var   afr_Relation : TFWRelation;
                                   const anod_Field,anod_FieldProperties : TALXMLNode;
-                                  const af_FieldDefs : TFWFieldColumn; var ab_islarge : Boolean;
+                                  const af_FieldDef : TFWFieldColumn; var ab_islarge : Boolean;
                                   const ab_createDS, ab_FullTable : Boolean; const acom_Owner : TComponent):Boolean;
 
 implementation
@@ -436,6 +436,12 @@ begin
      Begin
        p_CreateArrayStructComponents;
        fb_setNodeField (anod_Field,lffd_ColumnFieldDef);
+       with lffd_ColumnFieldDef do
+         Begin
+           ColUnique:=False;
+           ColHidden:=False;
+           ColPrivate:=False;
+         End;
        // Quitting because having created properties
        Exit;
      end;
@@ -825,7 +831,7 @@ End;
 function fb_FieldTypeRelation ( const afws_Source : TFWTable ;
                                 var   afr_Relation : TFWRelation;
                                 const anod_Field,anod_FieldProperties : TALXMLNode;
-                                const af_FieldDefs : TFWFieldColumn;
+                                const af_FieldDef : TFWFieldColumn;
                                 const ab_createDS, ab_FullTable : Boolean;
                                 const acom_Owner : TComponent):Boolean;
 var lnod_FieldProperties : TALXMLNode;
@@ -872,7 +878,7 @@ Begin
   if  anod_FieldProperties.NodeName = CST_LEON_NAME Then
    Begin
      if afr_Relation = nil Then
-      afr_Relation := af_FieldDefs.Relation;
+      afr_Relation := af_FieldDef.Relation;
      afr_Relation.RelationName:=anod_FieldProperties.Attributes[CST_LEON_VALUE];
    end;
   ls_ClassLink:=''; // init
@@ -898,7 +904,7 @@ Begin
               Break;
             end;
          end;
-      fb_GetCrossLinkFunction( afws_Source.Collection as TFWTables,afws_Source, af_FieldDefs,'', ls_ClassLink, afr_Relation, ab_createDS, ab_FullTable, acom_Owner );
+      fb_GetCrossLinkFunction( afws_Source.Collection as TFWTables,afws_Source, af_FieldDef,'', ls_ClassLink, afr_Relation, ab_createDS, ab_FullTable, acom_Owner );
    End;
 end;
 
@@ -907,14 +913,14 @@ end;
 function fb_FieldTypeProperties ( const afws_Source : TFWTable ;
                                   var   afr_Relation : TFWRelation;
                                   const anod_Field,anod_FieldProperties : TALXMLNode;
-                                  const af_FieldDefs : TFWFieldColumn; var ab_islarge : Boolean;
+                                  const af_FieldDef : TFWFieldColumn; var ab_islarge : Boolean;
                                   const ab_createDS, ab_FullTable : Boolean; const acom_Owner : TComponent):Boolean;
 var ldo_Temp : Double;
 Begin
-  with af_FieldDefs do
+  with af_FieldDef do
    Begin
      // recursive ended here for XML Form : Need only near tables
-    if  fb_FieldTypeRelation ( afws_Source, afr_Relation, anod_Field, anod_FieldProperties, af_FieldDefs, ab_createDS, ab_FullTable, acom_Owner ) Then
+    if  fb_FieldTypeRelation ( afws_Source, afr_Relation, anod_Field, anod_FieldProperties, af_FieldDef, ab_createDS, ab_FullTable, acom_Owner ) Then
      Begin
       Result:=True;
       Exit;
@@ -976,7 +982,7 @@ End;
 // Result : local
 ////////////////////////////////////////////////////////////////////////////////
 function  fb_setFieldType ( const afws_Source : TFWTable ;
-                            const af_FieldDefs : TFWFieldColumn;
+                            const af_FieldDef : TFWFieldColumn;
                             const anod_Field : TALXMLNode;
                             const ai_counter : Integer;
                             const ab_createDS : Boolean;
@@ -994,16 +1000,16 @@ var lb_isLarge : Boolean ;
 begin
   Result:=False;
   lfr_Relation := nil;
-  with af_FieldDefs, anod_Field do
+  with af_FieldDef, anod_Field do
    Begin
     if HasChildNodes then
      for li_k := 0 to ChildNodes.Count -1 do
       Begin
         lnod_Prop:=ChildNodes [ li_k ];
         // type properties of field
-        fb_FieldTypeProperties ( afws_Source, lfr_Relation, anod_Field,lnod_Prop, af_FieldDefs, lb_isLarge,ab_createDS,ab_FullTable,acom_Owner );
+        fb_FieldTypeProperties ( afws_Source, lfr_Relation, anod_Field,lnod_Prop, af_FieldDef, lb_isLarge,ab_createDS,ab_FullTable,acom_Owner );
         // options like local
-        fb_getFieldOptions ( afws_Source,anod_Field,lnod_Prop,af_FieldDefs,Result,ab_isreference);
+        fb_getFieldOptions ( afws_Source,anod_Field,lnod_Prop,af_FieldDef,Result,ab_isreference);
       End;
 
      // relation field set by relation's table
@@ -1148,7 +1154,7 @@ begin
          if HasAttribute ( CST_LEON_FIELD_CREATE)
           then ColCreate  := Attributes [ CST_LEON_FIELD_CREATE ] = CST_LEON_BOOL_TRUE;
          if HasAttribute ( CST_LEON_FIELD_PROVIDER)
-          then ColCreate  := Attributes [ CST_LEON_FIELD_PROVIDER ] = CST_LEON_BOOL_FALSE;
+          then ColCreate  := Attributes [ CST_LEON_FIELD_PROVIDER ] = CST_LEON_BOOL_TRUE;
          if HasAttribute ( CST_LEON_FIELD_UNIQUE)
           then ColUnique  := Attributes [ CST_LEON_FIELD_UNIQUE ] = CST_LEON_BOOL_TRUE;
          if HasAttribute ( CST_LEON_FIELD_id)
