@@ -948,7 +948,6 @@ var llab_Label  : TFWLabel;
       p_setComponentLeftWidth  ( Result, ab_Column );
       with lwin_last do
        Result.ClientHeight := Top +(Height + CST_CONTROLS_INTERLEAVING)*2; // do not forget groupbox caption
-
     end;
 
     // procedure p_CreateComponents
@@ -971,6 +970,7 @@ var llab_Label  : TFWLabel;
        Then
         Begin
           p_CreateArrayStructComponents;
+          p_FieldIsNotAKey( lffd_ColumnFieldDef );
           // Quitting because having created component
           Result := True;
           Exit;

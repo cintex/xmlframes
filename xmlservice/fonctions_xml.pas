@@ -239,6 +239,7 @@ function fb_getNodesField ( const anod_FieldProperty : TALXMLNode;
 procedure p_setNodeId ( const anod_FieldIsId : TALXMLNode;
                         const afws_Source : TFWTable ;
                         const affd_ColumnFieldDef : TFWMiniFieldColumn  );
+procedure p_FieldIsNotAKey( const affd_ColumnFieldDef : TFWFieldColumn);
 procedure p_OnCreateFieldProperties ( const ADBSources : TFWTables; const ADBSource : TFWTable;
                                       const anod_Field: TALXMLNode;
                                       var ab_FieldFound, ab_column : Boolean ;
@@ -333,6 +334,16 @@ begin
 
 end;
 
+
+procedure p_FieldIsNotAKey( const affd_ColumnFieldDef : TFWFieldColumn);
+Begin
+  with affd_ColumnFieldDef do
+    Begin
+      ColUnique:=False;
+      ColHidden:=False;
+      ColPrivate:=False;
+    End;
+End;
 
 // procedure p_OnCreateFieldProperties
 // Creating the column components
@@ -436,12 +447,7 @@ begin
      Begin
        p_CreateArrayStructComponents;
        fb_setNodeField (anod_Field,lffd_ColumnFieldDef);
-       with lffd_ColumnFieldDef do
-         Begin
-           ColUnique:=False;
-           ColHidden:=False;
-           ColPrivate:=False;
-         End;
+       p_FieldIsNotAKey( lffd_ColumnFieldDef );
        // Quitting because having created properties
        Exit;
      end;
