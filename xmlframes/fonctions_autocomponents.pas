@@ -85,6 +85,7 @@ const CST_GRID_NAVIGATION_WIDTH         = 200 ;
 
 
 var  gi_FontHeight : Integer = 24 ;
+     gb_DoubleColumn : Boolean = True;
 
 {$IFDEF VERSIONS}
 const
@@ -228,7 +229,7 @@ Begin
       afcf_ColumnField.CaptionName := Result.Caption;
       afcf_ColumnField.HintName := '| ' + afcf_ColumnField.CaptionName;
     end;
-  if ab_Column
+  if gb_DoubleColumn and ab_Column
    then awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE + CST_XML_SEGUND_COLUMN_MIN_POSWIDTH
    Else awin_Control.Left := CST_XML_FIELDS_CAPTION_SPACE ;
 
@@ -801,7 +802,7 @@ procedure p_setComponentLeftWidth  ( const awin_Control : TControl ; const ab_Co
 begin
   with awin_Control do
     Begin
-      if ab_Column
+      if gb_DoubleColumn and ab_Column
        then Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_CONTROLS_INTERLEAVING
        Else Left := CST_CONTROLS_INTERLEAVING ;
       Width := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH-CST_CONTROLS_INTERLEAVING*2;
@@ -836,7 +837,7 @@ begin
     Begin
       Top  := awin_Control.Top + ( awin_Control.Height - Height ) div 2 ;
       Width := CST_XML_FIELDS_CAPTION_SPACE - CST_XML_FIELDS_LABEL_INTERLEAVING;
-      if ab_Column
+      if gb_DoubleColumn and ab_Column
        then Left := CST_XML_SEGUND_COLUMN_MIN_POSWIDTH + CST_CONTROLS_INTERLEAVING
        else Left := CST_CONTROLS_INTERLEAVING;
     End;
@@ -873,7 +874,7 @@ end;
 // ab_Column : Second editing column
 procedure p_setFieldComponentTop  ( const awin_Control : TWinControl; const ai_lastTop, ai_lastHeight : Integer ; var ab_Column : Boolean );
 begin
-  if ab_Column and ( awin_Control.Width < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH )  Then
+  if gb_DoubleColumn and ab_Column and ( awin_Control.Width < CST_XML_SEGUND_COLUMN_MIN_POSWIDTH )  Then
    // Intervalle entre les champs
     awin_Control.Top := ai_lastTop + CST_CONTROLS_INTERLEAVING
    Else

@@ -216,7 +216,8 @@ uses SysUtils, Dialogs, fonctions_xml,
 {$IFDEF FPC}
      FileUtil,
 {$ENDIF}
-     fonctions_images , fonctions_init, U_XMLFenetrePrincipale,
+     fonctions_images ,
+     fonctions_init, U_XMLFenetrePrincipale,
      fonctions_proprietes,
      Variants, fonctions_Objets_Dynamiques, fonctions_dbcomponents, strutils,
      unite_variables, u_languagevars, Imaging, fonctions_languages;
@@ -1648,7 +1649,6 @@ Begin
       DecimalSeparator := gchar_DecimalSeparator ;
       fs_BuildFromXML ( 0, gxdo_FichierXML.Node, Application ) ;
       fs_BuildTreeFromXML ( 0, gxdo_FichierXML.Node, TOnExecuteProjectNode ( p_onProjectNode) ) ;
-
     End
    Else
     Result := False;

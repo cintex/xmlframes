@@ -215,6 +215,7 @@ uses
 {$ENDIF}
   fonctions_xml,
   u_multidonnees,
+  fonctions_autocomponents,
   fonctions_createsql,
   fonctions_dialogs,
   fonctions_xmlform,
@@ -615,6 +616,11 @@ end;
 procedure TF_FenetrePrincipale.mu_voletchange(const ab_visible : Boolean);
 begin
   p_voletchange(ab_visible, tbar_volet, mu_voletexplore, mi_CustomizedMenu, spl_volet, mtb_CustomizedMenu );
+  // do the child forms use double column
+  if ab_visible
+   Then gb_DoubleColumn:=Screen.{$IFDEF WINDOWS}WorkAreaWidth{$ELSE}Width{$ENDIF}>CST_XML_SEGUND_COLUMN_MIN_POSWIDTH*2+scb_Volet.Width+210
+   Else gb_DoubleColumn:=Screen.{$IFDEF WINDOWS}WorkAreaWidth{$ELSE}Width{$ENDIF}>CST_XML_SEGUND_COLUMN_MIN_POSWIDTH*2+210;
+
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -800,4 +806,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+
