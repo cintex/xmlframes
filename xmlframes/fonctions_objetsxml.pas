@@ -103,7 +103,6 @@ procedure p_setPrefixToMenuAndXPButton ( const as_Prefix : String;
                                         const axb_Button : TJvXPButton ;
                                         const amen_Menu : TMenuItem ;
                                         const aiml_Images : TImageList );
-function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer ):Boolean;
 function fb_CreeAppliFromNode ( const as_EntityFile : String ):boolean;
 function fb_getImageToBitmap ( const as_Prefix : String; const abmp_Bitmap : TBitmap ):Boolean;
 procedure p_onProjectNode ( const as_FileName : String ; const ANode : TALXMLNode );
@@ -1756,23 +1755,6 @@ Begin
 
      End;
 end;
-
-
-function fb_createFieldID (const ab_IsSourceTable : Boolean; const anod_Field: TALXMLNode ; const affd_ColumnFieldDef : TFWFieldColumn; const ai_Fieldcounter : Integer ):Boolean;
-Begin
-  Result := anod_Field.Attributes [ CST_LEON_ID ] <> Null;
-  if result Then
-    with affd_ColumnFieldDef do
-      begin
-        IsSourceTable := ab_IsSourceTable;
-        NumTag      := ai_Fieldcounter + 1;
-        FieldName   := anod_Field.Attributes [ CST_LEON_ID ];
-        ShowSearch  := -1;
-        ColSelect:=False;
-      end;
-end;
-
-
 
 // function fb_setChoiceProperties
 // After having read child nodes from component node setting the values of choice node

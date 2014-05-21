@@ -73,6 +73,7 @@ const CST_LEON_File_Extension = '.xml';
 
       CST_LEON_SYSTEM_ROOT     = 'ROOT SYSTEM';
       CST_LEON_SYSTEM_LOCATION = 'LOCATION SYSTEM';
+      CST_LEON_SYSTEM_LEON     = 'LEON';
       CST_LEON_SYSTEM          = 'SYSTEM';
       CST_LEON_SYSTEM_NAVIGATION = 'NAVIGATION SYSTEM';
 
@@ -708,6 +709,11 @@ Begin
       if Attributes [CST_LEON_NAME] <> Null Then
         CaptionName := Attributes [CST_LEON_NAME];
       Result:=Attributes [CST_LEON_ID] <> Null;
+      if not Result Then
+       Begin
+        Result:=Attributes [CST_LEON_IDREF] <> Null;
+
+       end;
       if ab_isreference and Result Then
        Begin
         FieldName := Attributes [CST_LEON_ID];

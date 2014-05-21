@@ -59,7 +59,14 @@ type
                                   Mode     : Byte ;
                                   Functions : TLeonFunctions;
                              end;
- const ge_ExecuteSQLScript : TOnExecuteSQLScript = nil;
+  TStringLink = Record
+                  Source ,
+                  Destination : String;
+                end;
+
+  TStringLinkArray = array of TStringLink;
+
+const ge_ExecuteSQLScript : TOnExecuteSQLScript = nil;
 function fb_ReadServerIni ( var amif_Init : TIniFile ; const AApplication : TComponent ): Boolean;
 procedure p_LoadData ( const axno_Node : TALXMLNode; const acom_owner : TComponent );
 function fs_getIniOrNotIniValue ( const as_Value : String ) : String;
@@ -73,11 +80,16 @@ procedure p_AddFunction (const AClep,AGroup,AName,AFileName,APrefix,AMode:String
 function fs_getClassCaption ( const AClass : String ) : String;
 function fs_BuildTreeFromXML ( Level : Integer ; const aNode : TALXMLNode ;
                                const aopn_OnProjectNode : TOnExecuteProjectNode ):String;
-var
-    gs_Language : String;
+procedure p_AddStringLink (var AArray : TStringLinkArray;const ASource,ADestination:String);
+function fstl_GetStringLink ( const AArray : TStringLinkArray; const ASource : String ):TStringLink;
+function fs_GetDestination  ( const AArray : TStringLinkArray; const ASource : String ):String;
+procedure p_CreateClassBinding ( const as_XMLClass : String ; const acom_owner : TComponent);
+
+var gs_Language : String;
     CST_FILE_LANGUAGES : String =  'languages';
     gs_RootAction           : String;
     ga_Functions : Array of TLeonFunction;
+    gas_ClassesBinding : TStringLinkArray;
 
 implementation
 
@@ -97,6 +109,7 @@ uses u_multidonnees, fonctions_xml,
      Dialogs,
      fonctions_string,
      fonctions_languages;
+
 /////////////////////////////////////////////////////////////////////////
 // procedure p_LoadEntitites
 // Calling a recursive procedure loading entities from XML Document
@@ -133,6 +146,99 @@ Begin
           Else Mode := Byte(fsMDIChild);
     End;
 end;
+
+procedure p_AddStringLink (var AArray : TStringLinkArray;const ASource,ADestination:String);
+Begin
+  SetLength ( AArray, high ( ga_Functions ) + 2 );
+  with AArray [ high ( AArray )] do
+    Begin
+      Source   := ASource;
+      Destination := ADestination;
+    End;
+end;
+
+function fstl_GetStringLink ( const AArray : TStringLinkArray; const ASource : String ):TStringLink;
+var li_i : Integer;
+Begin
+  for li_i := 0 to high ( AArray ) do
+   if ASource = AArray [ li_i ].Source Then
+     Begin
+      Result:=AArray [ li_i ];
+      Exit;
+     end;
+end;
+
+function fs_GetDestination ( const AArray : TStringLinkArray; const ASource : String ):String;
+Begin
+  Result:=fstl_GetStringLink(AArray,ASource).Source;
+end;
+
+
+
+// procedure p_CreateFormComponents
+// Create a form from XML File
+// as_XMLFile : XML File
+// as_Name : Name of form
+// awin_Parent : Parent component
+// ai_Counter : The column counter for other XML File
+procedure p_CreateClassBinding ( const as_XMLClass : String ; const acom_owner : TComponent);
+var li_i, li_j, li_k, li_NoField : LongInt ;
+    lnod_Node, lnod_ClassNode : TALXMLNode ;
+    lb_Column, lb_FieldFound, lb_Table : Boolean ;
+    lxml_Class : TALXMLDocument ;
+  // procedure p_CreateXMLColumn
+  // Creates the XML form column
+  // as_Table : Table name
+  // as_Connection : Connection name
+  procedure p_CreateClassBinding ( const as_Table, as_TableKey : String );
+  Begin
+     // MyShowMessage(as_Table + ' xmlcolumn');
+    p_AddStringLink(gas_ClassesBinding,as_TableKey,as_Table);
+  end;
+
+begin
+  lxml_Class := nil;
+  If fb_OpenClass ( as_XMLClass, acom_owner, lxml_Class ) Then
+   // reading the special XML form File
+    try
+      li_NoField := 0;
+      lb_FieldFound := False;
+      lb_Column := False;
+      for li_i := 0 to lxml_Class.ChildNodes.Count -1 do
+        Begin
+          lnod_Node := lxml_Class.ChildNodes [ li_i ];
+          if ( lnod_Node.NodeName = CST_LEON_CLASS  )
+          or ( lnod_Node.NodeName = CST_LEON_STRUCT ) then
+            Begin
+              if not lb_FieldFound Then
+                Begin
+                  lb_Table:=False;
+                  for li_j := 0 to lnod_Node.ChildNodes.Count -1 do
+                    Begin
+                      lnod_ClassNode:=lnod_Node.ChildNodes [ li_j ];
+                      if lnod_ClassNode.NodeName = CST_LEON_CLASS_C_BIND Then
+                       with lnod_ClassNode do
+                        Begin
+                          p_CreateClassBinding (Attributes [ CST_LEON_VALUE ], lnod_Node.Attributes [ CST_LEON_ID ]);
+                          Exit;
+                        end;
+                    end;
+                  if not lb_Table Then
+                   with lnod_ClassNode do
+                    Begin
+                      p_CreateClassBinding (Attributes [ CST_LEON_ID ], lnod_Node.Attributes [ CST_LEON_ID ]);
+                      Exit;
+                    end;
+                end;
+            End;
+        End;
+    finally
+      lxml_Class.Destroy;
+    End ;
+
+end;
+
+
 
 /////////////////////////////////////////////////////////////////////////
 // procedure p_BuildFromXML
@@ -263,6 +369,12 @@ Begin
                       lxdo_FichierXML.Destroy;
                     end;
                  End
+                Else
+                 if   ( pos ( CST_LEON_SYSTEM_ROOT      , Uppercase(lNode.NodeName) ) = 0 )
+                 and  ( pos ( CST_LEON_SYSTEM_NAVIGATION, Uppercase(lNode.NodeName) ) = 0 )
+                 and  ( pos ( CST_LEON_SYSTEM_LEON      , Uppercase(lNode.NodeName) ) = 0 )
+                  Then
+                   p_CreateClassBinding(Result,AApplication);
               end;
           End;
 //         else
