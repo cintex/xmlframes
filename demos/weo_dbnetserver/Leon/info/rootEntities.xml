@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Extra infos -->
 <UNIT id="unit_pourcent" name="NAME_UNIT_POURCENT" factor='4.9E-324' offset='4.9E-324'/>
 <UNIT id="facture_ht.Unit1_" name="DEVISE" value="DEVISE"/>

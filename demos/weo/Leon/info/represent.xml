@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CLASS id="represent" behavior="weo.behavior.ImportImageBehavior" 
 	javaName="weo.src.Representant">
 	<C_BIND value="represent" location="weo_db"/>

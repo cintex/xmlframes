@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CLASS id="devis_client"
 		behavior="weo.behavior.DevisClassBehavior">
 	<C_BIND value="devis_client" location="weo_db"/>
