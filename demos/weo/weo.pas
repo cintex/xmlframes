@@ -47,7 +47,7 @@ begin
   {$I weo.lrs}
   Application.Initialize;
   gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
-  GS_SUBDIR_IMAGES_SOFT := gs_LeonardiSubDir+'images'+DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := '../../images'+DirectorySeparator;
   {$IFNDEF FPC}
   Application.Title := 'Test';
 

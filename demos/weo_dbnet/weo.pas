@@ -52,6 +52,8 @@ begin
 
 	  end;
   doShowWorking(fs_GetNameSoft);
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := '../../images'+DirectorySeparator;
 
   try
     gb_DicoKeyFormPresent  := True ;

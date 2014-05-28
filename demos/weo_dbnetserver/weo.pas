@@ -27,6 +27,8 @@ var
 
 begin
   Application.Initialize;
+  gs_LeonardiSubDir := '..'+DirectorySeparator+'Leon' +DirectorySeparator;
+  GS_SUBDIR_IMAGES_SOFT := '../../images'+DirectorySeparator;
   if not fb_ReadServerIni ( FIniMain, Application ) Then
    Begin
     MyShowMessage ( 'XML file not initalized.' );
