@@ -4,7 +4,7 @@ program w4hotel;
 
 uses
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale,
-  LCLType, lazextcomponents, fonctions_ibx,  fonctions_dialogs,
+  LCLType, lazextcomponents, fonctions_manibx,  fonctions_dialogs,
   fonctions_system,
   fonctions_xml,
   sysutils,UniqueInstance,

@@ -93,7 +93,9 @@ var gs_Language : String;
 
 implementation
 
-uses u_multidonnees, fonctions_xml,
+uses u_multidonnees,
+     fonctions_xml,
+     fonctions_dbcomponents,
      fonctions_init, fonctions_proprietes,
      u_languagevars,
      unite_variables,
@@ -824,7 +826,8 @@ Begin
         p_setComponentProperty ( Connection, CST_DB_PROTOCOL, CST_LEON_DRIVER_MYSQL );
         gbm_DatabaseToGenerate:=bmMySQL;
        end
-     else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 ) Then
+     else if ( pos ( CST_LEON_DATA_FIREBIRD, DataDriver ) > 0 )
+     and ( gbm_DatabaseToGenerate = bmFirebird ) Then
       Begin
         AParams := fobj_getComponentObjectProperty(Connection,'Params') as TStrings;
         if DataUser = '' Then

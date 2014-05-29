@@ -8,9 +8,12 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Forms, Interfaces, Dialogs,
-  SysUtils, fonctions_dbnetserver,
-  fonctions_service,
+  SysUtils, fonctions_mandbnetserver,
+  fonctions_dbservice,
+  fonctions_xml,
   fonctions_init,
+  fonctions_dialogs,
+  fonctions_system,
   u_multidonnees;
 
 {$IFNDEF FPC}

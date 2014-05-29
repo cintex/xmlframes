@@ -10,7 +10,10 @@ uses
   fonctions_dialogs,
   Forms, Interfaces, U_FormMainIni, U_XMLFenetrePrincipale,
   LCLType, lazextcomponents,
-  SysUtils, fonctions_dbnet, fonctions_init,
+  fonctions_system,
+  fonctions_xml,
+  fonctions_dbservice,
+  SysUtils, fonctions_mandbnet, fonctions_init,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
   fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
 

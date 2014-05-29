@@ -12,7 +12,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   LCLType,
   lazextcomponents,
   SysUtils,
-  fonctions_zeos,
+  fonctions_manzeos,
   UniqueInstance,
   u_multidonnees,
   U_CustomFrameWork,

@@ -214,6 +214,7 @@ uses
   TntWindows,
 {$ENDIF}
   fonctions_xml,
+  fonctions_dbcomponents,
   u_multidonnees,
   fonctions_autocomponents,
   fonctions_createsql,
@@ -806,4 +807,4 @@ initialization
   p_ConcatVersion ( gVer_F_FenetrePrincipale );
 {$ENDIF}
 end.
-
+
