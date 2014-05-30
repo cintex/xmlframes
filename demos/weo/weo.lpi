@@ -2499,13 +2499,10 @@
       <Unit301>
         <Filename Value="../../../ZEOSDBO/src/dbc/ZDbcIntfs.pas"/>
         <UnitName Value="ZDbcIntfs"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1064"/>
-        <CursorPos X="72" Y="1069"/>
+        <TopLine Value="1063"/>
+        <CursorPos X="1" Y="1086"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit301>
       <Unit302>
@@ -2932,12 +2929,10 @@
       <Unit356>
         <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
         <UnitName Value="fonctions_dbcomponents"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="99"/>
         <CursorPos X="1" Y="134"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit356>
       <Unit357>
         <Filename Value="../../../ManFrames/manframes/u_fillcombobutton.pas"/>
@@ -2985,6 +2980,7 @@
       <Unit362>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <UnitName Value="fonctions_extdb"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
@@ -3184,12 +3180,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="u_formmaindb"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="112"/>
         <CursorPos X="164" Y="120"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit386>
       <Unit387>
         <Filename Value="../../../Extended/inicomp/u_formmainini.pas"/>
@@ -3232,12 +3226,10 @@
       <Unit391>
         <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
         <UnitName Value="fonctions_dbservice"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="817"/>
         <CursorPos X="1" Y="840"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit391>
       <Unit392>
         <Filename Value="../../../ManFrames/manbase/fonctions_createsql.pas"/>
@@ -3282,12 +3274,10 @@
       <Unit397>
         <Filename Value="../../../Extended/extdb/fonctions_startzeos.pas"/>
         <UnitName Value="fonctions_startzeos"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="88"/>
         <CursorPos X="1" Y="129"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit397>
       <Unit398>
         <Filename Value="../../../Extended/base/u_connection.pas"/>
@@ -3300,165 +3290,73 @@
       <Unit399>
         <Filename Value="../../../Extended/inicomp/fonctions_init.pas"/>
         <UnitName Value="fonctions_init"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="48"/>
         <CursorPos X="1" Y="85"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit399>
       <Unit400>
         <Filename Value="../../../ManFrames/manbase/unite_variables.pas"/>
         <UnitName Value="unite_variables"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="98"/>
         <CursorPos X="1" Y="136"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit400>
       <Unit401>
         <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
         <UnitName Value="u_connection"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="45"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit401>
       <Unit402>
         <Filename Value="../../../Extended/core/unite_messages.pas"/>
         <UnitName Value="unite_messages"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="89"/>
         <CursorPos X="1" Y="120"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit402>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
-        <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
-        <Caret Line="117" Column="33" TopLine="112"/>
+        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
+        <Caret Line="219" Column="1" TopLine="214"/>
       </Position1>
       <Position2>
-        <Filename Value="../../../Extended/inicomp/fonctions_init.pas"/>
-        <Caret Line="920" Column="40" TopLine="915"/>
+        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
+        <Caret Line="159" Column="1" TopLine="150"/>
       </Position2>
       <Position3>
-        <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
-        <Caret Line="119" Column="9" TopLine="96"/>
+        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
+        <Caret Line="198" Column="90" TopLine="177"/>
       </Position3>
       <Position4>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="219" Column="1" TopLine="214"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
-        <Caret Line="66" Column="1" TopLine="33"/>
-      </Position5>
-      <Position6>
-        <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
-        <Caret Line="89" Column="1" TopLine="65"/>
-      </Position6>
-      <Position7>
-        <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
-        <Caret Line="914" Column="24" TopLine="908"/>
-      </Position7>
-      <Position8>
-        <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
-        <Caret Line="60" Column="1" TopLine="24"/>
-      </Position8>
-      <Position9>
-        <Filename Value="../../../Extended/base/fonctions_dbcomponents.pas"/>
-        <Caret Line="937" Column="36" TopLine="912"/>
-      </Position9>
-      <Position10>
-        <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
-        <Caret Line="120" Column="25" TopLine="97"/>
-      </Position10>
-      <Position11>
-        <Filename Value="../../../ManFrames/manbase/unite_variables.pas"/>
-        <Caret Line="6" Column="39" TopLine="1"/>
-      </Position11>
-      <Position12>
-        <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
-        <Caret Line="120" Column="25" TopLine="97"/>
-      </Position12>
-      <Position13>
-        <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
-        <Caret Line="112" Column="18" TopLine="97"/>
-      </Position13>
-      <Position14>
-        <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
-        <Caret Line="249" Column="36" TopLine="213"/>
-      </Position14>
-      <Position15>
-        <Filename Value="../../../ManFrames/manbase/unite_variables.pas"/>
-        <Caret Line="96" Column="41" TopLine="93"/>
-      </Position15>
-      <Position16>
-        <Filename Value="../../../Extended/inicomp/u_connection.pas"/>
-        <Caret Line="249" Column="54" TopLine="213"/>
-      </Position16>
-      <Position17>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="159" Column="1" TopLine="150"/>
-      </Position17>
-      <Position18>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="198" Column="90" TopLine="177"/>
-      </Position18>
-      <Position19>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position19>
-      <Position20>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <Caret Line="12" Column="5" TopLine="1"/>
-      </Position20>
-      <Position21>
+      </Position5>
+      <Position6>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <Caret Line="77" Column="26" TopLine="33"/>
-      </Position21>
-      <Position22>
+      </Position6>
+      <Position7>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <Caret Line="54" Column="1" TopLine="31"/>
-      </Position22>
-      <Position23>
+      </Position7>
+      <Position8>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <Caret Line="55" Column="1" TopLine="32"/>
-      </Position23>
-      <Position24>
+      </Position8>
+      <Position9>
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <Caret Line="161" Column="20" TopLine="138"/>
-      </Position24>
-      <Position25>
-        <Filename Value="../../../ManFrames/manframes/u_formmaindb.pas"/>
-        <Caret Line="16" Column="123" TopLine="28"/>
-      </Position25>
-      <Position26>
-        <Filename Value="../../../ManFrames/manframes/u_formmaindb.pas"/>
-        <Caret Line="114" Column="35" TopLine="111"/>
-      </Position26>
-      <Position27>
-        <Filename Value="../../../Extended/extdb/fonctions_startzeos.pas"/>
-        <Caret Line="128" Column="37" TopLine="88"/>
-      </Position27>
-      <Position28>
-        <Filename Value="../../../Extended/extdb/fonctions_startzeos.pas"/>
-        <Caret Line="129" Column="1" TopLine="88"/>
-      </Position28>
-      <Position29>
-        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
-        <Caret Line="830" Column="49" TopLine="817"/>
-      </Position29>
-      <Position30>
-        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
-        <Caret Line="840" Column="1" TopLine="817"/>
-      </Position30>
+      </Position9>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

@@ -4,7 +4,7 @@ program weo;
 
 uses
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale, LCLType,
-  lazextcomponents, fonctions_ibx, fonctions_dialogs, fonctions_system,
+  lazextcomponents, fonctions_manibx, fonctions_dialogs, fonctions_system,
   fonctions_xml, sysutils, UniqueInstance, u_multidonnees, U_CustomFrameWork,
   lazmanframes, lazmansoft, lazxmlframes, fonctions_ObjetsXML, Dialogs,
   LResources, JvXPBarLaz, uniqueinstance_package;

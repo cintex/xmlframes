@@ -4,7 +4,7 @@ program plananimation;
 
 uses
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale,
-  LCLType, lazextcomponents, fonctions_ibx,  fonctions_dialogs,
+  LCLType, lazextcomponents, fonctions_manibx,  fonctions_dialogs,
   fonctions_system,
   fonctions_xml,
   sysutils,UniqueInstance,
@@ -68,4 +68,4 @@ begin
   end;
   Application.Run;
   SetHeapTraceOutput(ExtractFilePath(ParamStr(0)) + 'heaptrclog.txt');
-end.
+end.

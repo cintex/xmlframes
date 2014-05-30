@@ -4,7 +4,7 @@ program hotel;
 
 uses
   Forms, Interfaces, fonctions_init, U_XMLFenetrePrincipale,
-  LCLType, lazextcomponents, fonctions_zeos,
+  LCLType, lazextcomponents, fonctions_manzeos,
   fonctions_system,
   fonctions_xml,
   fonctions_dialogs,
@@ -64,6 +64,6 @@ begin
   finally
   end;
   Application.Run;
-  SetHeapTraceOutput(ExtractFilePath(ParamStr(0)) + 'heaptrclog.txt');
+//  SetHeapTraceOutput(ExtractFilePath(ParamStr(0)) + 'heaptrclog.txt');
 
 end.

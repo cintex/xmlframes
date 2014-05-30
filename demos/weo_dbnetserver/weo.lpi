@@ -46,12 +46,11 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="308">
+    <Units Count="309">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="weo"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -2532,7 +2531,6 @@
         <TopLine Value="10"/>
         <CursorPos X="15" Y="25"/>
         <UsageCount Value="21"/>
-        <LoadedDesigner Value="True"/>
       </Unit300>
       <Unit301>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/Instructions.inc"/>
@@ -2568,13 +2566,12 @@
         <TopLine Value="19"/>
         <CursorPos X="69" Y="46"/>
         <UsageCount Value="10"/>
-        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit304>
       <Unit305>
         <Filename Value="../../../ManFrames/mandb/fonctions_mandbnetserver.pas"/>
         <UnitName Value="fonctions_mandbnetserver"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="29"/>
         <CursorPos X="1" Y="68"/>
@@ -2584,7 +2581,7 @@
       <Unit306>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/MemDataBase.pas"/>
         <UnitName Value="MemDataBase"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1615"/>
         <CursorPos X="48" Y="1637"/>
@@ -2594,13 +2591,24 @@
       <Unit307>
         <Filename Value="../../../Extended/extdb/fonctions_startdbnetserver.pas"/>
         <UnitName Value="fonctions_startdbnetserver"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="10" Y="58"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit307>
+      <Unit308>
+        <Filename Value="../../xmlservice/fonctions_dbservice.pas"/>
+        <UnitName Value="fonctions_dbservice"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="818"/>
+        <CursorPos X="1" Y="840"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit308>
     </Units>
     <JumpHistory Count="12" HistoryIndex="11">
       <Position1>
@@ -2649,7 +2657,7 @@
       </Position11>
       <Position12>
         <Filename Value="weo.pas"/>
-        <Caret Line="15" Column="19" TopLine="1"/>
+        <Caret Line="15" Column="20" TopLine="1"/>
       </Position12>
     </JumpHistory>
   </ProjectOptions>
