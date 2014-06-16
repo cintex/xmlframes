@@ -58,7 +58,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="282">
+    <Units Count="283">
       <Unit0>
         <Filename Value="w4hotel.pas"/>
         <IsPartOfProject Value="True"/>
@@ -2266,11 +2266,10 @@
       <Unit277>
         <Filename Value="../../../ManFrames/mandb/fonctions_manibx.pas"/>
         <UnitName Value="fonctions_manibx"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="55"/>
-        <CursorPos X="12" Y="48"/>
+        <TopLine Value="48"/>
+        <CursorPos X="40" Y="71"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit277>
@@ -2295,6 +2294,7 @@
       <Unit280>
         <Filename Value="../../../ManFrames/mandb/fonctions_manzeos.pas"/>
         <UnitName Value="fonctions_manzeos"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -2312,6 +2312,13 @@
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit281>
+      <Unit282>
+        <Filename Value="../../../Extended/demos/Extended/demo.lrs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit282>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
