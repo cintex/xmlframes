@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Package Version="4">
     <Name Value="lazxmlframes"/>
@@ -19,7 +19,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Major="1" Minor="3"/>
+    <Version Major="1" Minor="3" Build="1"/>
     <Files Count="6">
       <Item1>
         <Filename Value="xmlframes/u_xmlform.pas"/>

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Package Version="4">
     <Name Value="lazxmlservice"/>
@@ -20,7 +20,7 @@
     <Description Value="Data part of XML Frames
 Use manbase only"/>
     <License Value="LGPL"/>
-    <Version Major="1" Minor="2"/>
+    <Version Major="1" Minor="2" Build="1"/>
     <Files Count="3">
       <Item1>
         <Filename Value="xmlservice/fonctions_dbservice.pas"/>
