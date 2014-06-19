@@ -1341,7 +1341,7 @@ End;
 // getting main directory
 function fs_getProjectDir : String;
 Begin
-  Result := fs_getLeonDir + ExtractFileDir ( gs_ProjectFile );
+  Result := ExtractFileDir ( fs_getLeonDir + gs_ProjectFile );
 End;
 
 // function fs_getImagesDir
