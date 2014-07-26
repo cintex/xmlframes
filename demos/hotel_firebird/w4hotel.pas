@@ -67,5 +67,5 @@ begin
   finally
   end;
   Application.Run;
-  SetHeapTraceOutput(ExtractFilePath(ParamStr(0)) + 'heaptrclog.txt');
-end.
+//  SetHeapTraceOutput(ExtractFilePath(ParamStr(0)) + 'heaptrclog.txt');
+end.
