@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="typhonxmlframes"/>
+    <AddToProjectUsesSection Value="True"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <IncludeFiles Value="xmlframes"/>
+        <OtherUnitFiles Value="xmlframes"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
+      <Other>
+        <CompilerPath Value="$(CompPath)"/>
+      </Other>
+    </CompilerOptions>
+    <Version Major="1" Minor="3" Build="1"/>
+    <Files Count="6">
+      <Item1>
+        <Filename Value="xmlframes/u_xmlform.pas"/>
+        <UnitName Value="u_xmlform"/>
+      </Item1>
+      <Item2>
+        <Filename Value="xmlframes/u_xmlfenetreprincipale.pas"/>
+        <UnitName Value="U_XMLFenetrePrincipale"/>
+      </Item2>
+      <Item3>
+        <Filename Value="xmlframes/fonctions_leon_format.pas"/>
+        <UnitName Value="fonctions_leon_format"/>
+      </Item3>
+      <Item4>
+        <Filename Value="xmlframes/u_xmlfillcombobutton.pas"/>
+        <UnitName Value="u_xmlfillcombobutton"/>
+      </Item4>
+      <Item5>
+        <Filename Value="xmlframes/fonctions_xmlform.pas"/>
+        <UnitName Value="fonctions_xmlform"/>
+      </Item5>
+      <Item6>
+        <Filename Value="xmlframes/fonctions_objetsxml.pas"/>
+        <UnitName Value="fonctions_ObjetsXML"/>
+      </Item6>
+    </Files>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="LANG"/>
+      <EnableI18NForLFM Value="True"/>
+    </i18n>
+    <RequiredPkgs Count="9">
+      <Item1>
+        <PackageName Value="typhonxmlservice"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="typhonextreports"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="typhonextbuttons"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="ExpertSuperForm"/>
+      </Item4>
+      <Item5>
+        <PackageName Value="LCL"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="typhonmanframes"/>
+      </Item6>
+      <Item7>
+        <PackageName Value="FCL"/>
+        <MinVersion Major="1" Valid="True"/>
+      </Item7>
+      <Item8>
+        <PackageName Value="typhonmansoft"/>
+      </Item8>
+      <Item9>
+        <PackageName Value="typhonextcomponents"/>
+      </Item9>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
