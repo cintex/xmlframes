@@ -15,11 +15,7 @@
           <UseAnsiStrings Value="False"/>
         </SyntaxOptions>
       </Parsing>
-      <Other>
-        <CompilerPath Value="$(CompPath)"/>
-      </Other>
     </CompilerOptions>
-    <Version Major="1" Minor="3" Build="1"/>
     <Files Count="6">
       <Item1>
         <Filename Value="xmlframes/u_xmlform.pas"/>
