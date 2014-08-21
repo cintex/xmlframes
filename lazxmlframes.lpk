@@ -19,7 +19,7 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Version Major="1" Minor="4" Build="1"/>
+    <Version Major="1" Minor="5"/>
     <Files Count="6">
       <Item1>
         <Filename Value="xmlframes/u_xmlform.pas"/>
@@ -53,10 +53,10 @@
     </i18n>
     <RequiredPkgs Count="11">
       <Item1>
-        <PackageName Value="lazxmlservice"/>
+        <PackageName Value="lazextreports"/>
       </Item1>
       <Item2>
-        <PackageName Value="extreports"/>
+        <PackageName Value="lazxmlservice"/>
       </Item2>
       <Item3>
         <PackageName Value="lazextbuttons"/>
