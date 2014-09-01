@@ -29,11 +29,11 @@ No XMLForm please
 
 uses Forms, JvXPBar,
 {$IFDEF FPC}
-   LCLType,
+   LCLType, ExtJvXPButtons,
 {$ELSE}
-   Windows, ToolWin,
+   Windows, ToolWin, JvXPButtons,
 {$ENDIF}
-  Controls, Classes, JvXPButtons,
+  Controls, Classes,
   Menus, DB,
 {$IFDEF VERSIONS}
   fonctions_version,
@@ -78,7 +78,7 @@ uses SysUtils, TypInfo,
      Variants, fonctions_proprietes,
      fonctions_Objets_Dynamiques,
      fonctions_dbcomponents,
-     u_languagevars, Imaging,
+     u_languagevars,
      u_connection,
      fonctions_createsql,
      u_xmlfillcombobutton,

@@ -55,8 +55,6 @@ begin
   doShowWorking(fs_GetNameSoft);
 
   try
-    gb_DicoKeyFormPresent  := True ;
-    gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
     if not fb_ReadIni ( FIniMain ) Then
      Begin

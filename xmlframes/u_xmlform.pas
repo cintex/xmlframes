@@ -17,9 +17,9 @@ interface
 
 uses
  {$IFDEF FPC}
- LCLType,
+ LCLType, ExtJvXPButtons,
  {$ELSE}
- Windows,
+ Windows, JvXPButtons,
  {$ENDIF}
   Controls, Classes, DB,
   U_ExtDBNavigator, Forms,
@@ -35,7 +35,7 @@ uses
   fonctions_version,
 {$ENDIF}
   u_framework_components,
-  u_multidata, JvXPButtons, Menus, fonctions_ObjetsXML,
+  u_multidata,  Menus, fonctions_ObjetsXML,
   u_man_reports_components, DBGrids,
   Graphics, U_GroupView;
 

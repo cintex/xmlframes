@@ -28,10 +28,12 @@ No XMLForm please
 }
 
 uses Forms, JvXPBar, LCLType,
-{$IFNDEF FPC}
-   Windows, ToolWin,
+{$IFDEF FPC}
+    ExtJvXPButtons,
+{$ELSE}
+   Windows, ToolWin, JvXPButtons,
 {$ENDIF}
-  Controls, Classes, JvXPButtons, ExtCtrls,
+  Controls, Classes, ExtCtrls,
   Menus,
 {$IFDEF VERSIONS}
   fonctions_version,
@@ -212,6 +214,12 @@ procedure p_RegisterSomeLanguages;
 implementation
 
 uses SysUtils, Dialogs, fonctions_xml,
+
+{$IFDEF BGRA}
+     BGRABitmapTypes,
+{$ELSE}
+     Imaging,
+{$ENDIF}
 {$IFDEF FPC}
      FileUtil,
 {$ENDIF}
@@ -219,7 +227,7 @@ uses SysUtils, Dialogs, fonctions_xml,
      fonctions_init, U_XMLFenetrePrincipale,
      fonctions_proprietes,
      Variants, fonctions_Objets_Dynamiques, fonctions_dbcomponents, strutils,
-     unite_variables, u_languagevars, Imaging, fonctions_languages;
+     unite_variables, u_languagevars, fonctions_languages;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -367,7 +375,11 @@ Begin
   while lb_IsFound do
    begin
     if  FileExistsUTF8 ( ls_ImagesDir + SR.Name )
+    {$IFDEF BGRA}
+    and ( DetectFileFormat ( ls_ImagesDir + SR.Name ) <> ifUnknown )
+    {$ELSE}
     and ( DetermineFileFormat ( ls_ImagesDir + SR.Name ) <> '' )
+    {$ENDIF}
      then
       Begin
         p_FileToBitmap (ls_ImagesDir + SR.Name, abmp_Bitmap, True );

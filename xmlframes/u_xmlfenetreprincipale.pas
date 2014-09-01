@@ -26,9 +26,10 @@ interface
 
 uses
 {$IFDEF FPC}
-   PCheck,
+   PCheck, ExtJvXPButtons,
 {$ELSE}
-  Windows, OleDB, JvComponent, StoHtmlHelp, JvScrollBox,
+  Windows, OleDB, JvComponent,
+  JvXPButtons, StoHtmlHelp, JvScrollBox,
 {$ENDIF}
 {$IFDEF JEDI}
   JvExExtCtrls, JvSplitter, JvLED,
@@ -44,7 +45,7 @@ uses
   TntActnList,
 {$ENDIF}
   Controls, Classes, SysUtils, StrUtils,
-  ExtCtrls, ActnList, Menus, ComCtrls, JvXPButtons,
+  ExtCtrls, ActnList, Menus, ComCtrls,
   IniFiles, Dialogs, Forms,  u_formmaindb, fonctions_init,
   fonctions_Objets_Dynamiques, fonctions_ObjetsXML,
   U_OnFormInfoIni,
