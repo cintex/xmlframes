@@ -31,29 +31,25 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="7">
+    <RequiredPackages Count="6">
       <Item1>
         <PackageName Value="lazregzeos"/>
       </Item1>
       <Item2>
-        <PackageName Value="JvXPBarLaz"/>
-        <MinVersion Major="1" Release="2" Valid="True"/>
+        <PackageName Value="lazxmlframes"/>
       </Item2>
       <Item3>
-        <PackageName Value="lazxmlframes"/>
+        <PackageName Value="lazmansoft"/>
       </Item3>
       <Item4>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="lazmanframes"/>
       </Item4>
       <Item5>
-        <PackageName Value="lazmanframes"/>
+        <PackageName Value="lazextcomponents"/>
       </Item5>
       <Item6>
-        <PackageName Value="lazextcomponents"/>
-      </Item6>
-      <Item7>
         <PackageName Value="LCL"/>
-      </Item7>
+      </Item6>
     </RequiredPackages>
     <Units Count="192">
       <Unit0>
@@ -63,7 +59,7 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="24"/>
+        <TopLine Value="27"/>
         <CursorPos X="3" Y="67"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>

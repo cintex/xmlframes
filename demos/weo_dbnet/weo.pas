@@ -15,7 +15,7 @@ uses
   fonctions_dbservice,
   SysUtils, fonctions_mandbnet, fonctions_init,
   u_multidonnees, U_CustomFrameWork, lazmanframes, lazmansoft, lazxmlframes,
-  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
+  fonctions_ObjetsXML, Dialogs, LResources;
 
 {$IFNDEF FPC}
 {$R *.res}
@@ -59,8 +59,6 @@ begin
   GS_SUBDIR_IMAGES_SOFT := '../../images'+DirectorySeparator;
 
   try
-    gb_DicoKeyFormPresent  := True ;
-    gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
     if not fb_ReadIni ( FIniMain ) Then
      Begin

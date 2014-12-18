@@ -9,7 +9,7 @@ uses
   fonctions_xml,
   sysutils,UniqueInstance,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
-  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz, uniqueinstance_package;
+  fonctions_ObjetsXML, Dialogs, LResources, uniqueinstance_package;
 
 var
 {$IFNDEF FPC}
@@ -55,8 +55,6 @@ begin
   doShowWorking(fs_GetNameSoft);
 
   try
-    gb_DicoKeyFormPresent  := True ;
-    gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
     if not fb_ReadIni ( FIniMain ) Then
      Begin

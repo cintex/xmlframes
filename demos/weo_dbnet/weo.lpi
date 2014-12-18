@@ -31,31 +31,27 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="7">
+    <RequiredPackages Count="6">
       <Item1>
         <PackageName Value="lazregdbnet"/>
       </Item1>
       <Item2>
-        <PackageName Value="JvXPBarLaz"/>
-        <MinVersion Major="1" Release="2" Valid="True"/>
+        <PackageName Value="lazxmlframes"/>
       </Item2>
       <Item3>
-        <PackageName Value="lazxmlframes"/>
+        <PackageName Value="lazmansoft"/>
       </Item3>
       <Item4>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="lazmanframes"/>
       </Item4>
       <Item5>
-        <PackageName Value="lazmanframes"/>
+        <PackageName Value="lazextcomponents"/>
       </Item5>
       <Item6>
-        <PackageName Value="lazextcomponents"/>
-      </Item6>
-      <Item7>
         <PackageName Value="LCL"/>
-      </Item7>
+      </Item6>
     </RequiredPackages>
-    <Units Count="309">
+    <Units Count="311">
       <Unit0>
         <Filename Value="weo.pas"/>
         <IsPartOfProject Value="True"/>
@@ -63,8 +59,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="13"/>
+        <TopLine Value="33"/>
+        <CursorPos X="1" Y="62"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -2558,7 +2554,7 @@
       <Unit307>
         <Filename Value="../../../ManFrames/mandb/fonctions_mandbnet.pas"/>
         <UnitName Value="fonctions_mandbnet"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
         <CursorPos X="69" Y="17"/>
@@ -2568,134 +2564,154 @@
       <Unit308>
         <Filename Value="../../../Extended/extdb/fonctions_startdbnet.pas"/>
         <UnitName Value="fonctions_startdbnet"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="1" Y="45"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit308>
+      <Unit309>
+        <Filename Value="../../../../Lazarus/composants/DBNetProcessor/SynaCSockets.pas"/>
+        <UnitName Value="SynaCSockets"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="31"/>
+        <CursorPos X="56" Y="55"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit309>
+      <Unit310>
+        <Filename Value="../../../../Lazarus/composants/synapse/source/lib/ssl_openssl.pas"/>
+        <UnitName Value="ssl_openssl"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit310>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="370" Column="1" TopLine="328"/>
+        <Caret Line="380" Column="1" TopLine="333"/>
       </Position1>
       <Position2>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="371" Column="1" TopLine="328"/>
+        <Caret Line="381" Column="1" TopLine="334"/>
       </Position2>
       <Position3>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="380" Column="1" TopLine="333"/>
+        <Caret Line="306" Column="1" TopLine="278"/>
       </Position3>
       <Position4>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="381" Column="1" TopLine="334"/>
+        <Caret Line="307" Column="1" TopLine="278"/>
       </Position4>
       <Position5>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="306" Column="1" TopLine="278"/>
+        <Caret Line="308" Column="1" TopLine="278"/>
       </Position5>
       <Position6>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="307" Column="1" TopLine="278"/>
+        <Caret Line="309" Column="1" TopLine="278"/>
       </Position6>
       <Position7>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="308" Column="1" TopLine="278"/>
+        <Caret Line="310" Column="1" TopLine="278"/>
       </Position7>
       <Position8>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="309" Column="1" TopLine="278"/>
+        <Caret Line="324" Column="1" TopLine="282"/>
       </Position8>
       <Position9>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="310" Column="1" TopLine="278"/>
+        <Caret Line="327" Column="1" TopLine="288"/>
       </Position9>
       <Position10>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="324" Column="1" TopLine="282"/>
+        <Caret Line="328" Column="1" TopLine="288"/>
       </Position10>
       <Position11>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="327" Column="1" TopLine="288"/>
+        <Caret Line="330" Column="1" TopLine="288"/>
       </Position11>
       <Position12>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="328" Column="1" TopLine="288"/>
+        <Caret Line="331" Column="1" TopLine="288"/>
       </Position12>
       <Position13>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="330" Column="1" TopLine="288"/>
+        <Caret Line="352" Column="1" TopLine="325"/>
       </Position13>
       <Position14>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="331" Column="1" TopLine="288"/>
+        <Caret Line="353" Column="1" TopLine="325"/>
       </Position14>
       <Position15>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="352" Column="1" TopLine="325"/>
+        <Caret Line="355" Column="1" TopLine="325"/>
       </Position15>
       <Position16>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="353" Column="1" TopLine="325"/>
+        <Caret Line="358" Column="1" TopLine="325"/>
       </Position16>
       <Position17>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="355" Column="1" TopLine="325"/>
+        <Caret Line="359" Column="1" TopLine="325"/>
       </Position17>
       <Position18>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="358" Column="1" TopLine="325"/>
+        <Caret Line="366" Column="1" TopLine="325"/>
       </Position18>
       <Position19>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="359" Column="1" TopLine="325"/>
+        <Caret Line="368" Column="1" TopLine="325"/>
       </Position19>
       <Position20>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="366" Column="1" TopLine="325"/>
+        <Caret Line="370" Column="1" TopLine="325"/>
       </Position20>
       <Position21>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="368" Column="1" TopLine="325"/>
+        <Caret Line="371" Column="1" TopLine="325"/>
       </Position21>
       <Position22>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="370" Column="1" TopLine="325"/>
+        <Caret Line="380" Column="1" TopLine="353"/>
       </Position22>
       <Position23>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="371" Column="1" TopLine="325"/>
+        <Caret Line="381" Column="1" TopLine="353"/>
       </Position23>
       <Position24>
-        <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="380" Column="1" TopLine="353"/>
-      </Position24>
-      <Position25>
-        <Filename Value="../../../../Lazarus/composants/DBNetProcessor/ClientProc.pas"/>
-        <Caret Line="381" Column="1" TopLine="353"/>
-      </Position25>
-      <Position26>
         <Filename Value="../../../../Lazarus/composants/DBNetProcessor/OnLineQuery.pas"/>
         <Caret Line="841" Column="1" TopLine="814"/>
-      </Position26>
-      <Position27>
+      </Position24>
+      <Position25>
         <Filename Value="../../../Extended/extdb/fonctions_startdbnet.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
+      </Position25>
+      <Position26>
+        <Filename Value="weo.pas"/>
+        <Caret Line="28" Column="70" TopLine="2"/>
+      </Position26>
+      <Position27>
+        <Filename Value="weo.pas"/>
+        <Caret Line="54" Column="31" TopLine="27"/>
       </Position27>
       <Position28>
         <Filename Value="weo.pas"/>
-        <Caret Line="28" Column="70" TopLine="2"/>
+        <Caret Line="16" Column="23" TopLine="12"/>
       </Position28>
       <Position29>
-        <Filename Value="weo.pas"/>
-        <Caret Line="54" Column="31" TopLine="27"/>
+        <Filename Value="../../../../Lazarus/composants/DBNetProcessor/SynaCSockets.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position29>
       <Position30>
         <Filename Value="weo.pas"/>
-        <Caret Line="16" Column="23" TopLine="12"/>
+        <Caret Line="13" Column="1" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

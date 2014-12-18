@@ -9,7 +9,7 @@ uses
   fonctions_xml,
   fonctions_dialogs,
   u_multidonnees, U_CustomFrameWork,lazmanframes, lazmansoft, lazxmlframes,
-  fonctions_ObjetsXML, Dialogs, LResources, JvXPBarLaz;
+  fonctions_ObjetsXML, Dialogs, LResources;
 
 {$IFNDEF FPC}
 {$R *.res}
@@ -52,8 +52,6 @@ begin
   doShowWorking(fs_GetNameSoft);
 
   try
-    gb_DicoKeyFormPresent  := True ;
-    gb_DicoUseFormField    := True ;
     gb_DicoGroupementMontreCaption := False ;
     if not fb_ReadIni ( FIniMain ) Then
      Begin

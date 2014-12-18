@@ -7,7 +7,7 @@ unit u_xmlfillcombobutton;
 interface
 
 uses
-  Classes, SysUtils, JvXPButtons, Graphics,
+  Classes, SysUtils, ExtJvXPButtons, Graphics,
   {$IFDEF VERSIONS}
      fonctions_version,
   {$ENDIF}

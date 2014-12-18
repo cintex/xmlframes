@@ -25,7 +25,6 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   LResources,
   fonctions_xml,
   fonctions_system,
-  JvXPBarLaz,
   uniqueinstance_package;
 
 {$IFNDEF FPC}
@@ -72,8 +71,6 @@ begin
   doShowWorking(fs_GetNameSoft);
 
     try
-    gb_DicoKeyFormPresent := True;
-    gb_DicoUseFormField := True;
     gb_DicoGroupementMontreCaption := False;
     if not fb_ReadIni(FIniMain) then
       begin

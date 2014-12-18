@@ -8,7 +8,7 @@
       <SearchPaths>
         <IncludeFiles Value="xmlservice"/>
         <OtherUnitFiles Value="xmlservice"/>
-        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+        <UnitOutputDirectory Value="typhon/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Other>
         <CompilerMessages>

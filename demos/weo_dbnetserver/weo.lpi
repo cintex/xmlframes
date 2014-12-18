@@ -31,7 +31,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="3">
       <Item1>
         <PackageName Value="lazregdbnetserver"/>
       </Item1>
@@ -39,12 +39,8 @@
         <PackageName Value="lazxmlservice"/>
       </Item2>
       <Item3>
-        <PackageName Value="JvXPBarLaz"/>
-        <MinVersion Major="1" Release="2" Valid="True"/>
-      </Item3>
-      <Item4>
         <PackageName Value="LCL"/>
-      </Item4>
+      </Item3>
     </RequiredPackages>
     <Units Count="309">
       <Unit0>

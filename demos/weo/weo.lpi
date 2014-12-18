@@ -7,7 +7,6 @@
       <Title Value="weo"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
-      <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <i18n>
       <EnableI18N Value="True"/>
@@ -31,7 +30,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="8">
+    <RequiredPackages Count="7">
       <Item1>
         <PackageName Value="uniqueinstance_package"/>
       </Item1>
@@ -39,24 +38,20 @@
         <PackageName Value="lazregzeos"/>
       </Item2>
       <Item3>
-        <PackageName Value="JvXPBarLaz"/>
-        <MinVersion Major="1" Release="2" Valid="True"/>
+        <PackageName Value="lazxmlframes"/>
       </Item3>
       <Item4>
-        <PackageName Value="lazxmlframes"/>
+        <PackageName Value="lazmansoft"/>
       </Item4>
       <Item5>
-        <PackageName Value="lazmansoft"/>
+        <PackageName Value="lazmanframes"/>
       </Item5>
       <Item6>
-        <PackageName Value="lazmanframes"/>
+        <PackageName Value="lazextcomponents"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazextcomponents"/>
-      </Item7>
-      <Item8>
         <PackageName Value="LCL"/>
-      </Item8>
+      </Item7>
     </RequiredPackages>
     <Units Count="403">
       <Unit0>
@@ -2981,12 +2976,10 @@
         <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
         <UnitName Value="fonctions_extdb"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="1" Y="56"/>
         <UsageCount Value="35"/>
-        <Loaded Value="True"/>
       </Unit362>
       <Unit363>
         <Filename Value="../../../ManFrames/manframes/unite_variables.pas"/>
@@ -3320,44 +3313,7 @@
         <UsageCount Value="10"/>
       </Unit402>
     </Units>
-    <JumpHistory Count="9" HistoryIndex="8">
-      <Position1>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="219" Column="1" TopLine="214"/>
-      </Position1>
-      <Position2>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="159" Column="1" TopLine="150"/>
-      </Position2>
-      <Position3>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="198" Column="90" TopLine="177"/>
-      </Position3>
-      <Position4>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position4>
-      <Position5>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="12" Column="5" TopLine="1"/>
-      </Position5>
-      <Position6>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="77" Column="26" TopLine="33"/>
-      </Position6>
-      <Position7>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="54" Column="1" TopLine="31"/>
-      </Position7>
-      <Position8>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="55" Column="1" TopLine="32"/>
-      </Position8>
-      <Position9>
-        <Filename Value="../../../ManFrames/manframes/fonctions_extdb.pas"/>
-        <Caret Line="161" Column="20" TopLine="138"/>
-      </Position9>
-    </JumpHistory>
+    <JumpHistory Count="0" HistoryIndex="-1"/>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
