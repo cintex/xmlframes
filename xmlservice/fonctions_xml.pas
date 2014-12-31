@@ -288,7 +288,7 @@ uses fonctions_init,
 
 function fs_getLeonDir :String ;
 Begin
-  Result:=fs_getAppDir+gs_LeonardiSubDir;
+  Result:=GetAppDir+gs_LeonardiSubDir;
 end;
 
 
