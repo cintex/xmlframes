@@ -7,6 +7,7 @@
       <Title Value="w4hotel"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
+      <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <i18n>
       <EnableI18N Value="True"/>
@@ -58,8 +59,6 @@
         <Filename Value="w4hotel.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="w4hotel"/>
-        <IsVisibleTab Value="True"/>
-        <WindowIndex Value="0"/>
         <TopLine Value="29"/>
         <CursorPos X="5" Y="69"/>
         <UsageCount Value="200"/>
@@ -2268,10 +2267,13 @@
       <Unit278>
         <Filename Value="../../../Extended/extdb/fonctions_startibx.pas"/>
         <UnitName Value="fonctions_startibx"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="318"/>
-        <CursorPos X="67" Y="347"/>
+        <TopLine Value="324"/>
+        <CursorPos X="35" Y="348"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit278>
       <Unit279>
         <Filename Value="../../../ManFrames/mandb/fonctions_zeos.pas"/>
@@ -2321,7 +2323,20 @@
         <UsageCount Value="10"/>
       </Unit284>
     </Units>
-    <JumpHistory Count="0" HistoryIndex="-1"/>
+    <JumpHistory Count="3" HistoryIndex="2">
+      <Position1>
+        <Filename Value="../../../Extended/extdb/fonctions_startibx.pas"/>
+        <Caret Line="347" Column="67" TopLine="318"/>
+      </Position1>
+      <Position2>
+        <Filename Value="../../../Extended/extdb/fonctions_startibx.pas"/>
+        <Caret Line="337" Column="14" TopLine="315"/>
+      </Position2>
+      <Position3>
+        <Filename Value="../../../Extended/extdb/fonctions_startibx.pas"/>
+        <Caret Line="347" Column="23" TopLine="323"/>
+      </Position3>
+    </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
