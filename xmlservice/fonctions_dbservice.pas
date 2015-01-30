@@ -794,7 +794,7 @@ Begin
          li_Pos:=posEx ( '/', DataURL, li_pos );
        DataBase:=fs_GetCorrectPath(copy(DataURL,li_Pos+1,Length(DataURL)-li_Pos));
        if not fb_IsFullPath(DataBase) Then
-         DataBase:=fs_getLeonDir+DataBase;
+         DataBase:=GetDataDir+DataBase;
        if not fb_CreateDirectoryStructure(ExtractFilePath(DataBase)) Then
         Begin
          MyShowMessage(fs_RemplaceMsg(GS_CANNOT_CREATE_DIR_EXITING,[ExtractFilePath(DataBase)]));
